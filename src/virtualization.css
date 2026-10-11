@@ -1,0 +1,115 @@
+/* Adaptive TanStack Virtual collection rendering.
+   Windowed archive retains document scrolling. Pane virtualizers apply only
+   when collections reach the large-result threshold. */
+.journal-list--virtual {
+  display: block;
+  contain: layout style;
+}
+.journal-list--virtual .windowed-archive-space,
+.windowed-pane-space { width: 100%; }
+.windowed-archive-row { box-sizing: border-box; }
+.windowed-archive-cell { min-width: 0; }
+.windowed-archive-row--list .journal-row,
+.windowed-archive-row--list .windowed-archive-cell { width: 100%; }
+.journal-list--virtual .windowed-archive-row--list .journal-row {
+  border-bottom: 1px solid var(--border);
+}
+.journal-list--virtual .windowed-archive-row--list:last-child .journal-row {
+  border-bottom: 0;
+}
+.journal-list--cards.journal-list--virtual {
+  display: block;
+  padding: 9px;
+}
+.windowed-archive-row--cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 9px;
+  padding-bottom: 9px;
+}
+.windowed-archive-row--cards .windowed-archive-cell,
+.windowed-archive-row--cards .journal-row { height: 100%; }
+.journal-list--cards.journal-list--virtual .journal-row:last-child {
+  border-bottom: 1px solid var(--border);
+}
+.dialog-results--virtual {
+  max-height: none;
+  overflow: hidden;
+}
+.dialog-window-scroll {
+  height: min(47dvh, 480px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+.dialog-window-row { padding-right: 3px; }
+.dialog-window-row > button {
+  width: 100%;
+  height: 100%;
+}
+.browse-main:has(.browse-recent-list--virtual) {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-bottom: 14px;
+}
+.browse-main:has(.browse-recent-list--virtual) .browse-section-label { flex-shrink: 0; }
+.browse-recent-list--virtual {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+.browse-recent-list--virtual .browse-window-row > button {
+  height: 100%;
+  width: 100%;
+  border-bottom: 1px solid var(--border);
+}
+@media (max-width: 767px) {
+  .windowed-archive-row--cards { grid-template-columns: minmax(0,1fr); }
+  .journal-list--cards.journal-list--virtual .windowed-archive-row--cards .journal-row {
+    min-height: 115px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .windowed-archive-row,
+  .dialog-window-row,
+  .browse-window-row { scroll-behavior: auto; }
+}
+
+/* Keep virtual-size estimates close to measured interactive touch targets. */
+.dialog-window-row { min-height: 56px; }
+.dialog-window-row > button { min-height: 56px; }
+.browse-window-row { min-height: 64px; }
+.browse-window-row > button { min-height: 64px; }
+
+/* Preserve identical styling when mobile recent items acquire virtual wrappers.
+   The preexisting selector was direct-child-only. */
+.browse-recent-list--virtual .browse-window-row > button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 10px;
+  min-height: 64px;
+  color: var(--foreground);
+  background: var(--card);
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  border-radius: 0;
+  cursor: pointer;
+}
+.browse-recent-list--virtual .browse-window-row > button > span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.browse-recent-list--virtual .browse-window-row > button:hover,
+.browse-recent-list--virtual .browse-window-row > button:focus-visible {
+  background: var(--inset);
+}

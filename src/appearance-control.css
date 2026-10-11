@@ -1,0 +1,234 @@
+/* Appearance picker V4
+ * Intentional miniature application previews instead of oversized empty tiles.
+ * Scoped to the preference selector; the rest of New York-density UI stays put.
+ */
+.prefs-choice.prefs-theme {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.prefs-choice.prefs-theme > .theme-option {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: auto;
+  min-height: 0;
+  padding: 5px;
+  gap: 0;
+  text-align: left;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  box-shadow: none;
+  color: var(--foreground);
+  cursor: pointer;
+  transition: border-color 140ms ease, background-color 140ms ease, box-shadow 140ms ease;
+}
+.prefs-choice.prefs-theme > .theme-option:hover {
+  border-color: var(--ring);
+  background: var(--inset);
+}
+.prefs-choice.prefs-theme > .theme-option[data-selected="true"] {
+  border-color: var(--foreground);
+  background: var(--card);
+  box-shadow: 0 0 0 1px var(--foreground);
+}
+.prefs-choice.prefs-theme > .theme-option:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+}
+
+.theme-option-preview {
+  --preview-bg: #eeeef0;
+  --preview-surface: #fff;
+  --preview-border: #d7d7dc;
+  --preview-detail: #9696a0;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 61px;
+  min-height: 61px;
+  overflow: hidden;
+  border: 1px solid var(--preview-border);
+  border-radius: 5px;
+  background: var(--preview-bg);
+  pointer-events: none;
+}
+.theme-option-preview--dark {
+  --preview-bg: #141417;
+  --preview-surface: #242429;
+  --preview-border: #42424a;
+  --preview-detail: #8f8f9a;
+}
+.theme-option-preview--system {
+  --preview-bg: #e2e2e6;
+  --preview-border: #c8c8d0;
+}
+
+.theme-mini-window {
+  --window-bg: #fdfdfe;
+  --window-rail: #eeeef0;
+  --window-rule: #d4d4d9;
+  --window-line: #a8a8b1;
+  display: flex;
+  flex-direction: column;
+  width: 83%;
+  height: 50px;
+  overflow: hidden;
+  border: 1px solid var(--window-rule);
+  border-bottom: 0;
+  border-radius: 4px 4px 0 0;
+  background: var(--window-bg);
+  transform: translateY(8px);
+  box-shadow: 0 1px 5px rgb(0 0 0 / .06);
+}
+.theme-mini-window--dark {
+  --window-bg: #1b1b20;
+  --window-rail: #27272d;
+  --window-rule: #464650;
+  --window-line: #777783;
+}
+.theme-mini-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex: none;
+  height: 10px;
+  padding: 0 5px;
+  border-bottom: 1px solid var(--window-rule);
+  background: var(--window-bg);
+}
+.theme-mini-titlebar i {
+  display: block;
+  width: 3px;
+  height: 3px;
+  border-radius: 1px;
+  background: var(--window-line);
+}
+.theme-mini-content {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+}
+.theme-mini-rail {
+  width: 25%;
+  flex: none;
+  padding: 5px 3px;
+  background: var(--window-rail);
+  border-right: 1px solid var(--window-rule);
+}
+.theme-mini-rail i,
+.theme-mini-copy i {
+  display: block;
+  background: var(--window-line);
+  opacity: .8;
+  border-radius: 1px;
+}
+.theme-mini-rail i {
+  height: 2px;
+  margin-bottom: 4px;
+}
+.theme-mini-rail i:nth-child(2) { width: 75%; }
+.theme-mini-rail i:nth-child(3) { width: 86%; }
+.theme-mini-copy {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 5px;
+}
+.theme-mini-copy i {
+  height: 3px;
+  margin-bottom: 5px;
+}
+.theme-mini-copy i:first-child { width: 52%; height: 4px; opacity: 1; }
+.theme-mini-copy i:nth-child(2) { width: 88%; }
+.theme-mini-copy i:nth-child(3) { width: 72%; }
+
+/* Side-by-side mini windows make "System" immediately understandable. */
+.theme-system-pair {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+.theme-system-pair .theme-mini-window {
+  width: 44%;
+  box-shadow: none;
+}
+.theme-system-pair .theme-mini-window:first-child {
+  transform: translate(4px, 8px);
+}
+.theme-system-pair .theme-mini-window:last-child {
+  transform: translate(-4px, 8px);
+}
+.theme-option-footer {
+  display: grid;
+  grid-template-columns: 14px minmax(0,1fr) 15px;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 33px;
+  padding: 0 3px;
+  white-space: nowrap;
+  color: var(--foreground);
+}
+.theme-option-footer > svg {
+  display: block;
+  position: static;
+  width: 13px;
+  height: 13px;
+  color: var(--muted-foreground);
+}
+.theme-option-footer > span:nth-child(2) {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 11.5px;
+  font-weight: 540;
+  letter-spacing: -.01em;
+}
+.theme-option-indicator {
+  width: 15px;
+  height: 15px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: transparent;
+}
+.theme-option[data-selected="true"] .theme-option-indicator {
+  background: var(--foreground);
+  color: var(--card);
+  border-color: var(--foreground);
+}
+.theme-option-indicator svg {
+  display: block;
+  position: static;
+  width: 11px;
+  height: 11px;
+}
+.theme-option[data-selected="true"] .theme-option-footer > svg {
+  color: var(--foreground);
+}
+@media (max-width: 767px) {
+  .prefs-choice.prefs-theme > .theme-option {
+    padding: 4px;
+  }
+  .theme-option-preview { height: 55px; min-height: 55px; }
+  .theme-option-footer { min-height: 33px; gap: 4px; padding: 0 2px; }
+  .theme-option-footer > span:nth-child(2) { font-size: 11.5px; }
+}
+@media (max-width: 359px) {
+  .prefs-choice.prefs-theme { gap: 6px; }
+  .theme-option-footer { grid-template-columns: 11px minmax(0,1fr) 12px; gap: 3px; }
+  .theme-option-footer > svg { width: 11px; height: 11px; }
+  .theme-option-indicator { width: 12px; height: 12px; }
+  .theme-option-indicator svg { width: 9px; height: 9px; }
+  .theme-option-footer > span:nth-child(2) { font-size: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .prefs-choice.prefs-theme > .theme-option { transition: none; }
+}

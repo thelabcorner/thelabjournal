@@ -1,0 +1,108 @@
+/* PWA-specific chrome, intentionally low visual priority within Preferences. */
+.prefs-install {
+  padding-bottom: 15px;
+}
+.install-status {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  min-height: 49px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--inset);
+}
+.install-status > svg { color: var(--muted-foreground); flex: 0 0 auto; margin-top: 3px; }
+.install-status > span { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.install-status strong { font-size: 11.5px; font-weight: 550; line-height: 1.5; }
+.install-status small { font-size: 11px; line-height: 1.5; color: var(--muted-foreground); }
+.install-status--notice { border-color: var(--border); }
+.install-action {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  min-height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--inset);
+  color: var(--foreground);
+  text-align: left;
+  font-size: 12px;
+  font-weight: 550;
+}
+.install-action > svg { color: var(--muted-foreground); }
+.install-action span:last-child { margin-left: auto; color: var(--muted-foreground); font-weight: 450; font-size: 10.5px; }
+.install-action:hover { background: var(--muted); }
+
+.pwa-update {
+  display: flex;
+  position: fixed;
+  z-index: 90;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(17px, env(safe-area-inset-bottom));
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  max-width: calc(100vw - 32px);
+  padding: 9px 10px 9px 12px;
+  background: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px oklch(0 0 0 / .13);
+  font-size: 12px;
+}
+.pwa-update > span { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.pwa-update > span svg { flex: 0 0 auto; width: 15px; height: 15px; color: var(--muted-foreground); }
+.pwa-update > div { flex: 0 0 auto; display: flex; align-items: center; gap: 4px; }
+.pwa-update button { border: 0; background: transparent; border-radius: 5px; min-height: 32px; padding: 0 9px; font-size: 11.5px; }
+.pwa-update button:hover { background: var(--muted); }
+.pwa-update button:last-child { background: var(--primary); color: var(--primary-foreground); font-weight: 550; }
+@media (max-width: 767px) {
+  .pwa-update {
+    bottom: calc(72px + env(safe-area-inset-bottom));
+    left: 10px;
+    right: 10px;
+    width: auto;
+  }
+}
+
+/* New content hierarchy: sentence case, sans, no tracking or uppercase
+   eyebrow convention. All section labels share the same restrained token. */
+.section-label {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 550;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.index-list-header,
+.figure-foot span:last-child,
+.header-issue {
+  letter-spacing: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .install-action, .pwa-update { transition: none; }
+}
+
+/* A taller Preferences sheet must fit fully in short tablet and phone viewports.
+   Header/footer stay reachable; only the middle pane scrolls. */
+.prefs-backdrop {
+  height: 100dvh;
+  box-sizing: border-box;
+  padding-top: clamp(10px, 7dvh, 72px);
+  padding-bottom: max(10px, env(safe-area-inset-bottom));
+}
+.prefs-dialog {
+  max-height: 100%;
+  min-height: 0;
+}
+.prefs-content { min-height: 0; }
+@media (max-width: 767px) {
+  .prefs-backdrop { padding-top: max(10px, env(safe-area-inset-top)); }
+  .prefs-dialog { margin-top: 0; }
+}

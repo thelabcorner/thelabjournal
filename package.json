@@ -1,0 +1,45 @@
+{
+  "name": "thelabjournal",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
+    "preview": "vite preview --host 0.0.0.0",
+    "export:essay": "bun scripts/export-essay.ts",
+    "smoke": "bun scripts/smoke.mjs",
+    "audit:dither": "bun scripts/dither-audit.mjs",
+    "audit:visual": "bun scripts/visual-audit.mjs",
+    "audit:chrome": "bun scripts/chrome-audit.mjs",
+    "audit:theme-haptics": "bun scripts/theme-haptics-audit.mjs",
+    "audit:appearance": "bun scripts/appearance-audit.mjs",
+    "generate:pwa-icons": "bun scripts/create-pwa-icons.mjs",
+    "audit:pwa": "bun scripts/pwa-audit.mjs",
+    "audit:virtualization": "bun scripts/virtualization-audit.mjs && bun scripts/virtual-navigation-audit.mjs && bun scripts/virtual-pane-audit.mjs && bun scripts/virtual-resize-audit.mjs && bun scripts/navigation-virtual-regression.mjs",
+    "audit:virtual-cold": "bun scripts/virtual-cold-load-audit.mjs",
+    "bench:virtualization": "bun scripts/virtualization-bench.mjs",
+    "audit:virtual-pwa": "bun scripts/virtual-pwa-offline-audit.mjs"
+  },
+  "dependencies": {
+    "@tanstack/react-virtual": "^3.13.12",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.544.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "tailwind-merge": "^3.4.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.17",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "playwright-core": "^1.64.0",
+    "tailwindcss": "^4.1.17",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.4",
+    "vite-plugin-pwa": "^2.0.0"
+  }
+}
