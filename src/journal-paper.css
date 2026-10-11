@@ -1,0 +1,65 @@
+/*
+ * Journal landing paper: a single paint-only surface behind the archive.
+ * No image downloads, compositing filters, animation, or translucent text cards.
+ *
+ * The sidebar remains opaque; the ruled sheet belongs to the Journal/All
+ * entries view only. Other subjects, Saved, and article readers use their
+ * existing zinc backgrounds.
+ */
+:root {
+  --journal-paper: oklch(.976 .001 286);
+  --journal-paper-rule: oklch(.67 .004 286 / .19);
+  --journal-paper-margin-rule: oklch(.61 .006 286 / .24);
+  --journal-paper-fiber: oklch(.62 .003 286 / .06);
+}
+
+:root[data-theme="dark"] {
+  --journal-paper: oklch(.17 .004 286);
+  --journal-paper-rule: oklch(.43 .005 286 / .16);
+  --journal-paper-margin-rule: oklch(.54 .006 286 / .19);
+  --journal-paper-fiber: oklch(.75 .004 286 / .032);
+}
+
+.frame--journal-paper {
+  /* The margin rule stays in the empty gutter, never underneath the copy. */
+  --journal-paper-gutter: 275px;
+  background-color: var(--journal-paper);
+  background-image:
+    linear-gradient(
+      to right,
+      transparent calc(var(--journal-paper-gutter) - 1px),
+      var(--journal-paper-margin-rule) calc(var(--journal-paper-gutter) - 1px),
+      var(--journal-paper-margin-rule) var(--journal-paper-gutter),
+      transparent var(--journal-paper-gutter)
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 31px,
+      var(--journal-paper-rule) 31px,
+      var(--journal-paper-rule) 32px
+    ),
+    radial-gradient(circle at 1px 1px, var(--journal-paper-fiber) .5px, transparent .8px),
+    radial-gradient(circle at 1px 1px, var(--journal-paper-fiber) .5px, transparent .8px);
+  background-size: 100% 100%, 100% 32px, 19px 23px, 29px 31px;
+  background-position: 0 0, 0 11px, 0 0, 11px 9px;
+}
+
+/* The sheet continues under the full desktop workspace, including its
+   max-width side gutters. The sidebar's existing solid fill masks it. */
+@media (min-width: 1024px) {
+  .frame--journal-paper.rail-collapsed { --journal-paper-gutter: 75px; }
+}
+
+@media (max-width: 1023px) {
+  .frame--journal-paper { --journal-paper-gutter: 12px; }
+}
+
+@media (max-width: 767px) {
+  .frame--journal-paper { --journal-paper-gutter: 9px; }
+}
+
+/* Keep paper as ambient material, never as a print background on hardcopy. */
+@media print {
+  .frame--journal-paper { background: none; }
+}

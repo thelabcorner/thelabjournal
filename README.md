@@ -33,6 +33,7 @@ Open `/thelabjournal/` on the preview origin when validating a Pages build.
 
 - **Persistent application frame:** 48 px header, 252 px desktop navigation rail, compact archive workspace, subdued footer.
 - **Archive:** topic filters, category badges shared with the article reader, type/date metadata, keyword search, subject grouping (newest within each subject) by default, alternative chronological/reading-length sorts, item actions, selected entry, and saved view. No separate hero page for each topic.
+- **Journal landing paper:** a CSS-only zinc grayscale sheet with 32 px horizontal ruling, a restrained margin rail and two sparse fiber layers. It adapts to collapsed sidebars and phone gutters. Only the Journal/All entries surface uses it; other subjects, Saved, and article readers remain plain. Print mode omits the texture.
 - **Navigation:** full-width WebSeal-inspired ordered-dot information fields behind the top header and mobile bottom bar, drawn at 14 fps with legible foreground controls and suspended when hidden or reduced-motion is enabled.
 - **Article reader:** back/actions bar, live reading-progress indicator, article contents rail at wide widths, and a native section picker at narrower widths. The first section appears **before** the supporting figure.
 - **Phone navigation:** persistent four-item bottom navigation (Journal, Browse, Saved, Search), safe-area-aware placement, and a bottom-sheet Browse menu. Breakpoint: below 768 px.
@@ -63,6 +64,7 @@ Large archive lists, responsive card grids, saved/filtered views, full-search re
 ```sh
 bun run build
 bun run audit:archive
+bun run audit:paper
 bun run smoke
 bun scripts/visual-audit.mjs
 bun run audit:dither
@@ -72,7 +74,7 @@ bun run audit:virtual-cold # needs production preview on localhost:11265
 bun run bench:virtualization # synthetic DOM, heap and commit comparison
 ```
 
-The smoke suite requires Chrome installed in the standard Windows location and the running dev server. It covers responsive navigation, modal behavior, saved entries and persistence, article navigation, section picker, keyboard search, JavaScript exceptions, and horizontal overflow at **320 / 375 / 390 / 430 / 768 / 1024 / 1440 px**. The visual audit captures phone, tablet and desktop reference images in `artifacts/`. The dither audit verifies moving pixel output, frame suspension offscreen/in hidden tabs, and still-frame rendering under reduced-motion preferences at 320, 375, 768, 1024 and 1440 px. It does not substitute for testing on physical iOS Safari.
+The smoke suite requires Chrome installed in the standard Windows location and the running dev server. It covers responsive navigation, modal behavior, saved entries and persistence, article navigation, section picker, keyboard search, JavaScript exceptions, and horizontal overflow at **320 / 375 / 390 / 430 / 768 / 1024 / 1440 px**. The visual audit captures phone, tablet and desktop reference images in `artifacts/`. The paper audit checks both themes at five widths, layout scope, the collapsed rail, print behavior, and screenshots. The dither audit verifies moving pixel output, frame suspension offscreen/in hidden tabs, and still-frame rendering under reduced-motion preferences at 320, 375, 768, 1024 and 1440 px. It does not substitute for testing on physical iOS Safari.
 
 ## UI contracts
 
@@ -84,3 +86,4 @@ The smoke suite requires Chrome installed in the standard Windows location and t
 - UI claims, paper status, and conceptual figure captions must be calibrated to the actual research evidence.
 - `src/components/DitherScene.tsx` and `src/dither.css` provide the WebSeal-inspired ordered-dot animation for the featured learning-sequence panel and the figure titlebar. Canvases are decorative, clipped and non-interactive, limited to 14–16 fps and device pixel ratio ≤ 1.5, and never overlap prose. Animations stop when hidden or offscreen and render a still frame under reduced-motion.
 - `src/styles.css` holds the WebSeal-derived baseline tokens and figure/reader primitives; `src/app-shell.css` holds the redesigned application-shell layer. Refactor or consolidate after design approval rather than allowing two competing shell implementations.
+- `src/journal-paper.css` holds the narrowly scoped, print-free background treatment. Its gradient primitives draw paper rules and fibers, not gradients used as decorative colored section fills; foreground cards remain opaque for readability.
