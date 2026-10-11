@@ -81,7 +81,7 @@
   mask-image: linear-gradient(90deg, transparent 0%, #000 9%, #000 91%, transparent 100%);
 }
 .header-dither-canvas { opacity: .34; }
-.tabbar-dither-canvas { opacity: .16; }
+.tabbar-dither-canvas { opacity: .04; }
 /* Journal / All entries only. Reuse the navbar's animated ordered-dot field,
    at a literal 2% composite opacity. The sticky viewport-sized drawing surface
    avoids rasterizing the entire scrolling archive on every animation frame. */
