@@ -14,12 +14,23 @@ for (const width of [375, 1440]) {
     if (response?.status() !== 200) throw Error('entry response')
     const manifestLink=await page.locator('link[rel="manifest"]').getAttribute('href')
     if(!manifestLink)throw Error('Manifest missing')
+    const headIcons=await page.locator('link[rel="icon"], link[rel="apple-touch-icon"]').evaluateAll(links=>links.map(link=>({
+      rel:link.rel,href:link.getAttribute('href'),type:link.getAttribute('type'),sizes:link.getAttribute('sizes')
+    })))
+    for (const filename of ['favicon.svg','favicon.ico','favicon-16.png','favicon-32.png','icons/apple-touch-icon.png']) {
+      const link=headIcons.find(icon=>icon.href?.includes(filename+'?v=2'))
+      if (!link) throw Error('Missing versioned browser/touch icon '+filename)
+      const response=await context.request.get(new URL(link.href,origin).href)
+      if(response.status()!==200)throw Error('Broken browser/touch icon '+filename+' HTTP '+response.status())
+    }
     const manifest=await (await context.request.get(new URL(manifestLink,origin).href)).json()
     if(manifest.name!=='thelabjournal™'||manifest.short_name!=='thelabjournal™')throw Error('PWA brand mismatch '+JSON.stringify(manifest))
     if(manifest.display!=='standalone'||manifest.scope!==base||manifest.start_url!==base||manifest.id!==base)throw Error('Manifest scope or standalone '+JSON.stringify(manifest))
     for (const file of expected) {
       const entry=manifest.icons.find(icon=>icon.src.includes(file))
       if (!entry) throw Error('Missing icon '+file)
+      if(!entry.src.includes('?v=2'))throw Error('Missing icon cache version '+file)
+      if(entry.purpose!==(file==='icon-maskable-512.png'?'maskable':'any'))throw Error('Icon purpose mismatch '+file)
       const image=await context.request.get(new URL(entry.src,origin).href)
       if (image.status()!==200 || image.headers()['content-type']?.includes('image/png')!==true)throw Error('Broken icon '+file)
     }
@@ -48,7 +59,7 @@ for (const width of [375, 1440]) {
       if(!await prefs.getByText('Install journal',{exact:true}).count())throw Error('PWA install section absent')
     }
     if(errors.length)throw Error('JS errors: '+errors.join(' | '))
-    console.log(JSON.stringify({width,pass:true,offlineArticle:true,worker:sw.sw,cacheCount:sw.cacheKeys.length,manifestName:manifest.name}))
+    console.log(JSON.stringify({width,pass:true,offlineArticle:true,worker:sw.sw,cacheCount:sw.cacheKeys.length,manifestName:manifest.name,brandIconsChecked:headIcons.length}))
   } catch(err) {
     failed++
     console.log(JSON.stringify({width,pass:false,error:String(err),pageErrors:errors}))

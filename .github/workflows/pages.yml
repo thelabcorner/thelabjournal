@@ -29,6 +29,8 @@ jobs:
         run: bun install --frozen-lockfile
       - name: Validate archive sorting
         run: bun run audit:archive
+      - name: Validate brand icon assets
+        run: bun run audit:icons
       - name: Build GitHub Pages site
         run: bun run build
         env:

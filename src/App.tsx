@@ -12,6 +12,7 @@ import { cue, cueDelayed, setHapticsEnabled } from './haptics'
 import { applyTheme, effectiveTheme } from './theme'
 import { cn, dateLabel } from './lib/utils'
 import { compareArchiveEntries, type ArchiveSort } from './lib/archiveSort'
+import { BRAND_MARK_OUTLINE, BRAND_MARK_FILL, BRAND_MARK_STROKE } from './lib/brandMark'
 
 const MobileNavigator = lazy(() => import('./components/MobileNavigator').then(m => ({ default: m.MobileNavigator })))
 const loadWindowedArchive = () => import('./components/WindowedArchive')
@@ -31,7 +32,7 @@ const findEntry = (slug: string | null) => entries.find((entry) => entry.slug ==
 const jumpScroll = (top: number) => window.scrollTo({ top, behavior: 'instant' })
 
 function Mark() {
-  return <span className="brand-mark" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none"><path d="M5 5H13V13H5V5ZM15 5H23V13H15V5ZM5 15H13V23H5V15ZM15 15H23V23H15V15Z" stroke="currentColor" strokeWidth="1.3"/><path d="M15 15H23V23H15V15Z" fill="currentColor"/></svg></span>
+  return <span className="brand-mark" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none"><path d={BRAND_MARK_OUTLINE} stroke="currentColor" strokeWidth={BRAND_MARK_STROKE}/><path d={BRAND_MARK_FILL} fill="currentColor"/></svg></span>
 }
 function Badge({ children, kind = 'neutral' }: { children: ReactNode, kind?: 'neutral' | 'success' | 'warning' }) {
   return <span className={cn('badge', 'badge--' + kind)}>{children}</span>

@@ -5,7 +5,7 @@ The journal is packaged as a standalone, installable Progressive Web App. Its so
 ## Production behavior
 
 - The Vite PWA plugin emits `manifest.webmanifest` with name, start URL, same-origin scope, app ID, standalone display, and 192/512/maskable icons.
-- Existing vector favicon is rasterized into install icons by `bun run generate:pwa-icons`; the 180 px Apple touch icon ships with the app.
+- The navigation's four-tile logo is the canonical source of truth in `src/lib/brandMark.ts`. `bun run generate:pwa-icons` regenerates its SVG, 16/32/48 PNG and ICO favicon variants, the 180 px Apple touch icon, 192/512 PWA icons, and a genuinely safe-zone-inset maskable 512 icon. These are committed assets; deployment validates them with `bun run audit:icons`.
 - A Workbox service worker precaches the generated static site, article data, CSS, scripts, and images. Article links use `?post=<slug>`, and a cached `index.html` supplies offline SPA navigation.
 - The React root registers the worker, handles update availability without immediately reloading the reader, and retains Chromium's `beforeinstallprompt` before Preferences opens.
 - Preferences shows an Install button when supported, iOS Safari's Add to Home Screen steps when applicable, or an accurate HTTPS requirement on LAN HTTP.
@@ -19,6 +19,7 @@ The journal is packaged as a standalone, installable Progressive Web App. Its so
 ```sh
 bun install
 bun run generate:pwa-icons
+bun run audit:icons
 bun run build
 bunx vite preview --host 127.0.0.1 --port 11265 --strictPort
 # in another terminal

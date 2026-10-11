@@ -16,6 +16,7 @@
     "audit:theme-haptics": "bun scripts/theme-haptics-audit.mjs",
     "audit:appearance": "bun scripts/appearance-audit.mjs",
     "generate:pwa-icons": "bun scripts/create-pwa-icons.mjs",
+    "audit:icons": "bun scripts/icon-audit.mjs",
     "audit:pwa": "bun scripts/pwa-audit.mjs",
     "audit:virtualization": "bun scripts/virtualization-audit.mjs && bun scripts/virtual-navigation-audit.mjs && bun scripts/virtual-pane-audit.mjs && bun scripts/virtual-resize-audit.mjs && bun scripts/navigation-virtual-regression.mjs",
     "audit:virtual-cold": "bun scripts/virtual-cold-load-audit.mjs",
