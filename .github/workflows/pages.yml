@@ -31,6 +31,10 @@ jobs:
         run: bun run audit:archive
       - name: Validate brand icon assets
         run: bun run audit:icons
+      - name: Render social image with Satori
+        run: bun run generate:og
+      - name: Audit social metadata and output
+        run: bun run audit:og
       - name: Build GitHub Pages site
         run: bun run build
         env:

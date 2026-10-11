@@ -16,6 +16,8 @@
     "audit:theme-haptics": "bun scripts/theme-haptics-audit.mjs",
     "audit:appearance": "bun scripts/appearance-audit.mjs",
     "generate:pwa-icons": "bun scripts/create-pwa-icons.mjs",
+    "generate:og": "bun scripts/generate-og.mjs",
+    "audit:og": "bun scripts/og-audit.mjs",
     "audit:icons": "bun scripts/icon-audit.mjs",
     "audit:pwa": "bun scripts/pwa-audit.mjs",
     "audit:virtualization": "bun scripts/virtualization-audit.mjs && bun scripts/virtual-navigation-audit.mjs && bun scripts/virtual-pane-audit.mjs && bun scripts/virtual-resize-audit.mjs && bun scripts/navigation-virtual-regression.mjs",
@@ -35,11 +37,14 @@
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
+    "@fontsource/inter": "^5.3.0",
+    "@resvg/resvg-js": "^2.6.2",
     "@tailwindcss/vite": "^4.1.17",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
     "playwright-core": "^1.64.0",
+    "satori": "^0.47.1",
     "tailwindcss": "^4.1.17",
     "typescript": "^5.9.3",
     "vite": "^7.2.4",
