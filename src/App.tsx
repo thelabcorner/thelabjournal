@@ -11,6 +11,7 @@ import { PWAUpdateNotice, useJournalPWA } from './components/JournalPWA'
 import { cue, cueDelayed, setHapticsEnabled } from './haptics'
 import { applyTheme, effectiveTheme } from './theme'
 import { cn, dateLabel } from './lib/utils'
+import { compareArchiveEntries, type ArchiveSort } from './lib/archiveSort'
 
 const MobileNavigator = lazy(() => import('./components/MobileNavigator').then(m => ({ default: m.MobileNavigator })))
 const loadWindowedArchive = () => import('./components/WindowedArchive')
@@ -18,7 +19,7 @@ const WindowedArchive = lazy(() => loadWindowedArchive().then(m => ({ default: m
 const WindowedPane = lazy(() => import('./components/WindowedPane').then(m => ({ default: m.WindowedPane<Entry> })))
 import { JournalPreferences } from './components/JournalPreferences'
 type Filter = Topic | 'All'
-type Sort = 'recent' | 'short' | 'long'
+type Sort = ArchiveSort
 type View = 'all' | 'saved'
 const draft = entries[0]
 const storageKey = 'thelabcorner.journal.saved.v1'
@@ -37,6 +38,9 @@ function Badge({ children, kind = 'neutral' }: { children: ReactNode, kind?: 'ne
 }
 function StageBadge({ stage }: { stage: Entry['stage'] }) {
   return <Badge kind={stage === 'Editorial draft' ? 'warning' : 'neutral'}>{stage}</Badge>
+}
+function TopicBadge({ topic }: { topic: Entry['topic'] }) {
+  return <Badge>{topic}</Badge>
 }
 function IconControl({ label, onClick, children, className, pressed }: { label: string, onClick: () => void, children: ReactNode, className?: string, pressed?: boolean }) {
   return <button type="button" className={cn('icon-control', className)} aria-label={label} title={label} aria-pressed={pressed} onClick={onClick}>{children}</button>
@@ -104,7 +108,7 @@ function FeatureRow({ onOpen, isSaved, toggle }: { onOpen: (entry: Entry) => voi
         <div className="feature-label"><span className="small-dot"/> Selected writing <span className="feature-separator">/</span> {draft.issue}</div>
         <h2>{draft.shortTitle}<ArrowUpRight aria-hidden="true"/></h2>
         <p>{draft.summary}</p>
-        <div className="feature-meta"><span>{draft.type}</span><span>·</span><span>{draft.minutes} min</span><StageBadge stage={draft.stage}/></div>
+        <div className="feature-meta"><span>{draft.type}</span><span>·</span><span>{draft.minutes} min</span><TopicBadge topic={draft.topic}/><StageBadge stage={draft.stage}/></div>
       </div>
       <div className="feature-illustration" aria-hidden="true"><DitherScene variant="sequence" className="feature-dither" fps={16} speed={0.72} intensity={0.9}/><span className="feature-visual-label">Learning sequence · 01</span></div>
     </PostLink>
@@ -115,8 +119,8 @@ function ListRow({ entry, onOpen, isSaved, toggle, position, setSize }: { entry:
   return <div className="journal-row" role="listitem" aria-posinset={position} aria-setsize={setSize}>
     <PostLink className="journal-row-link" entry={entry} onOpen={onOpen}>
       <span className="row-number">{entry.issue}</span>
-      <span className="journal-row-main"><span className="row-title">{entry.title}</span><span className="row-summary">{entry.summary}</span><span className="row-mobile-meta">{entry.topic} · {dateLabel(entry.date)} · {entry.minutes} min</span></span>
-      <span className="row-type"><span>{entry.topic}</span><small>{entry.type}</small></span>
+      <span className="journal-row-main"><span className="row-title">{entry.title}</span><span className="row-summary">{entry.summary}</span><span className="row-mobile-meta"><TopicBadge topic={entry.topic}/><span>{dateLabel(entry.date)} · {entry.minutes} min</span></span></span>
+      <span className="row-type"><TopicBadge topic={entry.topic}/><small>{entry.type}</small></span>
       <span className="row-date">{dateLabel(entry.date)}</span>
       <ChevronRight className="row-arrow" aria-hidden="true"/>
     </PostLink>
@@ -131,7 +135,7 @@ function JournalIndex({ active, view, sort, setSort, query, setQuery, onOpen, sa
   const results = useMemo(() => entries.filter((entry) => {
     const term = query.trim().toLowerCase()
     return (view !== 'saved' || saved.includes(entry.slug)) && (view === 'saved' || active === 'All' || entry.topic === active) && (!term || [entry.title, entry.summary, entry.topic, ...entry.keywords].join(' ').toLowerCase().includes(term))
-  }).sort((a, b) => sort === 'recent' ? b.date.localeCompare(a.date) : sort === 'short' ? a.minutes - b.minutes : b.minutes - a.minutes), [active, view, query, sort, saved])
+  }).sort((a, b) => compareArchiveEntries(a, b, sort)), [active, view, query, sort, saved])
   const visibleResults = expanded ? results : results.slice(0, 10)
   const renderEntry = (entry: Entry, index: number) => <ListRow entry={entry} onOpen={onOpen} isSaved={saved.includes(entry.slug)} toggle={toggle} position={index + 1} setSize={visibleResults.length}/>
   const heading = view === 'saved' ? 'Saved entries' : active === 'All' ? 'Journal' : active
@@ -153,7 +157,7 @@ function JournalIndex({ active, view, sort, setSort, query, setQuery, onOpen, sa
     <section className="index-section" aria-labelledby="index-heading">
       <div className="index-heading-row">
         <div><span className="section-label">{view === 'saved' ? 'Reading list' : 'Archive'}</span><h2 id="index-heading">{view === 'saved' ? 'Bookmarked' : 'All writing'} <span className="count-inline">{results.length.toString().padStart(2, '0')}</span></h2></div>
-        <div className="index-actions"><div className="layout-choice" role="group" aria-label="Archive display"><button className={layout === "list" ? "is-selected" : ""} aria-pressed={layout === "list"} aria-label="List view" title="List view" onClick={() => { cue("selection"); setLayout("list") }}><ListIcon/></button><button className={layout === "cards" ? "is-selected" : ""} aria-pressed={layout === "cards"} aria-label="Card view" title="Card view" onClick={() => { cue("selection"); setLayout("cards") }}><LayoutGrid/></button></div><div className="inline-search"><Search aria-hidden="true"/><input type="search" aria-label="Filter journal entries" placeholder="Filter entries..." value={query} onChange={(event) => setQuery(event.target.value)}/>{query && <button title="Clear query" aria-label="Clear query" onClick={() => setQuery('')}><X/></button>}</div><div className="sort-wrap"><label htmlFor="journal-sort"><Filter aria-hidden="true"/></label><select id="journal-sort" aria-label="Sort journal entries" value={sort} onChange={(event) => setSort(event.target.value as Sort)}><option value="recent">Newest</option><option value="short">Shortest</option><option value="long">Longest</option></select><ChevronDown aria-hidden="true"/></div></div>
+         <div className="index-actions"><div className="layout-choice" role="group" aria-label="Archive display"><button className={layout === "list" ? "is-selected" : ""} aria-pressed={layout === "list"} aria-label="List view" title="List view" onClick={() => { cue("selection"); setLayout("list") }}><ListIcon/></button><button className={layout === "cards" ? "is-selected" : ""} aria-pressed={layout === "cards"} aria-label="Card view" title="Card view" onClick={() => { cue("selection"); setLayout("cards") }}><LayoutGrid/></button></div><div className="inline-search"><Search aria-hidden="true"/><input type="search" aria-label="Filter journal entries" placeholder="Filter entries..." value={query} onChange={(event) => setQuery(event.target.value)}/>{query && <button title="Clear query" aria-label="Clear query" onClick={() => setQuery('')}><X/></button>}</div><div className="sort-wrap"><label htmlFor="journal-sort"><Filter aria-hidden="true"/></label><select id="journal-sort" aria-label="Sort journal entries" value={sort} onChange={(event) => setSort(event.target.value as Sort)}><option value="subject">Subject</option><option value="recent">Newest</option><option value="short">Shortest</option><option value="long">Longest</option></select><ChevronDown aria-hidden="true"/></div></div>
       </div>
       <div className="index-list-header"><span>Ref</span><span>Title / abstract</span><span>Field</span><span>Date</span><span>Actions</span></div>
       {visibleResults.length >= ARCHIVE_VIRTUAL_THRESHOLD ? <Suspense fallback={<div className="journal-list journal-list--pending" role="status">Preparing archive…</div>}><WindowedArchive entries={visibleResults} layout={layout} renderEntry={renderEntry}/></Suspense> : <div className={cn("journal-list", layout === "cards" && "journal-list--cards")} role="list" aria-label="Journal articles">{results.length ? visibleResults.map((entry, index) => <ListRow key={entry.slug} entry={entry} onOpen={onOpen} isSaved={saved.includes(entry.slug)} toggle={toggle} position={index + 1} setSize={visibleResults.length}/>) : <div className="empty-state">{view === 'saved' && !query ? <Bookmark/> : <Search/>}<strong>{view === 'saved' && !query ? 'Nothing saved yet' : 'No matching entries'}</strong><p>{view === 'saved' && !query ? 'Use the bookmark icon on an entry to keep it here.' : 'Try a different keyword or subject.'}</p><button className="button button--outline" onClick={() => { setQuery(''); if (view === 'saved') onShowAll(); else onFilter('All') }}>{view === 'saved' ? 'Browse the journal' : 'Clear filters'} <ArrowRight/></button></div>}</div>}
@@ -200,7 +204,7 @@ function Article({ entry, onBack, onOpen, copied, onCopy, isSaved, toggle }: {
         <div className="article-kicker"><span className="section-label">{entry.type} · {entry.issue}</span><StageBadge stage={entry.stage}/></div>
         <h1>{entry.title}</h1>
         <p className="article-dek">{entry.summary}</p>
-        <div className="article-meta"><span className="author-avatar">JC</span><div><strong>Jackson Cummings</strong><span>{dateLabel(entry.date)} · {entry.minutes} min read</span></div><span className="article-category">{entry.topic}</span></div>
+        <div className="article-meta"><span className="author-avatar">JC</span><div><strong>Jackson Cummings</strong><span>{dateLabel(entry.date)} · {entry.minutes} min read</span></div><span className="article-category"><TopicBadge topic={entry.topic}/></span></div>
         <div className="article-mobile-contents"><label htmlFor="article-jump">In this entry</label><div className="article-select"><select id="article-jump" value={activeSection} onChange={(event) => jumpTo(Number(event.target.value))}>{entry.sections.map((section, i) => <option value={i} key={section.heading}>{String(i + 1).padStart(2,'0')} · {section.heading}</option>)}</select><ChevronDown/></div></div>
         <div className="article-prose">{entry.sections.map((section, i) => <section id={sectionId(i)} key={section.heading} className="prose-section">
           <div className="section-count">{String(i + 1).padStart(2, '0')} / {String(entry.sections.length).padStart(2, '0')}</div>
@@ -245,7 +249,7 @@ export default function App() {
   const [selected, setSelected] = useState<Entry | null>(() => findEntry(getInitialSlug()))
   const [filter, setFilter] = useState<Filter>('All')
   const [view, setView] = useState<View>('all')
-  const [sort, setSort] = useState<Sort>('recent')
+  const [sort, setSort] = useState<Sort>('subject')
   const [query, setQuery] = useState('')
   const [dialogQuery, setDialogQuery] = useState('')
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -354,6 +358,7 @@ export default function App() {
       <IconControl className="mobile-nav-toggle" onClick={openNavigation} label="Open journal navigation"><Menu/></IconControl>
       <button onClick={goHome} className="brand" aria-label="thelabjournal™ home"><Mark/><span className="brand-text">thelabjournal™</span></button>
       <nav className="header-links" aria-label="Primary navigation"><button className={!selected && view === 'all' && filter === 'All' ? 'current' : ''} onClick={() => changeFilter('All')}>Journal</button><button className={!selected && view === 'all' && filter === 'Research' ? 'current' : ''} onClick={() => changeFilter('Research')}>Research</button><button className={!selected && view === 'all' && filter === 'Engineering' ? 'current' : ''} onClick={() => changeFilter('Engineering')}>Engineering</button></nav>
+      <span className="header-signal" aria-hidden="true"><DitherScene variant="nav" className="header-signal-dither" fps={12} speed={1} intensity={0.92}/></span>
       <div className="header-end"><button className="header-search" onClick={() => openSearch()} aria-label="Search journal"><Search/><span>Search entries</span><kbd>⌘ K</kbd></button><IconControl className="mobile-search" label="Search journal" onClick={() => openSearch()}><Search/></IconControl><IconControl className="header-theme" label={resolvedTheme === "dark" ? "Switch to light theme" : "Switch to dark theme"} onClick={toggleTheme}>{resolvedTheme === "dark" ? <Sun/> : <Moon/>}</IconControl><IconControl className="header-preferences" label="Journal preferences" onClick={openSettings}><Settings2/></IconControl><span className="header-issue">Vol. 01 / 2026</span></div>
     </div></header>
     <div className={cn("frame", railCollapsed && "rail-collapsed")}>

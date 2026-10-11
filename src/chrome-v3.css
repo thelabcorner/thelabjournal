@@ -40,6 +40,7 @@
 .journal-list--cards .row-title { font-size: 14px; line-height: 1.38; }
 .journal-list--cards .row-summary { -webkit-line-clamp: 2; line-height: 1.5; }
 .journal-list--cards .row-type { margin-top: auto; gap: 2px; flex-direction: row; align-items: center; gap: 8px; }
+.journal-list--cards .row-mobile-meta .badge { display: none; }
 .journal-list--cards .row-date { display: none; }
 .journal-list--cards .row-arrow { position: absolute; right: 16px; bottom: 13px; }
 .journal-list--cards .row-bookmark { position: absolute; right: 7px; top: 8px; margin: 0; }
@@ -116,7 +117,8 @@
  .journal-list--cards .journal-row .row-title { font-size: 13.5px; }
  .journal-list--cards .row-type { display: none; }
  .journal-list--cards .row-summary { display: -webkit-box; -webkit-line-clamp: 2; }
- .journal-list--cards .row-mobile-meta { display: block; }
+   .journal-list--cards .journal-row .row-mobile-meta { display: flex; }
+   .journal-list--cards .row-mobile-meta .badge { display: inline-flex; }
  .journal-list--cards .journal-row-link { padding: 13px 45px 13px 13px; }
  .sidebar-wrap { height: min(91dvh,850px); border-radius: 14px 14px 0 0; background: var(--card); }
  .browse-sheet { display: flex; flex-direction: column; height: 100%; min-height: 0; }

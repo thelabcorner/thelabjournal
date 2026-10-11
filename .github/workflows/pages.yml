@@ -27,6 +27,8 @@ jobs:
           bun-version: latest
       - name: Install dependencies
         run: bun install --frozen-lockfile
+      - name: Validate archive sorting
+        run: bun run audit:archive
       - name: Build GitHub Pages site
         run: bun run build
         env:

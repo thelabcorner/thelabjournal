@@ -20,7 +20,8 @@
     "audit:virtualization": "bun scripts/virtualization-audit.mjs && bun scripts/virtual-navigation-audit.mjs && bun scripts/virtual-pane-audit.mjs && bun scripts/virtual-resize-audit.mjs && bun scripts/navigation-virtual-regression.mjs",
     "audit:virtual-cold": "bun scripts/virtual-cold-load-audit.mjs",
     "bench:virtualization": "bun scripts/virtualization-bench.mjs",
-    "audit:virtual-pwa": "bun scripts/virtual-pwa-offline-audit.mjs"
+    "audit:virtual-pwa": "bun scripts/virtual-pwa-offline-audit.mjs",
+    "audit:archive": "bun scripts/archive-sort-audit.mjs"
   },
   "dependencies": {
     "@tanstack/react-virtual": "^3.13.12",

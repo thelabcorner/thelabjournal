@@ -16,9 +16,9 @@ Vite is configured for port **11264**, listening on `0.0.0.0`. The local preview
 
 ## Deployment
 
-The live site is [thelabcorner.github.io/thelabjournal](https://thelabcorner.github.io/thelabjournal/). Its current build was published under `thelabjournal/` in the existing `thelabcorner.github.io` Pages repository, without modifying that repository's homepage. The source is also publicly mirrored on its [`thelabjournal-source` branch](https://github.com/thelabcorner/thelabcorner.github.io/tree/thelabjournal-source) until a standalone project repository is connected.
+The canonical source is [thelabcorner/thelabjournal](https://github.com/thelabcorner/thelabjournal), and the live site is [thelabcorner.github.io/thelabjournal](https://thelabcorner.github.io/thelabjournal/). This project has its own GitHub Pages deployment; it does not depend on the owner's homepage repository.
 
-`.github/workflows/pages.yml` prepares direct, automatic Pages deployment on pushes to `main` after this project is published as its own repository. It is not the deployment mechanism for the current Pages-root snapshot.
+`.github/workflows/pages.yml` builds and deploys the site automatically on pushes to `main` via GitHub Actions.
 
 The workflow builds with `GITHUB_PAGES=true` and sets the Vite/PWA base path to `/thelabjournal/`. Local builds retain `/` as their base path, preserving the existing development and PWA audits. To inspect the Pages variant locally:
 
@@ -32,7 +32,8 @@ Open `/thelabjournal/` on the preview origin when validating a Pages build.
 ## Information architecture
 
 - **Persistent application frame:** 48 px header, 252 px desktop navigation rail, compact archive workspace, subdued footer.
-- **Archive:** topic filters, type/date metadata, keyword search, sorting, item actions, selected entry, and saved view. No separate hero page for each topic.
+- **Archive:** topic filters, category badges shared with the article reader, type/date metadata, keyword search, subject grouping (newest within each subject) by default, alternative chronological/reading-length sorts, item actions, selected entry, and saved view. No separate hero page for each topic.
+- **Navigation:** a tiny ordered-dot signal trace at desktop widths, drawn at 12 fps and suspended when hidden or reduced-motion is enabled.
 - **Article reader:** back/actions bar, live reading-progress indicator, article contents rail at wide widths, and a native section picker at narrower widths. The first section appears **before** the supporting figure.
 - **Phone navigation:** persistent four-item bottom navigation (Journal, Browse, Saved, Search), safe-area-aware placement, and a bottom-sheet Browse menu. Breakpoint: below 768 px.
 - **Tablet navigation:** top-bar Browse opens a left drawer between 768 and 1023 px.
@@ -61,6 +62,7 @@ Large archive lists, responsive card grids, saved/filtered views, full-search re
 
 ```sh
 bun run build
+bun run audit:archive
 bun run smoke
 bun scripts/visual-audit.mjs
 bun run audit:dither

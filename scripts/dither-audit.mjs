@@ -34,6 +34,15 @@ for (const width of [320,375,768,1024,1440]) {
       throw new Error('Feature animation did not advance or lacks ink: ' + JSON.stringify({start,end}))
     const rect = await feature.boundingBox()
     if (!rect || rect.height < 40 || rect.width < 70) throw new Error('Feature canvas is not visible: '+JSON.stringify(rect))
+    if (width === 1440) {
+      const navbar = page.locator('.header-signal-dither')
+      await page.waitForFunction(() => document.querySelector('.header-signal-dither')?.dataset.ditherState === 'playing')
+      const before = await measure(navbar)
+      await page.waitForTimeout(480)
+      const after = await measure(navbar)
+      if (before.ink < 5 || after.frames <= before.frames || before.hash === after.hash)
+        throw new Error('Navbar dither failed to animate: ' + JSON.stringify({before,after}))
+    }
 
     await page.locator('.feature-link').click()
     const ledger = page.locator('.figure-dither')

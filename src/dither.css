@@ -66,6 +66,20 @@
   mask-image: linear-gradient(90deg, transparent 0%, #000 28%, #000 78%, transparent 100%);
 }
 .figure-dither { opacity: .72; color: var(--dither-field); }
+.header-signal {
+  display: block;
+  flex: 0 0 104px;
+  position: relative;
+  height: 27px;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 14%, black 85%, transparent);
+  mask-image: linear-gradient(90deg, transparent, black 14%, black 85%, transparent);
+}
+.header-signal-dither { opacity: .78; }
+@media (max-width: 1279px) {
+  .header-signal { display: none; }
+}
 @media (max-width: 767px) {
   /* A dedicated 58 px graphic strip, not a full-screen animated hero. */
   .feature-illustration {

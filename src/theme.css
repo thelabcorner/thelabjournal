@@ -73,6 +73,7 @@
 :root[data-theme="dark"] .index-list-header { background: var(--inset); }
 :root[data-theme="dark"] .feature-dither { opacity: .54; }
 :root[data-theme="dark"] .figure-dither { opacity: .55; }
+:root[data-theme="dark"] .header-signal-dither { opacity: .62; }
 :root[data-theme="dark"] .prefs-backdrop { background: oklch(.055 0 0 / .66); }
 :root[data-theme="dark"] .overlay { background: oklch(.055 0 0 / .62); }
 :root[data-theme="dark"] .mobile-drawer-backdrop { background: oklch(.055 0 0 / .6); }

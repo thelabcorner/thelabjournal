@@ -7,7 +7,7 @@ import { useEffect, useRef } from 'react'
  * - No continuous animation loop when hidden, out of view, or reduced-motion.
  * - Decorative only: rendered pixels never represent measured experimental data.
  */
-type Variant = 'sequence' | 'ledger'
+type Variant = 'sequence' | 'ledger' | 'nav'
 interface DitherSceneProps {
   variant: Variant
   className?: string
@@ -36,19 +36,27 @@ interface Frame {
 }
 
 function dots({ ctx, width, height, dpr, seconds, still, intensity }: Frame, variant: Variant) {
-  const pitch = variant === 'ledger' ? 3.5 : 4.2
+  const pitch = variant === 'nav' ? 3 : variant === 'ledger' ? 3.5 : 4.2
   const dotSize = Math.max(1 / dpr, Math.round(pitch * 0.44 * dpr) / dpr)
   const cols = Math.ceil(width / pitch)
   const rows = Math.ceil(height / pitch)
-  const scan = still ? 0.52 : ((seconds * (variant === 'ledger' ? 0.04 : 0.062)) % 1)
+  const scan = still ? 0.52 : ((seconds * (variant === 'ledger' ? 0.04 : variant === 'nav' ? 0.085 : 0.062)) % 1)
   const fade = (u: number) => clamp(u / 0.13) * clamp((1 - u) / 0.13)
+  const navPhase = still ? 0.8 : seconds * 0.85
 
   for (let ry = 0; ry < rows; ry += 1) {
     const v = (ry + 0.5) / rows
     for (let cx = 0; cx < cols; cx += 1) {
       const u = (cx + 0.5) / cols
       let coverage = 0
-      if (variant === 'ledger') {
+      if (variant === 'nav') {
+        // A tiny ordered-dot signal trace. This is a purely decorative, sparse
+        // oscilloscope motif: no shader, SVG filter, or CSS animation loop.
+        const wave = 0.5 + 0.23 * Math.sin(u * 12.5 - navPhase) * (0.58 + 0.42 * Math.sin(u * 3.1 + navPhase * 0.35))
+        const distance = Math.abs(v - wave)
+        const line = Math.exp(-((distance / 0.16) ** 2))
+        coverage = (line * 0.72 + pulse(u, scan, 0.095) * line * 0.45) * fade(u)
+      } else if (variant === 'ledger') {
         // Seven short rows of archival records, with a resolving scan column.
         const lane = Math.floor(v * 7)
         const local = (v * 7) % 1
