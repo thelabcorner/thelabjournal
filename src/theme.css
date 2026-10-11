@@ -74,7 +74,7 @@
 :root[data-theme="dark"] .feature-dither { opacity: .54; }
 :root[data-theme="dark"] .figure-dither { opacity: .55; }
 :root[data-theme="dark"] .header-dither-canvas { opacity: .45; }
-:root[data-theme="dark"] .tabbar-dither-canvas { opacity: .14; }
+:root[data-theme="dark"] .tabbar-dither-canvas { opacity: .08; }
 :root[data-theme="dark"] .prefs-backdrop { background: oklch(.055 0 0 / .66); }
 :root[data-theme="dark"] .overlay { background: oklch(.055 0 0 / .62); }
 :root[data-theme="dark"] .mobile-drawer-backdrop { background: oklch(.055 0 0 / .6); }
