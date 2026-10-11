@@ -45,8 +45,24 @@ for (const width of [320,375,768,1024,1440]) {
         pointerEvents: getComputedStyle(node).pointerEvents,
         background: getComputedStyle(node.parentElement).backgroundColor,
       }))
-      if (layering.opacity < 0.2 || layering.pointerEvents !== 'none')
+      const isBottomBar = selector === '.tabbar-dither-canvas'
+      if ((isBottomBar ? layering.opacity < 0.12 || layering.opacity > 0.24 : layering.opacity < 0.2) || layering.pointerEvents !== 'none')
         throw new Error('Nav canvas contrast or pointer-events incorrect: ' + JSON.stringify({selector,layering}))
+      if (isBottomBar) {
+        const opacities = await page.evaluate(() => {
+          const root = document.documentElement
+          const original = root.dataset.theme
+          const canvas = document.querySelector('.tabbar-dither-canvas')
+          root.dataset.theme = 'light'
+          const light = Number(getComputedStyle(canvas).opacity)
+          root.dataset.theme = 'dark'
+          const dark = Number(getComputedStyle(canvas).opacity)
+          root.dataset.theme = original
+          return {light, dark}
+        })
+        if (opacities.light > 0.2 || opacities.dark > 0.24 || opacities.dark < opacities.light)
+          throw new Error('Mobile menu dither is not subdued in both themes: ' + JSON.stringify(opacities))
+      }
       const before = await measure(canvas)
       await page.waitForTimeout(480)
       const after = await measure(canvas)

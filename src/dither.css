@@ -81,7 +81,7 @@
   mask-image: linear-gradient(90deg, transparent 0%, #000 9%, #000 91%, transparent 100%);
 }
 .header-dither-canvas { opacity: .34; }
-.tabbar-dither-canvas { opacity: .46; }
+.tabbar-dither-canvas { opacity: .16; }
 @media (max-width: 767px) {
   .mobile-tabbar { isolation: isolate; overflow: hidden; }
   .mobile-tabbar > button { z-index: 1; }
