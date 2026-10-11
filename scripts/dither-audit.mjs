@@ -60,7 +60,7 @@ for (const width of [320,375,768,1024,1440]) {
           root.dataset.theme = original
           return {light, dark}
         })
-        if (opacities.light > 0.2 || opacities.dark > 0.24 || opacities.dark < opacities.light)
+        if (opacities.light > 0.2 || opacities.dark > 0.15 || opacities.dark >= opacities.light)
           throw new Error('Mobile menu dither is not subdued in both themes: ' + JSON.stringify(opacities))
       }
       const before = await measure(canvas)
