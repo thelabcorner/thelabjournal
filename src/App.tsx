@@ -354,11 +354,10 @@ export default function App() {
   }
   return <div className="app-shell" data-text-scale={prefs.textScale} data-layout={prefs.layout}>
     <a href="#main" className="skip-link">Skip to content</a>
-    <header className="site-header"><div className="header-inner">
+    <header className="site-header"><span className="header-dither-field" aria-hidden="true"><DitherScene variant="nav" className="header-dither-canvas" fps={14} intensity={0.95}/></span><div className="header-inner">
       <IconControl className="mobile-nav-toggle" onClick={openNavigation} label="Open journal navigation"><Menu/></IconControl>
       <button onClick={goHome} className="brand" aria-label="thelabjournal™ home"><Mark/><span className="brand-text">thelabjournal™</span></button>
       <nav className="header-links" aria-label="Primary navigation"><button className={!selected && view === 'all' && filter === 'All' ? 'current' : ''} onClick={() => changeFilter('All')}>Journal</button><button className={!selected && view === 'all' && filter === 'Research' ? 'current' : ''} onClick={() => changeFilter('Research')}>Research</button><button className={!selected && view === 'all' && filter === 'Engineering' ? 'current' : ''} onClick={() => changeFilter('Engineering')}>Engineering</button></nav>
-      <span className="header-signal" aria-hidden="true"><DitherScene variant="nav" className="header-signal-dither" fps={12} speed={1} intensity={0.92}/></span>
       <div className="header-end"><button className="header-search" onClick={() => openSearch()} aria-label="Search journal"><Search/><span>Search entries</span><kbd>⌘ K</kbd></button><IconControl className="mobile-search" label="Search journal" onClick={() => openSearch()}><Search/></IconControl><IconControl className="header-theme" label={resolvedTheme === "dark" ? "Switch to light theme" : "Switch to dark theme"} onClick={toggleTheme}>{resolvedTheme === "dark" ? <Sun/> : <Moon/>}</IconControl><IconControl className="header-preferences" label="Journal preferences" onClick={openSettings}><Settings2/></IconControl><span className="header-issue">Vol. 01 / 2026</span></div>
     </div></header>
     <div className={cn("frame", railCollapsed && "rail-collapsed")}>
@@ -371,6 +370,7 @@ export default function App() {
     </div>
     <footer className="site-footer"><div className="footer-inner"><span>© {new Date().getFullYear()} thelabjournal™</span><span>Research · Engineering · Essays</span><button onClick={() => window.scrollTo({ top:0, behavior:'smooth' })}>Back to top ↑</button></div></footer>
     <nav className="mobile-tabbar" aria-label="Mobile primary navigation">
+      <span className="tabbar-dither-field" aria-hidden="true"><DitherScene variant="nav" className="tabbar-dither-canvas" fps={14} intensity={0.98}/></span>
       <button aria-current={!selected && view === 'all' && filter === 'All' ? 'page' : undefined} onClick={() => { changeFilter('All', true); window.scrollTo(0,0) }}><BookOpen/><span>Journal</span></button>
       <button aria-expanded={navOpen} onClick={() => openNavigation(true)}><Menu/><span>Browse</span></button>
       <button aria-current={!selected && view === 'saved' ? 'page' : undefined} onClick={() => { showSaved(true); window.scrollTo(0,0) }}><Bookmark/><span>Saved</span>{saved.length > 0 && <i className="tab-count">{saved.length}</i>}</button>

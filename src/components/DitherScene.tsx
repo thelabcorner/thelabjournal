@@ -24,6 +24,12 @@ const hash = (x: number, y: number) => {
   const v = Math.sin(x * 127.1 + y * 311.7 + 41.7) * 43758.5453123
   return v - Math.floor(v)
 }
+// Deterministic integer noise for the high-frequency, full-width nav field.
+const cellNoise = (x: number, y: number) => {
+  let value = Math.imul(x + 1, 374761393) ^ Math.imul(y + 1, 668265263)
+  value = Math.imul(value ^ (value >>> 13), 1274126177)
+  return ((value ^ (value >>> 16)) >>> 0) / 4294967296
+}
 
 interface Frame {
   ctx: CanvasRenderingContext2D
@@ -36,13 +42,13 @@ interface Frame {
 }
 
 function dots({ ctx, width, height, dpr, seconds, still, intensity }: Frame, variant: Variant) {
-  const pitch = variant === 'nav' ? 3 : variant === 'ledger' ? 3.5 : 4.2
+  const pitch = variant === 'nav' ? 4.5 : variant === 'ledger' ? 3.5 : 4.2
   const dotSize = Math.max(1 / dpr, Math.round(pitch * 0.44 * dpr) / dpr)
   const cols = Math.ceil(width / pitch)
   const rows = Math.ceil(height / pitch)
-  const scan = still ? 0.52 : ((seconds * (variant === 'ledger' ? 0.04 : variant === 'nav' ? 0.085 : 0.062)) % 1)
+  const scan = still ? 0.52 : ((seconds * (variant === 'ledger' ? 0.04 : variant === 'nav' ? 0.042 : 0.062)) % 1)
   const fade = (u: number) => clamp(u / 0.13) * clamp((1 - u) / 0.13)
-  const navPhase = still ? 0.8 : seconds * 0.85
+  const navPhase = still ? 0 : seconds * 0.35
 
   for (let ry = 0; ry < rows; ry += 1) {
     const v = (ry + 0.5) / rows
@@ -50,12 +56,23 @@ function dots({ ctx, width, height, dpr, seconds, still, intensity }: Frame, var
       const u = (cx + 0.5) / cols
       let coverage = 0
       if (variant === 'nav') {
-        // A tiny ordered-dot signal trace. This is a purely decorative, sparse
-        // oscilloscope motif: no shader, SVG filter, or CSS animation loop.
-        const wave = 0.5 + 0.23 * Math.sin(u * 12.5 - navPhase) * (0.58 + 0.42 * Math.sin(u * 3.1 + navPhase * 0.35))
-        const distance = Math.abs(v - wave)
-        const line = Math.exp(-((distance / 0.16) ** 2))
-        coverage = (line * 0.72 + pulse(u, scan, 0.095) * line * 0.45) * fade(u)
+        // WebSeal-style information wall: Bayer-dot telemetry, short rows of
+        // records, sparse blocks, and a slow verification sweep. The field is
+        // a background texture, never an illustration behind article prose.
+        const lane = Math.floor(ry / 4)
+        const section = (Math.floor(cx / 18) + lane * 3) % 4
+        const noise = cellNoise(cx, ry)
+        const local = cx % 18
+        let occupancy: number
+        if (section === 0) occupancy = (local < 3 || local > 15) ? 0.17 : 0.58 + noise * 0.24
+        else if (section === 1) occupancy = (ry % 5 === 0 || local > 12) ? 0.15 : 0.36 + noise * 0.30
+        else if (section === 2) occupancy = (ry % 7 < 3) ? 0.48 + noise * 0.26 : 0.12
+        else occupancy = noise > 0.48 ? 0.61 : 0.15
+        const gap = ry % 9 === 0 ? 0.28 : 1
+        const verification = pulse(u, scan, 0.085) * 0.42
+        const drift = (Math.sin(u * 18 - navPhase + v * 3) + 1) * 0.09
+        const edge = clamp(u / 0.065) * clamp((1 - u) / 0.065)
+        coverage = clamp((occupancy * gap + verification + drift) * edge * intensity)
       } else if (variant === 'ledger') {
         // Seven short rows of archival records, with a resolving scan column.
         const lane = Math.floor(v * 7)

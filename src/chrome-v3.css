@@ -44,7 +44,7 @@
 .journal-list--cards .row-date { display: none; }
 .journal-list--cards .row-arrow { position: absolute; right: 16px; bottom: 13px; }
 .journal-list--cards .row-bookmark { position: absolute; right: 7px; top: 8px; margin: 0; }
-.journal-list--cards .row-mobile-meta { display: block; font-size: 10.5px; color: var(--muted-foreground); }
+.journal-list--cards .row-mobile-meta { display: flex; font-size: 10.5px; color: var(--muted-foreground); }
 .app-shell[data-text-scale="large"] .article-prose { font-size: 16.5px; line-height: 1.82; max-width: 740px; }
 .app-shell[data-text-scale="large"] .prose-section p { margin-bottom: 21px; }
 .app-shell[data-text-scale="large"] .prose-section h2 { font-size: 23px; }

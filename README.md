@@ -33,7 +33,7 @@ Open `/thelabjournal/` on the preview origin when validating a Pages build.
 
 - **Persistent application frame:** 48 px header, 252 px desktop navigation rail, compact archive workspace, subdued footer.
 - **Archive:** topic filters, category badges shared with the article reader, type/date metadata, keyword search, subject grouping (newest within each subject) by default, alternative chronological/reading-length sorts, item actions, selected entry, and saved view. No separate hero page for each topic.
-- **Navigation:** a tiny ordered-dot signal trace at desktop widths, drawn at 12 fps and suspended when hidden or reduced-motion is enabled.
+- **Navigation:** full-width WebSeal-inspired ordered-dot information fields behind the top header and mobile bottom bar, drawn at 14 fps with legible foreground controls and suspended when hidden or reduced-motion is enabled.
 - **Article reader:** back/actions bar, live reading-progress indicator, article contents rail at wide widths, and a native section picker at narrower widths. The first section appears **before** the supporting figure.
 - **Phone navigation:** persistent four-item bottom navigation (Journal, Browse, Saved, Search), safe-area-aware placement, and a bottom-sheet Browse menu. Breakpoint: below 768 px.
 - **Tablet navigation:** top-bar Browse opens a left drawer between 768 and 1023 px.

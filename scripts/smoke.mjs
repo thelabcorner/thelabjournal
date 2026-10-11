@@ -40,7 +40,18 @@ for (const { width, height } of sizes) {
     const rowBadges = page.locator('.journal-row .row-type .badge')
     if (await rowBadges.count() < 2) throw new Error('Journal category badges missing')
     if (await rowBadges.first().innerText() !== 'Essays') throw new Error('Subject grouping does not start with Essays')
-    if (width < 768 && !await page.locator('.journal-row .row-mobile-meta .badge').first().isVisible()) throw new Error('Mobile category badge not visible')
+    if (width < 768) {
+      const meta = page.locator('.journal-row .row-mobile-meta').first()
+      const badge = meta.locator('.badge')
+      if (!await badge.isVisible()) throw new Error('Mobile category badge not visible')
+      const spacing = await meta.evaluate((el) => {
+        const badge = el.querySelector('.badge').getBoundingClientRect()
+        const date = el.querySelector('.badge + span').getBoundingClientRect()
+        return { display:getComputedStyle(el).display, gap:parseFloat(getComputedStyle(el).columnGap), inlineDistance:date.left - badge.right, wrapped:date.top > badge.bottom }
+      })
+      if (spacing.display !== 'flex' || spacing.gap < 10 || (!spacing.wrapped && spacing.inlineDistance < 10))
+        throw new Error('Badge-to-date spacing is too tight: ' + JSON.stringify(spacing))
+    }
     await page.locator('#journal-sort').selectOption('short')
     if (await page.locator('#journal-sort').inputValue() !== 'short') throw new Error('Shortest sort cannot be selected')
     await page.locator('#journal-sort').selectOption('subject')

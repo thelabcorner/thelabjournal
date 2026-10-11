@@ -34,15 +34,36 @@ for (const width of [320,375,768,1024,1440]) {
       throw new Error('Feature animation did not advance or lacks ink: ' + JSON.stringify({start,end}))
     const rect = await feature.boundingBox()
     if (!rect || rect.height < 40 || rect.width < 70) throw new Error('Feature canvas is not visible: '+JSON.stringify(rect))
-    if (width === 1440) {
-      const navbar = page.locator('.header-signal-dither')
-      await page.waitForFunction(() => document.querySelector('.header-signal-dither')?.dataset.ditherState === 'playing')
-      const before = await measure(navbar)
+    const checkNavigationDither = async (selector) => {
+      const canvas = page.locator(selector)
+      await page.waitForFunction((className) => document.querySelector(className)?.dataset.ditherState === 'playing', selector)
+      const bounds = await canvas.boundingBox()
+      if (!bounds || bounds.width < width * 0.95 || bounds.height < 35)
+        throw new Error('Nav background is not full width: ' + JSON.stringify({selector,bounds}))
+      const layering = await canvas.evaluate((node) => ({
+        opacity: Number(getComputedStyle(node).opacity),
+        pointerEvents: getComputedStyle(node).pointerEvents,
+        background: getComputedStyle(node.parentElement).backgroundColor,
+      }))
+      if (layering.opacity < 0.2 || layering.pointerEvents !== 'none')
+        throw new Error('Nav canvas contrast or pointer-events incorrect: ' + JSON.stringify({selector,layering}))
+      const before = await measure(canvas)
       await page.waitForTimeout(480)
-      const after = await measure(navbar)
-      if (before.ink < 5 || after.frames <= before.frames || before.hash === after.hash)
-        throw new Error('Navbar dither failed to animate: ' + JSON.stringify({before,after}))
+      const after = await measure(canvas)
+      if (before.ink < 50 || after.frames <= before.frames || before.hash === after.hash)
+        throw new Error('Nav background did not animate: ' + JSON.stringify({selector,before,after}))
+      await page.emulateMedia({reducedMotion:'reduce'})
+      await page.waitForFunction((className) => document.querySelector(className)?.dataset.ditherState === 'still', selector)
+      const still = await measure(canvas)
+      await page.waitForTimeout(220)
+      const afterStill = await measure(canvas)
+      if (still.frames !== afterStill.frames || still.hash !== afterStill.hash)
+        throw new Error('Reduced-motion nav background kept redrawing: ' + selector)
+      await page.emulateMedia({reducedMotion:'no-preference'})
+      return { ink: after.ink, frames: after.frames - before.frames }
     }
+    const headerDither = await checkNavigationDither('.header-dither-canvas')
+    const bottomDither = width < 768 ? await checkNavigationDither('.tabbar-dither-canvas') : null
 
     await page.locator('.feature-link').click()
     const ledger = page.locator('.figure-dither')
@@ -60,7 +81,7 @@ for (const width of [320,375,768,1024,1440]) {
     if (still.hash !== afterStill.hash) throw new Error('Reduced-motion pixels changed')
     await page.emulateMedia({reducedMotion:'no-preference'})
     await page.waitForFunction(() => document.querySelector('.figure-dither')?.dataset.ditherState === 'playing')
-    console.log(JSON.stringify({width,pass:true,animatedFrames:end.frames-start.frames,startInk:start.ink,endInk:end.ink,figureInk:info.ink,stillFrames:afterStill.frames-still.frames,featureBounds:rect}))
+    console.log(JSON.stringify({width,pass:true,animatedFrames:end.frames-start.frames,startInk:start.ink,endInk:end.ink,headerDither,bottomDither,figureInk:info.ink,stillFrames:afterStill.frames-still.frames,featureBounds:rect}))
   } catch (error) {
     failures++
     console.log(JSON.stringify({width,pass:false,error:String(error)}))
