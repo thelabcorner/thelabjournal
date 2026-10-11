@@ -82,6 +82,32 @@
 }
 .header-dither-canvas { opacity: .34; }
 .tabbar-dither-canvas { opacity: .16; }
+/* Journal / All entries only. Reuse the navbar's animated ordered-dot field,
+   at a literal 2% composite opacity. The sticky viewport-sized drawing surface
+   avoids rasterizing the entire scrolling archive on every animation frame. */
+.frame--journal-dither { position: relative; isolation: isolate; background: var(--background); }
+.journal-landing-dither-field {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: clip;
+  pointer-events: none;
+  user-select: none;
+}
+.journal-landing-dither-viewport {
+  position: sticky;
+  top: var(--header-height);
+  height: calc(100dvh - var(--header-height));
+  width: 100%;
+}
+.journal-landing-dither-canvas { opacity: .02; }
+.frame--journal-dither > .content-main { position: relative; z-index: 1; }
+@media (min-width: 1024px) {
+  .frame--journal-dither > .sidebar-wrap { position: relative; z-index: 1; }
+}
+@media print {
+  .journal-landing-dither-field { display: none; }
+}
 @media (max-width: 767px) {
   .mobile-tabbar { isolation: isolate; overflow: hidden; }
   .mobile-tabbar > button { z-index: 1; }

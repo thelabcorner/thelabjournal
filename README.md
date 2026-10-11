@@ -33,7 +33,7 @@ Open `/thelabjournal/` on the preview origin when validating a Pages build.
 
 - **Persistent application frame:** 48 px header, 252 px desktop navigation rail, compact archive workspace, subdued footer.
 - **Archive:** topic filters, category badges shared with the article reader, type/date metadata, keyword search, subject grouping (newest within each subject) by default, alternative chronological/reading-length sorts, item actions, selected entry, and saved view. No separate hero page for each topic.
-- **Journal landing paper:** a CSS-only zinc grayscale sheet with 32 px horizontal ruling, a restrained margin rail and two sparse fiber layers. It adapts to collapsed sidebars and phone gutters. Only the Journal/All entries surface uses it; other subjects, Saved, and article readers remain plain. Print mode omits the texture.
+- **Journal landing background:** the existing ordered-dot WebSeal-style animation reused at exactly 2% opacity, with no paper ruling, margins, or artificial grain. The paint surface stays viewport-sized when scrolling, is excluded from printing, and exists only in Journal / All entries; other subjects, Saved, and article readers remain plain.
 - **Navigation:** full-width WebSeal-inspired ordered-dot information fields behind the top header and mobile bottom bar, drawn at 14 fps with legible foreground controls and suspended when hidden or reduced-motion is enabled.
 - **Article reader:** back/actions bar, live reading-progress indicator, article contents rail at wide widths, and a native section picker at narrower widths. The first section appears **before** the supporting figure.
 - **Phone navigation:** persistent four-item bottom navigation (Journal, Browse, Saved, Search), safe-area-aware placement, and a bottom-sheet Browse menu. Breakpoint: below 768 px.
@@ -64,7 +64,7 @@ Large archive lists, responsive card grids, saved/filtered views, full-search re
 ```sh
 bun run build
 bun run audit:archive
-bun run audit:paper
+bun run audit:landing-dither
 bun run smoke
 bun scripts/visual-audit.mjs
 bun run audit:dither

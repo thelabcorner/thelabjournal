@@ -22,7 +22,7 @@
     "bench:virtualization": "bun scripts/virtualization-bench.mjs",
     "audit:virtual-pwa": "bun scripts/virtual-pwa-offline-audit.mjs",
     "audit:archive": "bun scripts/archive-sort-audit.mjs",
-    "audit:paper": "bun scripts/paper-audit.mjs"
+    "audit:landing-dither": "bun scripts/landing-dither-audit.mjs"
   },
   "dependencies": {
     "@tanstack/react-virtual": "^3.13.12",

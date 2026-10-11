@@ -9,7 +9,6 @@ import './theme.css'
 import './appearance-control.css'
 import './pwa.css'
 import './virtualization.css'
-import './journal-paper.css'
 
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode><App /></React.StrictMode>
