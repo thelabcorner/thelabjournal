@@ -7,14 +7,14 @@ import type { Vibration, TriggerOptions } from './types';
  * Replaces previous 16ms polling + linear scan.
  */
 export class HapticScheduler {
-  private timeoutId: NodeJS.Timeout | number | null = null;
+  private timeoutId: ReturnType<typeof setTimeout> | null = null;
   private isRunning = false;
   private abortController: AbortController | null = null;
 
   // Injectable for tests (virtual clock with vi.useFakeTimers)
   private timer = {
     setTimeout: (cb: () => void, delay: number) => setTimeout(cb, delay),
-    clearTimeout: (id: NodeJS.Timeout | number) => clearTimeout(id as any),
+    clearTimeout: (id: ReturnType<typeof setTimeout>) => clearTimeout(id),
     now: () => Date.now(),
   };
 
