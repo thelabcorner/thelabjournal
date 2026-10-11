@@ -16,7 +16,9 @@ Vite is configured for port **11264**, listening on `0.0.0.0`. The local preview
 
 ## Deployment
 
-The production site is deployed to [GitHub Pages](https://thelabcorner.github.io/thelabjournal/) on pushes to `main`, via `.github/workflows/pages.yml`.
+The live site is [thelabcorner.github.io/thelabjournal](https://thelabcorner.github.io/thelabjournal/). Its current build was published under `thelabjournal/` in the existing `thelabcorner.github.io` Pages repository, without modifying that repository's homepage. The source is also publicly mirrored on its [`thelabjournal-source` branch](https://github.com/thelabcorner/thelabcorner.github.io/tree/thelabjournal-source) until a standalone project repository is connected.
+
+`.github/workflows/pages.yml` prepares direct, automatic Pages deployment on pushes to `main` after this project is published as its own repository. It is not the deployment mechanism for the current Pages-root snapshot.
 
 The workflow builds with `GITHUB_PAGES=true` and sets the Vite/PWA base path to `/thelabjournal/`. Local builds retain `/` as their base path, preserving the existing development and PWA audits. To inspect the Pages variant locally:
 
