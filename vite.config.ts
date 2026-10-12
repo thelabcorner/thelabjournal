@@ -35,6 +35,10 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{html,js,css,png,svg,ico,webmanifest}'],
+        // Avoid precaching all social PNGs and 12+ duplicate per-post HTML shells.
+        // Social crawlers fetch the real static pages; offline app navigation
+        // is handled by the existing index.html fallback.
+        globIgnores: ['og/articles/**', 'posts/**'],
         navigateFallback: 'index.html',
         navigateFallbackDenylist: [/^\/api(?:\/|$)/],
         cleanupOutdatedCaches: true,

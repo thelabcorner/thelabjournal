@@ -39,6 +39,8 @@ jobs:
         run: bun run audit:og
       - name: Audit article route links
         run: bun scripts/article-route-audit.mjs
+      - name: HTTP smoke-test static article pages and images
+        run: bun scripts/article-http-audit.mjs
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

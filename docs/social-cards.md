@@ -33,3 +33,7 @@ Inter sans-serif; grayscale shadcn-zinc surfaces; New York-style spacing; thin b
 - Vite emits base-prefixed asset URLs for Project Pages. Routes must point to those paths, not to relative ./assets.
 - Renaming an article slug breaks old external links. Prefer stable slugs.
 - OG caches can persist. URLs include a content-derived image hash query string so changed images get fresh cache identities.
+
+## Delivery verification
+
+The deployment and pull-request workflows start a local Vite preview server in GitHub Pages mode, fetch every physical `/posts/<slug>/` URL and PNG over HTTP, assert correct content types and canonical metadata, and check legacy query links still return the application shell. The PWA precache deliberately excludes generated OG PNGs and duplicate article HTML shells; the application remains available offline through its indexed navigation fallback.

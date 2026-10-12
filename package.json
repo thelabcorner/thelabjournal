@@ -27,7 +27,8 @@
     "audit:archive": "bun scripts/archive-sort-audit.mjs",
     "audit:landing-dither": "bun scripts/landing-dither-audit.mjs",
     "sync:journal": "bun scripts/sync-silica-post.mjs",
-    "check:journal": "bun scripts/sync-silica-post.mjs --check"
+    "check:journal": "bun scripts/sync-silica-post.mjs --check",
+    "audit:article-http": "bun scripts/article-http-audit.mjs"
   },
   "dependencies": {
     "@tanstack/react-virtual": "^3.13.12",

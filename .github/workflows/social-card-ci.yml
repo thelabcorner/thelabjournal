@@ -25,6 +25,8 @@ jobs:
         run: bun run audit:og
       - name: Verify article navigation and legacy links
         run: bun scripts/article-route-audit.mjs
+      - name: HTTP smoke-test static article pages and images
+        run: bun scripts/article-http-audit.mjs
       - name: Upload reviewable Open Graph gallery
         uses: actions/upload-artifact@v4
         with:
