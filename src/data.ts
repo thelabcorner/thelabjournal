@@ -1,6 +1,7 @@
 import { firstPost } from './first-post'
 import { agentToolsPost } from './agent-tools-post'
 import { problemScopePost } from './problem-scope-post'
+import { silicaDoorsPost } from './silica-doors-post'
 
 export type Topic = 'Essays' | 'Research' | 'Engineering' | 'Experiments' | 'Process'
 export type Stage = 'Editorial draft' | 'Under review' | 'Working notes' | 'Concept'
@@ -31,6 +32,7 @@ export const entries: Entry[] = [
   firstPost,
   agentToolsPost,
   problemScopePost,
+  silicaDoorsPost,
   {
     slug: 'four-axis-lyophilization',
     title: 'Low-temperature lyophilization: three theses in a four-axis optimization framework',
