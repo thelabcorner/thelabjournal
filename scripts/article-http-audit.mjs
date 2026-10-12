@@ -15,7 +15,7 @@ const server = spawn(process.execPath, ['node_modules/vite/bin/vite.js', 'previe
 let logs = ''
 server.stdout.on('data', buf => { logs += buf.toString() })
 server.stderr.on('data', buf => { logs += buf.toString() })
-const request = path => fetch(BASE + path, { signal: AbortSignal.timeout(3000) })
+const request = (path, options = {}) => fetch(BASE + path, { signal: AbortSignal.timeout(3000), ...options })
 
 try {
   let ready = false
@@ -39,6 +39,40 @@ try {
     assert.ok(source.includes('<link rel="canonical" href="' + url + '"'), entry.slug + ': canonical metadata')
     assert.ok(source.includes('property="og:image" content="' + img + '"'), entry.slug + ': article-specific OG metadata')
     assert.ok(source.includes('name="twitter:image" content="' + img + '"'), entry.slug + ': twitter preview')
+    assert.ok(source.includes('name="twitter:img:src" content="' + img + '"'), entry.slug + ': Snapchat legacy Twitter image fallback')
+    assert.ok(source.includes('name="twitter:image:src" content="' + img + '"'), entry.slug + ': legacy Twitter image alias')
+    assert.ok(source.includes('property="og:title" content="'), entry.slug + ': Open Graph title')
+    assert.ok(source.includes('property="og:description" content="'), entry.slug + ': Open Graph summary')
+    assert.ok(source.includes('property="og:image:width" content="1200"'), entry.slug + ': full width media')
+    assert.ok(source.includes('property="og:image:height" content="630"'), entry.slug + ': full height media')
+    // Link-unfurl bots must see the *same article-specific metadata* in the
+    // initial HTML response. They do not execute the React application.
+    const crawlers = [
+      ['Snapchat', 'Snap URL Preview Service; bot; snapchat; https://developers.snap.com/robots'],
+      ['Facebook / Instagram DM', 'facebookexternalhit/1.1'],
+      ['LinkedIn', 'LinkedInBot/1.0'],
+      ['Discord', 'Discordbot/2.0'],
+      ['Slack', 'Slackbot-LinkExpanding 1.0'],
+      ['Telegram', 'TelegramBot (like TwitterBot)'],
+      ['WhatsApp', 'WhatsApp/2.0'],
+      ['X', 'Twitterbot'],
+      ['Apple Messages', 'Applebot'],
+    ]
+    for (const [platform, agent] of crawlers) {
+      const crawlerResponse = await request('posts/' + entry.slug + '/', {
+        headers: { 'User-Agent': agent, 'Accept': 'text/html' },
+      })
+      assert.equal(crawlerResponse.status, 200, entry.slug + ': ' + platform + ' HTTP response')
+      const crawlerHTML = await crawlerResponse.text()
+      for (const expected of [
+        'property="og:url" content="' + url + '"',
+        'property="og:title" content="',
+        'property="og:image" content="' + img + '"',
+        'name="twitter:img:src" content="' + img + '"',
+      ]) {
+        assert.ok(crawlerHTML.includes(expected), entry.slug + ': ' + platform + ' readable server metadata ' + expected)
+      }
+    }
     assert.ok(source.includes('src="/thelabjournal/assets/'), entry.slug + ': app bootstrap path')
     const image = await request('og/articles/' + entry.slug + '.png')
     assert.equal(image.status, 200, entry.slug + ': PNG URL serves HTTP 200')
@@ -50,7 +84,7 @@ try {
   const old = await request('?post=' + entries[0].slug)
   assert.equal(old.status, 200, 'legacy URL still serves application HTML')
   assert.ok((await old.text()).includes('id="root"'), 'legacy URL still includes the app root')
-  console.log('HTTP social route audit passed: ' + entries.length + ' article HTML pages and PNG images served, plus legacy URL.')
+  console.log('HTTP social route audit passed: ' + entries.length + ' article HTML pages and PNG images, 9 social crawler identities per article, and legacy URL.')
 } finally {
   server.kill('SIGTERM')
 }

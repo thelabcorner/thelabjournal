@@ -37,3 +37,17 @@ Inter sans-serif; grayscale shadcn-zinc surfaces; New York-style spacing; thin b
 ## Delivery verification
 
 The deployment and pull-request workflows start a local Vite preview server in GitHub Pages mode, fetch every physical `/posts/<slug>/` URL and PNG over HTTP, assert correct content types and canonical metadata, and check legacy query links still return the application shell. The PWA precache deliberately excludes generated OG PNGs and duplicate article HTML shells; the application remains available offline through its indexed navigation fallback.
+
+
+## Snapchat and cross-platform sharing
+
+Snapchat's [official URL Preview Service documentation](https://developers.snap.com/robots) says it reads `og:title` and `og:image` first. If Open Graph metadata is unavailable, it falls back to `twitter:title` and the **legacy** `twitter:img:src` key. The build supplies all of these for **every article and the homepage**, plus the broadly used `twitter:image` and `twitter:image:src` keys. These keys all resolve to the **same hashed Satori PNG**, rather than creating duplicate platform-specific images. There is no documented need for a separate `snapchat:*` namespace or Snapchat developer credentials for a normal shared URL.
+
+- Snapchat (including shared web links): Open Graph title/image + legacy Twitter fallback; Snap documents a **30-minute URL preview cache**.
+- Instagram DMs, Facebook, LinkedIn, Discord, Slack, WhatsApp, Telegram, Signal, Reddit and Pinterest: ordinary publicly accessible Open Graph HTML and image resources; exact appearance and caching are provider-controlled.
+- X/Twitter: `twitter:card=summary_large_image`, title/description/image, plus Open Graph.
+- iMessage / Apple Messages: Open Graph preview images and the existing `apple-touch-icon`. Apple can render different crops and may prefer graphic-focused imagery on compact surfaces.
+
+All routes serve static crawler-readable HTML with HTTPS absolute image URLs, titles, summaries, image dimensions and descriptive alt text; no JavaScript, login, redirects or user-agent switching is necessary. The artwork stays **1200 × 630 PNG** for broad compatibility. Cropping and card presentation vary among apps; a single OG image does not make native photo posts or Snap camera sticker shares.
+
+The HTTP audit now fetches every article route using nine representative crawler user agents to catch missing static metadata; this verifies the **site response**, not a remote platform's cache or proprietary preview renderer. Snapchat can keep showing an older preview until its own cache expires.

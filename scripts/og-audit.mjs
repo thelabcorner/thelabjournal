@@ -25,6 +25,8 @@ async function validateAssets() {
     ['property', 'og:image'],
     ['property', 'og:image:secure_url'],
     ['name', 'twitter:image'],
+    ['name', 'twitter:img:src'],
+    ['name', 'twitter:image:src'],
   ]) {
     assert.ok(html.includes(`<meta ${type}="${key}" content="${expectedUrl}"`), key + ' points to the absolute preview URL')
   }

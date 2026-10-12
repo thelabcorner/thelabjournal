@@ -199,6 +199,10 @@ function metadata(entry, imageHash) {
     quoteMeta('name', 'twitter:title', entry.title),
     quoteMeta('name', 'twitter:description', description(entry)),
     quoteMeta('name', 'twitter:image', imageUrl),
+    // Snap's URL Preview Service supports a legacy Twitter fallback when OG is absent.
+    // These aliases point to the same unique Satori artwork, not a second image.
+    quoteMeta('name', 'twitter:img:src', imageUrl),
+    quoteMeta('name', 'twitter:image:src', imageUrl),
     quoteMeta('name', 'twitter:image:alt', label),
   ].join('\n  ')
 }
@@ -239,6 +243,12 @@ async function audit() {
     if (!html.includes('property="og:url" content="'+canonical+'"') ||
         !html.includes('property="og:image" content="'+imageUrl+'"') ||
         !html.includes('name="twitter:image" content="'+imageUrl+'"') ||
+        !html.includes('name="twitter:img:src" content="'+imageUrl+'"') ||
+        !html.includes('name="twitter:image:src" content="'+imageUrl+'"') ||
+        !html.includes('property="og:image:secure_url" content="'+imageUrl+'"') ||
+        !html.includes('property="og:image:width" content="'+W+'"') ||
+        !html.includes('property="og:image:height" content="'+H+'"') ||
+        !html.includes('property="og:image:alt" content="'+htmlEscape(e.title + '. An article from thelabjournal by Jackson Cummings.')+'"') ||
         !html.includes('property="og:type" content="article"') ||
         !html.includes('rel="canonical" href="'+canonical+'"') ||
         !html.includes('property="og:title" content="'+htmlEscape(e.title)+'"') ||
