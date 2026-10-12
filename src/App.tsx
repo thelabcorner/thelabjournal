@@ -207,7 +207,7 @@ function Article({ entry, onBack, onOpen, copied, onCopy, isSaved, toggle }: {
         <p className="article-dek">{entry.summary}</p>
         <div className="article-meta"><span className="author-avatar">JC</span><div><strong>Jackson Cummings</strong><span>{dateLabel(entry.date)} · {entry.minutes} min read</span></div><span className="article-category"><TopicBadge topic={entry.topic}/></span></div>
         <div className="article-mobile-contents"><label htmlFor="article-jump">In this entry</label><div className="article-select"><select id="article-jump" value={activeSection} onChange={(event) => jumpTo(Number(event.target.value))}>{entry.sections.map((section, i) => <option value={i} key={section.heading}>{String(i + 1).padStart(2,'0')} · {section.heading}</option>)}</select><ChevronDown/></div></div>
-        <div className="article-prose">{entry.sections.map((section, i) => <section id={sectionId(i)} key={section.heading} className="prose-section">
+        <div className="article-prose">{entry.intro && entry.intro.length > 0 && <div className="article-opening">{entry.intro.map((paragraph, i) => <p key={i}>{paragraph}</p>)}</div>}{entry.sections.map((section, i) => <section id={sectionId(i)} key={section.heading} className="prose-section">
           <div className="section-count">{String(i + 1).padStart(2, '0')} / {String(entry.sections.length).padStart(2, '0')}</div>
           <h2>{section.heading}</h2>
           {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}

@@ -4,8 +4,8 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --host 0.0.0.0",
-    "build": "tsc --noEmit && vite build",
+    "dev": "bun scripts/sync-silica-post.mjs && vite --host 0.0.0.0",
+    "build": "bun scripts/sync-silica-post.mjs && tsc --noEmit && vite build",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview --host 0.0.0.0",
     "export:essay": "bun scripts/export-essay.ts",
@@ -25,7 +25,9 @@
     "bench:virtualization": "bun scripts/virtualization-bench.mjs",
     "audit:virtual-pwa": "bun scripts/virtual-pwa-offline-audit.mjs",
     "audit:archive": "bun scripts/archive-sort-audit.mjs",
-    "audit:landing-dither": "bun scripts/landing-dither-audit.mjs"
+    "audit:landing-dither": "bun scripts/landing-dither-audit.mjs",
+    "sync:journal": "bun scripts/sync-silica-post.mjs",
+    "check:journal": "bun scripts/sync-silica-post.mjs --check"
   },
   "dependencies": {
     "@tanstack/react-virtual": "^3.13.12",

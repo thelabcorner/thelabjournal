@@ -13,6 +13,7 @@ export interface Section {
   takeaway?: string
 }
 export interface Entry {
+  intro?: string[]
   slug: string
   title: string
   shortTitle: string

@@ -199,6 +199,8 @@ kbd { font-family:ui-monospace, "SF Mono", monospace; font-size:10px; font-weigh
 .editor-note strong { font-size:12px; font-weight:550; }
 .editor-note p { font-size:12px; line-height:1.55; color:var(--muted-foreground); margin:3px 0 0; }
 .article-prose { font-size:14.5px; line-height:1.78; color:oklch(.28 .005 286); }
+.article-opening { padding-bottom:20px; }
+.article-opening p { margin:0 0 17px; text-wrap:pretty; }
 .prose-section { scroll-margin-top:76px; padding-bottom:25px; }
 .prose-section+.prose-section { border-top:1px solid var(--border); padding-top:28px; }
 .section-count { color:var(--muted-foreground); font-size:10.5px; margin-bottom:8px; font-variant-numeric:tabular-nums; }
