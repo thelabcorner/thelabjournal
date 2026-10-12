@@ -25,8 +25,18 @@ type View = 'all' | 'saved'
 const draft = entries[0]
 const storageKey = 'thelabcorner.journal.saved.v1'
 const sectionId = (index: number) => 'section-' + (index + 1)
-const paperHref = (entry: Entry) => '?post=' + encodeURIComponent(entry.slug)
-const getInitialSlug = () => new URLSearchParams(window.location.search).get('post')
+const journalBase = import.meta.env.BASE_URL
+// Shareable, statically generated pages for crawlers. Legacy ?post= links still work.
+const paperHref = (entry: Entry) => journalBase + 'posts/' + encodeURIComponent(entry.slug) + '/'
+const getInitialSlug = () => {
+  const path = window.location.pathname
+  const prefix = journalBase + 'posts/'
+  if (path.startsWith(prefix)) {
+    const slug = path.slice(prefix.length).replace(/\/$/, '')
+    if (/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return slug
+  }
+  return new URLSearchParams(window.location.search).get('post')
+}
 const findEntry = (slug: string | null) => entries.find((entry) => entry.slug === slug) || null
 // App navigation and scroll restoration are jumps, not animated journeys.
 const jumpScroll = (top: number) => window.scrollTo({ top, behavior: 'instant' })
@@ -248,6 +258,17 @@ function SearchDialog({ query, setQuery, onClose, onOpen }: { query: string, set
 export default function App() {
   const pwa = useJournalPWA()
   const [selected, setSelected] = useState<Entry | null>(() => findEntry(getInitialSlug()))
+  useEffect(() => {
+    // Upgrade existing bookmark links without breaking them.
+    const legacy = new URLSearchParams(window.location.search).get('post')
+    if (legacy) {
+      const entry = findEntry(legacy)
+      if (entry) window.history.replaceState(window.history.state, '', paperHref(entry))
+    }
+  }, [])
+  useEffect(() => {
+    document.title = selected ? selected.title + ' | thelabjournal™' : 'thelabjournal™'
+  }, [selected])
   const [filter, setFilter] = useState<Filter>('All')
   const [view, setView] = useState<View>('all')
   const [sort, setSort] = useState<Sort>('subject')
@@ -291,20 +312,20 @@ export default function App() {
   }
   const goHome = () => {
     cue('selection')
-    window.history.pushState({}, '', window.location.pathname)
+    window.history.pushState({}, '', journalBase)
     setSelected(null); setNavOpen(false); setDialogOpen(false)
     requestAnimationFrame(() => jumpScroll(archiveScroll.current))
   }
   const changeFilter = (topic: Filter, delayed = false) => {
     if (delayed) cueDelayed('selection', 60); else cue('selection')
     setFilter(topic); setView('all'); setQuery('')
-    if (selected) { window.history.pushState({}, '', window.location.pathname); setSelected(null) }
+    if (selected) { window.history.pushState({}, '', journalBase); setSelected(null) }
     jumpScroll(0)
   }
   const showSaved = (delayed = false) => {
     if (delayed) cueDelayed('selection', 60); else cue('selection')
     setView('saved'); setQuery('')
-    if (selected) { window.history.pushState({}, '', window.location.pathname); setSelected(null) }
+    if (selected) { window.history.pushState({}, '', journalBase); setSelected(null) }
     jumpScroll(0)
   }
   const openSearch = (delayed = false) => { if (delayed) cueDelayed('light', 60); else cue('light'); setNavOpen(false); setDialogQuery(''); setDialogOpen(true) }

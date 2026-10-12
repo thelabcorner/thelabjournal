@@ -4,3 +4,6 @@ artifacts/
 .env
 .env.*
 .DS_Store
+
+# Generated, deterministic Satori per-post images (CI regenerates them)
+public/og/articles/

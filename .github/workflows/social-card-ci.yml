@@ -1,0 +1,34 @@
+name: Social Card CI
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  article-previews:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Generate social assets and static article routes
+        run: bun run build
+        env:
+          GITHUB_PAGES: 'true'
+      - name: Verify Open Graph assets and metadata
+        run: bun run audit:og
+      - name: Verify article navigation and legacy links
+        run: bun scripts/article-route-audit.mjs
+      - name: Upload reviewable Open Graph gallery
+        uses: actions/upload-artifact@v4
+        with:
+          name: journal-social-cards
+          path: dist/og/articles/*.png
+          if-no-files-found: error
+          retention-days: 14
