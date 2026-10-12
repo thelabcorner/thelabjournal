@@ -29,41 +29,45 @@ We connected that work to Silica's native PDF output and built a browserless pat
 
 There's still a large gap between that result and replacing Chromium for arbitrary HTML. Complex text and fonts, the full CSS surface, images, effects, and pagination have to survive the same standard of testing. I'm not treating a clean box-and-clip benchmark as proof that we have built a complete browser. Still, we proved that a real portion of this problem can be solved without one.
 
-## Then SVG became a serious possibility
+## SVG was already on my mind
 
-Once we could produce a good native PDF, another question started bothering me. Could we turn the same HTML into SVG? We already had the layout and drawing information. It seemed wasteful to treat the PDF as an endpoint when so much of the work needed for vector export had already happened.
+I've worked with vector artwork for years, especially packaging and labels. Most printers want a PDF. Unless a print company specifically asks for an Adobe Illustrator file, that's usually what I send. A properly exported PDF is still full of useful vector information. I can open it in Illustrator, select paths, move geometry around, and edit it much like the original artwork. I've been handing off files this way for a long time.
 
-We prototyped an HTML-to-SVG API that first emits a Silica PDF and then converts it through either Hayro or MuPDF. Hayro is especially interesting because it is written in Rust and offers both SVG conversion and native raster rendering. MuPDF gives us a different, mature implementation to compare against. The current dual-backend prototype is deliberately limited, including explicit single-page handling, but it already produces actual SVGs from Silica's PDF output.
+So the relationship between PDF and SVG wasn't something I discovered while working on Silica. I already knew the conversion could go in both directions. SVG artwork can become a vector PDF, and PDF drawing geometry can become SVG. They aren't identical formats, and things like fonts, effects, transparency, and page structure can complicate a conversion. But the shared language of paths, fills, strokes, clips, and transforms is familiar to me. I've always known there was a way to get from one to the other.
 
-We put 94 existing Silica fixtures through the comparison instead of selecting a few screenshots that looked impressive. In a shared SVG rasterizer, 84 fixtures tied; MuPDF had lower pixel error in seven and Hayro in three. One nested-clipping case exposed a disagreement between SVG readers rather than a simple broken-exporter verdict. Hayro also preserved some gradients as vectors where MuPDF introduced image content. It's exactly the sort of detail that would disappear if we judged the experiment from one demo.
+When Silica started producing native PDFs from HTML, that immediately suggested a practical HTML-to-SVG route. We could generate the PDF we already knew how to make, then translate its vector geometry into SVG. No need to invent another HTML layout engine first. The PDF was a perfectly reasonable intermediate format, and I had good reasons from graphic design to trust that direction.
 
-I like that this leaves us with more questions than a single winner. SVG can contain paths, clips, gradients, embedded images, and glyph outlines. Glyph outlines look right but aren't editable text. Different consumers interpret difficult SVG structures differently. A useful exporter needs to care about those differences.
+We prototyped exactly that: HTML to Silica PDF, then PDF to SVG through either Hayro or MuPDF. Hayro interests me partly because it's written in Rust and also has a native PDF rasterizer. MuPDF gives us a mature, independent implementation to compare against. The current dual-backend SVG prototype is explicitly single-page, but it already produces real SVGs from Silica's output.
 
-## I wasn't expecting to think about Satori
+We put 94 existing Silica fixtures through the comparison rather than picking a few images that looked impressive. Rasterized through a shared SVG reader, 84 fixtures tied; MuPDF had lower pixel error in seven and Hayro in three. One nested-clipping case exposed a disagreement between SVG readers rather than an obvious winner. Hayro preserved some gradients as vectors where MuPDF introduced image content. That's the sort of thing I care about as a designer, because a file can look right and still be less useful when you open it to edit.
 
-Vercel's Satori is one of the tools I've used when I need to generate SVG-based graphics from a component. It is particularly useful for things like Open Graph images. It also has a deliberately narrower contract: static JSX, a subset of HTML and CSS, and a layout system based on Yoga. It doesn't promise to reproduce everything a browser would render.
+## Wait, this puts us in Satori territory
 
-Silica could eventually occupy a different part of that space. A renderer with broader HTML and CSS understanding could accept real document markup and produce vector output without forcing everything through Satori's supported subset. We may even be able to make it faster or more faithful on particular classes of documents. That's a hypothesis I want to benchmark, not a victory I'm claiming over Satori.
+After seeing those SVGs, I started thinking about Vercel's Satori. It's a clever tool for turning JSX into SVG, often for things like Open Graph images. But it works within a particular subset of HTML and CSS. Silica is approaching the problem from a different direction: use an HTML rendering system to make a native PDF, then take that PDF's geometry into SVG.
 
-The current SVG prototype passes through PDF and, in its existing node route, uses Silica's browser-observed capture. The separate Blitz work is what makes a future browserless path plausible. Combining them correctly is unfinished work. The more interesting long-term design may be to take one validated display list and send it straight to PDF or SVG, with no unnecessary conversion between formats.
+That's a little absurd to me. I started with HTML-to-PDF and ended up with a credible route to the kind of output people use Satori for. And potentially a route with broader layout and styling support. I want to see whether we can beat Satori on fidelity, performance, or both. We haven't proved that comparison yet, and its supported inputs aren't identical to ours, but now it's an experiment we can actually run.
 
-## And then there's SnapDOM
+There's an important technical distinction between our current prototypes. The existing Node HTML-to-SVG route still generates its PDF through Silica's browser-observed capture, while the Rust and Blitz work demonstrates a separate browserless PDF path. Joining those paths so browserless HTML can flow all the way to SVG is still work to do. The result I'm excited about is the direction, and the SVG conversion itself is already real.
 
-I've also spent time working around Juan Martín's SnapDOM. It solves a related problem from the other direction: take a live browser DOM, capture its appearance, and export SVG or raster images. Its browser access is an advantage when the page depends on computed styles, pseudo-elements, fonts, and a live application state. I've investigated parts of its capture performance myself, particularly the cost of collecting and processing styles.
+## Then I started thinking about SnapDOM
 
-Now I keep wondering whether Silica could handle some of the same jobs. If Silica can turn the HTML into a faithful drawing representation and render it to pixels quickly enough, we might have an alternative for DOM-to-image capture. We could rasterize the generated PDF through Hayro or MuPDF, or avoid the PDF round trip and render Blitz's drawing commands directly.
+The next thought came almost immediately. If we can convert HTML into a PDF and convert that PDF into SVG, what's stopping us from rendering the PDF into an image? At that point, the same HTML could produce a PNG or JPEG as well.
 
-Replacing SnapDOM outright would require much more than a fast PDF renderer. Capturing an already-running application's exact visual state is different from laying out a fresh HTML string. We would need to preserve browser-computed information where necessary, and compare real pages containing fonts, pseudo-elements, shadows, transforms, canvas content, and complicated clipping. Then we would need to measure total capture time, including the style work and image encoding, against SnapDOM on the same input.
+I've worked with Juan Martín's SnapDOM, which captures a live DOM into SVG or raster images. It made me wonder whether Silica could eventually replace it for some of the work I've been using it for. We already have the geometry. If we can render the generated PDF extremely quickly, with good enough fidelity, that could be a serious alternative.
 
-I still find the possibility ridiculous in a good way. A PDF experiment has given me a reason to revisit a DOM screenshot problem from a completely different angle.
+Hayro and MuPDF both give us ways to test the PDF-to-pixels route. In our 94-fixture comparison, Hayro's native PDF rasterizer had lower average pixel error than MuPDF's PDF rasterizer on that particular sample. That's a fidelity observation, not proof of a speed advantage. We still need to benchmark the entire HTML-to-image pipeline, including layout, PDF generation, rasterization, and encoding.
+
+And there may be a faster way. Blitz already produces drawing commands. Maybe we can render those straight to a pixel buffer instead of serializing a PDF and parsing it again. That could skip work. Or maybe the PDF intermediate will turn out to be fast enough that the simpler pipeline wins. I don't know yet. I want to measure it.
+
+SnapDOM has a real advantage for live pages: it can inspect the browser's computed styles and capture the state of an existing DOM. Reconstructing arbitrary live pages from HTML alone is not equivalent. Fonts, pseudo-elements, transforms, canvas, and other browser state make a fair comparison harder. But for HTML that Silica can render faithfully, the performance and fidelity contest is worth having.
 
 ## Maybe the PDF should be optional
 
-I can see at least two practical routes to PNG and JPEG. The first is already close to hand: generate the native PDF and use a fast renderer to turn it into pixels. We have been measuring Hayro and MuPDF for exactly this reason. Hayro's native PDF rasterizer had lower average pixel error than MuPDF's PDF rasterizer across the 94-fixture comparison we ran, though that isn't yet a portable speed or quality guarantee.
+This is where the project starts to look different to me. We could keep using PDF as an intermediate because we already have a working path through it. Or we could share the same layout and painting representation among a PDF backend, an SVG backend, and a raster backend.
 
-The second route is more appealing architecturally. If Blitz has already produced the positioned drawing commands, why serialize them into PDF only to parse them again? A direct raster backend could paint the same scene into a pixel buffer. That should remove an encode/decode step, although only an end-to-end benchmark will tell us whether it is faster once fonts, images, compositing, and memory allocation are included.
+PDF would remain useful for print and documents. SVG would be useful wherever I want vector graphics. PNG and JPEG would cover thumbnails, exports, and screenshots. If the native Rust or WASM path matures, we could do at least some of that without launching a browser.
 
-With that kind of separation, PDF becomes one output choice. SVG preserves vector structure for import or inspection. PNG preserves lossless pixels and transparency. JPEG is useful when file size matters more than exact pixels. The output format can be chosen after the expensive layout work, instead of deciding the entire rendering architecture up front.
+The formats have different requirements, of course. Fonts, text editability, page boundaries, color handling, and raster effects don't survive every conversion unchanged. But I'm increasingly interested in an HTML rendering engine whose output isn't dictated by the file format I happened to start with.
 
 ## One engine, several kinds of work
 
