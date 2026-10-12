@@ -5,82 +5,122 @@ author: "Jackson Cummings"
 status: draft
 slug: i-started-with-html-to-pdf
 category: "Essays"
-summary: "Silica began as a native HTML-to-PDF experiment. Rust and Blitz opened a browserless path, and now SVG, images, and DOM capture look like parts of the same rendering problem."
+summary: "Silica started as an HTML-to-PDF experiment. Now I think it could become an entire HTML rendering engine, and maybe replace tools I never intended to compete with."
 tags: ["Silica", "HTML to PDF", "Rust", "Blitz", "SVG", "Satori", "SnapDOM", "Rendering engines"]
 ---
 
 # I started with HTML to PDF
 
-Silica began as a native HTML-to-PDF experiment. Rust and Blitz opened a browserless path, and now SVG, images, and DOM capture look like parts of the same rendering problem.
+I've been working on an HTML-to-PDF conversion system called Silica, and the number of doors this one project has opened is getting kind of ridiculous.
 
-## The PDF problem was already big enough
+It started with a fairly specific goal. I wanted to generate proper PDFs from HTML. Native text, vector graphics, accurate layout, all of it. A PDF I could open in Illustrator and do something with, rather than a screenshot stuffed into a PDF container.
 
-I started working on Silica because I wanted a better way to turn HTML into a native PDF. That sounds like a fairly specific problem until you start trying to reproduce what a browser actually draws. Layout, fonts, clipping, transforms, gradients, paint order, pagination, and image decoding all become your problem. If you get one of them slightly wrong, a document can look fine in one example and fall apart in the next.
+That alone is an enormous problem. A browser does so much work to turn HTML and CSS into pixels that you don't really appreciate until you start pulling it apart. Fonts, layout, clipping, gradients, transforms, paint order, all the weird little interactions between them. We spent a lot of time trying to get those things right.
 
-I also care about what is inside the file. Flattening a page into a screenshot and putting it in a PDF container is easy compared with preserving real text and vector geometry. You can make something that looks correct at a glance and discover that it has no useful structure. I wanted the output to remain a document.
+The funny thing is that Silica is already turning into something much bigger than the thing I set out to build.
 
-We had a Chromium-based route, and Chromium is an excellent reference for how HTML should render. But shipping or launching a browser to produce a file comes with a lot of machinery. I kept wondering how much of it we actually needed for the work Silica was doing.
+## Getting rid of the browser
 
-## We found a way to remove the browser
+One of the developments I'm most excited about is that we've found a way to generate native PDFs **without running a browser**.
 
-The experiment that changed my view of the project was using Rust and Blitz to do the layout and painting work without running Chromium. Blitz already assembles serious pieces of browser technology: HTML parsing, Stylo for CSS, Taffy for layout, Parley for text, and a paint layer that produces drawing commands. That gave us a foundation to build on rather than another attempt to reproduce CSS from scratch.
+That sounds almost contradictory when the input is HTML. My first instinct was to lean on Chromium, because it's the obvious reference for what a page is supposed to look like. But carrying a browser around just to generate a PDF is a lot of machinery. I kept thinking there had to be a better way.
 
-We connected that work to Silica's native PDF output and built a browserless path, including a WebAssembly route. On the restricted fixtures we could prove, it produced native vector PDFs that matched the reference pixels exactly. In one warm clipping benchmark, the Blitz path was about 4.2 times faster than the reused Chromium baseline. Those are fixture-specific measurements, but seeing exact output without a browser was enough to make me rethink the architecture.
+We ended up experimenting with Rust and Blitz. Blitz brings together existing work on parsing, CSS, layout, and text, including Stylo, Taffy, and Parley. Instead of rebuilding an entire browser engine from nothing, we could use those components to interpret the document and feed its drawing information into Silica's PDF machinery.
 
-There's still a large gap between that result and replacing Chromium for arbitrary HTML. Complex text and fonts, the full CSS surface, images, effects, and pagination have to survive the same standard of testing. I'm not treating a clean box-and-clip benchmark as proof that we have built a complete browser. Still, we proved that a real portion of this problem can be solved without one.
+And it fucking works.
 
-## SVG was already on my mind
+One of our restricted clipping test sets reproduced the reference pixels exactly. In a warm benchmark on that path, we measured roughly 4.2 times the speed of a reused Chromium baseline. I know that doesn't mean every HTML page in existence works perfectly. What excites me is that there's a functioning browserless path at all, with native geometry coming out the other end. We also have a route into WebAssembly, which makes the whole idea even more interesting.
 
-I've worked with vector artwork for years, especially packaging and labels. Most printers want a PDF. Unless a print company specifically asks for an Adobe Illustrator file, that's usually what I send. A properly exported PDF is still full of useful vector information. I can open it in Illustrator, select paths, move geometry around, and edit it much like the original artwork. I've been handing off files this way for a long time.
+It's still a prototype. A really successful prototype, in my opinion. I can see the thing working, inspect what it produces, and start imagining where else the same work could take us.
 
-So the relationship between PDF and SVG wasn't something I discovered while working on Silica. I already knew the conversion could go in both directions. SVG artwork can become a vector PDF, and PDF drawing geometry can become SVG. They aren't identical formats, and things like fonts, effects, transparency, and page structure can complicate a conversion. But the shared language of paths, fills, strokes, clips, and transforms is familiar to me. I've always known there was a way to get from one to the other.
+## I've been working with PDF vectors for years
 
-When Silica started producing native PDFs from HTML, that immediately suggested a practical HTML-to-SVG route. We could generate the PDF we already knew how to make, then translate its vector geometry into SVG. No need to invent another HTML layout engine first. The PDF was a perfectly reasonable intermediate format, and I had good reasons from graphic design to trust that direction.
+The SVG direction felt natural to me because of my background in graphic design.
 
-We prototyped exactly that: HTML to Silica PDF, then PDF to SVG through either Hayro or MuPDF. Hayro interests me partly because it's written in Rust and also has a native PDF rasterizer. MuPDF gives us a mature, independent implementation to compare against. The current dual-backend SVG prototype is explicitly single-page, but it already produces real SVGs from Silica's output.
+I do a lot of vector artwork, especially labels and packaging. When I send artwork to a print company, the deliverable is usually a PDF. Occasionally they specifically ask for an Adobe Illustrator file, but PDFs are the normal handoff. And those aren't just flattened pictures. I can open a properly generated PDF in Illustrator, grab the paths, manipulate shapes, and work with much of the artwork as vectors.
 
-We put 94 existing Silica fixtures through the comparison rather than picking a few images that looked impressive. Rasterized through a shared SVG reader, 84 fixtures tied; MuPDF had lower pixel error in seven and Hayro in three. One nested-clipping case exposed a disagreement between SVG readers rather than an obvious winner. Hayro preserved some gradients as vectors where MuPDF introduced image content. That's the sort of thing I care about as a designer, because a file can look right and still be less useful when you open it to edit.
+I've known for years that PDFs and SVGs have a close relationship. It goes both ways. You can turn SVG graphics into a vector PDF, and you can take the drawing geometry in a PDF and turn it back into SVG. Their internals and capabilities aren't identical, but they share so many of the same graphical ideas: paths, strokes, fills, curves, clipping, transforms. Working with one has always made the other feel familiar.
 
-## Wait, this puts us in Satori territory
+So when Silica started producing native PDF geometry, HTML-to-SVG was already an obvious possibility in my head. We didn't have to figure out how to lay out HTML a second time. We could take the PDF we already knew how to produce and convert that geometry into SVG.
 
-After seeing those SVGs, I started thinking about Vercel's Satori. It's a clever tool for turning JSX into SVG, often for things like Open Graph images. But it works within a particular subset of HTML and CSS. Silica is approaching the problem from a different direction: use an HTML rendering system to make a native PDF, then take that PDF's geometry into SVG.
+That's what we built.
 
-That's a little absurd to me. I started with HTML-to-PDF and ended up with a credible route to the kind of output people use Satori for. And potentially a route with broader layout and styling support. I want to see whether we can beat Satori on fidelity, performance, or both. We haven't proved that comparison yet, and its supported inputs aren't identical to ours, but now it's an experiment we can actually run.
+We have a prototype that takes HTML, produces a Silica PDF, and converts the PDF into SVG using either Hayro or MuPDF. We even compared both converters on 94 Silica fixtures. A lot of the outputs agreed, and the differences were fascinating. There were cases where one preserved vector gradients while the other introduced raster content, plus clipping cases that behaved differently depending on the SVG reader.
 
-There's an important technical distinction between our current prototypes. The existing Node HTML-to-SVG route still generates its PDF through Silica's browser-observed capture, while the Rust and Blitz work demonstrates a separate browserless PDF path. Joining those paths so browserless HTML can flow all the way to SVG is still work to do. The result I'm excited about is the direction, and the SVG conversion itself is already real.
+As somebody who actually edits vector files, that stuff is interesting to me. An image looking correct is one thing. Having usable geometry on the other side is another. It's the same reason I cared about native PDFs in the first place.
 
-## Then I started thinking about SnapDOM
+And once we had HTML-to-SVG working, I started thinking about Satori.
 
-The next thought came almost immediately. If we can convert HTML into a PDF and convert that PDF into SVG, what's stopping us from rendering the PDF into an image? At that point, the same HTML could produce a PNG or JPEG as well.
+## We may have accidentally built a Satori competitor
 
-I've worked with Juan Martín's SnapDOM, which captures a live DOM into SVG or raster images. It made me wonder whether Silica could eventually replace it for some of the work I've been using it for. We already have the geometry. If we can render the generated PDF extremely quickly, with good enough fidelity, that could be a serious alternative.
+Vercel's Satori is a really clever library. You give it JSX, and it generates SVG. It's used for things like social images, and it makes that job remarkably convenient.
 
-Hayro and MuPDF both give us ways to test the PDF-to-pixels route. In our 94-fixture comparison, Hayro's native PDF rasterizer had lower average pixel error than MuPDF's PDF rasterizer on that particular sample. That's a fidelity observation, not proof of a speed advantage. We still need to benchmark the entire HTML-to-image pipeline, including layout, PDF generation, rasterization, and encoding.
+But now I'm looking at Silica and thinking: hang on, we're already doing HTML to PDF to SVG. We have an HTML layout system, native vector geometry, and a route to SVG output. Why couldn't this replace Satori for a lot of the same jobs?
 
-And there may be a faster way. Blitz already produces drawing commands. Maybe we can render those straight to a pixel buffer instead of serializing a PDF and parsing it again. That could skip work. Or maybe the PDF intermediate will turn out to be fast enough that the simpler pipeline wins. I don't know yet. I want to measure it.
+Actually, I think it has the potential to be *better*.
 
-SnapDOM has a real advantage for live pages: it can inspect the browser's computed styles and capture the state of an existing DOM. Reconstructing arbitrary live pages from HTML alone is not equivalent. Fonts, pseudo-elements, transforms, canvas, and other browser state make a fair comparison harder. But for HTML that Silica can render faithfully, the performance and fidelity contest is worth having.
+Satori supports a particular subset of HTML and CSS. Silica's ambitions are closer to rendering real HTML documents, with the possibility of broader styling and more complex layouts. If we get the browserless Blitz route and the SVG route working together, I can imagine an incredibly capable HTML-to-SVG engine that doesn't need Chromium at all.
 
-## Maybe the PDF should be optional
+That is a wild place to end up from wanting a better PDF converter.
 
-This is where the project starts to look different to me. We could keep using PDF as an intermediate because we already have a working path through it. Or we could share the same layout and painting representation among a PDF backend, an SVG backend, and a raster backend.
+I haven't made a head-to-head performance claim here. I have something more interesting to me right now: a working prototype and a very strong hunch about where it can go. It feels like we found a side door into a problem I'd previously associated with a completely different piece of software.
 
-PDF would remain useful for print and documents. SVG would be useful wherever I want vector graphics. PNG and JPEG would cover thumbnails, exports, and screenshots. If the native Rust or WASM path matures, we could do at least some of that without launching a browser.
+And then my brain went straight to SnapDOM.
 
-The formats have different requirements, of course. Fonts, text editability, page boundaries, color handling, and raster effects don't survive every conversion unchanged. But I'm increasingly interested in an HTML rendering engine whose output isn't dictated by the file format I happened to start with.
+## Could this replace SnapDOM too?
 
-## One engine, several kinds of work
+I've worked with Juan Martín's SnapDOM, which captures the DOM and turns it into SVG or raster images. It's a useful library, and I've spent time digging into the performance cost of gathering styles and capturing complex pages.
 
-I keep finding new uses when I follow that idea through. A design tool could take an HTML composition and export an editable-looking SVG or a press-ready PDF. A web application could generate a thumbnail or social card without launching a second browser. A server could produce documents and images from the same templates. A WASM build could run parts of that pipeline locally, while a native Rust build handles heavier batches.
+Now consider what Silica is doing.
 
-The possibility of adding more formats is real because layout and paint are reusable. Each output still needs its own backend and a testable promise about what survives the conversion. For PDF I care about native text, vectors, and pages. For SVG I care about structure and how independent readers interpret it. For PNG and JPEG I care about the pixels, encoding cost, and predictable dimensions. Those are different contracts, but they can share most of the difficult work.
+If I can take HTML and turn it into a native PDF, and I can take that PDF and turn it into SVG, why stop there? PDFs can be rendered into images. We could take that exact same output and produce a PNG or JPEG.
 
-I originally approached this as an HTML-to-PDF conversion project. I'm now spending time thinking about whether the renderer itself is the more valuable piece. That's a much bigger engineering problem than I expected to be working on.
+Suddenly the project isn't just competing with HTML-to-PDF tools or potentially with Satori. It might be able to do work I've been using SnapDOM for, too.
 
-## What makes the prototype exciting to me
+And I think there's a real possibility it could do that work **faster and with better fidelity**.
 
-Silica is still a prototype, and I'm comfortable calling it that. But it's a really successful prototype in the areas we have exercised. It produces genuinely useful files. It has independent readers and browser references to test against. We have real numbers for specific fidelity and performance cases, and failures detailed enough to investigate rather than hand-wave away.
+Hayro and MuPDF already give us ways to render PDF geometry. We're investigating their fidelity and performance. If we can generate a PDF extremely quickly and rasterize it extremely quickly, the whole HTML-to-image pipeline becomes very interesting. That's game time, as far as I'm concerned.
 
-I'm excited by the doors that keep appearing as we solve one subsystem and discover it can be reused somewhere else. The next work is concrete: extend the browserless HTML coverage, harden SVG export, make the single-page limitation explicit until multi-page export is ready, compare a direct painter against PDF rasterization, and measure the complete path against Satori and SnapDOM on workloads each actually supports.
+There's another possibility I find even more exciting. Why render the PDF at all?
 
-I expected HTML-to-PDF conversion to lead me deeper into PDF internals. It did. I didn't expect it to put me in the middle of building a general-purpose HTML rendering system, or to make PNG and SVG export feel like natural next experiments. I want to find out how far the shared renderer can go before the fidelity tests stop us.
+Blitz has already done the layout and produced drawing commands. Maybe we can paint those commands directly to a pixel buffer. We wouldn't need to write a PDF and read it back just to get pixels. That might be the faster route. Or maybe the PDF pipeline is already fast enough to win. Either way, we have multiple routes worth pursuing.
+
+SnapDOM captures a live browser DOM, which brings some different concerns about computed styles and page state. I know those details matter. They're engineering problems I want to attack, not reasons to stop imagining the outcome.
+
+I keep looking at all of this and thinking how absurd it would be if the PDF engine I started building ended up becoming my preferred replacement for both Satori and SnapDOM.
+
+## What if Silica could output basically anything?
+
+This is the part I keep coming back to.
+
+Imagine feeding Silica an HTML document and choosing what you want back.
+
+A PDF for a print shop. An SVG to open in Illustrator. A PNG with transparency. A JPEG for a thumbnail. Maybe other formats later. The same HTML, the same layout, the same underlying drawing information.
+
+That's fucking crazy to me.
+
+I'm used to reaching for different tools for different jobs. One system to capture a DOM node as an image. Another to generate SVG. Another to print HTML to PDF. They all overlap in some way because they're solving parts of the same underlying rendering problem.
+
+Silica could bring those jobs together.
+
+The PDF-to-SVG route we have now is a great demonstration of that idea. Longer term, I can see a shared representation of the laid-out page, with separate backends for PDF, SVG, and raster images. Rust makes the native side appealing. WebAssembly opens another set of deployment options. And Blitz gives us a way to do the HTML layout work without hauling an entire browser into every export.
+
+For a project like PresGen, where I constantly care about graphics, documents, screenshots, and editable output, the idea of owning that entire pipeline is especially appealing. I wouldn't have to treat every export format as an unrelated engineering problem.
+
+I know there will be frustrating edge cases. There always are. But that has never been the part that makes me lose interest. I like chasing the cases where the geometry breaks, where text doesn't shape correctly, where one renderer disagrees with another. Every one of those failures gives me something specific to figure out.
+
+## I love when a project does this
+
+What I find so exciting about Silica is how one solution keeps suggesting the next one.
+
+First I wanted native PDFs. Then we found a way to eliminate the browser with Rust and Blitz. My experience with vector artwork made PDF-to-SVG an obvious extension, so we built it. That made me think seriously about Satori. Then it occurred to me that fast PDF rasterization, or direct painting from Blitz, could put us in SnapDOM territory. And now I'm thinking about Silica as an all-around HTML rendering engine.
+
+All of that grew out of one conversion problem.
+
+This is also exactly what I was talking about in my last journal entry, about how AI has changed the problems I'm able to solve. I can follow an idea much further than I used to. The work still gets complicated, and I still have to understand what's happening, but the amount of experimentation I can push through is ridiculous compared with what used to be practical for me.
+
+I feel genuinely excited about where this one is going. Silica already works well enough to make me proud of it, and I can see several more directions I want to try. I want to get the browserless PDF and SVG paths working together, race the image-rendering approaches against each other, and find out whether my intuition about Satori and SnapDOM is right.
+
+Imagine if this thing ends up being able to take HTML and spit out practically whatever file format I want.
+
+I started with a PDF converter. Now I really want to build that.
