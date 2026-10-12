@@ -6,8 +6,24 @@ interface FigureProps { type: FigureType; compact?: boolean; className?: string 
 
 export function ResearchFigure({ type, compact = false, className }: FigureProps) {
   return <div className={cn('research-figure', compact && 'research-figure--compact', className)}>
-    <div className="figure-top"><span>Fig. {type === 'pressure' ? '01' : '02'} / {type === 'learning' ? 'Learning sequence' : type === 'agent' ? 'Agent engineering loop' : type === 'pressure' ? 'Transport model' : type === 'geometry' ? 'Geometry' : type === 'pdf' ? 'Document structure' : type === 'contours' ? 'Primitive fitting' : type === 'system' ? 'Trust boundaries' : type === 'signals' ? 'Phrase structure' : type === 'storage' ? 'Chunk index' : 'Module graph'}</span><span className="figure-motion" aria-hidden="true"><DitherScene variant="ledger" className="figure-dither" fps={14} speed={0.68} intensity={0.85}/></span></div>
+    <div className="figure-top"><span>Fig. {type === 'pressure' ? '01' : '02'} / {type === 'learning' ? 'Learning sequence' : type === 'frontier' ? 'Problem feasibility' : type === 'agent' ? 'Agent engineering loop' : type === 'pressure' ? 'Transport model' : type === 'geometry' ? 'Geometry' : type === 'pdf' ? 'Document structure' : type === 'contours' ? 'Primitive fitting' : type === 'system' ? 'Trust boundaries' : type === 'signals' ? 'Phrase structure' : type === 'storage' ? 'Chunk index' : 'Module graph'}</span><span className="figure-motion" aria-hidden="true"><DitherScene variant="ledger" className="figure-dither" fps={14} speed={0.68} intensity={0.85}/></span></div>
     <div className="figure-canvas">
+      {type === 'frontier' && <svg viewBox="0 0 580 226" role="img" aria-label="Conceptual comparison of where project work becomes difficult: formerly setup and manual groundwork, now the reasoning needed to investigate and verify harder problems">
+        <g fontFamily="Inter,Arial,sans-serif" fill="currentColor">
+          <text x="22" y="28" fontSize="11" opacity=".55" fontWeight="600">Before</text>
+          <text x="22" y="126" fontSize="11" opacity=".55" fontWeight="600">With AI</text>
+          {([['Idea',88,18,105],['Manual groundwork',217,18,156],['First serious test',397,18,157]] as const).map(([label,x,y,w],i) => <g key={label}>
+            <rect x={x} y={y} width={w} height="53" rx="5" stroke="currentColor" strokeOpacity={i===1?.64:.28} fill="currentColor" fillOpacity={i===1?.075:.025}/>
+            <text x={x+w/2} y={y+31} textAnchor="middle" fontSize="11.5" fontWeight={i===1?600:500}>{label}</text>
+          </g>)}
+          {([['Idea',88,117,105],['Agent groundwork',217,117,156],['Reasoning + tests',397,117,157]] as const).map(([label,x,y,w],i) => <g key={label}>
+            <rect x={x} y={y} width={w} height="53" rx="5" stroke="currentColor" strokeOpacity={i===2?.65:.28} fill="currentColor" fillOpacity={i===2?.075:.025}/>
+            <text x={x+w/2} y={y+31} textAnchor="middle" fontSize="11.5" fontWeight={i===2?600:500}>{label}</text>
+          </g>)}
+          <path d="M193 44H217m-7-5 7 5-7 5M373 44H397m-7-5 7 5-7 5M193 143H217m-7-5 7 5-7 5M373 143H397m-7-5 7 5-7 5" fill="none" stroke="currentColor" strokeOpacity=".55" strokeWidth="1.5"/>
+          <text x="290" y="204" textAnchor="middle" fontSize="11" opacity=".6">The limiting work shifts as models improve</text>
+        </g>
+      </svg>}
       {type === 'learning' && <svg viewBox="0 0 580 226" role="img" aria-label="Two learning sequences: formerly research then understanding then prototype; now rough AI-assisted prototype then investigation then understanding and refinement">
         <g fontFamily="Inter,Arial,sans-serif" fill="currentColor">
           <text x="24" y="30" fontSize="11" fontWeight="600" opacity=".54">Before</text>

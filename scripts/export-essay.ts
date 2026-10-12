@@ -1,9 +1,10 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 import { firstPost } from '../src/first-post'
 import { agentToolsPost } from '../src/agent-tools-post'
+import { problemScopePost } from '../src/problem-scope-post'
 
 const quote = (s: string) => JSON.stringify(s)
-for (const post of [firstPost, agentToolsPost]) {
+for (const post of [firstPost, agentToolsPost, problemScopePost]) {
   const lines = [
     '---',
     'title: ' + quote(post.title),

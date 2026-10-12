@@ -1,9 +1,10 @@
 import { firstPost } from './first-post'
 import { agentToolsPost } from './agent-tools-post'
+import { problemScopePost } from './problem-scope-post'
 
 export type Topic = 'Essays' | 'Research' | 'Engineering' | 'Experiments' | 'Process'
 export type Stage = 'Editorial draft' | 'Under review' | 'Working notes' | 'Concept'
-export type FigureType = 'learning' | 'pressure' | 'contours' | 'geometry' | 'tokens' | 'pdf' | 'storage' | 'system' | 'signals' | 'agent'
+export type FigureType = 'learning' | 'pressure' | 'contours' | 'geometry' | 'tokens' | 'pdf' | 'storage' | 'system' | 'signals' | 'agent' | 'frontier'
 
 export interface Section {
   heading: string
@@ -29,6 +30,7 @@ export interface Entry {
 export const entries: Entry[] = [
   firstPost,
   agentToolsPost,
+  problemScopePost,
   {
     slug: 'four-axis-lyophilization',
     title: 'Low-temperature lyophilization: three theses in a four-axis optimization framework',

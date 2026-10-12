@@ -54,8 +54,8 @@ Large archive lists, responsive card grids, saved/filtered views, full-search re
 
 ## Editorial workflow
 
-- `src/first-post.ts` is the canonical source of the first essay; `src/agent-tools-post.ts` contains the second essay about OpenFork tooling.
-- `bun run export:essay` exports both editorial essays to `content/drafts/`. The journal reads the TypeScript entries, not the Markdown exports.
+- `src/first-post.ts` is the canonical source of the first essay; `src/agent-tools-post.ts` contains the second essay about OpenFork tooling; `src/problem-scope-post.ts` contains the third essay about AI expanding the problems that are practical to attempt.
+- `bun run export:essay` exports all three editorial essays to `content/drafts/`. The journal reads the TypeScript entries, not the Markdown exports.
 - `src/data.ts` contains illustrative working notes and research previews, **not** independently verified published papers.
 - All entries have explicit stage labels; avoid representing placeholders or under-review work as accepted results.
 - Editorial status labels distinguish essays, working notes, concepts, and research under review. Publication is not a claim of peer review.
