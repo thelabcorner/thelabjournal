@@ -17,7 +17,7 @@ Tedious work used to decide which ideas I could pursue. As models get smarter, t
 
 I have always had more ideas than time to pursue them. Before I could test one, I had to decide whether the investigation was worth all the work surrounding it. Sometimes I knew exactly what I wanted to explore and still put it aside because of everything I would need to build first.
 
-An unfamiliar file format might mean days of reading documentation, making test fixtures, and assembling a parser before reaching the interesting question. An algorithm experiment might need a benchmark harness, a reference implementation, and enough debugging to make the comparison fair. Each step was manageable. Taken together, they could consume the time and energy I wanted to spend on the actual problem.
+An unfamiliar file format might mean days of reading documentation, making test fixtures, and assembling a parser before reaching the interesting question. An algorithm experiment might need a benchmark runner, a reference implementation, and enough debugging to make the comparison fair. Each step was manageable. Taken together, they could consume the time and energy I wanted to spend on the actual problem.
 
 Tediousness was my main bottleneck. I was willing to learn the difficult parts. I struggled more with the volume of routine work required to get to them.
 
