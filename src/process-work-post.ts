@@ -26,8 +26,8 @@ export const processWorkPost: Entry = {
     {
       "heading": "The work I actually want to do",
       "paragraphs": [
-        "I have never been particularly interested in doing Git the “right way” for its own sake. I use Git because I need to know what changed, recover when an experiment goes wrong, and keep work from colliding. I do not get much satisfaction out of turning every idea into a branch, every branch into a ceremony, and every small decision into a review process.",
-        "I would rather spend that time finding out whether the idea works. That preference can look undisciplined from the outside. To me, the discipline is in the evidence: can I reproduce the result, identify the change that caused it, and safely undo it? A tidy commit history is useful, but it does not answer those questions by itself."
+        "I know why people use formal Git workflows, and I see the benefits of well-designed systems every day. I use them myself. I have never been particularly interested in doing Git the “right way” for its own sake. I use Git because I need to know what changed, recover when an experiment goes wrong, and keep work from colliding. I do not get much satisfaction out of turning every idea into a branch, every branch into a ceremony, and every small decision into a review process.",
+        "This is an observation about how I work, not an indictment of people who prefer more structure. Those processes solve real problems, especially when coordination and production risk demand them. I would rather spend that time finding out whether the idea works. That preference can look undisciplined from the outside. To me, the discipline is in the evidence: can I reproduce the result, identify the change that caused it, and safely undo it? A tidy commit history is useful, but it does not answer those questions by itself."
       ]
     },
     {
@@ -41,7 +41,7 @@ export const processWorkPost: Entry = {
     {
       "heading": "What Git is good at, and what it is not",
       "paragraphs": [
-        "Git is excellent at preserving states of source code, comparing changes, and recovering history. It does not prescribe one universal social workflow. Feature branches, pull requests, commit conventions, approvals, and release gates are policies built around the tool. Some are indispensable when multiple people ship to production. Others are inherited habits that make little sense during exploratory research.",
+        "I genuinely enjoy a good framework. My ES-star repositories are one example of how much I value building around coherent systems, conventions, and reusable foundations. I respect the thought behind them and use that structure when it helps me work. The point where I start pushing back is when maintaining the framework gets in the way of advancing the thing it exists to support.\n\nGit is excellent at preserving states of source code, comparing changes, and recovering history. It does not prescribe one universal social workflow. Feature branches, pull requests, commit conventions, approvals, and release gates are policies built around the tool. Some are indispensable when multiple people ship to production. Others are inherited habits that make little sense during exploratory research.",
         "A ten-minute experiment should not need the same ceremony as a production data migration. On the other hand, a shared worktree with concurrent agents needs explicit ownership, because one worker can destroy another worker's uncommitted work. I want the smallest mechanism that protects the actual boundary: snapshots, scoped ownership, conflict detection, reversible edits, and tests that run at the right time. I do not need a simulated organization around every local hypothesis.",
         "Skipping a ritual does not mean skipping accountability. If I cannot tell which agent changed a file, whether the tests ran, or what remains unverified, I have traded bureaucracy for confusion. That is not an improvement."
       ]
@@ -74,7 +74,7 @@ export const processWorkPost: Entry = {
       "heading": "A rule I keep returning to",
       "paragraphs": [
         "Before adding another step, I want to know which concrete failure it prevents and whether a cheaper mechanism would prevent the same failure. If the answer is unclear, I would rather run the experiment and learn what protection is actually needed.",
-        "I am not trying to eliminate structure. I am trying to stop structure from consuming the time and attention it was supposed to protect. The goal is still to solve the problem. Everything around that goal should have to earn its place."
+        "I am not claiming that other people are wrong for using more formal processes. I can appreciate a system, rely on it daily, and still decide that a particular requirement is costing more than it protects in the work in front of me.\n\nI am not trying to eliminate structure. I am trying to stop structure from consuming the time and attention it was supposed to protect. The goal is still to solve the problem. Everything around that goal should have to earn its place."
       ]
     }
   ]
