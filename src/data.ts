@@ -5,6 +5,7 @@ import { silicaDoorsPost } from './silica-doors-post'
 import { acyclicityPost } from './acyclicity-post'
 import { processWorkPost } from './process-work-post'
 import { modelSwitchPromptPost } from './model-switch-prompt-post'
+import { whatBecomesOrdinaryPost } from './what-becomes-ordinary-post'
 
 export type Topic = 'Essays' | 'Research' | 'Engineering' | 'Experiments' | 'Process'
 export type Stage = 'Editorial draft' | 'Under review' | 'Working notes' | 'Concept'
@@ -40,6 +41,7 @@ export const entries: Entry[] = [
   acyclicityPost,
   processWorkPost,
   modelSwitchPromptPost,
+  whatBecomesOrdinaryPost,
   {
     slug: 'four-axis-lyophilization',
     title: 'Low-temperature lyophilization: three theses in a four-axis optimization framework',
