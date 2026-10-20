@@ -1,16 +1,18 @@
 /* Journal application shell — WebSeal zinc/New York tokens are defined in styles.css.
    These rules intentionally supersede the prototype's original landing-page composition. */
-:root { --header-height: 48px; }
+:root { --header-height: 48px; --journal-content-inline-padding: clamp(24px, 4vw, 56px); }
 body { overflow-x: clip; }
 .app-shell { min-height: 100dvh; }
-.header-inner { max-width: 1720px; }
-.frame { max-width: 1720px; grid-template-columns: 252px minmax(0, 1fr); min-height: calc(100dvh - 97px); }
+/* The masthead, workspace, and footer occupy one centered desktop canvas. */
+.site-header, .site-footer { width: 100%; max-width: var(--journal-shell-max-width); margin-inline: auto; }
+.header-inner { max-width: var(--journal-shell-max-width); }
+.frame { max-width: var(--journal-shell-max-width); grid-template-columns: 252px minmax(0, 1fr); min-height: calc(100dvh - 97px); }
 .sidebar-wrap { background: var(--background); }
 .sidebar-scroll { padding-top: 23px; }
 .side-group + .side-group { margin-top: 23px; }
 .side-head { margin-bottom: 7px; }
 .side-article { padding-top: 9px; padding-bottom: 9px; }
-.content-main { max-width: 1230px; padding: 30px clamp(24px, 4vw, 56px) 70px; }
+.content-main { max-width: 1230px; padding: 30px var(--journal-content-inline-padding) 70px; }
 .icon-control { width: 32px; height: 32px; }
 .icon-control:active, .side-nav-row:active, .topic-tab:active { background: var(--muted); }
 .mobile-tabbar { display: none; }
@@ -67,7 +69,7 @@ body { overflow-x: clip; }
 .archive-disclaimer { display: flex; gap: 9px; align-items: flex-start; color: var(--muted-foreground); padding: 20px 2px 0; font-size: 11px; line-height: 1.5; }
 .archive-disclaimer .small-dot { margin-top: 5px; }
 .site-footer { background: var(--background); }
-.footer-inner { max-width: 1720px; }
+.footer-inner { max-width: var(--journal-shell-max-width); }
 .empty-state { min-height: 220px; justify-content: center; }
 .empty-state svg { width: 22px; height: 22px; }
 .empty-state .button svg { width: 13px; height: 13px; margin: 0; }
@@ -96,7 +98,6 @@ body { overflow-x: clip; }
 .prose-section { scroll-margin-top: 116px; }
 .article-prose { max-width: 740px; }
 .article-bottom { margin-top: 12px; }
-.dialog-results button.is-highlighted { background: var(--muted); }
 .mobile-drawer-head .drawer-handle { display: none; }
 @media (max-width: 1250px) {
   .article-layout { grid-template-columns: minmax(0,1fr); }
@@ -206,12 +207,6 @@ body { overflow-x: clip; }
   .prose-section p { margin-bottom: 14px; }
   .takeaway { padding: 13px; }
   .article-bottom h3 { font-size: 17px; }
-  .overlay { z-index: 75; padding: max(12px, env(safe-area-inset-top)) 8px max(12px, env(safe-area-inset-bottom)); align-items: flex-start; }
-  .search-dialog { width: 100%; max-height: calc(100dvh - env(safe-area-inset-top) - 24px); border-radius: 10px; }
-  .dialog-search { height: 52px; padding: 0 12px; }
-  .dialog-search input { font-size: 16px; }
-  .dialog-results { max-height: min(70dvh, 600px); }
-  .dialog-results button { min-height: 56px; }
 }
 @media (max-width: 390px) {
   .brand-text { display: inline; }

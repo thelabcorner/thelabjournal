@@ -11,7 +11,7 @@ export const whatBecomesOrdinaryPost: Entry = {
   type: 'Journal note',
   date: '2026-10-14',
   minutes: 2,
-  issue: 'J–004',
+  issue: 'J–005',
   figure: 'frontier',
   summary: 'Working on Nacre has me thinking about how much of what counts as difficult depends on when you happen to be alive.',
   keywords: ['Nacre', 'Learning', 'Machine learning', 'Research', 'Scientific progress'],

@@ -1,12 +1,198 @@
 /* thelabjournal™ · Chrome V3
    Dense app-shell polish. WebSeal zinc/New York; motion only in discrete states. */
-:root { --surface-well: oklch(.976 .001 286.375); }
+:root {
+  --surface-well: oklch(.976 .001 286.375);
+  --journal-frame-stroke: 1px;
+  --journal-edge-width: 24px;
+}
 .header-preferences { color: var(--muted-foreground); border: 1px solid transparent; }
 .header-preferences:hover { border-color: var(--border); background: var(--card); }
-.header-end { gap: 9px; }
+.header-end { gap: 0; }
+.header-tools { display: inline-flex; align-items: center; gap: 8px; margin-left: 20px; flex: 0 0 auto; }
 .header-search { width: min(230px,22vw); }
 .brand-mark { box-shadow: 0 1px 1px oklch(0 0 0 / .035); }
 .site-header { box-shadow: 0 1px 1px oklch(0 0 0 / .015); }
+/* Opaque, borderless chrome: the animated dot wall never reads through controls. */
+.site-header .header-links button,
+.site-header .header-search,
+.site-header .header-end .icon-control,
+.site-header .mobile-nav-toggle {
+  background: var(--card);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: var(--foreground);
+}
+.site-header .header-links button:hover,
+.site-header .header-links button.current,
+.site-header .header-search:hover,
+.site-header .header-end .icon-control:hover,
+.site-header .mobile-nav-toggle:hover { background: var(--secondary); }
+.site-header .header-search kbd { background: var(--inset); }
+/* One native window scroll owner; a full-width, accessible drag target lives
+   exactly in the 24px right-hand shell rail. The visible ink is much finer. */
+.centered-scrollbar { display: none; }
+@media (min-width:1024px) {
+  html { scrollbar-width: none; }
+  html::-webkit-scrollbar { display: none; }
+  .centered-scrollbar {
+    position: fixed;
+    right: max(0px, calc((100vw - var(--journal-shell-max-width)) / 2));
+    top: var(--header-height);
+    bottom: 0;
+    width: var(--journal-edge-width);
+    display: block;
+    z-index: 46;
+    background: transparent;
+    border: 0;
+    touch-action: none;
+    user-select: none;
+    cursor: default;
+    /* Hide transient thumb geometry while the track shortens above the footer.
+       The scroll owner stays the window; clipping does not create a scrollport. */
+    overflow: clip;
+  }
+  .centered-scrollbar::before {
+    content: '';
+    position: absolute;
+    top: 9px;
+    bottom: 9px;
+    left: calc(50% - 1px);
+    width: 2px;
+    border-radius: 2px;
+    background: var(--border);
+    pointer-events: none;
+  }
+  .centered-scrollbar[data-scrollable="false"] { visibility: hidden; pointer-events: none; }
+  .centered-scrollbar-thumb {
+    position: absolute;
+    top: 0;
+    left: calc(50% - 3px);
+    width: 6px;
+    border-radius: 999px;
+    background: var(--muted-foreground);
+    opacity: .86;
+    will-change: transform;
+    cursor: grab;
+    transition: left 130ms ease, width 130ms ease, background-color 130ms ease, opacity 130ms ease;
+  }
+  .centered-scrollbar[data-dragging="true"] .centered-scrollbar-thumb { cursor: grabbing; }
+  .centered-scrollbar:hover .centered-scrollbar-thumb,
+  .centered-scrollbar[data-dragging="true"] .centered-scrollbar-thumb,
+  .centered-scrollbar:focus-visible .centered-scrollbar-thumb {
+    left: calc(50% - 5px);
+    width: 10px;
+    background: var(--foreground);
+    opacity: .95;
+  }
+  .centered-scrollbar:focus-visible { outline: none; }
+  .centered-scrollbar:focus-visible .centered-scrollbar-thumb {
+    box-shadow: 0 0 0 2px var(--card), 0 0 0 4px var(--ring);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .centered-scrollbar-thumb { transition: none; }
+  }
+  @media (forced-colors: active) {
+    .centered-scrollbar-thumb { background: CanvasText; opacity: 1; }
+    .centered-scrollbar:focus-visible .centered-scrollbar-thumb { outline: 2px solid Highlight; }
+  }
+}
+/* The margins reuse the nav's actual ordered-Bayer renderer, but their
+   fades are computed on individual dot coverage/alpha in DitherScene.
+   No CSS mask, vignette overlay, bright sweeping beam, or interactive rail. */
+.journal-gutter-fields { display: none; pointer-events: none; }
+@media (min-width: 1680px) {
+  .journal-gutter-fields {
+    display: block;
+    position: fixed;
+    inset: var(--header-height) 0 0;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+    overflow: clip;
+    contain: layout style paint;
+  }
+  .journal-gutter-field {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: min(340px, calc((100vw - var(--journal-shell-max-width)) / 2));
+    overflow: clip;
+    pointer-events: none;
+  }
+  .journal-gutter-field--left {
+    right: calc(50% + var(--journal-shell-max-width) / 2);
+  }
+  .journal-gutter-field--right {
+    left: calc(50% + var(--journal-shell-max-width) / 2);
+  }
+  .journal-gutter-dither { color: var(--dither-bright); opacity: .84; }
+  :root[data-theme="dark"] .journal-gutter-dither { opacity: .9; }
+}
+@media print, (forced-colors: active) {
+  .journal-gutter-fields { display: none; }
+}
+/* Desktop bookends: a bounded editorial canvas, not a clipped full-screen app.
+   The right strip has a job (the scrollbar) and a quiet ordered-dot signature.
+   Animate a tiny compositor layer instead of mounting another canvas renderer. */
+.workspace-edge { display: none; }
+@media (min-width:1024px) {
+  .site-header {
+    border-top: var(--journal-frame-stroke) solid var(--border);
+    box-shadow: inset var(--journal-frame-stroke) 0 0 var(--border), inset calc(-1 * var(--journal-frame-stroke)) 0 0 var(--border),
+      0 1px 1px oklch(0 0 0 / .015);
+  }
+  .site-footer {
+    box-shadow: inset var(--journal-frame-stroke) 0 0 var(--border), inset calc(-1 * var(--journal-frame-stroke)) 0 0 var(--border);
+  }
+  .frame { position: relative; }
+  .frame::before {
+    content: "";
+    position: absolute;
+    z-index: 3;
+    inset-block: 0;
+    left: 0;
+    width: var(--journal-frame-stroke);
+    background: var(--border);
+    pointer-events: none;
+  }
+  .workspace-edge {
+    position: absolute;
+    display: block;
+    z-index: 2;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: var(--journal-edge-width);
+    background: var(--card);
+    border-inline: var(--journal-frame-stroke) solid var(--border);
+    pointer-events: none;
+  }
+  .workspace-edge-viewport {
+    position: sticky;
+    top: var(--header-height);
+    height: calc(100dvh - var(--header-height));
+    overflow: hidden;
+  }
+  .workspace-edge-dots {
+    position: absolute;
+    inset: -32px 0;
+    opacity: .12;
+    background-image: radial-gradient(circle, var(--muted-foreground) .65px, transparent .8px);
+    background-size: 8px 8px;
+    animation: workspace-edge-drift 36s linear infinite;
+  }
+}
+@keyframes workspace-edge-drift {
+  to { transform: translate3d(0, -24px, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .workspace-edge-dots { animation: none; }
+}
+@media (min-width:768px) and (max-width:1023px) {
+  /* Keep the solid navigation controls within the tablet-width masthead. */
+  .header-inner { gap: 8px; }
+  .header-links { margin-left: 0; }
+}
 .side-nav-row, .side-article, .topic-tab, .journal-row-link { transition: background 140ms ease, color 140ms ease; }
 .sidebar-wrap { border-right-color: oklch(.89 .004 286); }
 .sidebar-footer { position: relative; background: var(--inset); }
@@ -99,8 +285,9 @@
  .index-actions { gap: 6px; }
 }
 @media(max-width:767px) {
- .header-preferences { display: inline-flex; }
- .header-end { gap: 2px; }
+  .header-preferences { display: inline-flex; }
+  .header-end { gap: 2px; }
+  .header-tools { margin-left: 2px; gap: 2px; }
  .header-inner { gap: 4px; }
  .workspace-status { grid-template-columns: repeat(2,minmax(0,1fr)); margin: 16px 0 0; }
  .status-unit { padding: 10px 13px; }
@@ -198,29 +385,50 @@
 .desktop-rail { display: none; }
 .side-panel { min-width: 0; flex: 1; }
 @media(min-width:1024px) {
-  .frame { grid-template-columns: 264px minmax(0,1fr); transition: grid-template-columns 180ms ease; }
-  .frame.rail-collapsed { grid-template-columns: 52px minmax(0,1fr); }
+  /* One desktop coordinate system: the masthead and workspace share rail/panel boundaries. */
+  .app-shell { --desktop-rail-width: 52px; --desktop-sidebar-width: 264px; --collapsed-main-max-width: 1320px; }
+  .app-shell.rail-collapsed { --desktop-sidebar-width: var(--desktop-rail-width); }
+  .frame { grid-template-columns: var(--desktop-sidebar-width) minmax(0,1fr); transition: grid-template-columns 180ms ease; }
+  .frame.rail-collapsed { grid-template-columns: var(--desktop-rail-width) minmax(0,1fr); }
+  .header-inner { display: grid; grid-template-columns: var(--desktop-sidebar-width) minmax(0,1fr) auto; gap: 0; padding: 0; }
+  /* Shared control rhythm: align nav pills, search and tools on the same 32px baseline. */
+  .site-header .header-links button,
+  .site-header .header-search,
+  .site-header .header-end .icon-control,
+  .header-inner .brand-text { height: 32px; }
+  .header-inner .brand-mark { width: 32px; height: 32px; }
+  .header-inner .brand { display: grid; grid-template-columns: var(--desktop-rail-width) minmax(0,1fr); width: 100%; height: 100%; gap: 0; min-width: 0; }
+  .header-inner .brand-mark { justify-self: center; }
+  /* Opaque name chip, with text on the same vertical guide as the Library label. */
+  .header-inner .brand-text { display: inline-flex; align-items: center; justify-self: start; min-width: 0; height: 32px; margin-left: 0; padding: 0 9px; border: 1px solid transparent; border-radius: 6px; background: var(--card); }
+  .header-links { margin-left: 0; padding-left: calc(var(--journal-content-inline-padding) - 10px); min-width: 0; }
+  /* When the wide collapsed main recenters at its max-width, follow its text edge. */
+  .app-shell.rail-collapsed .header-links {
+    padding-left: calc(var(--journal-content-inline-padding) - 10px + max(0px, (min(100vw, var(--journal-shell-max-width)) - var(--desktop-rail-width) - var(--collapsed-main-max-width)) / 2));
+  }
+  /* The tools terminate on the interior of the right rail (24px) with a
+     deliberate 12px gutter; no extra article padding pushing them left. */
+  .header-end { padding-right: calc(var(--journal-edge-width) + 12px); }
+  .app-shell.rail-collapsed .header-inner .brand-text { display: none; }
   .sidebar-wrap { display: flex; height: 100%; overflow: visible; }
   .frame.rail-collapsed .side-panel { display: none; }
   .frame .sidebar { width: 100%; }
   .frame .sidebar-scroll { padding-inline: 9px; }
   .frame .sidebar-footer { padding-inline: 12px; }
-  .desktop-rail { position: sticky; top: var(--header-height); height: calc(100dvh - var(--header-height)); flex: 0 0 52px; display: flex; flex-direction: column; align-items: center; gap: 4px; background: var(--card); border-right: 1px solid var(--border); padding: 9px 5px 12px; z-index: 1; }
+  .desktop-rail { position: sticky; top: var(--header-height); height: calc(100dvh - var(--header-height)); flex: 0 0 var(--desktop-rail-width); display: flex; flex-direction: column; align-items: center; gap: 4px; background: var(--card); border-right: 1px solid var(--border); padding: 9px 5px 12px; z-index: 1; }
   .rail-masthead { width: 40px; height: 37px; display: grid; place-items: center; }
-  .rail-mark { width: 22px; height: 22px; display: grid; grid-template-columns: repeat(2,8px); gap: 3px; padding: 0; }
-  .rail-mark span { border: 1px solid var(--foreground); border-radius: 2px; }
-  .rail-mark span:last-child { background: var(--foreground); }
   .rail-micro-divider { width: 25px; height: 1px; background: var(--border); margin: 8px auto; }
   .rail-primary-nav { display: flex; flex-direction: column; gap: 3px; width: 100%; align-items: center; }
   .desktop-rail button { position: relative; width: 39px; height: 39px; display: grid; place-items: center; background: none; border: 0; color: var(--muted-foreground); border-radius: 7px; }
   .desktop-rail button:hover { background: var(--muted); color: var(--foreground); }
   .desktop-rail button.active,.desktop-rail button[aria-current="page"] { background: var(--secondary); color: var(--foreground); }
   .rail-primary-footer { display: flex; flex-direction: column; gap: 4px; align-items: center; width: 100%; margin-top: auto; }
-  .rail-primary-footer .rail-collapse { border: 1px solid var(--border); background: var(--inset); }
-  .rail-author { width: 31px; height: 31px; margin-top: 7px; display: grid; place-items: center; border-radius: 8px; background: var(--muted); color: var(--foreground); font-size: 10px; font-weight: 600; }
+  .rail-masthead .rail-collapse { width: 39px; height: 39px; border: 1px solid var(--border); background: var(--inset); }
+  .rail-masthead .rail-collapse:hover { background: var(--muted); color: var(--foreground); }
+  .rail-author { display:block; flex:none; width: 31px; height: 31px; margin-top: 7px; border-radius: 8px; border: 1px solid var(--border); background: var(--muted); object-fit: cover; }
   .rail-tiny-count { position: absolute; top: 0; right: 0; font-size: 9px; font-variant-numeric: tabular-nums; color: var(--foreground); }
   .rail-edge-control { display: none; }
-  .frame.rail-collapsed .content-main { max-width: 1320px; }
+  .frame.rail-collapsed .content-main { max-width: var(--collapsed-main-max-width); }
 }
 @media(min-width:1024px) and (prefers-reduced-motion:reduce) {
   .frame { transition: none; }

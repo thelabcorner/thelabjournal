@@ -47,7 +47,9 @@ for (const [index, size] of [16, 32, 48].entries()) {
 }
 
 const source = await readFile(new URL('../src/App.tsx', import.meta.url), 'utf8')
-assert.ok(source.includes('d={BRAND_MARK_OUTLINE}') && source.includes('d={BRAND_MARK_FILL}'), 'Navbar uses the shared icon geometry')
+const sharedMark = await readFile(new URL('../src/components/BrandMark.tsx', import.meta.url), 'utf8')
+assert.ok(source.includes("import { BrandMark } from './components/BrandMark'") && source.includes('<BrandMark'), 'Navbar imports and renders the canonical BrandMark')
+assert.ok(sharedMark.includes("from '../lib/brandMark'") && sharedMark.includes('d={BRAND_MARK_OUTLINE}') && sharedMark.includes('d={BRAND_MARK_FILL}') && sharedMark.includes('strokeWidth={BRAND_MARK_STROKE}'), 'Shared BrandMark renders the canonical SVG geometry')
 const html = await readFile(new URL('../index.html', import.meta.url), 'utf8')
 for (const filename of ['favicon.svg', 'favicon.ico', 'favicon-16.png', 'favicon-32.png', 'icons/apple-touch-icon.png']) {
   assert.ok(html.includes(`%BASE_URL%${filename}?v=2`), filename + ' has a base-aware, cache-busted link')

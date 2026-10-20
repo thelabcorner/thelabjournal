@@ -109,3 +109,49 @@
   .browse-footer > span { font-size: 0; }
   .browse-footer > span .small-dot { display: none; }
 }
+
+/* Desktop surface hierarchy: zinc-on-zinc separation without luminous borders.
+   The original dark header shadow replaced the left/right inset frame strokes,
+   visually erasing the perimeter. Restore that geometry explicitly here. */
+@media (min-width: 1024px) {
+  :root[data-theme="dark"] {
+    --journal-dark-outline: oklch(.372 .006 286);
+    --journal-dark-canvas: oklch(.172 .004 286);
+    --journal-dark-sidebar: oklch(.209 .005 286);
+    --journal-dark-rail: oklch(.233 .006 286);
+  }
+  :root[data-theme="dark"] body { background: oklch(.132 .004 286); }
+  :root[data-theme="dark"] .frame,
+  :root[data-theme="dark"] .site-footer { background: var(--journal-dark-canvas); }
+  :root[data-theme="dark"] .sidebar-wrap {
+    background: var(--journal-dark-sidebar);
+    border-right-color: var(--journal-dark-outline);
+  }
+  :root[data-theme="dark"] .desktop-rail {
+    background: var(--journal-dark-rail);
+    border-right-color: var(--journal-dark-outline);
+  }
+  :root[data-theme="dark"] .site-header {
+    background: oklch(.195 .005 286);
+    border-color: var(--journal-dark-outline);
+    box-shadow:
+      inset var(--journal-frame-stroke) 0 0 var(--journal-dark-outline),
+      inset calc(-1 * var(--journal-frame-stroke)) 0 0 var(--journal-dark-outline),
+      0 1px 1px oklch(0 0 0 / .18);
+  }
+  :root[data-theme="dark"] .site-footer {
+    border-top-color: var(--journal-dark-outline);
+    box-shadow:
+      inset var(--journal-frame-stroke) 0 0 var(--journal-dark-outline),
+      inset calc(-1 * var(--journal-frame-stroke)) 0 0 var(--journal-dark-outline);
+  }
+  :root[data-theme="dark"] .frame::before { background: var(--journal-dark-outline); }
+  :root[data-theme="dark"] .workspace-edge {
+    background: var(--journal-dark-rail);
+    border-inline-color: var(--journal-dark-outline);
+  }
+  :root[data-theme="dark"] .reading-bar {
+    background: var(--journal-dark-canvas);
+    border-bottom-color: var(--journal-dark-outline);
+  }
+}

@@ -22,13 +22,14 @@ interface Props {
   onFilter: (topic: Topic | 'All') => void
   onSaved: () => void
   onSearch: () => void
+  onResearch: () => void
   onOpen: (entry: Entry) => void
   onSettings: () => void
   theme: 'light' | 'dark'
   onToggleTheme: () => void
   onClose: () => void
 }
-export function MobileNavigator({ active, saved, onFilter, onSaved, onSearch, onOpen, onSettings, theme, onToggleTheme, onClose }: Props) {
+export function MobileNavigator({ active, saved, onFilter, onSaved, onSearch, onResearch, onOpen, onSettings, theme, onToggleTheme, onClose }: Props) {
   const [page, setPage] = useState<Page>('topics')
   const pointer = useRef<number | null>(null)
   const change = (next: Page) => { if (page !== next) cue('selection'); setPage(next) }
@@ -58,12 +59,13 @@ export function MobileNavigator({ active, saved, onFilter, onSaved, onSearch, on
       {page === 'topics' ? <>
         <div className="browse-featured-links">
           <button onClick={() => choose('All')} className={cn(active === 'All' && 'selected')}><span className="browse-feature-icon"><BookOpen size={17}/></span><span><strong>All writing</strong><small>Complete archive</small></span><span className="browse-numeric">{entries.length.toString().padStart(2, '0')}</span><ChevronRight size={15}/></button>
+          <button onClick={() => { onResearch(); onClose() }}><span className="browse-feature-icon"><Microscope size={17}/></span><span><strong>Research manuscripts</strong><small>Formal papers and technical methods</small></span><ChevronRight size={15}/></button>
           <button onClick={() => { onSaved(); onClose() }}><span className="browse-feature-icon"><Bookmark size={17}/></span><span><strong>Saved entries</strong><small>Stored on this device</small></span><span className="browse-numeric">{saved.toString().padStart(2, '0')}</span><ChevronRight size={15}/></button>
         </div>
         <div className="browse-section-label"><span>Subjects</span><span>5 collections</span></div>
         <div className="browse-topic-grid">{topics.filter((topic): topic is Topic => topic !== 'All').map(topic => {
           const Icon = icons[topic]
-          return <button key={topic} className={cn(active === topic && 'selected')} onClick={() => choose(topic)}><Icon size={17}/><span>{topic}</span><span className="browse-topic-count">{topicCount(topic).toString().padStart(2,'0')}</span>{active === topic && <Check className="browse-check" size={13}/>}</button>
+          return <button key={topic} className={cn(active === topic && 'selected')} onClick={() => choose(topic)}><Icon size={17}/><span>{topic === 'Research' ? 'Research notes' : topic}</span><span className="browse-topic-count">{topicCount(topic).toString().padStart(2,'0')}</span>{active === topic && <Check className="browse-check" size={13}/>}</button>
         })}</div>
         <div className="browse-spotlight"><div><span className="section-label">From the workbench</span><strong>Learning in reverse</strong><p>What AI changed about how I learn and build.</p></div><button aria-label="Open Learning in reverse" onClick={() => { onOpen(entries[0]); onClose() }}><ArrowRight size={17}/></button></div>
       </> : <>

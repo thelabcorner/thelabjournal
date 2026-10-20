@@ -1,0 +1,455 @@
+/* shadcn zinc / New York dense scientific presentation.
+   Paper-only: no journal entry, shared chrome, or thesis source text changes.
+   Blue = gas, sage = material and measurement, amber = thermal apparatus. */
+.research-body {
+  --research-gas: #4b7596;
+  --research-gas-fill: #4b7596;
+  --research-on-gas: #fff;
+  --research-measure: #648f80;
+  --research-thermal: #c29a69;
+  --research-material: #6b9c87;
+  --research-blue-wash: color-mix(in oklab, var(--card) 91%, #b1d5ed);
+  --research-sage-wash: color-mix(in oklab, var(--card) 91%, #b6dfc6);
+  --research-amber-wash: color-mix(in oklab, var(--card) 89%, #f2d8aa);
+  --research-line-blue: color-mix(in oklab, var(--border) 82%, #80a9c9);
+  --research-line-sage: color-mix(in oklab, var(--border) 82%, #76af96);
+  --accent: var(--research-gas);
+  --accent-hover: var(--research-gas);
+  --accent-muted: var(--research-blue-wash);
+  --latex-badge-bg: var(--research-blue-wash);
+  --latex-badge-border: var(--research-line-blue);
+  --latex-badge-label: var(--foreground);
+  --figure-bg: var(--card);
+  --sidenote-bg: var(--inset);
+  --status-success-text: #357758;
+  --status-warning-text: #92702f;
+  --status-danger-text: #ad5656;
+}
+:root[data-theme="dark"] .research-body {
+  --research-gas: #91b8d8;
+  --research-gas-fill: #476f8e;
+  --research-on-gas: #fff;
+  --research-measure: #8bbba5;
+  --research-thermal: #d8b27e;
+  --research-material: #97c7aa;
+  --research-blue-wash: color-mix(in oklab, var(--card) 90%, #426480);
+  --research-sage-wash: color-mix(in oklab, var(--card) 90%, #456e59);
+  --research-amber-wash: color-mix(in oklab, var(--card) 90%, #7b6445);
+  --research-line-blue: color-mix(in oklab, var(--border) 74%, #577b9b);
+  --research-line-sage: color-mix(in oklab, var(--border) 74%, #5f9278);
+  --status-success-text: #8acfa7;
+  --status-warning-text: #e0c08c;
+  --status-danger-text: #e5a0a0;
+}
+
+/* Bring back the thesis masthead's discrete bordered badges. Existing
+   research-reading.css explicitly stripped them: override that high-specificity
+   rule instead of relying on utility-class source order. */
+.research-body #title > .research-masthead-badges.flex.flex-wrap.items-center.gap-2.mb-6 {
+  display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;
+}
+.research-body #title > .research-masthead-badges.flex.flex-wrap.items-center.gap-2.mb-6 > span.research-badge {
+  display:inline-flex;align-items:center;max-width:100%;min-height:23px;
+  padding:3px 8px;border:1px solid var(--border);border-radius:5px;
+  background:var(--inset);color:var(--muted-foreground);
+  font:540 10.75px/1.35 Inter,system-ui,sans-serif;
+  letter-spacing:0;
+}
+.research-body #title > .research-masthead-badges.flex.flex-wrap.items-center.gap-2.mb-6 > span.research-badge--research {
+  border-color:var(--research-line-blue);background:var(--research-blue-wash);
+  color:var(--foreground);
+}
+.research-body #title .research-publication-line {margin-bottom:11px;}
+.research-body #title > .flex.flex-wrap.gap-4 {margin-bottom:17px;gap:10px 24px;}
+.research-body #title > .flex.flex-wrap.items-center.gap-x-4 {
+  gap:5px 17px;padding-top:12px;border-top:1px solid var(--border);
+  font-variant-numeric:tabular-nums;
+}
+.research-body #title .uppercase {text-transform:none;}
+.research-body #title .tracking-widest {letter-spacing:0;}
+.research-body #title .font-mono,
+.research-body .research-scientific-figure .font-mono,
+.research-body .math-block .font-mono {font-family:inherit;font-variant-numeric:tabular-nums;}
+.research-body #title a:focus-visible,
+.research-body .research-keywords summary:focus-visible {
+  outline:2px solid var(--ring);outline-offset:3px;border-radius:4px;
+}
+.research-body .research-keyword-list > span {
+  border:1px solid var(--border);background:var(--inset);
+}
+
+/* Abstract: symmetrical content inset, 3px unobtrusive contextual edge,
+   neutral text over a very faint paper tint. */
+.research-body #abstract {margin:0 0 34px;}
+.research-body #abstract > .research-section-label {margin:0 0 11px;padding:0;}
+.research-body #abstract > .research-abstract-card {
+  margin-top:0;padding:17px 20px 18px;
+  border:1px solid var(--border);
+  border-left:3px solid var(--research-line-blue);
+  border-radius:7px;background:var(--research-blue-wash);
+}
+.research-body #abstract .research-abstract-card > p {
+  max-width:none;margin:0;font-size:13.5px;line-height:1.76;
+  color:var(--prose-ink);
+}
+.research-body #abstract .research-abstract-card > p + p {margin-top:12px;}
+
+.research-body .prose-heading {min-width:0;}
+.research-body .research-chapter-label {border-top-color:var(--border);}
+.research-body .research-section-label h3 {color:var(--foreground);}
+.research-body .research-scientific-note {
+  padding:12px 15px;border-left:2px solid var(--research-line-sage);
+  border-radius:6px;background:var(--inset);
+}
+.research-body .research-scientific-note > p {margin:0;line-height:1.5;}
+.research-body .research-scientific-note > div {margin-top:6px;line-height:1.7;}
+.research-body .research-data-table {border-radius:7px;background:var(--card);scrollbar-width:thin;}
+.research-body .research-data-table th {
+  background:var(--inset);color:var(--foreground);font-size:11.5px;font-weight:600;
+}
+.research-body .research-data-table td {line-height:1.55;font-variant-numeric:tabular-nums;}
+.research-body .research-data-table tbody tr:nth-child(even) {
+  background:color-mix(in oklab,var(--inset) 35%,transparent);
+}
+.research-body .research-data-table tbody tr:hover {background:var(--research-blue-wash);}
+
+/* Editorial exhibits, not dashboard cards or decorative gradients. */
+.research-body .research-scientific-figure {
+  min-width:0;margin-block:20px 24px;padding:14px;overflow:hidden;
+  border:1px solid var(--border);border-radius:8px;background:var(--card);
+}
+.research-body .research-scientific-figure > figcaption:first-child {
+  align-items:baseline;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border);
+}
+.research-body .research-scientific-figure > figcaption:first-child > span:first-child {
+  font-size:12px;font-weight:610;
+}
+.research-body .research-scientific-figure > figcaption,
+.research-body .research-scientific-figure > p:last-child {font-size:11.5px;line-height:1.65;}
+.research-body .research-scheme {border-radius:6px;background:var(--inset);}
+.research-body .research-scheme > div:first-child {background:var(--card);}
+.research-body .research-scheme svg {display:block;}
+.research-body .research-calibration-figure > div:nth-child(2) {background:var(--inset);}
+.research-body .research-calibration-mode--reference > div:first-child {
+  background:var(--research-blue-wash);border-bottom-color:var(--research-line-blue);
+}
+.research-body .research-calibration-mode--process > div:first-child {
+  background:var(--research-sage-wash);border-bottom-color:var(--research-line-sage);
+}
+.research-body .research-calibration-mode > div:first-child > span {
+  font-family:inherit;font-weight:570;letter-spacing:0;text-transform:none;
+}
+.research-body .research-calibration-figure > div:last-of-type {
+  background:var(--research-amber-wash);
+}
+.research-body .research-pressure-figure,
+.research-body .research-gas-figure {
+  overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;
+}
+.research-body .research-pressure-figure > svg,
+.research-body .research-gas-figure > svg {display:block;}
+.research-body .math-block > div:first-child {
+  border-radius:6px;background:var(--inset);
+}
+.research-body .math-block figcaption {font-size:11.5px;line-height:1.55;}
+
+/* Equation ⇄ Python: same scientific figure and caption, alternate reading
+   surface. Default equation is preserved for non-JS print output. */
+.research-body .math-block.math-block--python-enabled > .math-block__shell {
+  padding:0;min-width:0;overflow:hidden;
+}
+.research-body .math-block__toolbar {
+  min-height:31px;display:flex;align-items:center;justify-content:space-between;
+  gap:12px;padding:4px 7px 4px 13px;
+  border-bottom:1px solid var(--border);background:var(--card);
+}
+.research-body .math-block__eyebrow {
+  font:540 10.5px/1.4 Inter,system-ui,sans-serif;
+  color:var(--muted-foreground);font-variant-numeric:tabular-nums;
+}
+.research-body .math-block__view-toggle,
+.research-body .math-block__copy {
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  min-height:24px;padding:3px 8px;border:1px solid var(--border);
+  border-radius:5px;background:var(--inset);color:var(--foreground);
+  font:550 10.75px/1.3 Inter,system-ui,sans-serif;
+  cursor:pointer;transition:background-color 120ms,border-color 120ms;
+}
+.research-body .math-block__view-toggle:hover,
+.research-body .math-block__copy:hover {
+  background:var(--research-blue-wash);border-color:var(--research-line-blue);
+}
+.research-body .math-block__content {min-width:0;}
+.research-body .math-block--python-enabled .math-block__formula {
+  min-width:0;overflow-x:auto;overscroll-behavior-x:contain;
+  padding:15px 19px;scrollbar-width:thin;
+}
+.research-body .math-block__code {display:none;min-width:0;}
+.research-body .math-block[data-equation-view="python"] .math-block__formula {display:none;}
+.research-body .math-block[data-equation-view="python"] .math-block__code {display:block;}
+.research-body .math-block__code-heading {
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  min-width:0;padding:8px 12px 6px 15px;
+  color:var(--text-secondary);background:var(--inset);
+  font:550 10.5px/1.45 Inter,system-ui,sans-serif;
+}
+.research-body .math-block__code-heading > span {
+  display:inline-flex;align-items:center;gap:6px;min-width:0;flex-wrap:wrap;
+}
+.research-body .math-block__code-context {color:var(--text-muted);font-weight:400;}
+.research-body .math-block__code pre {
+  margin:0;max-width:100%;padding:12px 15px 16px;overflow-x:auto;
+  overscroll-behavior-x:contain;tab-size:4;scrollbar-width:thin;
+  background:var(--inset);color:var(--foreground);
+  font:440 11.5px/1.65 "SFMono-Regular",Consolas,"Liberation Mono",monospace;
+  letter-spacing:0;font-variant-ligatures:none;
+}
+.research-body .math-block__code code {font:inherit;white-space:pre;}
+
+/* Pierre is an embedded manuscript reader, not an independent IDE surface.
+   Feed its shadow DOM the exact active shadcn/zinc paper tokens. */
+.research-body .math-block__pierre {
+  min-width:0;width:100%;overflow:hidden;background:var(--inset);
+}
+.research-body .math-block__pierre diffs-container {
+  display:block;min-width:0;max-width:100%;width:100%;
+  color-scheme:light;
+  --diffs-light-bg:var(--inset);
+  --diffs-dark-bg:var(--inset);
+  --diffs-light:var(--foreground);
+  --diffs-dark:var(--foreground);
+  --diffs-fg-number-override:var(--muted-foreground);
+  --diffs-bg-context-override:var(--inset);
+  --diffs-bg-context-gutter-override:var(--inset);
+  --diffs-font-size:11.5px;
+  --diffs-line-height:19px;
+  --diffs-font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace;
+  --diffs-gap-block:8px;
+  --diffs-gap-inline:7px;
+  --diffs-tab-size:4;
+}
+:root[data-theme="dark"] .research-body .math-block__pierre diffs-container {
+  color-scheme:dark;
+}
+.research-body .math-block__code-loading {
+  margin:0;padding:12px 15px 16px;max-width:100%;overflow-x:auto;
+  color:var(--foreground);background:var(--inset);
+  font:440 11.5px/19px "SFMono-Regular",Consolas,"Liberation Mono",monospace;
+  white-space:pre;tab-size:4;
+}
+@media (max-width:767px) {
+  .research-body .math-block__pierre diffs-container {--diffs-font-size:11px;--diffs-line-height:18px;}
+}
+
+@media (max-width:767px) {
+  .research-body .math-block.math-block--python-enabled > .math-block__shell {padding:0;}
+  .research-body .math-block--python-enabled .math-block__formula {padding:12px 11px;}
+  .research-body .math-block__code pre {padding:10px 11px 13px;font-size:11px;}
+  .research-body .math-block__code-heading {padding:7px 9px 5px 11px;}
+  .research-body .math-block__code-context {display:none;}
+}
+@media print {
+  .research-body .math-block__toolbar,
+  .research-body .math-block__code {display:none!important;}
+  .research-body .math-block[data-equation-view="python"] .math-block__formula {
+    display:flex!important;overflow:visible!important;
+  }
+}
+
+.research-body .research-range {accent-color:var(--research-gas);}
+
+/* Inline mathematical notation is editorial metadata, not developer code.
+   Reserve pills for genuine quantities; formulas and units remain unboxed. */
+.research-body .research-variable-badge {
+  display:inline-flex;
+  position:relative;
+  top:-.035em;
+  align-items:baseline;
+  vertical-align:baseline;
+  white-space:nowrap;
+  max-width:100%;
+  margin-inline:.045em;
+  padding:.045em .33em .075em;
+  border:1px solid var(--border);
+  border-radius:4px;
+  background:var(--inset);
+  color:var(--foreground);
+  font-size:.845em;
+  font-weight:470;
+  line-height:1.22;
+  letter-spacing:0;
+  font-variant-numeric:lining-nums;
+}
+.research-body .research-variable-badge--gas {
+  border-color:var(--research-line-blue);
+  background:var(--research-blue-wash);
+}
+.research-body .research-variable-badge--thermal {
+  border-color:color-mix(in oklab,var(--border) 80%,var(--research-thermal));
+  background:var(--research-amber-wash);
+}
+.research-body .research-variable-badge--measure {
+  border-color:var(--research-line-sage);
+  background:var(--research-sage-wash);
+}
+.research-body .research-variable-glyph {
+  font-family:"Cambria Math","STIX Two Math",Georgia,serif;
+  font-size:1.11em;
+  font-style:italic;
+  font-weight:500;
+  line-height:1;
+}
+.research-body .research-variable-badge sub,
+.research-body .research-variable-badge sup {
+  position:relative;
+  font-family:"Cambria Math","STIX Two Math",Georgia,serif;
+  font-size:.75em;
+  font-style:normal;
+  line-height:0;
+  vertical-align:baseline;
+}
+.research-body .research-variable-badge sub {bottom:-.27em;}
+.research-body .research-variable-badge sup {bottom:.43em;}
+.research-body .research-chemical-formula,
+.research-body .research-unit-inline {white-space:nowrap;font-variant-numeric:lining-nums;}
+.research-body .research-chemical-formula sub,
+.research-body .research-unit-inline sup {
+  position:relative;
+  font-size:.72em;
+  line-height:0;
+  vertical-align:baseline;
+}
+.research-body .research-chemical-formula sub {bottom:-.24em;}
+.research-body .research-unit-inline sup {bottom:.45em;}
+
+.research-body input:focus-visible,
+.research-body button:focus-visible,
+.research-body summary:focus-visible {
+  outline:2px solid var(--ring);outline-offset:2px;
+}
+@media (max-width:767px) {
+  .research-body #title > .research-masthead-badges.flex.flex-wrap.items-center.gap-2.mb-6 {margin-bottom:12px;}
+  .research-body #title > .research-masthead-badges.flex.flex-wrap.items-center.gap-2.mb-6 > span.research-badge {
+    min-height:22px;font-size:10.5px;padding-inline:7px;
+  }
+  .research-body #abstract > .research-abstract-card {padding:14px 15px 15px;}
+  .research-body #abstract .research-abstract-card > p {font-size:13.25px;line-height:1.72;}
+  .research-body .research-scientific-figure {padding:11px;margin-block:17px 21px;}
+  .research-body .research-pressure-figure > svg,
+  .research-body .research-gas-figure > svg {min-width:520px;}
+  .research-body .research-data-table th,
+  .research-body .research-data-table td {padding:8px 9px;}
+  .research-body .math-block > div:first-child {padding:12px;}
+}
+@media print {
+  .research-body .research-scientific-figure,
+  .research-body .research-abstract-card {break-inside:avoid;}
+  .research-body .research-scientific-figure {overflow:visible;}
+  .research-body .research-pressure-figure > svg,
+  .research-body .research-gas-figure > svg {min-width:0;}
+}
+
+/* Mass-led scientific pathway — document figure, not dashboard widgets. */
+.research-body .research-mass-pipeline > figcaption:first-child {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 10px;
+}
+.research-body .research-mass-pipeline > figcaption:first-child > span:last-child {
+  color: var(--muted-foreground);
+  font-size: 11.5px;
+  font-weight: 400;
+}
+.research-body .research-mass-pipeline-steps {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.research-body .research-mass-pipeline-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  padding: 9px 8px 10px;
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--research-line-sage);
+  border-radius: 5px;
+  background: var(--card);
+}
+.research-body .research-mass-pipeline-stage--gas { border-top-color: var(--research-line-blue); }
+.research-body .research-mass-pipeline-index {
+  margin-bottom: 5px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  background: var(--research-sage-wash);
+  color: var(--foreground);
+  font: 600 10px/1.2 Inter, system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+.research-body .research-mass-pipeline-stage--gas .research-mass-pipeline-index { background: var(--research-blue-wash); }
+.research-body .research-mass-pipeline-stage strong {
+  font: 600 11.5px/1.3 Inter, system-ui, sans-serif;
+  color: var(--foreground);
+}
+.research-body .research-mass-pipeline-equation {
+  width: 100%;
+  min-width: 0;
+  margin: 8px 0 5px;
+  padding: 6px 3px;
+  border-radius: 3px;
+  background: var(--inset);
+  overflow-x: auto;
+  scrollbar-width: thin;
+  text-align: center;
+  white-space: nowrap;
+  color: var(--foreground);
+}
+.research-body .research-mass-pipeline-equation .katex { font-size: .86em; }
+.research-body .research-mass-pipeline-stage p {
+  margin: 0;
+  color: var(--muted-foreground);
+  font: 400 10.75px/1.5 Inter, system-ui, sans-serif;
+}
+@media (max-width: 700px) {
+  .research-body .research-mass-pipeline-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
+  .research-body .research-mass-pipeline-stage { min-height: 112px; }
+  .research-body .research-mass-pipeline-stage:last-child { grid-column: 1 / -1; min-height: 0; }
+}
+@media (max-width: 360px) {
+  .research-body .research-mass-pipeline-steps { grid-template-columns: minmax(0, 1fr); }
+  .research-body .research-mass-pipeline-stage,
+  .research-body .research-mass-pipeline-stage:last-child { grid-column: auto; min-height: 0; }
+  .research-body .research-mass-pipeline-stage { padding: 8px 10px; }
+  .research-body .research-mass-pipeline-equation { margin: 5px 0; }
+}
+@media print {
+  .research-body .research-mass-pipeline-steps { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .research-body .research-mass-pipeline-stage { break-inside: avoid; }
+}
+
+
+/* Source-authored KaTeX symbols and the editorial token vocabulary use one visual grammar. */
+.research-body--gravimetric .prose-heading p .katex-inline,
+.research-body--gravimetric .research-scientific-note .katex-inline {
+  display: inline-block;
+  vertical-align: -.055em;
+  margin-inline: .105em;
+  padding: .025em .28em .04em;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--inset);
+  color: var(--foreground);
+  font-size: .96em;
+  line-height: 1.14;
+  white-space: nowrap;
+  max-width: 100%;
+}
+.research-body .research-variable-suffix {
+  font-family: "Cambria Math", "STIX Two Math", Georgia, serif;
+  font-style: normal;
+  font-size: 1.03em;
+}

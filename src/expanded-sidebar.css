@@ -1,0 +1,379 @@
+/* Journal explorer — bounded workspace panel, separate from the icon rail.
+   Quiet zinc hierarchy, document-first density, matching light/dark surfaces. */
+@media (min-width: 1024px) {
+  .app-shell { --desktop-sidebar-width: 296px; }
+  .app-shell.rail-collapsed { --desktop-sidebar-width: var(--desktop-rail-width); }
+  .app-shell .header-inner .brand-text { padding-inline: 16px; }
+}
+
+.sidebar--explorer {
+  --side-line: var(--border);
+  --side-hover: var(--chrome-tint-hover);
+  --side-active: var(--secondary);
+  --side-surface: var(--background);
+  position: sticky;
+  top: var(--header-height);
+  height: calc(100dvh - var(--header-height));
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--side-surface);
+}
+:root[data-theme="dark"] .sidebar--explorer { --side-surface: var(--card); }
+@media (min-width: 1024px) {
+  :root[data-theme="dark"] .sidebar--explorer {
+    --side-surface: var(--journal-dark-sidebar, var(--card));
+  }
+}
+.sidebar--explorer .side-explorer-header {
+  flex: 0 0 auto;
+  min-height: 65px;
+  padding: 11px 16px 12px;
+  border-bottom: 1px solid var(--side-line);
+  background: var(--inset);
+}
+.sidebar--explorer .side-explorer-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--muted-foreground);
+  font-size: 9px;
+  font-weight: 590;
+  letter-spacing: .075em;
+  line-height: 15px;
+  white-space: nowrap;
+}
+.sidebar--explorer .side-explorer-eyebrow span { opacity: .55; }
+.sidebar--explorer .side-explorer-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 9px;
+  margin-top: 4px;
+}
+.sidebar--explorer .side-explorer-title strong {
+  color: var(--foreground);
+  font-size: 14px;
+  font-weight: 630;
+  letter-spacing: -.025em;
+  line-height: 19px;
+}
+.sidebar--explorer .side-explorer-title > span {
+  color: var(--muted-foreground);
+  font-size: 9px;
+  letter-spacing: .05em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.sidebar--explorer .sidebar-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+  scrollbar-gutter: stable;
+  padding: 14px 9px 20px;
+}
+.sidebar--explorer .sidebar-scroll::-webkit-scrollbar { width: 5px; }
+.sidebar--explorer .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
+.sidebar--explorer .sidebar-scroll::-webkit-scrollbar-thumb {
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: var(--border);
+  background-clip: padding-box;
+}
+.sidebar--explorer .sidebar-scroll::-webkit-scrollbar-thumb:hover { background: var(--muted-foreground); }
+.sidebar--explorer .side-group { padding: 0; margin: 0; min-width: 0; }
+.sidebar--explorer .side-group + .side-group {
+  margin-top: 13px;
+  padding-top: 12px;
+  border-top: 1px solid var(--side-line);
+}
+.sidebar--explorer .side-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 9px;
+  width: 100%;
+  min-height: 20px;
+  min-width: 0;
+  margin: 0 0 7px;
+  padding: 0 9px;
+  color: var(--muted-foreground);
+  font-size: 10px;
+  font-weight: 625;
+  letter-spacing: .025em;
+  line-height: 17px;
+}
+.sidebar--explorer .side-section-heading h2 { margin: 0; font: inherit; color: inherit; }
+.sidebar--explorer .side-section-count {
+  color: var(--muted-foreground);
+  font-size: 9px;
+  font-weight: 480;
+  letter-spacing: .04em;
+  font-variant-numeric: tabular-nums;
+}
+.sidebar--explorer .side-section-toggle {
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+.sidebar--explorer .side-section-toggle:hover { color: var(--foreground); }
+.sidebar--explorer .side-section-toggle:focus-visible { outline-offset: 1px; }
+.sidebar--explorer .side-section-actions { display: flex; align-items: center; gap: 8px; }
+.sidebar--explorer .side-section-actions svg {
+  width: 12px; height: 12px;
+  color: var(--muted-foreground);
+  transition: transform 150ms ease;
+}
+.sidebar--explorer .side-section-actions svg.is-collapsed { transform: rotate(-90deg); }
+.sidebar--explorer .side-items { display: flex; flex-direction: column; gap: 2px; }
+.sidebar--explorer .side-nav-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 16px minmax(0,1fr) auto;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 32px;
+  min-height: 32px;
+  padding: 0 10px 0 11px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--menu-ink);
+  text-align: left;
+  font-size: 11.75px;
+  font-weight: 480;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+.sidebar--explorer .side-nav-row > svg {
+  width: 15px; height: 15px;
+  color: var(--muted-foreground);
+  stroke-width: 1.75;
+}
+.sidebar--explorer .side-nav-name {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sidebar--explorer .side-nav-row:hover { background: var(--side-hover); color: var(--foreground); }
+.sidebar--explorer .side-nav-row[data-active="true"] {
+  background: var(--side-active);
+  color: var(--foreground);
+  font-weight: 610;
+}
+.sidebar--explorer .side-nav-row[data-active="true"]::before,
+.sidebar--explorer .side-article[data-active="true"]::before {
+  content: '';
+  position: absolute;
+  inset: 7px auto 7px 0;
+  width: 2px;
+  border-radius: 1px;
+  background: var(--foreground);
+}
+.sidebar--explorer .side-nav-row[data-active="true"] > svg { color: var(--foreground); }
+.sidebar--explorer .side-count {
+  min-width: 2ch;
+  color: var(--muted-foreground);
+  font-size: 10px;
+  font-weight: 490;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.sidebar--explorer .side-nav-row[data-active="true"] .side-count { color: var(--foreground); opacity: .72; }
+
+/* File records are readable across the full panel width, not squeezed into a
+   narrow title column alongside a redundant issue prefix. */
+.sidebar--explorer .side-article {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  min-height: 52px;
+  padding: 7px 11px 9px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background: transparent;
+  transition: background-color 120ms ease;
+}
+.sidebar--explorer .side-article:hover { background: var(--side-hover); }
+.sidebar--explorer .side-article[data-active="true"] { background: var(--side-active); }
+.sidebar--explorer .side-article[data-active="true"]::before { inset-block: 8px; }
+.sidebar--explorer .side-article-identity {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 7px;
+  min-width: 0;
+  height: 14px;
+}
+.sidebar--explorer .side-article-ref {
+  color: var(--muted-foreground);
+  font-size: 9.5px;
+  font-weight: 620;
+  letter-spacing: .012em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.sidebar--explorer .side-article-meta {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--muted-foreground);
+  font-size: 9.5px;
+  font-weight: 450;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sidebar--explorer .side-article-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--foreground);
+  font-size: 11.75px;
+  font-weight: 535;
+  line-height: 1.35;
+  letter-spacing: -.01em;
+}
+.sidebar--explorer .side-article[data-active="true"] .side-article-title { font-weight: 620; }
+.sidebar--explorer .side-recent-items { gap: 1px; }
+.sidebar--explorer .side-group--current .side-article {
+  min-height: 55px;
+  background: var(--side-active);
+  border-color: var(--side-line);
+}
+.sidebar--explorer .side-group--current .side-article::before {
+  content: ''; position: absolute; inset: 7px auto 7px 0;
+  width: 2px; background: var(--foreground); border-radius: 1px;
+}
+
+/* The footer is a compact factual inventory, not an oversized status card. */
+.sidebar--explorer .sidebar-footer {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  gap: 3px;
+  min-height: 55px;
+  margin-top: 0;
+  padding: 9px 15px;
+  border-top: 1px solid var(--side-line);
+  background: var(--inset);
+  color: var(--muted-foreground);
+}
+.sidebar--explorer .sidebar-footer::before { content: none; }
+.sidebar--explorer .side-footer-line { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.sidebar--explorer .side-footer-line strong {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--foreground);
+  font-size: 10.5px;
+  font-weight: 615;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sidebar--explorer .side-footer-mark {
+  flex: 0 0 auto;
+  width: 6px;
+  height: 6px;
+  background: var(--muted-foreground);
+  border-radius: 50%;
+}
+.sidebar--explorer .side-footer-total {
+  font-size: 10px;
+  font-weight: 585;
+  font-variant-numeric: tabular-nums;
+}
+.sidebar--explorer .side-footer-detail {
+  padding-left: 14px;
+  font-size: 9.5px;
+  line-height: 14px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.sidebar--explorer .side-footer-detail span { padding-inline: 3px; opacity: .6; }
+
+@media (max-width: 1023px) {
+  .sidebar--explorer { position: static; height: 100%; width: 100%; }
+  .sidebar--explorer .sidebar-scroll { padding-inline: 14px; }
+  .sidebar--explorer .side-nav-row { height: 39px; min-height: 39px; font-size: 12.5px; }
+  .sidebar--explorer .side-article { min-height: 56px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sidebar--explorer .side-nav-row,
+  .sidebar--explorer .side-article,
+  .sidebar--explorer .side-section-actions svg { transition: none; }
+}
+@media (forced-colors: active) {
+  .sidebar--explorer .side-nav-row[data-active="true"],
+  .sidebar--explorer .side-article[data-active="true"] { outline: 1px solid Highlight; }
+  .sidebar--explorer .side-nav-row[data-active="true"]::before,
+  .sidebar--explorer .side-article[data-active="true"]::before,
+  .sidebar--explorer .side-group--current .side-article::before { background: Highlight; }
+}
+
+/* Journal articles and formal scientific papers are separate navigation domains.
+   The icon rail and main content shell remain untouched. */
+.sidebar--explorer .side-explorer-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 65px;
+}
+.sidebar--explorer .side-explorer-title { margin-top: 0; }
+.sidebar--explorer .side-explorer-description {
+  margin-top: 2px;
+  color: var(--muted-foreground);
+  font-size: 10.5px;
+  line-height: 15px;
+}
+.sidebar--explorer .side-domain-heading {
+  min-height: 21px;
+  margin-bottom: 5px;
+}
+.sidebar--explorer .side-domain-heading h2 {
+  color: var(--foreground);
+  font-size: 12px;
+  font-weight: 660;
+  line-height: 18px;
+  letter-spacing: -.015em;
+}
+.sidebar--explorer .side-domain-heading .side-section-count {
+  font-size: 9.5px;
+  letter-spacing: 0;
+}
+.sidebar--explorer .side-subgroup {
+  margin-top: 9px;
+  padding-top: 9px;
+  border-top: 1px solid var(--side-line);
+}
+.sidebar--explorer .side-subgroup .side-section-heading { margin-bottom: 4px; }
+
+/* Research is a peer domain to Journal, not a separate inset card.
+   Its destinations inherit the exact same navigation and document-row styles.
+   An ordinary hairline and the explicit domain heading do the differentiation. */
+.sidebar--explorer .side-group.side-group--papers {
+  margin-top: 14px;
+  padding-top: 13px;
+}
+.sidebar--explorer .side-papers-items { gap: 2px; }
+.sidebar--explorer .side-papers-items .side-paper-entry {
+  min-height: 49px;
+  padding-block: 5px 6px;
+}
+.sidebar--explorer .side-papers-items .side-paper-entry .side-article-title {
+  line-height: 1.3;
+}
+.sidebar--explorer .side-recent-items .side-article { min-height: 47px; padding-block: 5px 6px; }

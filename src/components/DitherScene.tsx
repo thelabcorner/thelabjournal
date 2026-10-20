@@ -14,6 +14,9 @@ interface DitherSceneProps {
   fps?: number
   speed?: number
   intensity?: number
+  /** Gradually remove dots toward the outside of a desktop margin.
+   * Unlike a CSS mask, the falloff modifies coverage AND per-dot alpha. */
+  ambientEdge?: 'left' | 'right'
 }
 
 const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5] as const
@@ -39,9 +42,10 @@ interface Frame {
   seconds: number
   still: boolean
   intensity: number
+  ambientEdge?: 'left' | 'right'
 }
 
-function dots({ ctx, width, height, dpr, seconds, still, intensity }: Frame, variant: Variant) {
+function dots({ ctx, width, height, dpr, seconds, still, intensity, ambientEdge }: Frame, variant: Variant) {
   const pitch = variant === 'nav' ? 4.5 : variant === 'ledger' ? 3.5 : 4.2
   const dotSize = Math.max(1 / dpr, Math.round(pitch * 0.44 * dpr) / dpr)
   const cols = Math.ceil(width / pitch)
@@ -49,11 +53,56 @@ function dots({ ctx, width, height, dpr, seconds, still, intensity }: Frame, var
   const scan = still ? 0.52 : ((seconds * (variant === 'ledger' ? 0.04 : variant === 'nav' ? 0.042 : 0.062)) % 1)
   const fade = (u: number) => clamp(u / 0.13) * clamp((1 - u) / 0.13)
   const navPhase = still ? 0 : seconds * 0.35
+  // Side-margin silhouettes must NEVER come from clipping a mostly opaque
+  // rectangle. Compute a soft, asymmetric pair of elliptical lobes per dot:
+  // a dominant plume near the upper half, and a weak lower echo. The Bayer
+  // threshold consumes this falloff as *coverage*, so individual dots
+  // disappear gradually rather than drawing a CSS vignette over a rectangle.
+  // All corners, the outermost horizontal edge, and both vertical endpoints
+  // are mathematically guaranteed to contain no dots.
+  const ambientX = ambientEdge ? new Float32Array(cols) : undefined
+  const upperCenters = ambientEdge ? new Float32Array(cols) : undefined
+  const lowerCenters = ambientEdge ? new Float32Array(cols) : undefined
+  if (ambientX && upperCenters && lowerCenters) {
+    const sidePhase = ambientEdge === 'left' ? 0 : 1.4
+    for (let cx = 0; cx < cols; cx += 1) {
+      const u = (cx + 0.5) / cols
+      const inward = ambientEdge === 'left' ? u : 1 - u
+      ambientX[cx] = (1 - inward) ** 2
+      upperCenters[cx] = 0.34 + 0.046 * Math.sin(inward * 5.2 + sidePhase)
+      lowerCenters[cx] = 0.68 + 0.035 * Math.sin(inward * 6.1 + sidePhase)
+    }
+  }
+  const ambientY = ambientEdge
+    ? Float32Array.from({ length: rows }, (_, ry) => {
+      const v = (ry + 0.5) / rows
+      const topFade = clamp(v / 0.115)
+      const bottomFade = clamp((1 - v) / 0.16)
+      return Math.min(topFade * topFade * (3 - 2 * topFade),
+        bottomFade * bottomFade * (3 - 2 * bottomFade))
+    })
+    : undefined
+  const organicEnvelope = (radiusSquared: number) => {
+    const remaining = clamp(1 - radiusSquared)
+    return remaining * remaining * (3 - 2 * remaining)
+  }
 
   for (let ry = 0; ry < rows; ry += 1) {
     const v = (ry + 0.5) / rows
     for (let cx = 0; cx < cols; cx += 1) {
       const u = (cx + 0.5) / cols
+      // Cull absent dots before hashing and computing their coverage. Sine
+      // centers are precomputed once per column, not once per grid cell.
+      let spatial = 1
+      if (ambientX && ambientY && upperCenters && lowerCenters) {
+        if (ambientY[ry] <= 0) continue
+        const upper = organicEnvelope(ambientX[cx] / (0.91 * 0.91)
+          + ((v - upperCenters[cx]) / 0.53) ** 2)
+        const lower = organicEnvelope(ambientX[cx] / (0.77 * 0.77)
+          + ((v - lowerCenters[cx]) / 0.27) ** 2)
+        spatial = Math.max(upper, lower * 0.39) * ambientY[ry]
+        if (spatial <= 0) continue
+      }
       let coverage = 0
       if (variant === 'nav') {
         // WebSeal-style information wall: Bayer-dot telemetry, short rows of
@@ -69,8 +118,10 @@ function dots({ ctx, width, height, dpr, seconds, still, intensity }: Frame, var
         else if (section === 2) occupancy = (ry % 7 < 3) ? 0.48 + noise * 0.26 : 0.12
         else occupancy = noise > 0.48 ? 0.61 : 0.15
         const gap = ry % 9 === 0 ? 0.28 : 1
-        const verification = pulse(u, scan, 0.085) * 0.42
-        const drift = (Math.sin(u * 18 - navPhase + v * 3) + 1) * 0.09
+        // The header keeps its normal activity. Peripheral fields use the
+        // identical Bayer information pattern, but fewer shifting dots.
+        const verification = pulse(u, scan, 0.085) * (ambientEdge ? 0.11 : 0.42)
+        const drift = (Math.sin(u * 18 - navPhase + v * 3) + 1) * (ambientEdge ? 0.025 : 0.09)
         const edge = clamp(u / 0.065) * clamp((1 - u) / 0.065)
         coverage = clamp((occupancy * gap + verification + drift) * edge * intensity)
       } else if (variant === 'ledger') {
@@ -100,9 +151,12 @@ function dots({ ctx, width, height, dpr, seconds, still, intensity }: Frame, var
       }
       if (coverage <= 0) continue
       const ordered = threshold(cx, ry)
-      const brightness = clamp(coverage * intensity)
+      const brightness = clamp(coverage * (ambientEdge ? 1 : intensity) * spatial)
       if (brightness <= ordered) continue
-      ctx.globalAlpha = 0.24 + brightness * 0.64
+      // Modulate the actual surviving dot alpha, never the entire canvas.
+      ctx.globalAlpha = ambientEdge
+        ? (0.32 + brightness * 0.46) * (0.74 + spatial * 0.26)
+        : 0.24 + brightness * 0.64
       const x = Math.round((cx * pitch) * dpr) / dpr
       const y = Math.round((ry * pitch) * dpr) / dpr
       ctx.fillRect(x, y, dotSize, dotSize)
@@ -111,7 +165,7 @@ function dots({ ctx, width, height, dpr, seconds, still, intensity }: Frame, var
   ctx.globalAlpha = 1
 }
 
-export function DitherScene({ variant, className = '', fps = 16, speed = 1, intensity = 0.9 }: DitherSceneProps) {
+export function DitherScene({ variant, className = '', fps = 16, speed = 1, intensity = 0.9, ambientEdge }: DitherSceneProps) {
   const ref = useRef<HTMLCanvasElement>(null)
   useEffect(() => {
     const canvas = ref.current
@@ -144,7 +198,7 @@ export function DitherScene({ variant, className = '', fps = 16, speed = 1, inte
       const color = getComputedStyle(canvas).color
       ctx.clearRect(0, 0, width, height)
       ctx.fillStyle = color
-      dots({ ctx, width, height, dpr, seconds: elapsed / 1000 * speed, still, intensity }, variant)
+      dots({ ctx, width, height, dpr, seconds: elapsed / 1000 * speed, still, intensity, ambientEdge }, variant)
       canvas.dataset.ditherState = still ? 'still' : 'playing'
       canvas.dataset.ditherFrames = String(Number(canvas.dataset.ditherFrames || 0) + 1)
     }
@@ -224,6 +278,6 @@ export function DitherScene({ variant, className = '', fps = 16, speed = 1, inte
       document.removeEventListener('visibilitychange', sync)
       motion.removeEventListener('change', sync)
     }
-  }, [variant, fps, speed, intensity])
-  return <canvas ref={ref} className={'journal-dither ' + className} data-dither-variant={variant} aria-hidden="true" />
+  }, [variant, fps, speed, intensity, ambientEdge])
+  return <canvas ref={ref} className={'journal-dither ' + className} data-dither-variant={variant} data-dither-falloff={ambientEdge} aria-hidden="true" />
 }

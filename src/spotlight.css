@@ -1,0 +1,316 @@
+/* Spotlight / journal application chrome. Dense zinc surfaces, Inter throughout.
+   Viewport scrolling is native for input fidelity; scrollbar UI is ScrollView-owned. */
+.spotlight-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: clamp(32px, 11vh, 104px) 16px 20px;
+  background: oklch(.09 .002 286 / .66);
+  backdrop-filter: blur(3px);
+}
+.spotlight-dialog {
+  display: flex;
+  flex-direction: column;
+  width: min(694px, 100%);
+  max-height: calc(100dvh - 50px);
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--card);
+  color: var(--foreground);
+  font-family: inherit;
+  box-shadow: 0 24px 65px -25px oklch(0 0 0 / .48), 0 4px 16px -6px oklch(0 0 0 / .18);
+}
+.spotlight-dialog *, .spotlight-dialog *::before, .spotlight-dialog *::after { box-sizing: border-box; }
+.spotlight-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+}
+.spotlight-search-bar {
+  display: flex;
+  flex: 0 0 55px;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 0 14px 0 17px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+}
+.spotlight-magnifier { width: 17px; height: 17px; flex-shrink: 0; color: var(--muted-foreground); }
+.spotlight-search-bar input {
+  min-width: 0;
+  flex: 1;
+  width: 100%;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--foreground);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 460;
+  letter-spacing: -.015em;
+  caret-color: var(--foreground);
+}
+.spotlight-search-bar input::placeholder { color: var(--muted-foreground); opacity: .88; }
+.spotlight-search-bar button {
+  display: grid;
+  flex: 0 0 28px;
+  height: 28px;
+  place-items: center;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--muted-foreground);
+}
+.spotlight-search-bar button:hover { color: var(--foreground); background: var(--secondary); }
+.spotlight-search-bar button svg { width: 15px; height: 15px; }
+.spotlight-scopes {
+  display: flex;
+  flex: 0 0 38px;
+  align-items: center;
+  gap: 3px;
+  min-width: 0;
+  padding: 0 11px;
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.spotlight-scopes::-webkit-scrollbar { display: none; }
+.spotlight-scopes button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 28px;
+  flex: 0 0 auto;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 5px;
+  color: var(--muted-foreground);
+  background: transparent;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  line-height: 1;
+}
+.spotlight-scopes button:hover { background: var(--inset); color: var(--foreground); }
+.spotlight-scopes button.selected { color: var(--foreground); background: var(--secondary); font-weight: 620; }
+.spotlight-scopes button span { color: var(--muted-foreground); font-size: 10px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.spotlight-workspace {
+  display: grid;
+  grid-template-columns: minmax(0,1fr);
+  flex: 1 1 auto;
+  height: min(388px, 52dvh);
+  min-height: 0;
+}
+.journal-scrollview {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+.journal-scrollview-viewport {
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.journal-scrollview-viewport::-webkit-scrollbar { display: none; }
+.journal-scrollview-content { min-width: 0; }
+.journal-scrollview-track {
+  position: absolute;
+  z-index: 2;
+  top: 4px;
+  bottom: 4px;
+  right: 3px;
+  width: 9px;
+  border-radius: 5px;
+  touch-action: none;
+  user-select: none;
+  cursor: default;
+  outline: none;
+}
+.journal-scrollview[data-scrollable="false"] .journal-scrollview-track { display: none; }
+.journal-scrollview-thumb {
+  width: 5px;
+  margin-left: 2px;
+  border-radius: 9px;
+  background: var(--muted-foreground);
+  opacity: .38;
+  transform: translate3d(0,0,0);
+  will-change: transform;
+  pointer-events: none;
+}
+.journal-scrollview:hover .journal-scrollview-thumb,
+.journal-scrollview-track:focus-visible .journal-scrollview-thumb { opacity: .7; }
+.journal-scrollview-track:focus-visible { outline: 1px solid var(--ring); }
+.spotlight-results {
+  background: var(--background);
+  border-right: 1px solid var(--border);
+}
+.spotlight-results .journal-scrollview-content { padding: 5px 14px 12px 9px; }
+.spotlight-result-block { min-width: 0; }
+.spotlight-group-heading {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 8px 10px 4px;
+  color: var(--muted-foreground);
+  font-size: 10.5px;
+  font-weight: 600;
+}
+.spotlight-group-heading svg { width: 12px; height: 12px; }
+.spotlight-group-count { margin-left: auto; color: var(--muted-foreground); font-size: 10px; font-weight: 450; font-variant-numeric: tabular-nums; }
+.spotlight-option {
+  position: relative;
+  display: grid;
+  grid-template-columns: 17px minmax(0,1fr) 14px;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 49px;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 5px;
+  color: var(--foreground);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+.spotlight-option > svg:first-child { width: 15px; height: 15px; color: var(--muted-foreground); }
+.spotlight-option[data-active="true"], .spotlight-option:hover {
+  background: var(--secondary);
+}
+.spotlight-option[data-active="true"]::before,
+.spotlight-option:focus-visible::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 0;
+  width: 2px;
+  border-radius: 1px;
+  background: var(--foreground);
+  pointer-events: none;
+}
+.spotlight-option:focus-visible { outline: none; background: var(--secondary); }
+.spotlight-dialog button:not(.spotlight-option):focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }
+.spotlight-result-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.spotlight-result-title {
+  display: block;
+  overflow: hidden;
+  color: var(--foreground);
+  font-size: 11.5px;
+  font-weight: 620;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.spotlight-result-subtitle {
+  display: block;
+  overflow: hidden;
+  color: var(--muted-foreground);
+  font-size: 10px;
+  font-weight: 450;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.spotlight-result-context {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--muted-foreground);
+  font-size: 10px;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.spotlight-result-arrow { width: 13px; height: 13px; color: var(--muted-foreground); opacity: .55; }
+.spotlight-option[data-active="true"] .spotlight-result-arrow { opacity: 1; }
+.spotlight-result-title mark, .spotlight-result-context mark { padding: 0; background: transparent; color: var(--foreground); font-weight: 750; }
+.spotlight-result-limit { padding: 12px 9px; color: var(--muted-foreground); font-size: 11px; }
+.spotlight-empty { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 7px; max-width: 265px; margin: 62px auto; color: var(--muted-foreground); }
+.spotlight-empty > svg { width: 20px; height: 20px; margin-bottom: 5px; }
+.spotlight-empty strong { color: var(--foreground); font-size: 12px; font-weight: 620; }
+.spotlight-empty p { margin: 0; font-size: 10.5px; line-height: 1.6; }
+.spotlight-empty button { display: flex; gap: 6px; align-items: center; margin-top: 9px; padding: 7px 10px; border: 1px solid var(--border); border-radius: 5px; background: var(--card); color: var(--foreground); font-size: 10.5px; }
+.spotlight-empty button svg { width: 12px; height: 12px; }
+.spotlight-statusbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 0 0 35px;
+  gap: 12px;
+  padding: 0 13px;
+  border-top: 1px solid var(--border);
+  background: var(--card);
+  color: var(--muted-foreground);
+  font-size: 10px;
+}
+.spotlight-status-count { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.spotlight-status-shortcuts { display: flex; align-items: center; gap: 14px; }
+.spotlight-status-shortcuts > span { display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+.spotlight-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--inset);
+  color: var(--muted-foreground);
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 510;
+  line-height: 1;
+}
+@media (max-width: 750px) {
+  .spotlight-dialog { width: min(580px, 100%); }
+  .spotlight-workspace { grid-template-columns: minmax(0,1fr); }
+
+  .spotlight-results { border-right: 0; }
+}
+@media (max-width: 500px) {
+  .spotlight-backdrop { padding: max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)); }
+  .spotlight-dialog { max-height: calc(100dvh - 16px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); border-radius: 7px; }
+  .spotlight-search-bar { flex-basis: 52px; gap: 9px; padding: 0 10px 0 13px; }
+  .spotlight-search-bar input { font-size: 16px; }
+  .spotlight-scopes { flex-basis: 36px; padding: 0 6px; }
+  .spotlight-scopes button { height: 26px; padding-inline: 8px; font-size: 10px; }
+  .spotlight-workspace { height: min(64dvh, 540px); flex: 1 1 auto; }
+  .spotlight-results .journal-scrollview-content { padding: 4px 13px 12px 6px; }
+  .spotlight-result-context { display: none; }
+  .spotlight-option { min-height: 52px; padding-inline: 9px; }
+  .spotlight-statusbar { padding: 0 10px; }
+  .spotlight-status-count { display: none; }
+  .spotlight-status-shortcuts { justify-content: space-between; width: 100%; gap: 6px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spotlight-dialog *, .spotlight-dialog *::before, .spotlight-dialog *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

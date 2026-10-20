@@ -1,0 +1,146 @@
+
+/* Lyophilization: quiet scientific editorial skin, scoped to this manuscript.
+   Inherits the journal's shadcn/zinc palette and shared scientific controls. */
+.research-body .lyo-paper {min-width:0;color:var(--prose-ink);}
+.research-body .lyo-paper .prose-heading {min-width:0;}
+.research-body .lyo-paper .research-chapter-label {
+  margin-top:26px;padding-top:15px;border-top:1px solid var(--border);
+}
+.research-body .lyo-paper .research-chapter-label h2 {
+  font-size:16.5px;line-height:1.34;letter-spacing:-.02em;font-weight:620;
+}
+.research-body .lyo-paper .research-section-label {margin-bottom:9px;}
+.research-body .lyo-paper .research-section-label h3 {letter-spacing:-.015em;}
+.research-body .lyo-paper .lyo-abstract-card {
+  background:var(--research-blue-wash);border-color:var(--border);
+  border-left-color:var(--research-line-blue);box-shadow:none;
+}
+.research-body .lyo-paper .lyo-kicker {
+  color:var(--muted-foreground);font:620 10.5px/1.4 var(--font-sans);
+  text-transform:uppercase;letter-spacing:.08em;
+}
+.research-body .lyo-paper .lyo-evidence-intro {
+  display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
+  margin-top:15px;margin-bottom:9px;
+}
+.research-body .lyo-paper .lyo-evidence-intro p {
+  margin:0;color:var(--muted-foreground);font-size:11.5px;line-height:1.55;
+}
+.research-body .lyo-paper .lyo-evidence-grid {
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;margin-bottom:23px;
+}
+.research-body .lyo-paper .lyo-evidence-item {
+  min-width:0;padding:11px 12px 12px;
+  border:1px solid var(--border);border-radius:7px;background:var(--card);
+}
+.research-body .lyo-paper .lyo-evidence-item--gas {border-top:2px solid var(--research-line-blue);}
+.research-body .lyo-paper .lyo-evidence-item--thermal {border-top:2px solid var(--research-thermal);}
+.research-body .lyo-paper .lyo-evidence-item--measure {border-top:2px solid var(--research-line-sage);}
+.research-body .lyo-paper .lyo-evidence-top {display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
+.research-body .lyo-paper .lyo-evidence-index {
+  font:620 10px/1.4 var(--font-sans);color:var(--muted-foreground);
+  min-width:20px;padding:1px 4px;text-align:center;border:1px solid var(--border);
+  border-radius:4px;background:var(--inset);
+}
+.research-body .lyo-paper .lyo-evidence-status {
+  color:var(--muted-foreground);font-size:10px;line-height:1.4;
+}
+.research-body .lyo-paper .lyo-evidence-item > strong {
+  display:block;color:var(--foreground);font:620 12px/1.45 var(--font-sans);
+}
+.research-body .lyo-paper .lyo-evidence-item > p {
+  margin:5px 0 0;color:var(--prose-ink);font-size:11.5px;line-height:1.58;
+}
+.research-body .lyo-paper .lyo-process-figure {
+  margin:15px 0 18px;padding:13px;background:var(--card);
+}
+.research-body .lyo-paper .lyo-process-grid {
+  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:6px;margin:0;padding:0;list-style:none;
+}
+.research-body .lyo-paper .lyo-process-node {
+  min-width:0;padding:9px 8px 10px;border:1px solid var(--border);
+  border-radius:6px;background:var(--inset);
+}
+.research-body .lyo-paper .lyo-process-node--gas {background:var(--research-blue-wash);}
+.research-body .lyo-paper .lyo-process-node--measure {background:var(--research-sage-wash);}
+.research-body .lyo-paper .lyo-process-node--thermal {background:var(--research-amber-wash);}
+.research-body .lyo-paper .lyo-process-index {
+  display:block;margin-bottom:6px;color:var(--muted-foreground);
+  font-size:9px;font-weight:650;font-variant-numeric:tabular-nums;
+}
+.research-body .lyo-paper .lyo-process-node > strong {
+  display:block;color:var(--foreground);font-size:11px;line-height:1.3;font-weight:620;
+}
+.research-body .lyo-paper .lyo-process-node .lyo-process-math {
+  margin-top:7px;color:var(--foreground);font-size:10px;min-height:22px;
+  overflow-x:auto;scrollbar-width:thin;
+}
+.research-body .lyo-paper .lyo-process-node > p {
+  margin:3px 0 0;color:var(--muted-foreground);font-size:10.3px;line-height:1.5;
+}
+/* Isolated variables retain a quiet box, but use the KaTeX text baseline
+   instead of flex alignment and the oversized line box. */
+.research-body .lyo-paper .lyo-variable-math {
+  display:inline-block;
+  max-width:100%;
+  vertical-align:-.055em;
+  padding:.025em .28em .04em;
+  margin-inline:.105em;
+  white-space:nowrap;
+  border:1px solid var(--border);
+  border-radius:4px;
+  background:var(--inset);
+  line-height:1.14;
+  color:var(--foreground);
+}
+.research-body .lyo-paper .lyo-variable-math .katex {font-size:.96em;}
+.research-body .lyo-paper .lyo-notation-table {
+  margin:10px 0 14px;max-width:100%;border-radius:7px;
+  border:1px solid var(--border);scrollbar-width:thin;
+}
+.research-body .lyo-paper .lyo-notation-table table {margin:0;border:0;border-collapse:collapse;min-width:490px;}
+.research-body .lyo-paper .lyo-notation-table td:first-child {white-space:nowrap;}
+.research-body .lyo-paper .overflow-x-auto > table:not(.research-data-table) {
+  width:100%;min-width:460px;border-collapse:collapse;border:1px solid var(--border);
+  border-radius:7px;background:var(--card);
+  font-variant-numeric:tabular-nums;
+}
+.research-body .lyo-paper .overflow-x-auto > table th {
+  background:var(--inset);color:var(--foreground);
+  font-family:var(--font-sans);font-size:11px;font-weight:630;
+  text-transform:none;letter-spacing:0;
+}
+.research-body .lyo-paper .overflow-x-auto > table th,
+.research-body .lyo-paper .overflow-x-auto > table td {
+  padding:9px 10px;line-height:1.52;vertical-align:top;border-bottom:1px solid var(--border);
+}
+.research-body .lyo-paper .overflow-x-auto > table td {
+  color:var(--prose-ink);font-size:11.5px;
+}
+.research-body .lyo-paper .overflow-x-auto > table tbody tr:nth-child(even) {
+  background:color-mix(in oklab,var(--inset) 39%,transparent);
+}
+.research-body .lyo-paper .overflow-x-auto > table tbody tr:hover {
+  background:var(--research-blue-wash);
+}
+.research-body .lyo-paper .math-block {margin-block:16px 18px;}
+.research-body .lyo-paper .math-block figcaption {max-width:670px;margin-inline:auto;}
+.research-body .lyo-paper .research-integrity-note {margin-top:18px;}
+@media (max-width:900px) {
+  .research-body .lyo-paper .lyo-process-grid {grid-template-columns:repeat(3,minmax(0,1fr));}
+}
+@media (max-width:600px) {
+  .research-body .lyo-paper .lyo-evidence-grid {grid-template-columns:1fr;}
+  .research-body .lyo-paper .lyo-process-grid {grid-template-columns:repeat(2,minmax(0,1fr));}
+  .research-body .lyo-paper .lyo-process-node {padding:9px;}
+  .research-body .lyo-paper .lyo-process-figure {padding:11px;}
+  .research-body .lyo-paper .lyo-abstract-card {padding:14px 15px;}
+  .research-body .lyo-paper .overflow-x-auto {overscroll-behavior-x:contain;scrollbar-width:thin;}
+}
+@media print {
+  .research-body .lyo-paper .lyo-process-node,
+  .research-body .lyo-paper .lyo-evidence-item {break-inside:avoid;}
+  .research-body .lyo-paper .lyo-process-grid {grid-template-columns:repeat(3,minmax(0,1fr));}
+}
