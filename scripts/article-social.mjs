@@ -17,7 +17,9 @@ const W = 1200, H = 630
 const ROOT = resolve(import.meta.dir, '..')
 const PUBLIC = join(ROOT, 'public', 'og', 'articles')
 const DIST = join(ROOT, 'dist')
-const BASE = 'https://thelabcorner.github.io/thelabjournal/'
+// Cloudflare is the canonical journal origin. GitHub Pages remains a mirror.
+const BASE = 'https://journal.thedabcorner.site/'
+const APP_ASSET_BASE = process.env.GITHUB_PAGES === 'true' ? '/thelabjournal/' : '/'
 const colors = {
   bg: '#101012', surface: '#18181b', paper: '#fafafa', text: '#e4e4e7',
   muted: '#a1a1aa', quiet: '#71717a', line: '#3f3f46', subtle: '#27272a',
@@ -140,7 +142,7 @@ function card(entry) {
     ),
     el('div', { display: 'flex', position: 'absolute', left: 70, top: 554, width: 1060, height: 1, backgroundColor: colors.line }),
     el('div', { display: 'flex', position: 'absolute', left: 70, top: 570, width: 1060, height: 20, alignItems: 'center', justifyContent: 'space-between' },
-      text('thelabcorner.github.io/thelabjournal', { fontSize: 14, color: colors.muted, letterSpacing: .15, fontWeight: 500 }),
+      text('journal.thedabcorner.site', { fontSize: 14, color: colors.muted, letterSpacing: .15, fontWeight: 500 }),
       text(shortDate(entry.date).toUpperCase() + '    /    ' + entry.minutes + ' MIN READ', { fontSize: 12, letterSpacing: 1.4, color: colors.muted, fontWeight: 600 })
     )
   )
@@ -254,7 +256,7 @@ async function audit() {
         !html.includes('property="og:title" content="'+htmlEscape(e.title)+'"') ||
         !html.includes('property="og:description" content="'+htmlEscape(description(e))+'"') ||
         !html.includes('name="twitter:card" content="summary_large_image"') ||
-        !html.includes('src="/thelabjournal/assets/')) throw Error('Article page metadata or app bootstrap mismatch: '+e.slug)
+        !html.includes('src="'+APP_ASSET_BASE+'assets/')) throw Error('Article page metadata or app bootstrap mismatch: '+e.slug)
     if (html.includes('/og-image.png?v=1') || html.includes('?post=')) throw Error('Generic OG metadata leaked into article: '+e.slug)
     if (ogUrls.has(imageUrl)) throw Error('Duplicate OG URL: '+imageUrl)
     ogUrls.add(imageUrl)

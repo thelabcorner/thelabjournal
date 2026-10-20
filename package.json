@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "bun scripts/sync-silica-post.mjs && vite --host 0.0.0.0",
     "build": "bun scripts/sync-silica-post.mjs && bun run generate:og && tsc --noEmit && vite build && bun scripts/article-social.mjs pages && bun scripts/article-social.mjs audit",
+    "deploy:cloudflare": "bun run build && wrangler deploy --config wrangler.jsonc",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview --host 0.0.0.0",
     "export:essay": "bun scripts/export-essay.ts",
@@ -62,6 +63,7 @@
     "tailwindcss": "^4.1.17",
     "typescript": "^5.9.3",
     "vite": "^7.2.4",
-    "vite-plugin-pwa": "^2.0.0"
+    "vite-plugin-pwa": "^2.0.0",
+    "wrangler": "4.101.0"
   }
 }

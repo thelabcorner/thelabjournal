@@ -34,8 +34,8 @@ try {
     assert.equal(page.status, 200, entry.slug + ': article URL serves HTTP 200')
     assert.match(page.headers.get('content-type') || '', /text\/html/, entry.slug + ': HTML content-type')
     const source = await page.text()
-    const url = 'https://thelabcorner.github.io/thelabjournal/posts/' + entry.slug + '/'
-    const img = 'https://thelabcorner.github.io/thelabjournal/og/articles/' + entry.slug + '.png?v=' + manifest[entry.slug]
+    const url = 'https://journal.thedabcorner.site/posts/' + entry.slug + '/'
+    const img = 'https://journal.thedabcorner.site/og/articles/' + entry.slug + '.png?v=' + manifest[entry.slug]
     assert.ok(source.includes('<link rel="canonical" href="' + url + '"'), entry.slug + ': canonical metadata')
     assert.ok(source.includes('property="og:image" content="' + img + '"'), entry.slug + ': article-specific OG metadata')
     assert.ok(source.includes('name="twitter:image" content="' + img + '"'), entry.slug + ': twitter preview')

@@ -6,7 +6,7 @@ import { readFile } from 'node:fs/promises'
 const path = new URL('../public/', import.meta.url)
 const readAsset = name => readFile(new URL(name, path))
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex')
-const expectedUrl = 'https://thelabcorner.github.io/thelabjournal/og-image.png?v=1'
+const expectedUrl = 'https://journal.thedabcorner.site/og-image.png?v=1'
 const pngSignature = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])
 
 async function validateAssets() {
@@ -37,7 +37,7 @@ async function validateAssets() {
     assert.ok(html.includes(`property="${key}" content="${value}"`), key)
   }
   assert.ok(html.includes('name="twitter:card" content="summary_large_image"'), 'Twitter large-image preview')
-  assert.ok(html.includes('property="og:url" content="https://thelabcorner.github.io/thelabjournal/"'), 'canonical project Pages URL')
+  assert.ok(html.includes('property="og:url" content="https://journal.thedabcorner.site/"'), 'canonical journal URL')
   assert.ok(html.includes('property="og:image:alt"') && html.includes('name="twitter:image:alt"'), 'accessible social descriptions')
   return { png, svg }
 }
