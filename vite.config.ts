@@ -13,7 +13,10 @@ export default defineConfig({
     react(),
     tailwindcss(),
     VitePWA({
-      registerType: 'prompt',
+      // Manuscript and journal releases must activate on revisits, including
+      // iOS home-screen installations. The previous prompt strategy could leave
+      // an installed app displaying an outdated precached application shell.
+      registerType: 'autoUpdate',
       injectRegister: null,
       includeAssets: ['favicon.svg', 'favicon.ico', 'favicon-16.png', 'favicon-32.png', 'favicon-48.png', 'icons/apple-touch-icon.png'],
       manifest: {
