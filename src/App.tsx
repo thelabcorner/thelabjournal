@@ -1,7 +1,7 @@
 import { Suspense, lazy, useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type MouseEvent, type ReactNode } from 'react'
 import { Microscope, ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, BookOpen, Bookmark, Check, ChevronDown, ChevronRight, Clock3, FileText, Filter, LayoutGrid, List as ListIcon, ListTree, Menu, Printer, Search, Settings2, Share2, Sun, Moon, X } from 'lucide-react'
 import { entries, topics, topicCount, type Entry, type Topic } from './data'
-import { ResearchFigure } from './components/ResearchFigure'
+import { JournalFigure, hasJournalDetailFigure } from './components/JournalFigure'
 import { DitherScene } from './components/DitherScene'
 
 import { DesktopRail } from './components/DesktopRail'
@@ -346,10 +346,11 @@ function Article({ entry, onBack, onOpen, copied, onShare, isSaved, toggle }: {
           <div className="section-count">{String(i + 1).padStart(2, '0')} / {String(entry.sections.length).padStart(2, '0')}</div>
           <h2>{section.heading}</h2>
           {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-          {i === 0 && <div className="article-evidence"><ResearchFigure type={entry.figure} className="article-figure"/>
+          {i === 0 && <div className="article-evidence"><JournalFigure slug={entry.slug} variant="overview" className="article-figure"/>
             {entry.slug === draft.slug && <div className="editor-note"><FileText aria-hidden="true"/><div><strong>Editorial draft</strong><p>Prepared for review. Examples are generalized to avoid private implementation details.</p></div></div>}
           </div>}
           {section.takeaway && <aside className="takeaway"><span className="section-label">Working principle</span><p>{section.takeaway}</p></aside>}
+          {entry.sections.length > 1 && i === Math.max(1, Math.floor(entry.sections.length / 2)) && hasJournalDetailFigure(entry.slug) && <JournalFigure slug={entry.slug} variant="detail" className="article-figure"/>}
         </section>)}</div>
         <div className="article-bottom"><div><span className="section-label">End of entry</span><h3>Keep reading</h3></div><button onClick={onBack} className="button button--outline">All writing <ArrowRight/></button></div>
         <div className="related-list">{relatedEntries.map((item) => <PostLink entry={item} onOpen={onOpen} className="related-row" key={item.slug}><span>{item.shortTitle}</span><span>{item.issue}<ArrowUpRight/></span></PostLink>)}</div>
