@@ -37,6 +37,8 @@ jobs:
           GITHUB_PAGES: 'true'
       - name: Audit homepage and per-article social media previews
         run: bun run audit:og
+        env:
+          GITHUB_PAGES: 'true'
       - name: Audit article route links
         run: bun scripts/article-route-audit.mjs
       - name: HTTP smoke-test static article pages and images
