@@ -176,12 +176,12 @@
   .ofarch-service { padding:8px; align-items:start; display:flex; flex-direction:column; gap:6px; min-height:54px; }
   .ofarch-service strong { font-size:10.5px; }
   /* Hub above a two-dimensional, roomy capability distribution. */
-  .ofarch-bus-content { display:grid; grid-template-columns:190px minmax(0,1fr); grid-template-rows:80px minmax(0,1fr); gap:9px 12px; }
+  .ofarch-bus-content { display:grid; grid-template-columns:190px minmax(0,1fr); grid-template-rows:94px minmax(0,1fr); gap:9px 12px; }
   .ofarch-bus-content>.ofarch-source-pill { align-self:center; grid-column:1; grid-row:1; position:relative; }
   .ofarch-bus-content>.ofarch-source-pill:after { content:'→'; position:absolute; right:-17px; top:50%; transform:translateY(-50%); color:var(--muted-foreground); font-size:14px; font-weight:400; }
   .ofarch-bus-content>.ofarch-flow { position:absolute; display:none; }
   .ofarch-bus-content>.ofarch-panel { grid-column:2; grid-row:1; align-self:center; padding:10px 14px; position:relative; }
-  .ofarch-bus-content>.ofarch-panel:after { content:''; position:absolute; height:9px; width:1px; background:var(--muted-foreground); left:50%; top:100%; }
+  .ofarch-bus-content>.ofarch-panel:after { content:''; position:absolute; height:9px; width:1px; background:var(--muted-foreground); left:50%; top:calc(100% - 9px); }
   .ofarch-bus-content>.ofarch-panel>strong { font-size:19px; }
   .ofarch-bus-rail {
     grid-column:1/-1; grid-row:2; display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
@@ -243,4 +243,71 @@
   .ofarch-figure { break-inside:avoid; color:#18181b; }
   .ofarch-plate { background:#fff; }
   .ofarch-figure .figure-motion { display:none; }
+}
+
+
+/* The primary figure is an actual directed network, not a one-way flowchart.
+ * Nodes are selectable HTML; SVG routes are redrawn for portrait and landscape.
+ */
+.ofarch-overview-network { gap:5px; }
+.ofarch-overview-network>.ofarch-section-label { flex:none; font-size:9px; }
+.ofarch-network { position:relative; flex:1 1 auto; min-height:0; width:100%; isolation:isolate; }
+.ofarch-network-wires { position:absolute; inset:0; height:100%; width:100%; overflow:visible; pointer-events:none; color:var(--foreground); }
+.ofarch-network-wires--landscape { display:none; }
+.ofarch-network-edge { fill:none; stroke:currentColor; stroke-width:1.9px; stroke-linecap:round; stroke-linejoin:round; opacity:.68; vector-effect:non-scaling-stroke; }
+.ofarch-network-edge--native { stroke:var(--muted-foreground); stroke-dasharray:4 3; stroke-width:1.55px; opacity:.85; }
+.ofarch-network-node {
+ position:absolute; z-index:1; display:flex; flex-direction:column; justify-content:center; align-items:flex-start;
+ gap:2px; padding:5px 7px; min-width:0; overflow:hidden;
+ border:1px solid color-mix(in srgb,var(--foreground) 29%,var(--border));
+ border-radius:4px; background:var(--card); box-shadow:0 0 0 2px var(--card);
+}
+.ofarch-network-node strong { font-size:11px; line-height:1.15; font-weight:700; letter-spacing:-.01em; overflow-wrap:anywhere; }
+.ofarch-network-eyebrow { font-size:8.2px; line-height:1.08; font-weight:700; color:var(--muted-foreground); letter-spacing:.035em; }
+.ofarch-network-detail { font-size:9px; line-height:1.17; color:var(--muted-foreground); overflow-wrap:anywhere; }
+.ofarch-network-node--oxp { background:var(--foreground); color:var(--background); border-color:var(--foreground); box-shadow:0 0 0 3px var(--card); }
+.ofarch-network-node--oxp .ofarch-network-eyebrow,.ofarch-network-node--oxp .ofarch-network-detail { color:var(--background); opacity:.8; }
+.ofarch-network-node--chatgpt { left:4%; top:4%; width:42%; height:10%; }
+.ofarch-network-node--session { left:54%; top:4%; width:42%; height:10%; }
+.ofarch-network-node--oxp { left:30%; top:22%; width:40%; height:12%; }
+.ofarch-network-node--worker { left:4%; top:43%; width:43%; height:10%; }
+.ofarch-network-node--tools { left:54%; top:43%; width:42%; height:10%; }
+.ofarch-network-node--mcp { left:4%; top:63%; width:43%; height:10%; }
+.ofarch-network-node--ofxp { left:54%; top:63%; width:42%; height:10%; }
+.ofarch-network-node--peer { left:54%; top:81%; width:42%; height:10%; border-style:dashed; }
+.ofarch-network-legend {
+ position:absolute; z-index:2; left:2%; bottom:1.2%; right:2%; display:flex; flex-wrap:wrap;
+ gap:6px 12px; align-items:center; padding:3px 0; color:var(--muted-foreground); font-size:8.4px; line-height:1;
+}
+.ofarch-network-legend>span { display:flex; align-items:center; gap:5px; }
+.ofarch-network-legend i { width:15px; height:0; border-top:1.5px solid var(--foreground); }
+.ofarch-network-legend .ofarch-key-native { border-top-style:dashed; border-top-color:var(--muted-foreground); }
+
+@media(max-width:389px) {
+ .ofarch-network-node--session,.ofarch-network-node--mcp,.ofarch-network-node--ofxp { height:12%; }
+}
+@media(max-width:349px) {
+ .ofarch-network-node { padding:4px 5px; gap:1px; }
+ .ofarch-network-node strong { font-size:10.2px; }
+ .ofarch-network-eyebrow { font-size:7.6px; letter-spacing:0; }
+ .ofarch-network-detail { font-size:8.7px; }
+ .ofarch-network-legend { font-size:8px; gap:5px 8px; }
+}
+@media(min-width:700px) {
+ .ofarch-overview-network { gap:5px; }
+ .ofarch-network-wires--portrait { display:none; }
+ .ofarch-network-wires--landscape { display:block; }
+ .ofarch-network-node { padding:5px 8px; gap:2px; border-radius:5px; }
+ .ofarch-network-node strong { font-size:12px; }
+ .ofarch-network-eyebrow { font-size:9px; }
+ .ofarch-network-detail { font-size:10px; }
+ .ofarch-network-node--chatgpt { left:3%; top:16%; width:22%; height:24%; }
+ .ofarch-network-node--session { left:3%; top:60%; width:22%; height:25%; }
+ .ofarch-network-node--oxp { left:33%; top:11%; width:28%; height:26%; }
+ .ofarch-network-node--worker { left:33%; top:43%; width:28%; height:24%; }
+ .ofarch-network-node--tools { left:33%; top:71%; width:28%; height:23%; }
+ .ofarch-network-node--mcp { left:74%; top:10%; width:23%; height:27%; }
+ .ofarch-network-node--ofxp { left:74%; top:43%; width:23%; height:26%; }
+ .ofarch-network-node--peer { left:74%; top:71%; width:23%; height:23%; }
+ .ofarch-network-legend { font-size:9px; left:1.5%; right:1%; bottom:0.4%; }
 }

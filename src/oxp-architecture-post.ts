@@ -3,8 +3,8 @@ import type { Entry } from './data'
 /** Source-audited October 26, 2026 engineering journal note. */
 export const oxpArchitecturePost: Entry = {
   "slug": "the-openfork-network-behind-one-oxp-connection",
-  "title": "The OpenFork network behind one OXP connection",
-  "shortTitle": "One OXP connection, an entire agent harness",
+  "title": "OpenFork: connecting the systems around an agent harness",
+  "shortTitle": "The interconnected OpenFork",
   "contextLabel": "Engineering note / 012",
   "topic": "Engineering",
   "stage": "Working notes",
@@ -13,34 +13,34 @@ export const oxpArchitecturePost: Entry = {
   "minutes": 18,
   "issue": "E-012",
   "figure": "system",
-  "summary": "How OXP opens OpenFork's native tools, durable workers, configured MCP servers, and paired OFXP machines to ChatGPT, while OpenFork Sessions remain independent entry points into the same system.",
+  "summary": "I forked OpenCode and expanded its abilities tenfold by connecting its agents, native tools, delegated workers, MCP integrations, ChatGPT through OXP, and other OpenFork machines through OFXP.",
   "keywords": [
     "OpenFork",
+    "OpenCode",
     "OXP",
     "OFXP",
     "MCP",
+    "Interconnected systems",
     "Agent harness",
     "Agent delegation",
-    "System architecture",
     "Native tools",
-    "Multi-agent systems",
     "Peer exchange"
   ],
   "sections": [
     {
-      "heading": "The problem with stopping at computer automation",
+      "heading": "I took OpenCode and kept connecting things to it",
       "paragraphs": [
-        "I have built computer-automation tools before. My localMCP projects, along with tools in the same general category as Chat on Steroids, give an external agent a way to inspect files, execute commands, and interact with a machine. They solve a real problem: an agent in one environment needs to do useful work in another. I still like that approach.",
-        "But I kept getting more interested in what was on the other side of the connection. I already had OpenFork, my fork of OpenCode, and it was becoming a substantial agent harness in its own right. OpenFork has Sessions, native tools, model and account routing, workers, durable state, its own integrations, and a local execution runtime. Why reduce all of that to a generic remote shell?",
-        "OXP is my answer to that question. It gives an already-running agent, such as ChatGPT, an authorized entry into the capabilities OpenFork already owns. I can ask ChatGPT to use the same underlying project inspection, symbol analysis, editing, testing, and other services that OpenFork's own agents use. From there, the architecture extends into worker delegation, configured MCP servers, and other OpenFork machines through OFXP. There is one OXP connection from ChatGPT, but considerably more than one route through the system."
+        "I took OpenCode, forked it into OpenFork, and expanded its abilities tenfold by interconnecting other systems with it. OpenCode was already a capable agent harness. Its agents, Sessions, tools, models, and execution loop were the foundation I wanted to build upon. What excites me about OpenFork is how far that foundation can extend when the systems surrounding it are connected.",
+        "I had already worked on computer-automation projects such as localMCP, where an external agent can inspect files or execute operations on another machine. OpenFork gave me a different opportunity: I could connect an external agent to an entire existing agent environment, with its own working Sessions, customized engineering tools, integrations, and persistent workers. I could make those abilities accessible across systems while retaining the native ways of using them.",
+        "The result is a network of paths, not a single chain of tools. ChatGPT can enter through OXP, inspect an existing OpenFork Session, delegate a new worker, run an OpenFork tool directly, invoke a configured MCP integration, or reach an authorized OFXP peer. A native OpenFork Session can use its own tools, MCP integrations, and paired peers without going through ChatGPT. The part I find beautiful is the overlap: these are independent systems with deliberate connections between them."
       ]
     },
     {
-      "heading": "OpenFork is an agent harness, even when OXP is absent",
+      "heading": "OpenCode was the foundation; interconnection was my expansion",
       "paragraphs": [
-        "I think this is the most important part of the diagram. OpenFork isn't a desktop wrapper that waits for ChatGPT to do the reasoning. I can open a manual OpenFork Session, select the agent and model I want, give it a task, and let that Session use its own tools. Workers and native Sessions have their own execution identities and lifecycles.",
-        "The application has a newer interface, but the mature V1 Session and tool runtime remains the production execution path that I've chosen to maintain and extend. The desktop host and local sidecar own the work, with shared domain services providing storage, tools, supervision, and other capabilities. The UI is a way to interact with those services, not their implementation.",
-        "This gives the system several legitimate entry points. A person can work in OpenFork directly. An editor can reach an OpenFork-backed Session through a supported ACP route. Native Sessions can run their tool loops or use Code Mode. ChatGPT can enter through OXP. A different OpenFork installation can address approved capabilities over OFXP. Each path has a distinct caller and permission boundary, but the objective is to converge on the same authoritative behavior."
+        "OpenCode already had the essential structure of an agent harness. Forking it meant I could work from a real Session runtime rather than invent a new one. I then extended OpenFork with specialized tools, model and account routing, richer worker and Session controls, Code Mode capabilities, and interfaces to other systems. The engineering interest is in how those extensions interact.",
+        "Imagine drawing OpenFork as a network instead of an application window. OXP has several outbound connections: one to the native tool surface, one to existing Sessions for inspection and control, one to delegation for creating worker Sessions, one to the MCP integrations OpenFork can use, and one to OFXP for reaching another machine. Each connection has its own operation and authority checks. They are different routes into capabilities that can be combined in one task.",
+        "A native Session is another participant in that network. It can use the native tools, access appropriately configured MCP servers, and address paired OFXP machines. An OXP-delegated worker becomes a real native Session, able to continue through its own authorized execution path. I care about making those paths converge on shared implementations because it means every new connection extends the whole system instead of becoming another isolated integration."
       ]
     },
     {
@@ -52,11 +52,11 @@ export const oxpArchitecturePost: Entry = {
       ]
     },
     {
-      "heading": "One connector, many operations",
+      "heading": "One OXP connector, several connected systems",
       "paragraphs": [
-        "From ChatGPT, OXP looks like one connection to OpenFork. Behind it, I can inspect and modify code in approved workspaces, search the native capability catalog, describe a specialized operation only when it is needed, invoke that operation, supervise existing Sessions, and delegate new workers. I can also reach OpenFork-configured MCP tools and, where paired and granted, remote machines through the OFXP adapter.",
-        "The connection is an MCP interface, but its payload is the OpenFork harness. OXP has direct tools for common operations and a progressive capability broker for the long tail. The broker can list compact capabilities, describe the schema for the one operation I need, and then call it. Code Mode offers another route for composing authorized operations without dumping every tool schema and intermediate result into the parent model's context.",
-        "There is a good engineering reason for the shape of this interface. Tool definitions consume context and compete with the material the model is trying to reason about. Exposing every native action, every MCP tool, and every optional subsystem eagerly would make the system harder to use. Keeping discovery compact means the breadth of the underlying runtime doesn't have to become a permanent context penalty."
+        "The diagram is easiest to understand by following connections outward from OXP. From ChatGPT I can call OpenFork tools directly; inspect, prompt, or stop authorized existing Sessions; delegate durable worker Sessions; discover and call configured MCP integrations; and invoke permitted capabilities on other OpenFork hosts through OFXP. These aren't five stages of one workflow. They are five different paths that I can choose and combine as the task changes.",
+        "Native OpenFork agents sit beside that external access. A native Session can call the same underlying engineering services under its own permissions, reach its available MCP integrations, and interact with OFXP peers. When OXP starts a worker, the worker is a native Session, so the same native execution environment becomes available to the delegated task. This is the interconnection I want the figure to express: overlapping reachability, distinct callers, and real shared services.",
+        "I built compact tool discovery into OXP because the breadth of that network should not consume the whole model context at once. Direct operations cover everyday work, while a capability broker can identify and describe specialized calls when needed. The connections remain available without eagerly exposing every tool schema."
       ]
     },
     {
@@ -96,7 +96,7 @@ export const oxpArchitecturePost: Entry = {
       "paragraphs": [
         "Suppose I am in ChatGPT discussing a difficult problem in a repository on my main machine. Through OXP, I can inspect the repository with OpenFork's Project and Symbols services, ask for a bounded code read, and run a focused test. If I want a separate agent to work on a defined implementation or audit, I can delegate a real OpenFork worker rather than asking ChatGPT to emulate another agent through repeated terminal commands.",
         "Now suppose that another OpenFork machine has a different authorized workspace or an existing Session I want to inspect. I can use the same OXP connection to list the paired OFXP peer's available capabilities, then inspect the remote Session or invoke an allowed operation there. The request crosses two boundaries: ChatGPT to OXP on Machine A, and Machine A to OFXP on Machine B. Both boundaries retain their caller identities and grants. If the remote Session has authority to continue work on B, I can supervise its real work without treating the two installations as one database.",
-        "If instead I am already in a manual OpenFork Session, I can perform the corresponding local work directly. I can invoke native tools, use my configured MCP integrations, and address paired OFXP machines through the Session's own model-facing interface. ChatGPT isn't the origin of every operation. That symmetry is the system design I wanted."
+        "Starting the same work from a manual OpenFork Session follows another route through the network. The native agent can use its tools, reach its configured MCP integrations, and address permitted OFXP peers directly. If a worker was spawned through OXP, it has become part of that native Session environment too. Different starting points can lead to overlapping capabilities without erasing who initiated the work."
       ]
     },
     {
@@ -108,11 +108,11 @@ export const oxpArchitecturePost: Entry = {
       ]
     },
     {
-      "heading": "Why I find this architecture beautiful",
+      "heading": "Why connecting these systems feels beautiful to me",
       "paragraphs": [
-        "I have always liked systems in which a small number of clearly defined interfaces gives access to a much larger composition of capabilities. In this case, each piece has a job. OpenFork is the agent harness and execution runtime. OXP gives an existing external agent access to that runtime. MCP is a general tool protocol that OpenFork both consumes and uses at the OXP boundary. OFXP connects distinct OpenFork installations as authenticated peers. Native Sessions and workers are first-class participants rather than subordinate artifacts created by a remote-control wrapper.",
-        "Those distinctions make the combinations possible. I can begin in ChatGPT and reach OpenFork's own tools, delegate a worker, use an already-configured MCP integration, and access approved capabilities on another computer. I can begin in a manual OpenFork Session and reach many of the same underlying services, with its own native authority and context. I can add another OpenFork machine without teaching ChatGPT the entire new machine's tool inventory or turning every workspace into one shared filesystem.",
-        "The especially satisfying part is the recursive engineering constraint: each new route ought to use the same real domain owner instead of creating another implementation. Every additional entry point puts pressure on me to make the boundaries and ownership clearer. That's an architecture worth continuing to build."
+        "I keep coming back to the fact that I started with OpenCode. It was already an established agent harness with serious capabilities, and I treated it as a foundation for connecting much more. Through OpenFork, I expanded its abilities tenfold by making other systems part of the same working environment. That interconnection is the part that feels badass to me.",
+        "OXP is one connection in the network, but it reaches a surprising amount: direct tools, existing Sessions, delegated workers, configured MCP integrations, and paired OFXP machines. OpenFork's native Sessions have their own paths to tools, integrations, and peers. Delegated workers can carry on as real Sessions. The moment one agent can hand off work, inspect another Session, or use a tool on another authorized machine without rebuilding the whole workflow is the moment the relationships between the pieces matter.",
+        "I love the engineering constraint behind it: the more entry points I connect, the more important it becomes for them to use shared underlying implementations and retain their own permissions. Every connection increases what I can do with the existing pieces. I can start in different places, cross several systems, and still understand who is doing the work, which machine owns it, and how to control it. That's the OpenFork architecture I wanted to build."
       ]
     }
   ]

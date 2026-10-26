@@ -18,7 +18,7 @@ for (const width of widths) {
   try {
     const response = await page.goto(new URL('posts/' + slug + '/', origin).href, { waitUntil: 'networkidle', timeout: 30000 })
     if (!response?.ok()) throw new Error('Non-OK article response: ' + response?.status())
-    if (await page.getByRole('heading', { name: 'The OpenFork network behind one OXP connection', exact: true }).count() !== 1)
+    if (await page.getByRole('heading', { name: 'OpenFork: connecting the systems around an agent harness', exact: true }).count() !== 1)
       throw new Error('Entry title missing')
     if (await page.locator('.prose-section').count() !== 11) throw new Error('Wrong section count')
     const figures = page.locator('.ofarch-figure')

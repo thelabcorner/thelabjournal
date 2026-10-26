@@ -1,4 +1,4 @@
-# Source ledger — The OpenFork network behind one OXP connection
+# Source ledger — OpenFork: connecting the systems around an agent harness
 
 Article date: 2026-10-26. Narrative is first-person engineering interpretation. Figures are conceptual schematics; they do not encode measurements or a claim of full protocol/tool-surface certification.
 

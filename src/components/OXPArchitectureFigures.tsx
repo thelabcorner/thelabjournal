@@ -1,11 +1,12 @@
 import type { ReactNode } from 'react'
 import { DitherScene } from './DitherScene'
+import { InterconnectionNetwork } from './InterconnectionNetwork'
 import './oxp-architecture-figures.css'
 
 /**
- * Portrait editorial diagrams for the OpenFork/OXP article.
- * The 9:16 artboards are source-grounded system schematics, never performance data.
- * Each artboard has one top-to-bottom reading order at every viewport.
+ * Responsive editorial diagrams for the OpenFork/OXP article.
+ * Mobile artboards use 9:16 portrait compositions; desktop uses 16:9 landscape.
+ * The lead diagram is a directed interconnection graph with distinct callers.
  */
 function Figure({ number, title, caption, diagramLabel, children }: {
   number: number
@@ -62,40 +63,16 @@ function PlateFooter({ children }: { children: ReactNode }) {
   return <div className="ofarch-plate-footer"><span className="ofarch-plate-footer-rule"/><span>{children}</span></div>
 }
 
-const entries = [
-  { id: '01', kind: 'NATIVE SESSION', name: 'OpenFork agent', detail: 'Desktop, browser or worker' },
-  { id: '02', kind: 'EXTERNAL MCP', name: 'ChatGPT → OXP', detail: 'Connector-authenticated ingress' },
-  { id: '03', kind: 'EDITOR ADAPTER', name: 'ACP client', detail: 'Session-backed coding interface' },
-  { id: '04', kind: 'PAIRED MACHINE', name: 'OFXP peer', detail: 'Authenticated remote route' },
-] as const
 function EntryPoints() {
-  return <Figure number={1} title="Four entry points. One local execution system."
-    diagramLabel="Portrait graph: four independent entrances descend through an authority adapter to the shared OpenFork native runtime and its four services."
-    caption="Native Sessions, OXP, ACP and OFXP have different identities and authorization paths. They can reach shared OpenFork domain implementations without sharing credentials.">
-    <PlateHeading section="01 / INGRESS" index="ENTRY"/>
-    <div className="ofarch-plate-content ofarch-entry-content">
-      <span className="ofarch-section-label">Independent entrances</span>
-      <div className="ofarch-entrances" role="list">
-        {entries.map(entry => <div className="ofarch-entrance" role="listitem" key={entry.id}>
-          <span className="ofarch-index">{entry.id}</span>
-          <div className="ofarch-entrance-text">
-            <span className="ofarch-kicker">{entry.kind}</span>
-            <strong>{entry.name}</strong>
-          </div>
-          <span className="ofarch-entrance-detail">{entry.detail}</span>
-        </div>)}
-      </div>
-      <Flow label="Authorized adapter"/>
-      <Panel kicker="LOCAL DOMAIN OWNER" title="OpenFork runtime" description="Native Sessions + shared services" emphasis/>
-      <Flow/>
-      <div className="ofarch-service-stack" role="list" aria-label="Shared capability families">
-        {['Custom tools and patches', 'Session and worker lifecycle', 'Configured MCP integrations', 'OFXP peer exchange'].map((item, i) =>
-          <div role="listitem" className="ofarch-service" key={item}>
-            <span>{String(i + 1).padStart(2, '0')}</span><strong>{item}</strong>
-          </div>)}
-      </div>
+  return <Figure number={1} title="The OpenFork network: every connection matters"
+    diagramLabel="Connected network with eleven directed paths. ChatGPT reaches OXP; OXP reaches native Sessions, workers, tools, MCP servers and OFXP. Native Sessions also reach tools, MCP and OFXP; workers use native tools; OFXP reaches an independent OpenFork peer."
+    caption="OpenCode supplied the agent harness foundation. OpenFork extends it by interconnecting external agents, native Sessions, delegated workers, customized tools, MCP integrations, and authenticated OFXP peers. Solid lines trace OXP-mediated operations; dashed lines show independent native agent routes. Each route still requires its own authorization.">
+    <PlateHeading section="01 / CONNECTED SYSTEMS" index="NETWORK"/>
+    <div className="ofarch-plate-content ofarch-overview-network">
+      <span className="ofarch-section-label">OpenCode foundation / OpenFork extensions</span>
+      <InterconnectionNetwork/>
     </div>
-    <PlateFooter>One implementation per capability · scoped entry</PlateFooter>
+    <PlateFooter>Shared capabilities. Multiple routes. Independent principals.</PlateFooter>
   </Figure>
 }
 
@@ -107,9 +84,9 @@ const branches = [
   ['05', 'Session control', 'Inspect · prompt · stop · select', 'Authorized Session scopes'],
 ] as const
 function OXPBranches() {
-  return <Figure number={2} title="Five capability families behind one OXP connector"
+  return <Figure number={2} title="Five independently callable connections from OXP"
     diagramLabel="Portrait fanout: ChatGPT enters OXP at the top. A vertical numbered capability bus lists native tools, delegated workers, configured MCPs, OFXP peers and Session control, with a permission label for each."
-    caption="OXP is one external entry point to multiple native domain services. Tool availability and execution permission are evaluated independently for each branch.">
+    caption="These are five separate OXP routes, all visible in the interconnected system map above. A native OpenFork Session has its own independent connections to tools, configured MCP integrations and OFXP. Worker delegation creates a native Session instead of a simulated remote shell.">
     <PlateHeading section="02 / CAPABILITY BUS" index="OXP"/>
     <div className="ofarch-plate-content ofarch-bus-content">
       <div className="ofarch-source-pill">CHATGPT <span>External agent</span></div>
