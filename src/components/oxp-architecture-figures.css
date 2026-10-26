@@ -1,90 +1,246 @@
-/* Scoped, editorial architecture diagrams: dense, neutral, responsive. */
-.ofarch-figure{margin:28px 0 32px;min-width:0;width:100%;border:1px solid var(--border);border-radius:8px;overflow:hidden;color:var(--foreground);background:var(--card);font-family:Inter,Arial,sans-serif}
-.ofarch-figure-top{height:34px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 16px;border-bottom:1px solid var(--border);background:var(--inset);color:var(--muted-foreground);font-size:10px;font-weight:600;letter-spacing:.075em}
-.ofarch-figure-inner{padding:18px 17px 20px;min-width:0}
-.ofarch-figure-title{font-size:15px!important;line-height:1.36!important;letter-spacing:-.02em;margin:0 0 17px!important;font-weight:700!important}
-.ofarch-caption{padding:12px 16px;border-top:1px solid var(--border);background:var(--inset);font-size:11px;line-height:1.55;color:var(--muted-foreground)}
-.ofarch-entry-label,.ofarch-owner-label{font-size:10px;letter-spacing:.1em;font-weight:700;color:var(--muted-foreground)}
-.ofarch-entry-label{margin:0 0 8px}
-.ofarch-entry-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
-.ofarch-block{min-width:0;display:flex;flex-direction:column;gap:7px;border:1px solid var(--border);padding:12px 10px;min-height:107px;border-radius:5px;background:var(--inset)}
-.ofarch-block--core{border-color:color-mix(in srgb,var(--foreground) 42%,var(--border))}
-.ofarch-block--external{background:var(--card)}
-.ofarch-block--peer{border-style:dashed}
-.ofarch-block-eyebrow{font-size:9px;font-weight:700;letter-spacing:.075em;color:var(--muted-foreground)}
-.ofarch-block strong{font-size:12px;letter-spacing:-.01em;line-height:1.3}
-.ofarch-block-detail{font-size:10.5px;line-height:1.42;color:var(--muted-foreground)}
-.ofarch-merge{display:flex;justify-content:center;align-items:center;gap:16px;padding:10px 0;color:var(--muted-foreground);font-size:9px;letter-spacing:.1em;font-weight:700}
-.ofarch-merge>span:first-child,.ofarch-merge>span:last-child{font-size:17px;letter-spacing:0;color:var(--foreground)}
-.ofarch-owner{border:1.5px solid var(--foreground);border-radius:6px;padding:15px;background:var(--card);display:flex;flex-direction:column;gap:6px}
-.ofarch-owner>strong{font-size:15px;letter-spacing:-.02em;line-height:1.3}
-.ofarch-owner>span:nth-child(3){font-size:11px;line-height:1.5;color:var(--muted-foreground)}
-.ofarch-owner-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:9px}
-.ofarch-owner-grid>div{display:flex;flex-direction:column;gap:4px;background:var(--inset);border:1px solid var(--border);border-radius:4px;padding:10px}
-.ofarch-owner-grid strong{font-size:11px}.ofarch-owner-grid span{font-size:10.5px;color:var(--muted-foreground);line-height:1.4}
-.ofarch-hub{display:flex;flex-direction:column;align-items:center;gap:7px}
-.ofarch-hub-in{font-size:11px;font-weight:600;display:flex;align-items:center;flex-direction:column;gap:3px}
-.ofarch-hub-in>b,.ofarch-hub-down{font-size:20px;font-weight:400;line-height:1.1}
-.ofarch-hub-core{width:min(100%,294px);background:var(--foreground);color:var(--background);padding:13px 18px;border-radius:6px;display:flex;align-items:center;flex-direction:column;gap:5px}
-.ofarch-hub-core>span{font-size:9px;letter-spacing:.1em;opacity:.72;font-weight:600}
-.ofarch-hub-core>strong{font-size:21px;letter-spacing:-.04em}
-.ofarch-hub-core>small{font-size:10px;opacity:.75}
-.ofarch-branch-list{display:grid;gap:7px;margin-top:5px}
-.ofarch-branch{display:grid;grid-template-columns:28px minmax(0,1.5fr) minmax(130px,.9fr);gap:9px;align-items:center;padding:11px 12px;border:1px solid var(--border);border-radius:5px;background:var(--inset)}
-.ofarch-branch-index{font-size:10px;color:var(--muted-foreground);font-variant-numeric:tabular-nums;font-weight:700}
-.ofarch-branch>div{display:flex;flex-direction:column;gap:4px;min-width:0}
-.ofarch-branch strong{font-size:12px}.ofarch-branch>div>span{font-size:10.5px;line-height:1.4;color:var(--muted-foreground)}
-.ofarch-branch>small{color:var(--muted-foreground);font-size:10px;line-height:1.45;border-left:1px solid var(--border);padding-left:10px}
-.ofarch-sequence{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-.ofarch-sequence-step{position:relative;border:1px solid var(--border);padding:11px 10px;background:var(--inset);border-radius:5px;min-height:141px}
-.ofarch-sequence-index{display:flex;align-items:center;justify-content:center;background:var(--foreground);color:var(--background);font-size:10px;font-weight:700;width:23px;height:23px;border-radius:4px;margin-bottom:10px}
-.ofarch-sequence-step strong{font-size:11px;line-height:1.3;display:block}
-.ofarch-sequence-step p{margin:5px 0 0!important;color:var(--muted-foreground);font-size:10.5px!important;line-height:1.45!important}
-.ofarch-sequence-arrow{position:absolute;z-index:2;right:-14px;top:48%;background:var(--card);border:1px solid var(--border);width:20px;height:20px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:12px}
-.ofarch-inline-note{font-size:10.5px!important;color:var(--muted-foreground)!important;line-height:1.5!important;margin:12px 1px 0!important}
-.ofarch-peer-topline{display:flex;justify-content:center;gap:14px;align-items:center;font-size:10px;letter-spacing:.06em;font-weight:700;padding:9px;border:1px solid var(--border);border-radius:4px;background:var(--inset);margin-bottom:9px}
-.ofarch-peer-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(95px,.85fr) minmax(0,1fr);gap:8px;align-items:stretch}
-.ofarch-machine{border:1px solid var(--foreground);border-radius:5px;padding:12px 10px;min-width:0;display:flex;flex-direction:column;gap:8px}
-.ofarch-machine--remote{border-style:dashed}
-.ofarch-machine-kicker{font-size:9px;line-height:1.4;letter-spacing:.07em;color:var(--muted-foreground);font-weight:700}
-.ofarch-machine>strong{font-size:15px;letter-spacing:-.025em}
-.ofarch-machine-data{font-size:10.5px;line-height:1.45;padding:7px;background:var(--inset);border:1px solid var(--border);border-radius:3px}
-.ofarch-machine-endpoint{margin-top:auto;background:var(--foreground);color:var(--background);font-size:10px;padding:8px;text-align:center;border-radius:3px;font-weight:700}
-.ofarch-wire{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;min-width:0;text-align:center}
-.ofarch-wire>span{font-size:10px;font-weight:650;line-height:1.4}
-.ofarch-wire-line{display:flex;align-items:center;width:100%;gap:4px;font-size:18px;line-height:1}
-.ofarch-wire-line>i{height:2px;flex:1;background:var(--foreground)}
-.ofarch-wire>small{font-size:9.5px;color:var(--muted-foreground);line-height:1.5}
-.ofarch-status-legend{display:grid;gap:7px;margin-top:12px}
-.ofarch-status-legend>span{display:flex;align-items:baseline;gap:7px;font-size:10px;line-height:1.45;color:var(--muted-foreground)}
-.ofarch-status-dot{display:inline-block;min-width:7px;width:7px;height:7px;border-radius:50%;background:var(--foreground)}
-.ofarch-status-dot--hollow{background:transparent;border:1px dashed var(--muted-foreground)}
-.ofarch-authority-table{display:grid;border:1px solid var(--border);border-radius:5px;overflow:hidden}
-.ofarch-authority-row{display:grid;grid-template-columns:1fr 1.2fr 1.6fr;gap:10px;padding:11px 12px;align-items:start;border-top:1px solid var(--border);font-size:10.5px;line-height:1.45}
-.ofarch-authority-row:first-child{border-top:0}
-.ofarch-authority-row:nth-child(odd){background:var(--inset)}
-.ofarch-authority-row strong{font-size:11px}
-.ofarch-authority-heading{font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted-foreground);font-weight:700;background:var(--inset)}
-.ofarch-law{display:flex;flex-direction:column;gap:5px;margin-top:10px;padding:12px;border-left:2px solid var(--foreground);background:var(--inset)}
-.ofarch-law span{font-size:9px;letter-spacing:.08em;color:var(--muted-foreground);font-weight:700}
-.ofarch-law strong{font-size:11.5px;line-height:1.45}
-@media(max-width:660px){
- .ofarch-entry-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
- .ofarch-sequence{grid-template-columns:repeat(2,minmax(0,1fr))}
- .ofarch-sequence-arrow{display:none}
- .ofarch-sequence-step{min-height:125px}
- .ofarch-peer-grid{grid-template-columns:minmax(0,1fr);gap:9px}
- .ofarch-wire{padding:3px 0;gap:5px}
- .ofarch-wire-line{max-width:100px}
- .ofarch-branch{grid-template-columns:24px minmax(0,1fr)}
- .ofarch-branch>small{grid-column:2;padding:0;border-left:0}
- .ofarch-authority-row{grid-template-columns:minmax(90px,.85fr) minmax(0,1fr);gap:5px 9px}
- .ofarch-authority-row>*:last-child{grid-column:2}
- .ofarch-authority-heading>*:last-child{display:none}
+/*
+ * OpenFork editorial diagrams — thelabjournal™ figure system.
+ * Mobile: 9:16 vertical flow. Desktop: 16:9 with landscape compositions.
+ * Source text stays selectable, the graph reflows rather than scaling a wide SVG.
+ */
+.ofarch-figure { width:100%; min-width:0; margin:22px 0 34px; font-family:Inter,Arial,sans-serif; color:var(--foreground); }
+.ofarch-figure-inner { min-width:0; padding:13px 12px 15px; }
+.ofarch-title { max-width:740px; margin:0 0 12px!important; font-size:15px!important; line-height:1.34!important; font-weight:650!important; letter-spacing:-.025em; }
+.ofarch-caption { font-size:11px; line-height:1.55; }
+.ofarch-plate {
+  width:100%; aspect-ratio:9/16; margin:0 auto; padding:11px;
+  display:flex; flex-direction:column; gap:6px; min-width:0; overflow:hidden;
+  border:1px solid var(--border); border-radius:5px; background:var(--card);
+  color:var(--foreground); font-variant-numeric:tabular-nums;
 }
-@media(max-width:390px){
- .ofarch-figure-inner{padding:14px 11px}
- .ofarch-figure-top{padding:0 10px;font-size:9px}
- .ofarch-owner-grid{grid-template-columns:minmax(0,1fr)}
- .ofarch-merge{gap:6px;font-size:8px}
+.ofarch-plate-heading,.ofarch-plate-footer {
+  flex:none; display:flex; align-items:center; justify-content:space-between;
+  gap:6px; font-size:9px; line-height:1.2; font-weight:700;
+  color:var(--muted-foreground); letter-spacing:.06em;
+}
+.ofarch-plate-heading { min-height:17px; padding:0 1px 6px; border-bottom:1px solid var(--border); }
+.ofarch-plate-serial { color:var(--foreground); }
+.ofarch-plate-footer {
+  justify-content:flex-start; align-items:flex-start; min-height:16px; padding:6px 1px 0;
+  border-top:1px solid var(--border); font-weight:550; letter-spacing:0;
+}
+.ofarch-plate-footer-rule { background:var(--foreground); width:10px; height:2px; flex:none; margin-top:5px; }
+.ofarch-plate-content { flex:1 1 auto; display:flex; flex-direction:column; gap:4px; min-width:0; min-height:0; }
+.ofarch-section-label,.ofarch-kicker { color:var(--muted-foreground); font-size:9px; line-height:1.25; letter-spacing:.055em; font-weight:700; }
+.ofarch-section-label { text-transform:uppercase; }
+.ofarch-index {
+  display:grid; place-items:center; flex:none; width:21px; height:21px;
+  background:var(--inset); color:var(--foreground); border:1px solid var(--border);
+  border-radius:4px; font-size:9.5px; font-weight:700;
+}
+.ofarch-index--solid { color:var(--background); background:var(--foreground); border-color:var(--foreground); }
+.ofarch-panel {
+  min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:3px;
+  border:1px solid var(--border); background:var(--inset); padding:8px 10px; border-radius:5px;
+}
+.ofarch-panel>strong { font-size:14px; line-height:1.2; letter-spacing:-.015em; font-weight:700; }
+.ofarch-description { color:var(--muted-foreground); font-size:10.5px; line-height:1.25; }
+.ofarch-panel--emphasis { border-color:var(--foreground); background:var(--foreground); color:var(--background); }
+.ofarch-panel--emphasis .ofarch-kicker,.ofarch-panel--emphasis .ofarch-description { color:var(--background); opacity:.79; }
+.ofarch-flow {
+  flex:0 0 15px; display:flex; flex-direction:column; align-items:center;
+  justify-content:center; position:relative; color:var(--muted-foreground);
+}
+.ofarch-flow-stem { width:1px; height:8px; background:currentColor; opacity:.7; }
+.ofarch-flow-arrow { width:6px; height:6px; transform:rotate(45deg); margin-top:-2px; border-bottom:1.5px solid currentColor; border-right:1.5px solid currentColor; }
+.ofarch-flow-label {
+  position:absolute; left:calc(50% + 12px); top:50%; transform:translateY(-50%);
+  font-size:9px; line-height:1.1; white-space:nowrap; font-weight:550; color:var(--muted-foreground);
+}
+/* Figure 1 — independently numbered entry routes converge on one owner. */
+.ofarch-entrances,.ofarch-service-stack { display:flex; flex-direction:column; gap:4px; }
+.ofarch-entrance {
+  display:grid; grid-template-columns:21px minmax(0,1fr); align-items:center; gap:2px 7px;
+  padding:5px 8px; border:1px solid var(--border); border-radius:4px; background:var(--inset); min-width:0;
+}
+.ofarch-entrance-text { display:flex; flex-direction:column; min-width:0; gap:1px; }
+.ofarch-entrance-text>strong { font-size:11.5px; font-weight:650; line-height:1.2; }
+.ofarch-entrance-detail { grid-column:2; font-size:10px; line-height:1.22; color:var(--muted-foreground); }
+.ofarch-service { display:grid; grid-template-columns:21px minmax(0,1fr); gap:6px; align-items:center; padding:5px 8px; border-left:2px solid var(--border); background:var(--inset); }
+.ofarch-service span { color:var(--muted-foreground); font-size:9px; font-weight:700; }
+.ofarch-service strong { font-size:10.5px; font-weight:600; line-height:1.2; }
+/* Figure 2 — top source, OXP dispatch and five guarded branches. */
+.ofarch-bus-content { gap:0; }
+.ofarch-source-pill {
+  display:flex; align-items:center; justify-content:space-between; gap:6px;
+  padding:7px 9px; border:1px solid var(--border); border-radius:4px;
+  background:var(--inset); font-size:11px; line-height:1.2; font-weight:700;
+}
+.ofarch-source-pill span { color:var(--muted-foreground); font-size:10px; font-weight:500; }
+.ofarch-bus-rail {
+  flex:1; min-height:0; display:flex; flex-direction:column; justify-content:space-between;
+  gap:3px; margin:9px 0 0 9px; padding-left:15px; border-left:1px solid var(--border);
+}
+.ofarch-bus-item { display:grid; grid-template-columns:22px minmax(0,1fr); gap:6px; position:relative; min-width:0; align-items:start; }
+.ofarch-bus-item:before { content:""; width:14px; height:1px; background:var(--border); position:absolute; left:-15px; top:12px; }
+.ofarch-bus-marker span {
+  display:grid; place-items:center; border:1px solid var(--border); border-radius:4px;
+  width:22px; height:22px; font-size:9.5px; font-weight:700; background:var(--card);
+}
+.ofarch-bus-copy { min-width:0; display:flex; flex-direction:column; gap:2px; }
+.ofarch-bus-copy strong { font-size:11px; line-height:1.2; }
+.ofarch-bus-copy>span { font-size:10px; line-height:1.25; color:var(--muted-foreground); }
+.ofarch-bus-copy small { font-size:9.4px; line-height:1.3; padding:3px 6px; background:var(--inset); border-left:2px solid var(--border); color:var(--foreground); }
+/* Figure 3 — portrait state machine, desktop sequential pipeline. */
+.ofarch-lifecycle-lead {
+  display:flex; flex-direction:column; gap:3px; padding:8px 10px;
+  background:var(--foreground); color:var(--background); border-radius:4px;
+}
+.ofarch-lifecycle-lead strong { font-size:14px; }
+.ofarch-lifecycle-lead span { font-size:10.5px; opacity:.8; }
+.ofarch-lifecycle { display:flex; flex-direction:column; flex:1; justify-content:space-between; min-height:0; gap:3px; margin-top:2px; }
+.ofarch-lifecycle-group { display:flex; flex-direction:column; gap:0; }
+.ofarch-lifecycle-group>.ofarch-flow { height:13px; flex-basis:13px; }
+.ofarch-lifecycle-card { display:grid; grid-template-columns:21px minmax(0,1fr); gap:8px; padding:8px 9px; border:1px solid var(--border); border-radius:4px; background:var(--inset); align-items:start; }
+.ofarch-lifecycle-card>div { display:flex; flex-direction:column; gap:3px; min-width:0; }
+.ofarch-lifecycle-card strong { font-size:11.5px; line-height:1.22; }
+.ofarch-lifecycle-card>div>span { font-size:10.5px; line-height:1.28; color:var(--muted-foreground); }
+.ofarch-boundary {
+  display:grid; grid-template-columns:1fr 14px 1fr; gap:5px; align-items:center;
+  padding:8px 10px; border:1px dashed var(--border); border-radius:4px; background:var(--card);
+}
+.ofarch-boundary>span:first-child { grid-column:1/-1; color:var(--muted-foreground); font-size:8.5px; letter-spacing:.04em; font-weight:700; }
+.ofarch-boundary strong { font-size:10.5px; font-weight:650; line-height:1.25; }
+.ofarch-boundary-divider { text-align:center; font-size:14px; font-weight:700; color:var(--muted-foreground); }
+/* Figure 4 — vertical authenticated two-host exchange. */
+.ofarch-peer-content { gap:0; }
+.ofarch-peer-content>.ofarch-panel { gap:3px; }
+.ofarch-panel-tag { padding:5px 7px; font-size:10px; font-weight:600; background:var(--card); color:var(--foreground); border:1px solid var(--border); border-radius:3px; }
+.ofarch-exchange-gate { display:flex; flex-direction:column; align-items:center; text-align:center; gap:4px; border:1px dashed var(--border); border-radius:4px; padding:8px 7px; background:var(--inset); }
+.ofarch-exchange-gate>span { font-size:9px; color:var(--muted-foreground); letter-spacing:.04em; font-weight:700; }
+.ofarch-exchange-gate strong { font-size:12px; line-height:1.2; }
+.ofarch-exchange-gate small { font-size:10px; line-height:1.2; color:var(--muted-foreground); }
+.ofarch-peer-status { display:flex; flex-direction:column; gap:4px; margin-top:auto; padding-top:5px; }
+.ofarch-peer-status>div { display:grid; grid-template-columns:10px minmax(0, 1fr); gap:2px 7px; align-items:center; padding:5px 7px; background:var(--inset); border-radius:3px; }
+.ofarch-status-indicator { border:1px solid var(--foreground); width:8px; height:8px; border-radius:50%; }
+.ofarch-status-indicator--solid { background:var(--foreground); }
+.ofarch-status-indicator--outline { background:transparent; border-style:dashed; }
+.ofarch-peer-status strong { font-size:10px; line-height:1.2; }
+.ofarch-peer-status>div>span:last-child { grid-column:2; font-size:9.7px; line-height:1.2; color:var(--muted-foreground); }
+/* Figure 5 — independently scoped authority gates. */
+.ofarch-principals { display:flex; flex-direction:column; gap:5px; }
+.ofarch-principal { display:grid; grid-template-columns:21px minmax(0,1fr); align-items:center; gap:7px; padding:8px 9px; background:var(--inset); border:1px solid var(--border); border-radius:4px; }
+.ofarch-principal-content { display:flex; flex-direction:column; gap:2px; min-width:0; }
+.ofarch-principal-content strong { font-size:12px; line-height:1.2; }
+.ofarch-principal-content>span:last-child { font-size:10.5px; line-height:1.25; color:var(--muted-foreground); }
+.ofarch-authorization { padding:9px 11px; display:flex; flex-direction:column; gap:5px; border:1px dashed var(--foreground); border-radius:4px; background:var(--inset); }
+.ofarch-authorization>span { color:var(--muted-foreground); font-size:9px; letter-spacing:.065em; font-weight:700; }
+.ofarch-authorization strong { font-size:12px; line-height:1.3; }
+.ofarch-gate-checks { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:4px; }
+.ofarch-gate-checks span { text-align:center; border:1px solid var(--border); border-radius:3px; padding:5px 1px; background:var(--card); font-size:9px; font-weight:700; }
+
+/* Compact widths: identical text but a genuine tall composition (no horizontal graph). */
+@media(max-width:699px) {
+  .ofarch-figure-inner { padding:11px 9px 14px; }
+  .ofarch-title { margin-bottom:10px!important; font-size:14px!important; }
+  .ofarch-plate { max-width:410px; }
+}
+@media(max-width:349px) {
+  .ofarch-plate { padding:8px; gap:4px; }
+  .ofarch-plate-content { gap:3px; }
+  .ofarch-entrance { padding:4px 6px; }
+  .ofarch-service { padding:4px 6px; }
+  .ofarch-panel { padding:7px 8px; }
+  .ofarch-source-pill { padding:6px 8px; }
+  .ofarch-bus-copy small { padding:2px 5px; }
+  .ofarch-bus-rail { margin-top:5px; }
+  .ofarch-peer-status { padding-top:0; }
+}
+/*
+ * Desktop art direction — 16:9 landscape plate with native horizontal
+ * topology. This intentionally differs from the portrait mobile composition.
+ */
+@media(min-width:700px) {
+  .ofarch-figure-inner { padding:17px 17px 20px; }
+  .ofarch-title { font-size:16px!important; margin-bottom:13px!important; }
+  .ofarch-plate { aspect-ratio:16/9; max-width:none; padding:14px 17px; gap:9px; }
+  .ofarch-plate-heading { padding-bottom:8px; min-height:20px; }
+  .ofarch-plate-footer { padding-top:9px; min-height:20px; }
+  .ofarch-plate-content { gap:7px; }
+  .ofarch-entrances { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:7px; }
+  .ofarch-entrance { display:flex; flex-direction:column; align-items:flex-start; gap:6px; min-height:90px; padding:11px 10px; }
+  .ofarch-entrance .ofarch-index { width:23px; height:23px; }
+  .ofarch-entrance-text { gap:5px; }
+  .ofarch-entrance-detail { margin-top:auto; font-size:10px; }
+  .ofarch-entrance-text>strong { font-size:11.5px; }
+  .ofarch-entry-content { gap:6px; justify-content:center; }
+  .ofarch-entry-content>.ofarch-flow { flex-basis:18px; }
+  .ofarch-entry-content>.ofarch-panel { padding:11px 14px; }
+  .ofarch-entry-content>.ofarch-panel>strong { font-size:17px; }
+  .ofarch-service-stack { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:6px; }
+  .ofarch-service { padding:8px; align-items:start; display:flex; flex-direction:column; gap:6px; min-height:54px; }
+  .ofarch-service strong { font-size:10.5px; }
+  /* Hub above a two-dimensional, roomy capability distribution. */
+  .ofarch-bus-content { display:grid; grid-template-columns:190px minmax(0,1fr); grid-template-rows:80px minmax(0,1fr); gap:9px 12px; }
+  .ofarch-bus-content>.ofarch-source-pill { align-self:center; grid-column:1; grid-row:1; position:relative; }
+  .ofarch-bus-content>.ofarch-source-pill:after { content:'→'; position:absolute; right:-17px; top:50%; transform:translateY(-50%); color:var(--muted-foreground); font-size:14px; font-weight:400; }
+  .ofarch-bus-content>.ofarch-flow { position:absolute; display:none; }
+  .ofarch-bus-content>.ofarch-panel { grid-column:2; grid-row:1; align-self:center; padding:10px 14px; position:relative; }
+  .ofarch-bus-content>.ofarch-panel:after { content:''; position:absolute; height:9px; width:1px; background:var(--muted-foreground); left:50%; top:100%; }
+  .ofarch-bus-content>.ofarch-panel>strong { font-size:19px; }
+  .ofarch-bus-rail {
+    grid-column:1/-1; grid-row:2; display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
+    grid-template-rows:repeat(2,minmax(0,1fr)); gap:8px; margin:0; padding:0; border-left:0;
+  }
+  .ofarch-bus-item { grid-template-columns:24px minmax(0,1fr); gap:7px; padding:8px; border:1px solid var(--border); border-radius:4px; background:var(--inset); }
+  .ofarch-bus-item:before { display:none; }
+  .ofarch-bus-copy { gap:4px; justify-content:center; }
+  .ofarch-bus-copy strong { font-size:12px; }
+  .ofarch-bus-copy>span { font-size:10.5px; }
+  .ofarch-bus-copy small { font-size:9.5px; background:var(--card); padding:4px 5px; }
+  /* Four-stage sequence is left-to-right at desktop. */
+  .ofarch-activation-content { display:grid; grid-template-columns:1fr; grid-template-rows:45px minmax(0,1fr) 57px; gap:10px; }
+  .ofarch-lifecycle-lead { flex-direction:row; justify-content:space-between; align-items:center; padding:10px 15px; }
+  .ofarch-lifecycle-lead strong { font-size:17px; }
+  .ofarch-lifecycle { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; margin:0; }
+  .ofarch-lifecycle-group { position:relative; display:block; min-width:0; }
+  .ofarch-lifecycle-card { display:flex; flex-direction:column; gap:10px; height:100%; padding:11px; }
+  .ofarch-lifecycle-card>div { gap:7px; }
+  .ofarch-lifecycle-card strong { font-size:12px; }
+  .ofarch-lifecycle-card>div>span { font-size:11px; line-height:1.35; }
+  .ofarch-lifecycle-group>.ofarch-flow { position:absolute; top:43%; right:-15px; width:20px; height:20px; flex-basis:20px; z-index:2; transform:rotate(-90deg); background:var(--card); border:1px solid var(--border); border-radius:50%; }
+  .ofarch-lifecycle-group>.ofarch-flow .ofarch-flow-stem { height:7px; }
+  .ofarch-boundary { grid-template-columns:1fr auto 1fr; padding:7px 12px; align-items:center; }
+  .ofarch-boundary>span:first-child { grid-column:1/-1; }
+  /* Machine-to-machine peer connection is a horizontal network diagram. */
+  .ofarch-peer-content {
+    display:grid; grid-template-columns:minmax(0,1fr) minmax(0,.94fr) minmax(0,1fr);
+    grid-template-rows:34px minmax(0,1fr) 64px; gap:8px 10px;
+  }
+  .ofarch-peer-content>.ofarch-source-pill { grid-column:1/-1; grid-row:1; }
+  .ofarch-peer-content>.ofarch-panel:nth-child(3) { grid-column:1; grid-row:2; }
+  .ofarch-peer-content>.ofarch-panel:nth-child(7) { grid-column:3; grid-row:2; }
+  .ofarch-peer-content>.ofarch-flow { display:none; }
+  .ofarch-exchange-gate { grid-column:2; grid-row:2; justify-content:center; padding:9px; position:relative; }
+  .ofarch-exchange-gate:before,.ofarch-exchange-gate:after { content:""; position:absolute; width:10px; height:1px; top:50%; background:var(--foreground); }
+  .ofarch-exchange-gate:before { left:-10px; }.ofarch-exchange-gate:after { right:-10px; }
+  .ofarch-exchange-gate strong { font-size:12px; }
+  .ofarch-peer-status { grid-column:1/-1; grid-row:3; flex-direction:row; margin:0; padding:0; gap:9px; }
+  .ofarch-peer-status>div { flex:1; align-content:center; }
+  .ofarch-panel-tag { margin-top:auto; width:100%; text-align:center; }
+  /* Parallel identities feed a common authorization gate and final owner. */
+  .ofarch-authority-content { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); grid-template-rows:18px minmax(0,1fr) 61px 65px; gap:7px 9px; }
+  .ofarch-authority-content>.ofarch-section-label { grid-column:1/-1; grid-row:1; }
+  .ofarch-principals { grid-column:1/-1; grid-row:2; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:9px; }
+  .ofarch-principal { align-items:start; padding:10px; display:flex; flex-direction:column; }
+  .ofarch-principal-content { gap:6px; }
+  .ofarch-principal-content strong { font-size:12px; }
+  .ofarch-principal-content>span:last-child { font-size:10.5px; }
+  .ofarch-authority-content>.ofarch-flow { display:none; }
+  .ofarch-authorization { grid-column:1/-1; grid-row:3; display:grid; grid-template-columns:minmax(0,1fr) 1.4fr; gap:3px 12px; padding:8px 12px; align-content:center; }
+  .ofarch-authorization>span { grid-column:1; grid-row:1; }
+  .ofarch-authorization>strong { grid-column:1; grid-row:2; font-size:11px; }
+  .ofarch-gate-checks { grid-column:2; grid-row:1/3; align-items:center; }
+  .ofarch-authority-content>.ofarch-panel { grid-column:1/-1; grid-row:4; padding:12px 14px; }
+  .ofarch-authority-content>.ofarch-panel>strong { font-size:15px; }
+}
+@media print {
+  .ofarch-figure { break-inside:avoid; color:#18181b; }
+  .ofarch-plate { background:#fff; }
+  .ofarch-figure .figure-motion { display:none; }
 }
