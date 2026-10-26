@@ -3,6 +3,7 @@ import { agentToolsPost } from './agent-tools-post'
 import { problemScopePost } from './problem-scope-post'
 import { silicaDoorsPost } from './silica-doors-post'
 import { acyclicityPost } from './acyclicity-post'
+import { oxpArchitecturePost } from './oxp-architecture-post'
 import { processWorkPost } from './process-work-post'
 import { modelSwitchPromptPost } from './model-switch-prompt-post'
 import { whatBecomesOrdinaryPost } from './what-becomes-ordinary-post'
@@ -40,6 +41,7 @@ export const entries: Entry[] = [
   problemScopePost,
   silicaDoorsPost,
   acyclicityPost,
+  oxpArchitecturePost,
   processWorkPost,
   modelSwitchPromptPost,
   whatBecomesOrdinaryPost,

@@ -2,6 +2,7 @@ import { Suspense, lazy, useEffect, useMemo, useRef, useState, type KeyboardEven
 import { Microscope, ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, BookOpen, Bookmark, Check, ChevronDown, ChevronRight, Clock3, FileText, Filter, LayoutGrid, List as ListIcon, ListTree, Menu, Printer, Search, Settings2, Share2, Sun, Moon, X } from 'lucide-react'
 import { entries, topics, topicCount, type Entry, type Topic } from './data'
 import { JournalFigure, hasJournalDetailFigure } from './components/JournalFigure'
+import { OXPArchitectureFigures } from './components/OXPArchitectureFigures'
 import { DitherScene } from './components/DitherScene'
 
 import { DesktopRail } from './components/DesktopRail'
@@ -346,7 +347,8 @@ function Article({ entry, onBack, onOpen, copied, onShare, isSaved, toggle }: {
           <div className="section-count">{String(i + 1).padStart(2, '0')} / {String(entry.sections.length).padStart(2, '0')}</div>
           <h2>{section.heading}</h2>
           {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-          {i === 0 && <div className="article-evidence"><JournalFigure slug={entry.slug} variant="overview" className="article-figure"/>
+          {entry.slug === 'the-openfork-network-behind-one-oxp-connection' && <OXPArchitectureFigures sectionIndex={i}/>}
+          {i === 0 && entry.slug !== 'the-openfork-network-behind-one-oxp-connection' && <div className="article-evidence"><JournalFigure slug={entry.slug} variant="overview" className="article-figure"/>
             {entry.slug === draft.slug && <div className="editor-note"><FileText aria-hidden="true"/><div><strong>Editorial draft</strong><p>Prepared for review. Examples are generalized to avoid private implementation details.</p></div></div>}
           </div>}
           {section.takeaway && <aside className="takeaway"><span className="section-label">Working principle</span><p>{section.takeaway}</p></aside>}
