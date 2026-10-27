@@ -80,9 +80,9 @@ for (const width of widths) {
     if (await frame.locator('svg[role="img"] path.route').count() !== 10)
       throw new Error('Integration map must show ten independent caller-to-capability routes')
     const pathTypes = await frame.locator('path.route').evaluateAll(paths => paths.map(path => path.getAttribute('d')))
-    if (pathTypes.some(d => !/^M\\d+ \\d+ H\\d+$/.test(d)))
+    if (pathTypes.some(d => !/^M\d+ \d+ H\d+$/.test(d)))
       throw new Error('Integration map contains non-orthogonal, curved or multi-segment routes: ' + JSON.stringify(pathTypes))
-    const diagramTitle = await frame.locator('svg > title').innerText()
+    const diagramTitle = await frame.locator('svg > title').textContent()
     if (!/OpenFork interconnection map/.test(diagramTitle)) throw new Error('Missing semantic diagram title')
     if (landscape) {
       if (!(audit.peerBoxes[1].left > audit.peerBoxes[0].left+20 && Math.abs(audit.peerBoxes[1].top-audit.peerBoxes[0].top) < 3))
