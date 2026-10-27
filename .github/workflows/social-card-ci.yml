@@ -21,8 +21,12 @@ jobs:
         run: bun run build
         env:
           GITHUB_PAGES: 'true'
+      - name: Validate responsive OpenFork diagram source topology
+        run: bun scripts/oxp-architecture-source-audit.mjs
       - name: Verify Open Graph assets and metadata
         run: bun run audit:og
+        env:
+          GITHUB_PAGES: 'true'
       - name: Verify article navigation and legacy links
         run: bun scripts/article-route-audit.mjs
       - name: HTTP smoke-test static article pages and images

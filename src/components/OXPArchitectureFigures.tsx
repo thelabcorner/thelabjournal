@@ -25,7 +25,7 @@ function Figure({ number, title, caption, diagramLabel, children }: {
     </div>
     <div className="ofarch-figure-inner">
       <h3 className="jf-title ofarch-title" id={identifier}>{title}</h3>
-      <div className="ofarch-plate" role="group" aria-label={diagramLabel}>
+      <div className={number === 1 ? "ofarch-plate ofarch-plate--integration" : "ofarch-plate"} role="group" aria-label={diagramLabel}>
         {children}
       </div>
     </div>
@@ -64,15 +64,10 @@ function PlateFooter({ children }: { children: ReactNode }) {
 }
 
 function EntryPoints() {
-  return <Figure number={1} title="The OpenFork network: every connection matters"
-    diagramLabel="Connected network with eleven directed paths. ChatGPT reaches OXP; OXP reaches native Sessions, workers, tools, MCP servers and OFXP. Native Sessions also reach tools, MCP and OFXP; workers use native tools; OFXP reaches an independent OpenFork peer."
-    caption="OpenCode supplied the agent harness foundation. OpenFork extends it by interconnecting external agents, native Sessions, delegated workers, customized tools, MCP integrations, and authenticated OFXP peers. Solid lines trace OXP-mediated operations; dashed lines show independent native agent routes. Each route still requires its own authorization.">
-    <PlateHeading section="01 / CONNECTED SYSTEMS" index="NETWORK"/>
-    <div className="ofarch-plate-content ofarch-overview-network">
-      <span className="ofarch-section-label">OpenCode foundation / OpenFork extensions</span>
-      <InterconnectionNetwork/>
-    </div>
-    <PlateFooter>Shared capabilities. Multiple routes. Independent principals.</PlateFooter>
+  return <Figure number={1} title="The interconnection that makes OpenFork interesting"
+    diagramLabel="Five OpenFork capability routes from ChatGPT through OXP and from independent native OpenFork Sessions. All arrows run directly into the capability they address; delegated workers and remote OFXP hosts are explicitly distinguished."
+    caption="OpenCode provided the original agent harness. OpenFork expands its reach by connecting that runtime to OXP, native tools, Sessions, durable worker delegation, configured MCP integrations, and paired OFXP installations. Each line identifies one independently authorized connection.">
+    <InterconnectionNetwork/>
   </Figure>
 }
 
