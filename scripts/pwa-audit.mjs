@@ -43,9 +43,10 @@ for (const width of [375, 1440]) {
       return {scope:reg.scope,sw:reg.active?.scriptURL,cacheKeys:keys,controlled:!!navigator.serviceWorker.controller}
     })
     if (!sw.controlled||!sw.cacheKeys.some(v=>v.includes('workbox-precache'))||!sw.scope.endsWith(base)||!sw.sw?.endsWith(base+'sw.js'))throw Error('Service worker not controlling and caching the application scope '+JSON.stringify(sw))
-    // First essay is an existing query-string deep link, not a separate HTML file.
+    // Journal links may use the current statically published /posts/ route or
+    // the legacy ?post= SPA form; both must resolve to the offline app shell.
     const link=await page.locator('.feature-link').getAttribute('href')
-    if(!link?.startsWith('?post='))throw Error('Article URL changed '+link)
+    if(!link?.startsWith('?post=') && !new URL(link,origin).pathname.startsWith(base+'posts/'))throw Error('Unexpected article URL '+link)
     const deep=new URL(link,origin)
     await context.setOffline(true)
     await page.goto(deep.href,{waitUntil:'domcontentloaded',timeout:15000})

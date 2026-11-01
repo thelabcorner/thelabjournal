@@ -33,6 +33,52 @@ export function useJournalPWA() {
     onRegisterError: (error) => console.warn('Journal offline registration unavailable:', error),
   })
   useEffect(() => {
+    // Home-screen PWAs, especially on iOS, can resume without a new navigation.
+    // Registration alone does not periodically check for new releases.
+    if (!('serviceWorker' in navigator) || !window.isSecureContext) return
+
+    const pollIntervalMs = 5 * 60_000
+    const minCheckIntervalMs = 15_000
+    let lastCheck = 0
+    let checking = false
+    let disposed = false
+
+    const checkForRelease = async () => {
+      if (disposed || checking || !navigator.onLine || document.visibilityState === 'hidden') return
+      const now = Date.now()
+      if (now - lastCheck < minCheckIntervalMs) return
+      lastCheck = now
+      checking = true
+      try {
+        const registration = await navigator.serviceWorker.getRegistration(import.meta.env.BASE_URL)
+        if (!disposed && registration?.active) await registration.update()
+      } catch (error) {
+        // Transient connectivity problems must never interrupt offline reading.
+        console.debug('Journal release check deferred:', error)
+      } finally {
+        checking = false
+      }
+    }
+
+    const onVisibilityChange = () => { if (!document.hidden) void checkForRelease() }
+    const onForeground = () => { void checkForRelease() }
+    const initialCheck = window.setTimeout(onForeground, 1000)
+    const interval = window.setInterval(onForeground, pollIntervalMs)
+    document.addEventListener('visibilitychange', onVisibilityChange)
+    window.addEventListener('pageshow', onForeground)
+    window.addEventListener('focus', onForeground)
+    window.addEventListener('online', onForeground)
+    return () => {
+      disposed = true
+      window.clearTimeout(initialCheck)
+      window.clearInterval(interval)
+      document.removeEventListener('visibilitychange', onVisibilityChange)
+      window.removeEventListener('pageshow', onForeground)
+      window.removeEventListener('focus', onForeground)
+      window.removeEventListener('online', onForeground)
+    }
+  }, [])
+  useEffect(() => {
     const capture = (event: Event) => {
       event.preventDefault()
       setPrompt(event as InstallPromptEvent)
