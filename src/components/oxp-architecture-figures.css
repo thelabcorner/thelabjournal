@@ -1,313 +1,198 @@
 /*
- * OpenFork editorial diagrams — thelabjournal™ figure system.
- * Mobile: 9:16 vertical flow. Desktop: 16:9 with landscape compositions.
- * Source text stays selectable, the graph reflows rather than scaling a wide SVG.
+ * OpenFork / thelabjournal editorial schematics.
+ * Native type, rules, and vectors. No iframe, bitmap, forced aspect ratio or ornamental labels.
+ * Responsive compositions preserve selectable text and let the article determine width.
  */
-.ofarch-figure { width:100%; min-width:0; margin:22px 0 34px; font-family:Inter,Arial,sans-serif; color:var(--foreground); }
-.ofarch-figure-inner { min-width:0; padding:13px 12px 15px; }
-.ofarch-title { max-width:740px; margin:0 0 12px!important; font-size:15px!important; line-height:1.34!important; font-weight:650!important; letter-spacing:-.025em; }
-.ofarch-caption { font-size:11px; line-height:1.55; }
-.ofarch-plate {
-  width:100%; aspect-ratio:9/16; margin:0 auto; padding:11px;
-  display:flex; flex-direction:column; gap:6px; min-width:0; overflow:hidden;
-  border:1px solid var(--border); border-radius:5px; background:var(--card);
-  color:var(--foreground); font-variant-numeric:tabular-nums;
+.of-figure {
+  --of-paper: var(--card);
+  --of-wash: var(--inset);
+  --of-rule: var(--border);
+  --of-ink: var(--foreground);
+  --of-quiet: var(--muted-foreground);
+  --of-mono: ui-monospace, "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+  margin: 30px 0 38px;
+  min-width: 0;
+  color: var(--of-ink);
+  font-family: Inter, system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
 }
-.ofarch-plate-heading,.ofarch-plate-footer {
-  flex:none; display:flex; align-items:center; justify-content:space-between;
-  gap:6px; font-size:9px; line-height:1.2; font-weight:700;
-  color:var(--muted-foreground); letter-spacing:.06em;
+.of-figure-heading { display:flex; align-items:baseline; gap:12px; margin-bottom:12px; }
+.of-figure-num { flex:none; color:var(--of-quiet); font:500 12px/1.4 var(--of-mono); }
+.of-figure-heading h3 { margin:0!important; font-size:clamp(15px,1.4vw,18px)!important; line-height:1.32!important; font-weight:650!important; letter-spacing:-.025em; }
+.of-plate {
+  min-width:0; width:100%; background:var(--of-paper);
+  border:1px solid var(--of-rule); border-radius:3px;
+  padding:clamp(12px,2.6vw,24px); overflow:visible;
 }
-.ofarch-plate-heading { min-height:17px; padding:0 1px 6px; border-bottom:1px solid var(--border); }
-.ofarch-plate-serial { color:var(--foreground); }
-.ofarch-plate-footer {
-  justify-content:flex-start; align-items:flex-start; min-height:16px; padding:6px 1px 0;
-  border-top:1px solid var(--border); font-weight:550; letter-spacing:0;
+.of-figure-caption {
+  padding:11px 1px 0;
+  color:var(--of-quiet); font-size:12px; line-height:1.65;
+  max-width:76ch;
 }
-.ofarch-plate-footer-rule { background:var(--foreground); width:10px; height:2px; flex:none; margin-top:5px; }
-.ofarch-plate-content { flex:1 1 auto; display:flex; flex-direction:column; gap:4px; min-width:0; min-height:0; }
-.ofarch-section-label,.ofarch-kicker { color:var(--muted-foreground); font-size:9px; line-height:1.25; letter-spacing:.055em; font-weight:700; }
-.ofarch-section-label { text-transform:uppercase; }
-.ofarch-index {
-  display:grid; place-items:center; flex:none; width:21px; height:21px;
-  background:var(--inset); color:var(--foreground); border:1px solid var(--border);
-  border-radius:4px; font-size:9.5px; font-weight:700;
+.of-plate :is(strong,small,p,span) { overflow-wrap:normal; }
+.of-plate p { margin:0; }
+.of-net { width:100%; min-width:0; }
+.of-net-head { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.8fr) minmax(0,1fr); gap:10px; align-items:end; padding-bottom:13px; border-bottom:1px solid var(--of-rule); }
+.of-net-principal { display:flex; flex-direction:column; gap:5px; min-width:0; }
+.of-net-principal:last-child { text-align:right; }
+.of-net-principal strong { font-size:13px; letter-spacing:-.02em; font-weight:650; line-height:1.25; }
+.of-net-principal strong span { font-weight:450; }
+.of-net-principal>span { font-size:10.5px; line-height:1.35; color:var(--of-quiet); }
+.of-net-center-head { color:var(--of-quiet); font:500 11px/1.3 var(--of-mono); text-align:center; }
+.of-net-rows { display:flex; flex-direction:column; }
+.of-net-row {
+  display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.8fr) minmax(0,1fr);
+  align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid var(--of-rule);
 }
-.ofarch-index--solid { color:var(--background); background:var(--foreground); border-color:var(--foreground); }
-.ofarch-panel {
-  min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:3px;
-  border:1px solid var(--border); background:var(--inset); padding:8px 10px; border-radius:5px;
-}
-.ofarch-panel>strong { font-size:14px; line-height:1.2; letter-spacing:-.015em; font-weight:700; }
-.ofarch-description { color:var(--muted-foreground); font-size:10.5px; line-height:1.25; }
-.ofarch-panel--emphasis { border-color:var(--foreground); background:var(--foreground); color:var(--background); }
-.ofarch-panel--emphasis .ofarch-kicker,.ofarch-panel--emphasis .ofarch-description { color:var(--background); opacity:.79; }
-.ofarch-flow {
-  flex:0 0 15px; display:flex; flex-direction:column; align-items:center;
-  justify-content:center; position:relative; color:var(--muted-foreground);
-}
-.ofarch-flow-stem { width:1px; height:8px; background:currentColor; opacity:.7; }
-.ofarch-flow-arrow { width:6px; height:6px; transform:rotate(45deg); margin-top:-2px; border-bottom:1.5px solid currentColor; border-right:1.5px solid currentColor; }
-.ofarch-flow-label {
-  position:absolute; left:calc(50% + 12px); top:50%; transform:translateY(-50%);
-  font-size:9px; line-height:1.1; white-space:nowrap; font-weight:550; color:var(--muted-foreground);
-}
-/* Figure 1 — independently numbered entry routes converge on one owner. */
-.ofarch-entrances,.ofarch-service-stack { display:flex; flex-direction:column; gap:4px; }
-.ofarch-entrance {
-  display:grid; grid-template-columns:21px minmax(0,1fr); align-items:center; gap:2px 7px;
-  padding:5px 8px; border:1px solid var(--border); border-radius:4px; background:var(--inset); min-width:0;
-}
-.ofarch-entrance-text { display:flex; flex-direction:column; min-width:0; gap:1px; }
-.ofarch-entrance-text>strong { font-size:11.5px; font-weight:650; line-height:1.2; }
-.ofarch-entrance-detail { grid-column:2; font-size:10px; line-height:1.22; color:var(--muted-foreground); }
-.ofarch-service { display:grid; grid-template-columns:21px minmax(0,1fr); gap:6px; align-items:center; padding:5px 8px; border-left:2px solid var(--border); background:var(--inset); }
-.ofarch-service span { color:var(--muted-foreground); font-size:9px; font-weight:700; }
-.ofarch-service strong { font-size:10.5px; font-weight:600; line-height:1.2; }
-/* Figure 2 — top source, OXP dispatch and five guarded branches. */
-.ofarch-bus-content { gap:0; }
-.ofarch-source-pill {
-  display:flex; align-items:center; justify-content:space-between; gap:6px;
-  padding:7px 9px; border:1px solid var(--border); border-radius:4px;
-  background:var(--inset); font-size:11px; line-height:1.2; font-weight:700;
-}
-.ofarch-source-pill span { color:var(--muted-foreground); font-size:10px; font-weight:500; }
-.ofarch-bus-rail {
-  flex:1; min-height:0; display:flex; flex-direction:column; justify-content:space-between;
-  gap:3px; margin:9px 0 0 9px; padding-left:15px; border-left:1px solid var(--border);
-}
-.ofarch-bus-item { display:grid; grid-template-columns:22px minmax(0,1fr); gap:6px; position:relative; min-width:0; align-items:start; }
-.ofarch-bus-item:before { content:""; width:14px; height:1px; background:var(--border); position:absolute; left:-15px; top:12px; }
-.ofarch-bus-marker span {
-  display:grid; place-items:center; border:1px solid var(--border); border-radius:4px;
-  width:22px; height:22px; font-size:9.5px; font-weight:700; background:var(--card);
-}
-.ofarch-bus-copy { min-width:0; display:flex; flex-direction:column; gap:2px; }
-.ofarch-bus-copy strong { font-size:11px; line-height:1.2; }
-.ofarch-bus-copy>span { font-size:10px; line-height:1.25; color:var(--muted-foreground); }
-.ofarch-bus-copy small { font-size:9.4px; line-height:1.3; padding:3px 6px; background:var(--inset); border-left:2px solid var(--border); color:var(--foreground); }
-/* Figure 3 — portrait state machine, desktop sequential pipeline. */
-.ofarch-lifecycle-lead {
-  display:flex; flex-direction:column; gap:3px; padding:8px 10px;
-  background:var(--foreground); color:var(--background); border-radius:4px;
-}
-.ofarch-lifecycle-lead strong { font-size:14px; }
-.ofarch-lifecycle-lead span { font-size:10.5px; opacity:.8; }
-.ofarch-lifecycle { display:flex; flex-direction:column; flex:1; justify-content:space-between; min-height:0; gap:3px; margin-top:2px; }
-.ofarch-lifecycle-group { display:flex; flex-direction:column; gap:0; }
-.ofarch-lifecycle-group>.ofarch-flow { height:13px; flex-basis:13px; }
-.ofarch-lifecycle-card { display:grid; grid-template-columns:21px minmax(0,1fr); gap:8px; padding:8px 9px; border:1px solid var(--border); border-radius:4px; background:var(--inset); align-items:start; }
-.ofarch-lifecycle-card>div { display:flex; flex-direction:column; gap:3px; min-width:0; }
-.ofarch-lifecycle-card strong { font-size:11.5px; line-height:1.22; }
-.ofarch-lifecycle-card>div>span { font-size:10.5px; line-height:1.28; color:var(--muted-foreground); }
-.ofarch-boundary {
-  display:grid; grid-template-columns:1fr 14px 1fr; gap:5px; align-items:center;
-  padding:8px 10px; border:1px dashed var(--border); border-radius:4px; background:var(--card);
-}
-.ofarch-boundary>span:first-child { grid-column:1/-1; color:var(--muted-foreground); font-size:8.5px; letter-spacing:.04em; font-weight:700; }
-.ofarch-boundary strong { font-size:10.5px; font-weight:650; line-height:1.25; }
-.ofarch-boundary-divider { text-align:center; font-size:14px; font-weight:700; color:var(--muted-foreground); }
-/* Figure 4 — vertical authenticated two-host exchange. */
-.ofarch-peer-content { gap:0; }
-.ofarch-peer-content>.ofarch-panel { gap:3px; }
-.ofarch-panel-tag { padding:5px 7px; font-size:10px; font-weight:600; background:var(--card); color:var(--foreground); border:1px solid var(--border); border-radius:3px; }
-.ofarch-exchange-gate { display:flex; flex-direction:column; align-items:center; text-align:center; gap:4px; border:1px dashed var(--border); border-radius:4px; padding:8px 7px; background:var(--inset); }
-.ofarch-exchange-gate>span { font-size:9px; color:var(--muted-foreground); letter-spacing:.04em; font-weight:700; }
-.ofarch-exchange-gate strong { font-size:12px; line-height:1.2; }
-.ofarch-exchange-gate small { font-size:10px; line-height:1.2; color:var(--muted-foreground); }
-.ofarch-peer-status { display:flex; flex-direction:column; gap:4px; margin-top:auto; padding-top:5px; }
-.ofarch-peer-status>div { display:grid; grid-template-columns:10px minmax(0, 1fr); gap:2px 7px; align-items:center; padding:5px 7px; background:var(--inset); border-radius:3px; }
-.ofarch-status-indicator { border:1px solid var(--foreground); width:8px; height:8px; border-radius:50%; }
-.ofarch-status-indicator--solid { background:var(--foreground); }
-.ofarch-status-indicator--outline { background:transparent; border-style:dashed; }
-.ofarch-peer-status strong { font-size:10px; line-height:1.2; }
-.ofarch-peer-status>div>span:last-child { grid-column:2; font-size:9.7px; line-height:1.2; color:var(--muted-foreground); }
-/* Figure 5 — independently scoped authority gates. */
-.ofarch-principals { display:flex; flex-direction:column; gap:5px; }
-.ofarch-principal { display:grid; grid-template-columns:21px minmax(0,1fr); align-items:center; gap:7px; padding:8px 9px; background:var(--inset); border:1px solid var(--border); border-radius:4px; }
-.ofarch-principal-content { display:flex; flex-direction:column; gap:2px; min-width:0; }
-.ofarch-principal-content strong { font-size:12px; line-height:1.2; }
-.ofarch-principal-content>span:last-child { font-size:10.5px; line-height:1.25; color:var(--muted-foreground); }
-.ofarch-authorization { padding:9px 11px; display:flex; flex-direction:column; gap:5px; border:1px dashed var(--foreground); border-radius:4px; background:var(--inset); }
-.ofarch-authorization>span { color:var(--muted-foreground); font-size:9px; letter-spacing:.065em; font-weight:700; }
-.ofarch-authorization strong { font-size:12px; line-height:1.3; }
-.ofarch-gate-checks { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:4px; }
-.ofarch-gate-checks span { text-align:center; border:1px solid var(--border); border-radius:3px; padding:5px 1px; background:var(--card); font-size:9px; font-weight:700; }
+.of-net-capability { display:grid; grid-template-columns:21px minmax(0,1fr); gap:9px; align-items:center; min-height:58px; border:1px solid var(--of-rule); padding:9px 11px; background:var(--of-wash); }
+.of-net-index { align-self:start; color:var(--of-quiet); font:500 10px/1.35 var(--of-mono); }
+.of-net-capability div { display:flex; flex-direction:column; gap:3px; min-width:0; }
+.of-net-capability strong { font-size:13px; line-height:1.26; letter-spacing:-.015em; font-weight:650; }
+.of-net-capability small { color:var(--of-quiet); font-size:10.5px; line-height:1.35; }
+.of-net-route { display:flex; align-items:center; min-width:0; gap:8px; color:var(--of-quiet); font:500 10.5px/1.3 var(--of-mono); }
+.of-net-route--native { flex-direction:row; text-align:right; }
+.of-net-route i { position:relative; flex:1; height:1px; background:var(--of-ink); min-width:9px; }
+.of-net-route--external i:after { content:''; position:absolute; right:0; top:-3px; width:7px; height:7px; border-top:1px solid var(--of-ink); border-right:1px solid var(--of-ink); transform:rotate(45deg); }
+.of-net-route--native i:after { content:''; position:absolute; left:0; top:-3px; width:7px; height:7px; border-left:1px solid var(--of-ink); border-bottom:1px solid var(--of-ink); transform:rotate(45deg); }
+.of-net-bottom { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px; font-size:11.5px; line-height:1.5; color:var(--of-quiet); }
+.of-net-bottom>div { display:flex; align-items:start; gap:8px; }
+.of-net-point { flex:none; height:7px; width:7px; border:1px solid var(--of-ink); background:var(--of-ink); margin-top:5px; }
+.of-net-point--outline { background:transparent; }
 
-/* Compact widths: identical text but a genuine tall composition (no horizontal graph). */
-@media(max-width:699px) {
-  .ofarch-figure-inner { padding:11px 9px 14px; }
-  .ofarch-title { margin-bottom:10px!important; font-size:14px!important; }
-  .ofarch-plate { max-width:410px; }
+/* Diagram 2. Convergence, not a duplicate capability list. */
+.of-parity { max-width:710px; margin:auto; }
+.of-parity-sources,.of-parity-gates { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.of-source { min-height:66px; padding:16px 16px 14px; border:1px solid var(--of-rule); display:flex; flex-direction:column; gap:6px; }
+.of-source--external { border-top:2px solid var(--of-ink); }
+.of-source strong { font-size:14px; font-weight:650; }
+.of-source p { font-size:11.5px; color:var(--of-quiet); }
+.of-parity-gates { margin-top:11px; }
+.of-gate { display:flex; align-items:center; gap:9px; padding:10px 12px; background:var(--of-wash); border:1px solid var(--of-rule); min-height:56px; }
+.of-gate span { color:var(--of-quiet); font:500 11px var(--of-mono); }
+.of-gate strong { font-size:11.5px; font-weight:550; line-height:1.45; }
+.of-join { position:relative; height:52px; width:100%; }
+.of-join span { position:absolute; height:30px; top:0; width:1px; background:var(--of-quiet); }
+.of-join span:first-child { left:25%; }
+.of-join span:last-child { left:75%; }
+.of-join:before { content:''; position:absolute; top:29px; left:25%; width:50%; height:1px; background:var(--of-quiet); }
+.of-join:after { content:''; position:absolute; top:29px; left:50%; width:1px; height:23px; background:var(--of-quiet); }
+.of-service { display:flex; align-items:center; justify-content:center; gap:15px; max-width:470px; margin:0 auto; border:1px solid var(--of-ink); padding:21px; min-height:95px; background:var(--of-wash); }
+.of-service-symbol { display:grid; place-items:center; width:43px; height:43px; flex:none; border:1px solid var(--of-ink); font:600 16px var(--of-mono); }
+.of-service strong { font-size:17px; letter-spacing:-.025em; }
+.of-service p { margin-top:5px; color:var(--of-quiet); font-size:11.5px; line-height:1.5; }
+.of-parity-examples { display:flex; justify-content:center; flex-wrap:wrap; gap:7px; margin-top:15px; }
+.of-parity-examples span { font:500 11px/1.3 var(--of-mono); border:1px solid var(--of-rule); padding:7px 10px; color:var(--of-quiet); }
+
+/* Diagram 3. Finite lifecycle with two distinct ownership lanes. */
+.of-mcp-stages { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:9px; margin:0; padding:0; list-style:none; }
+.of-mcp-stages li { position:relative; display:flex; flex-direction:column; gap:11px; padding:16px 13px; border:1px solid var(--of-rule); min-width:0; min-height:170px; }
+.of-mcp-stages li:not(:last-child):after { content:'›'; position:absolute; right:-11px; top:39%; color:var(--of-ink); background:var(--of-paper); width:11px; text-align:center; z-index:1; font-size:18px; }
+.of-mcp-number { font:500 11px/1.3 var(--of-mono); color:var(--of-quiet); }
+.of-mcp-stages strong { font-size:14px; font-weight:650; }
+.of-mcp-stages p { color:var(--of-quiet); font-size:11.5px; line-height:1.5; }
+.of-mcp-owners { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:18px; }
+.of-owner-rule { display:flex; flex-direction:column; gap:6px; border-top:1px solid var(--of-ink); padding-top:12px; }
+.of-owner-rule strong { font-size:12px; font-weight:650; }
+.of-owner-rule span { font-size:11.5px; color:var(--of-quiet); line-height:1.5; }
+.of-mcp-note { margin-top:19px!important; font-size:12px; line-height:1.55; font-family:var(--of-mono); }
+
+/* Diagram 4. Physical host boundaries, peer transport, and explicit gaps. */
+.of-peer { display:grid; grid-template-columns:minmax(0,1fr) minmax(138px,.75fr) minmax(0,1fr); gap:12px; }
+.of-machine { display:flex; flex-direction:column; gap:13px; min-width:0; border:1px solid var(--of-rule); padding:16px; }
+.of-machine-title { display:flex; align-items:center; gap:10px; font-size:14px; line-height:1.4; }
+.of-machine-id { display:grid; place-items:center; flex:none; width:29px; height:29px; border:1px solid var(--of-ink); font:600 13px var(--of-mono); }
+.of-machine-title strong { font-weight:650; }
+.of-machine-contents { display:flex; flex-direction:column; gap:7px; }
+.of-machine-contents>div { display:flex; flex-direction:column; gap:4px; padding:12px; background:var(--of-wash); border:1px solid var(--of-rule); }
+.of-machine-contents strong { font-size:12px; font-weight:650; }
+.of-machine-contents span { font-size:11px; color:var(--of-quiet); line-height:1.45; }
+.of-machine>p { font-size:11px; line-height:1.5; color:var(--of-quiet); margin-top:auto; }
+.of-peer-link { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:10px; min-width:0; }
+.of-peer-link strong { font-size:13px; line-height:1.4; }
+.of-peer-link>span:not(.of-peer-line) { font:500 10.5px/1.35 var(--of-mono); color:var(--of-quiet); }
+.of-peer-line { width:100%; height:1px; background:var(--of-ink); position:relative; }
+.of-peer-line:first-child:after { content:'›'; position:absolute; font-size:18px; right:0; top:-12px; background:var(--of-paper); }
+.of-peer-limits { grid-column:1/-1; display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:6px; }
+.of-peer-limits>div { display:grid; grid-template-columns:10px 1fr; gap:4px 8px; align-items:center; border-top:1px solid var(--of-rule); padding-top:11px; }
+.of-peer-limits i { width:8px; height:8px; background:var(--of-ink); }
+.of-peer-limits .of-limit-open { background:none; border:1px solid var(--of-ink); }
+.of-peer-limits strong { font-size:12px; font-weight:650; }
+.of-peer-limits span { grid-column:2; color:var(--of-quiet); font-size:11px; line-height:1.45; }
+
+/* Diagram 5. Permission matrix. */
+.of-auth-table { display:flex; flex-direction:column; }
+.of-auth-header,.of-auth-row { display:grid; grid-template-columns:1.25fr 1fr 1.35fr 1fr; gap:12px; align-items:center; }
+.of-auth-header { border-bottom:1px solid var(--of-ink); padding:0 9px 10px; }
+.of-auth-header span { color:var(--of-quiet); font:500 11px/1.3 var(--of-mono); }
+.of-auth-row { border-bottom:1px solid var(--of-rule); padding:18px 9px; min-height:70px; font-size:11.5px; line-height:1.5; }
+.of-auth-row>strong { display:flex; align-items:center; gap:10px; font-size:13px; font-weight:650; }
+.of-auth-num { font:500 11px var(--of-mono); color:var(--of-quiet); }
+.of-auth-row>span { color:var(--of-quiet); }
+.of-auth-result { max-width:530px; display:flex; align-items:center; gap:16px; border:1px solid var(--of-rule); background:var(--of-wash); padding:13px 16px; margin:19px auto 0; }
+.of-auth-result-mark { font:500 35px/1 var(--of-mono); }
+.of-auth-result strong { font-size:13px; }
+.of-auth-result p { margin-top:4px; font-size:11.5px; color:var(--of-quiet); line-height:1.5; }
+.of-auth-outcome { display:flex; justify-content:center; align-items:baseline; gap:8px; border-top:1px solid var(--of-ink); padding:12px 0 0; margin-top:18px; text-align:center; }
+.of-auth-outcome strong { font-size:13px; }
+.of-auth-outcome span { font-size:11px; color:var(--of-quiet); }
+
+@media (max-width: 700px) {
+  .of-figure { margin:24px 0 32px; }
+  .of-figure-heading { gap:9px; }
+  .of-figure-heading h3 { font-size:15px!important; }
+  .of-plate { padding:12px; }
+  .of-net-head,.of-net-row { grid-template-columns:minmax(0,1fr) minmax(0,1.72fr) minmax(0,1fr); gap:6px; }
+  .of-net-principal strong { font-size:11px; }
+  .of-net-principal>span { font-size:9.5px; }
+  .of-net-center-head { font-size:9.5px; }
+  .of-net-route { gap:4px; font-size:9px; }
+  .of-net-route i { min-width:6px; }
+  .of-net-capability { grid-template-columns:1fr; gap:4px; padding:10px 8px; min-height:68px; }
+  .of-net-capability strong { font-size:12px; }
+  .of-net-capability small { font-size:10px; }
+  .of-net-index { font-size:9px; }
+  .of-net-bottom { grid-template-columns:1fr; gap:8px; margin-top:13px; }
+  .of-mcp-stages { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .of-mcp-stages li { min-height:150px; }
+  .of-mcp-stages li:nth-child(2):after { display:none; }
+  .of-peer { grid-template-columns:1fr; gap:11px; }
+  .of-peer-link { flex-direction:row; flex-wrap:wrap; gap:8px; padding:8px 2px; }
+  .of-peer-line { flex:1; min-width:15px; }
+  .of-peer-link>span:not(.of-peer-line) { font-size:10px; }
+  .of-peer-limits { grid-column:1; }
+  .of-auth-header { display:none; }
+  .of-auth-row { grid-template-columns:1fr 1fr; gap:9px 13px; padding:14px 9px; }
+  .of-auth-row>strong { grid-column:1/-1; }
+  .of-auth-row>span { font-size:11px; }
+  .of-auth-row>span:before { display:block; margin-bottom:2px; color:var(--of-quiet); font:500 10px var(--of-mono); }
+  .of-auth-row>span:nth-child(2):before { content:'Identity'; }
+  .of-auth-row>span:nth-child(3):before { content:'Scope'; }
+  .of-auth-row>span:nth-child(4):before { content:'Enforced by'; }
 }
-@media(max-width:349px) {
-  .ofarch-plate { padding:8px; gap:4px; }
-  .ofarch-plate-content { gap:3px; }
-  .ofarch-entrance { padding:4px 6px; }
-  .ofarch-service { padding:4px 6px; }
-  .ofarch-panel { padding:7px 8px; }
-  .ofarch-source-pill { padding:6px 8px; }
-  .ofarch-bus-copy small { padding:2px 5px; }
-  .ofarch-bus-rail { margin-top:5px; }
-  .ofarch-peer-status { padding-top:0; }
-}
-/*
- * Desktop art direction — 16:9 landscape plate with native horizontal
- * topology. This intentionally differs from the portrait mobile composition.
- */
-@media(min-width:700px) {
-  .ofarch-figure-inner { padding:17px 17px 20px; }
-  .ofarch-title { font-size:16px!important; margin-bottom:13px!important; }
-  .ofarch-plate { aspect-ratio:16/9; max-width:none; padding:14px 17px; gap:9px; }
-  .ofarch-plate-heading { padding-bottom:8px; min-height:20px; }
-  .ofarch-plate-footer { padding-top:9px; min-height:20px; }
-  .ofarch-plate-content { gap:7px; }
-  .ofarch-entrances { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:7px; }
-  .ofarch-entrance { display:flex; flex-direction:column; align-items:flex-start; gap:6px; min-height:90px; padding:11px 10px; }
-  .ofarch-entrance .ofarch-index { width:23px; height:23px; }
-  .ofarch-entrance-text { gap:5px; }
-  .ofarch-entrance-detail { margin-top:auto; font-size:10px; }
-  .ofarch-entrance-text>strong { font-size:11.5px; }
-  .ofarch-entry-content { gap:6px; justify-content:center; }
-  .ofarch-entry-content>.ofarch-flow { flex-basis:18px; }
-  .ofarch-entry-content>.ofarch-panel { padding:11px 14px; }
-  .ofarch-entry-content>.ofarch-panel>strong { font-size:17px; }
-  .ofarch-service-stack { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:6px; }
-  .ofarch-service { padding:8px; align-items:start; display:flex; flex-direction:column; gap:6px; min-height:54px; }
-  .ofarch-service strong { font-size:10.5px; }
-  /* Hub above a two-dimensional, roomy capability distribution. */
-  .ofarch-bus-content { display:grid; grid-template-columns:190px minmax(0,1fr); grid-template-rows:94px minmax(0,1fr); gap:9px 12px; }
-  .ofarch-bus-content>.ofarch-source-pill { align-self:center; grid-column:1; grid-row:1; position:relative; }
-  .ofarch-bus-content>.ofarch-source-pill:after { content:'→'; position:absolute; right:-17px; top:50%; transform:translateY(-50%); color:var(--muted-foreground); font-size:14px; font-weight:400; }
-  .ofarch-bus-content>.ofarch-flow { position:absolute; display:none; }
-  .ofarch-bus-content>.ofarch-panel { grid-column:2; grid-row:1; align-self:center; padding:10px 14px; position:relative; }
-  .ofarch-bus-content>.ofarch-panel:after { content:''; position:absolute; height:9px; width:1px; background:var(--muted-foreground); left:50%; top:calc(100% - 9px); }
-  .ofarch-bus-content>.ofarch-panel>strong { font-size:19px; }
-  .ofarch-bus-rail {
-    grid-column:1/-1; grid-row:2; display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
-    grid-template-rows:repeat(2,minmax(0,1fr)); gap:8px; margin:0; padding:0; border-left:0;
-  }
-  .ofarch-bus-item { grid-template-columns:24px minmax(0,1fr); gap:7px; padding:8px; border:1px solid var(--border); border-radius:4px; background:var(--inset); }
-  .ofarch-bus-item:before { display:none; }
-  .ofarch-bus-copy { gap:4px; justify-content:center; }
-  .ofarch-bus-copy strong { font-size:12px; }
-  .ofarch-bus-copy>span { font-size:10.5px; }
-  .ofarch-bus-copy small { font-size:9.5px; background:var(--card); padding:4px 5px; }
-  /* Four-stage sequence is left-to-right at desktop. */
-  .ofarch-activation-content { display:grid; grid-template-columns:1fr; grid-template-rows:45px minmax(0,1fr) 57px; gap:10px; }
-  .ofarch-lifecycle-lead { flex-direction:row; justify-content:space-between; align-items:center; padding:10px 15px; }
-  .ofarch-lifecycle-lead strong { font-size:17px; }
-  .ofarch-lifecycle { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; margin:0; }
-  .ofarch-lifecycle-group { position:relative; display:block; min-width:0; }
-  .ofarch-lifecycle-card { display:flex; flex-direction:column; gap:10px; height:100%; padding:11px; }
-  .ofarch-lifecycle-card>div { gap:7px; }
-  .ofarch-lifecycle-card strong { font-size:12px; }
-  .ofarch-lifecycle-card>div>span { font-size:11px; line-height:1.35; }
-  .ofarch-lifecycle-group>.ofarch-flow { position:absolute; top:43%; right:-15px; width:20px; height:20px; flex-basis:20px; z-index:2; transform:rotate(-90deg); background:var(--card); border:1px solid var(--border); border-radius:50%; }
-  .ofarch-lifecycle-group>.ofarch-flow .ofarch-flow-stem { height:7px; }
-  .ofarch-boundary { grid-template-columns:1fr auto 1fr; padding:7px 12px; align-items:center; }
-  .ofarch-boundary>span:first-child { grid-column:1/-1; }
-  /* Machine-to-machine peer connection is a horizontal network diagram. */
-  .ofarch-peer-content {
-    display:grid; grid-template-columns:minmax(0,1fr) minmax(0,.94fr) minmax(0,1fr);
-    grid-template-rows:34px minmax(0,1fr) 64px; gap:8px 10px;
-  }
-  .ofarch-peer-content>.ofarch-source-pill { grid-column:1/-1; grid-row:1; }
-  .ofarch-peer-content>.ofarch-panel:nth-child(3) { grid-column:1; grid-row:2; }
-  .ofarch-peer-content>.ofarch-panel:nth-child(7) { grid-column:3; grid-row:2; }
-  .ofarch-peer-content>.ofarch-flow { display:none; }
-  .ofarch-exchange-gate { grid-column:2; grid-row:2; justify-content:center; padding:9px; position:relative; }
-  .ofarch-exchange-gate:before,.ofarch-exchange-gate:after { content:""; position:absolute; width:10px; height:1px; top:50%; background:var(--foreground); }
-  .ofarch-exchange-gate:before { left:-10px; }.ofarch-exchange-gate:after { right:-10px; }
-  .ofarch-exchange-gate strong { font-size:12px; }
-  .ofarch-peer-status { grid-column:1/-1; grid-row:3; flex-direction:row; margin:0; padding:0; gap:9px; }
-  .ofarch-peer-status>div { flex:1; align-content:center; }
-  .ofarch-panel-tag { margin-top:auto; width:100%; text-align:center; }
-  /* Parallel identities feed a common authorization gate and final owner. */
-  .ofarch-authority-content { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); grid-template-rows:18px minmax(0,1fr) 61px 65px; gap:7px 9px; }
-  .ofarch-authority-content>.ofarch-section-label { grid-column:1/-1; grid-row:1; }
-  .ofarch-principals { grid-column:1/-1; grid-row:2; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:9px; }
-  .ofarch-principal { align-items:start; padding:10px; display:flex; flex-direction:column; }
-  .ofarch-principal-content { gap:6px; }
-  .ofarch-principal-content strong { font-size:12px; }
-  .ofarch-principal-content>span:last-child { font-size:10.5px; }
-  .ofarch-authority-content>.ofarch-flow { display:none; }
-  .ofarch-authorization { grid-column:1/-1; grid-row:3; display:grid; grid-template-columns:minmax(0,1fr) 1.4fr; gap:3px 12px; padding:8px 12px; align-content:center; }
-  .ofarch-authorization>span { grid-column:1; grid-row:1; }
-  .ofarch-authorization>strong { grid-column:1; grid-row:2; font-size:11px; }
-  .ofarch-gate-checks { grid-column:2; grid-row:1/3; align-items:center; }
-  .ofarch-authority-content>.ofarch-panel { grid-column:1/-1; grid-row:4; padding:12px 14px; }
-  .ofarch-authority-content>.ofarch-panel>strong { font-size:15px; }
+@media (max-width: 420px) {
+  .of-net-principal strong { font-size:10px; }
+  .of-net-route { flex-direction:column; gap:5px; }
+  .of-net-route--native { flex-direction:column-reverse; }
+  .of-net-route i { width:100%; flex:none; }
+  .of-parity-sources,.of-parity-gates { gap:7px; }
+  .of-source { padding:12px 9px; min-height:76px; }
+  .of-source strong { font-size:12px; }
+  .of-gate { padding:9px 7px; align-items:start; }
+  .of-gate strong { font-size:10.5px; }
+  .of-service { padding:14px 9px; }
+  .of-service strong { font-size:15px; }
+  .of-mcp-stages { grid-template-columns:1fr; }
+  .of-mcp-stages li { min-height:0; gap:6px; padding:12px; }
+  .of-mcp-stages li:after { display:none; }
+  .of-mcp-owners,.of-peer-limits { grid-template-columns:1fr; }
+  .of-peer-link { display:flex; flex-direction:column; }
+  .of-peer-line { width:1px; height:18px; flex:none; }
+  .of-peer-line:first-child:after { display:none; }
+  .of-auth-row { grid-template-columns:1fr 1fr; }
+  .of-auth-outcome { flex-direction:column; align-items:center; gap:4px; }
 }
 @media print {
-  .ofarch-figure { break-inside:avoid; color:#18181b; }
-  .ofarch-plate { background:#fff; }
-  .ofarch-figure .figure-motion { display:none; }
-}
-
-
-/* The primary figure is an actual directed network, not a one-way flowchart.
- * Nodes are selectable HTML; SVG routes are redrawn for portrait and landscape.
- */
-.ofarch-overview-network { gap:5px; }
-.ofarch-overview-network>.ofarch-section-label { flex:none; font-size:9px; }
-.ofarch-network { position:relative; flex:1 1 auto; min-height:0; width:100%; isolation:isolate; }
-.ofarch-network-wires { position:absolute; inset:0; height:100%; width:100%; overflow:visible; pointer-events:none; color:var(--foreground); }
-.ofarch-network-wires--landscape { display:none; }
-.ofarch-network-edge { fill:none; stroke:currentColor; stroke-width:1.9px; stroke-linecap:round; stroke-linejoin:round; opacity:.68; vector-effect:non-scaling-stroke; }
-.ofarch-network-edge--native { stroke:var(--muted-foreground); stroke-dasharray:4 3; stroke-width:1.55px; opacity:.85; }
-.ofarch-network-node {
- position:absolute; z-index:1; display:flex; flex-direction:column; justify-content:center; align-items:flex-start;
- gap:2px; padding:5px 7px; min-width:0; overflow:hidden;
- border:1px solid color-mix(in srgb,var(--foreground) 29%,var(--border));
- border-radius:4px; background:var(--card); box-shadow:0 0 0 2px var(--card);
-}
-.ofarch-network-node strong { font-size:11px; line-height:1.15; font-weight:700; letter-spacing:-.01em; overflow-wrap:anywhere; }
-.ofarch-network-eyebrow { font-size:8.2px; line-height:1.08; font-weight:700; color:var(--muted-foreground); letter-spacing:.035em; }
-.ofarch-network-detail { font-size:9px; line-height:1.17; color:var(--muted-foreground); overflow-wrap:anywhere; }
-.ofarch-network-node--oxp { background:var(--foreground); color:var(--background); border-color:var(--foreground); box-shadow:0 0 0 3px var(--card); }
-.ofarch-network-node--oxp .ofarch-network-eyebrow,.ofarch-network-node--oxp .ofarch-network-detail { color:var(--background); opacity:.8; }
-.ofarch-network-node--chatgpt { left:4%; top:4%; width:42%; height:10%; }
-.ofarch-network-node--session { left:54%; top:4%; width:42%; height:10%; }
-.ofarch-network-node--oxp { left:30%; top:22%; width:40%; height:12%; }
-.ofarch-network-node--worker { left:4%; top:43%; width:43%; height:10%; }
-.ofarch-network-node--tools { left:54%; top:43%; width:42%; height:10%; }
-.ofarch-network-node--mcp { left:4%; top:63%; width:43%; height:10%; }
-.ofarch-network-node--ofxp { left:54%; top:63%; width:42%; height:10%; }
-.ofarch-network-node--peer { left:54%; top:81%; width:42%; height:10%; border-style:dashed; }
-.ofarch-network-legend {
- position:absolute; z-index:2; left:2%; bottom:1.2%; right:2%; display:flex; flex-wrap:wrap;
- gap:6px 12px; align-items:center; padding:3px 0; color:var(--muted-foreground); font-size:8.4px; line-height:1;
-}
-.ofarch-network-legend>span { display:flex; align-items:center; gap:5px; }
-.ofarch-network-legend i { width:15px; height:0; border-top:1.5px solid var(--foreground); }
-.ofarch-network-legend .ofarch-key-native { border-top-style:dashed; border-top-color:var(--muted-foreground); }
-
-@media(max-width:389px) {
- .ofarch-network-node--session,.ofarch-network-node--mcp,.ofarch-network-node--ofxp { height:12%; }
-}
-@media(max-width:349px) {
- .ofarch-network-node { padding:4px 5px; gap:1px; }
- .ofarch-network-node strong { font-size:10.2px; }
- .ofarch-network-eyebrow { font-size:7.6px; letter-spacing:0; }
- .ofarch-network-detail { font-size:8.7px; }
- .ofarch-network-legend { font-size:8px; gap:5px 8px; }
-}
-@media(min-width:700px) {
- .ofarch-overview-network { gap:5px; }
- .ofarch-network-wires--portrait { display:none; }
- .ofarch-network-wires--landscape { display:block; }
- .ofarch-network-node { padding:5px 8px; gap:2px; border-radius:5px; }
- .ofarch-network-node strong { font-size:12px; }
- .ofarch-network-eyebrow { font-size:9px; }
- .ofarch-network-detail { font-size:10px; }
- .ofarch-network-node--chatgpt { left:3%; top:16%; width:22%; height:24%; }
- .ofarch-network-node--session { left:3%; top:60%; width:22%; height:25%; }
- .ofarch-network-node--oxp { left:33%; top:11%; width:28%; height:26%; }
- .ofarch-network-node--worker { left:33%; top:43%; width:28%; height:24%; }
- .ofarch-network-node--tools { left:33%; top:71%; width:28%; height:23%; }
- .ofarch-network-node--mcp { left:74%; top:10%; width:23%; height:27%; }
- .ofarch-network-node--ofxp { left:74%; top:43%; width:23%; height:26%; }
- .ofarch-network-node--peer { left:74%; top:71%; width:23%; height:23%; }
- .ofarch-network-legend { font-size:9px; left:1.5%; right:1%; bottom:0.4%; }
+  .of-figure { break-inside:avoid; color:#18181b; }
+  .of-plate { background:#fff; }
+  .of-figure-caption,.of-net-center-head { color:#52525b; }
 }

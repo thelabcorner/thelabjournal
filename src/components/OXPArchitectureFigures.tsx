@@ -1,214 +1,184 @@
 import type { ReactNode } from 'react'
-import { DitherScene } from './DitherScene'
 import { InterconnectionNetwork } from './InterconnectionNetwork'
 import './oxp-architecture-figures.css'
 
 /**
- * Responsive editorial diagrams for the OpenFork/OXP article.
- * Mobile artboards use 9:16 portrait compositions; desktop uses 16:9 landscape.
- * The lead diagram is a directed interconnection graph with distinct callers.
+ * Five native, selectable, responsive editorial figures.
+ * Each answers one architectural question; none is a scaled screenshot or an iframe.
  */
-function Figure({ number, title, caption, diagramLabel, children }: {
+function Figure({ number, title, caption, label, children }: {
   number: number
   title: string
   caption: string
-  diagramLabel: string
+  label: string
   children: ReactNode
 }) {
-  const identifier = 'ofarch-figure-' + number
-  return <figure className="research-figure jf-figure ofarch-figure" aria-labelledby={identifier}>
-    <div className="figure-top jf-top">
-      <span>Fig. {String(number).padStart(2, '0')} / System architecture</span>
-      <span className="figure-motion" aria-hidden="true">
-        <DitherScene variant="ledger" className="figure-dither" fps={14} speed={0.68} intensity={0.85}/>
-      </span>
+  const id = 'ofarch-figure-' + number
+  return <figure className="research-figure of-figure" aria-labelledby={id}>
+    <div className="of-figure-heading">
+      <span className="of-figure-num">{String(number).padStart(2, '0')}</span>
+      <h3 id={id}>{title}</h3>
     </div>
-    <div className="ofarch-figure-inner">
-      <h3 className="jf-title ofarch-title" id={identifier}>{title}</h3>
-      <div className="ofarch-plate" role="group" aria-label={diagramLabel}>
-        {children}
-      </div>
-    </div>
-    <figcaption className="jf-caption ofarch-caption">{caption}</figcaption>
+    <div className="of-plate" role="group" aria-label={label}>{children}</div>
+    <figcaption className="of-figure-caption">{caption}</figcaption>
   </figure>
 }
 
-function PlateHeading({ section, index }: { section: string; index: string }) {
-  return <div className="ofarch-plate-heading">
-    <span>{section}</span><span className="ofarch-plate-serial">OF / {index}</span>
-  </div>
-}
-function Flow({ label }: { label?: string }) {
-  return <div className="ofarch-flow" aria-hidden="true">
-    <span className="ofarch-flow-stem"/>
-    {label && <span className="ofarch-flow-label">{label}</span>}
-    <span className="ofarch-flow-arrow"/>
-  </div>
-}
-function Panel({ kicker, title, description, emphasis = false, children }: {
-  kicker: string
-  title: string
-  description?: string
-  emphasis?: boolean
-  children?: ReactNode
-}) {
-  return <div className={'ofarch-panel' + (emphasis ? ' ofarch-panel--emphasis' : '')}>
-    <span className="ofarch-kicker">{kicker}</span>
-    <strong>{title}</strong>
-    {description && <span className="ofarch-description">{description}</span>}
-    {children}
-  </div>
-}
-function PlateFooter({ children }: { children: ReactNode }) {
-  return <div className="ofarch-plate-footer"><span className="ofarch-plate-footer-rule"/><span>{children}</span></div>
-}
-
-function EntryPoints() {
-  return <Figure number={1} title="The OpenFork network: every connection matters"
-    diagramLabel="Connected network with eleven directed paths. ChatGPT reaches OXP; OXP reaches native Sessions, workers, tools, MCP servers and OFXP. Native Sessions also reach tools, MCP and OFXP; workers use native tools; OFXP reaches an independent OpenFork peer."
-    caption="OpenCode supplied the agent harness foundation. OpenFork extends it by interconnecting external agents, native Sessions, delegated workers, customized tools, MCP integrations, and authenticated OFXP peers. Solid lines trace OXP-mediated operations; dashed lines show independent native agent routes. Each route still requires its own authorization.">
-    <PlateHeading section="01 / CONNECTED SYSTEMS" index="NETWORK"/>
-    <div className="ofarch-plate-content ofarch-overview-network">
-      <span className="ofarch-section-label">OpenCode foundation / OpenFork extensions</span>
-      <InterconnectionNetwork/>
-    </div>
-    <PlateFooter>Shared capabilities. Multiple routes. Independent principals.</PlateFooter>
+function Overview() {
+  return <Figure number={1}
+    title="One harness, independently authorized routes"
+    label="Five-row OpenFork capability matrix. ChatGPT through OXP and a local native Session each have an independent route to tools, existing Sessions, worker delegation, MCP integrations, and OFXP peers."
+    caption="Two entry principals reach overlapping OpenFork capabilities. Connections in the same row share a capability family, not a permission grant. A delegated worker becomes a native Session; an OFXP peer remains another OpenFork installation.">
+    <InterconnectionNetwork/>
   </Figure>
 }
 
-const branches = [
-  ['01', 'Native tools', 'Project · symbols · edit · test', 'Approved roots + action permission'],
-  ['02', 'Delegated workers', 'Create and supervise worker Sessions', 'Delegation and supervision grants'],
-  ['03', 'Configured MCPs', 'Discover · activate · invoke', 'Integration-specific authority'],
-  ['04', 'OFXP peers', 'Remote capability + Session control', 'Paired peer + remote grants'],
-  ['05', 'Session control', 'Inspect · prompt · stop · select', 'Authorized Session scopes'],
+function SharedImplementation() {
+  return <Figure number={2}
+    title="Different callers, one implementation"
+    label="An external OXP request and a native Session request cross different permission boundaries, then call the same OpenFork domain implementation."
+    caption="The OXP adapter checks its external caller's grants; a native Session uses its Session and workspace permissions. The Project inspection domain service is shared, so repository logic need not be implemented twice.">
+    <div className="of-parity">
+      <div className="of-parity-sources">
+        <div className="of-source of-source--external">
+          <strong>ChatGPT / OXP</strong>
+          <p>External request</p>
+        </div>
+        <div className="of-source">
+          <strong>OpenFork Session</strong>
+          <p>Native request</p>
+        </div>
+      </div>
+      <div className="of-parity-gates">
+        <div className="of-gate"><span>01</span><strong>Approved root + connector grant</strong></div>
+        <div className="of-gate"><span>02</span><strong>Session + workspace permission</strong></div>
+      </div>
+      <div className="of-join" aria-hidden="true"><span/><span/></div>
+      <div className="of-service">
+        <div className="of-service-symbol" aria-hidden="true">[ ]</div>
+        <div>
+          <strong>Project inspection</strong>
+          <p>One domain service / shared repository semantics</p>
+        </div>
+      </div>
+      <div className="of-parity-examples" aria-label="Example outputs">
+        <span>Repository structure</span><span>Package scripts</span><span>Toolchain probes</span>
+      </div>
+    </div>
+  </Figure>
+}
+
+const lifecycle = [
+  { number: '01', title: 'Configured', detail: 'A server exists in OpenFork settings.' },
+  { number: '02', title: 'Activated', detail: 'An authorized caller opens a connection.' },
+  { number: '03', title: 'Invoked', detail: 'Only the selected tool contract is loaded.' },
+  { number: '04', title: 'Released', detail: 'OXP-owned idle connections can close.' },
 ] as const
-function OXPBranches() {
-  return <Figure number={2} title="Five independently callable connections from OXP"
-    diagramLabel="Portrait fanout: ChatGPT enters OXP at the top. A vertical numbered capability bus lists native tools, delegated workers, configured MCPs, OFXP peers and Session control, with a permission label for each."
-    caption="These are five separate OXP routes, all visible in the interconnected system map above. A native OpenFork Session has its own independent connections to tools, configured MCP integrations and OFXP. Worker delegation creates a native Session instead of a simulated remote shell.">
-    <PlateHeading section="02 / CAPABILITY BUS" index="OXP"/>
-    <div className="ofarch-plate-content ofarch-bus-content">
-      <div className="ofarch-source-pill">CHATGPT <span>External agent</span></div>
-      <Flow/>
-      <Panel kicker="MCP-FACING CONNECTOR" title="OXP" description="Direct tools + on-demand capability dispatch" emphasis/>
-      <div className="ofarch-bus-rail" role="list" aria-label="Available capability families">
-        {branches.map(([index, name, action, scope]) => <div className="ofarch-bus-item" role="listitem" key={index}>
-          <div className="ofarch-bus-marker"><span>{index}</span></div>
-          <div className="ofarch-bus-copy">
-            <strong>{name}</strong>
-            <span>{action}</span>
-            <small>{scope}</small>
-          </div>
-        </div>)}
+
+function MCPConnections() {
+  return <Figure number={3}
+    title="MCP connections have an owner and a lifetime"
+    label="Four stages of on-demand MCP access: configured, activated, invoked and released. A separate boundary distinguishes OXP-managed transient connections from native Session connections."
+    caption="On-demand connection management avoids treating every configured MCP server as permanently connected. OXP-owned transient activation and native Session activation are separate lifecycles; neither implicitly changes the other's active tools.">
+    <div className="of-mcp">
+      <ol className="of-mcp-stages">
+        {lifecycle.map(stage => <li key={stage.number}>
+          <span className="of-mcp-number">{stage.number}</span>
+          <strong>{stage.title}</strong>
+          <p>{stage.detail}</p>
+        </li>)}
+      </ol>
+      <div className="of-mcp-owners">
+        <div className="of-owner-rule"><strong>OXP-owned</strong><span>Transient client / external grant</span></div>
+        <div className="of-owner-rule"><strong>Session-owned</strong><span>Native client / Session permission</span></div>
       </div>
+      <p className="of-mcp-note">Configuration is persistent. A connection is not.</p>
     </div>
-    <PlateFooter>One connection · five separately guarded paths</PlateFooter>
   </Figure>
 }
 
-const activation = [
-  ['01', 'Configured', 'A server exists in OpenFork configuration.'],
-  ['02', 'Activated on request', 'OXP opens a transient, owned connection.'],
-  ['03', 'Tool call dispatched', 'Selected schemas and actions are used.'],
-  ['04', 'Released or idle', 'Connection closes; config is unchanged.'],
+function OFXPPeer() {
+  return <Figure number={4}
+    title="OFXP connects two independent runtimes"
+    label="Machine A contains local native Sessions and an OXP ingress. The OFXP connection crosses an authenticated peer boundary into Machine B, which maintains its own roots, Sessions and grants. Remote operations are permission checked."
+    caption="OXP can reach a paired OFXP machine through the local OpenFork host. Pairing establishes identity; remote root and action grants are separate. Remote Session control exists under explicit grants, while remote-worker delegation and peer messaging are not executable routes in this audited implementation.">
+    <div className="of-peer">
+      <div className="of-machine">
+        <div className="of-machine-title"><span className="of-machine-id">A</span><strong>Local OpenFork</strong></div>
+        <div className="of-machine-contents">
+          <div><strong>OXP ingress</strong><span>ChatGPT as external principal</span></div>
+          <div><strong>Native Sessions</strong><span>Local agents and workers</span></div>
+        </div>
+        <p>Initiates an OFXP request</p>
+      </div>
+      <div className="of-peer-link">
+        <span className="of-peer-line" aria-hidden="true"/>
+        <strong>Authenticated OFXP</strong>
+        <span>Peer identity</span>
+        <span>Target grants</span>
+        <span>Approved roots</span>
+        <span className="of-peer-line" aria-hidden="true"/>
+      </div>
+      <div className="of-machine">
+        <div className="of-machine-title"><span className="of-machine-id">B</span><strong>Remote OpenFork</strong></div>
+        <div className="of-machine-contents">
+          <div><strong>Local authority</strong><span>Own workspaces and Sessions</span></div>
+          <div><strong>Remote dispatch</strong><span>Granted tools and Session control</span></div>
+        </div>
+        <p>Decides what the caller may access</p>
+      </div>
+      <div className="of-peer-limits">
+        <div><i aria-hidden="true"/> <strong>Executable</strong><span>Approved operations / Session supervision</span></div>
+        <div><i className="of-limit-open" aria-hidden="true"/> <strong>Not dispatched</strong><span>Remote workers / peer messages</span></div>
+      </div>
+    </div>
+  </Figure>
+}
+
+const permissions = [
+  { principal: 'Native Session', identity: 'Session ID', scope: 'Workspace + tool policy', authority: 'Native runtime' },
+  { principal: 'ChatGPT / OXP', identity: 'Connector principal', scope: 'Approved roots + grants', authority: 'OXP adapter' },
+  { principal: 'OFXP peer', identity: 'Paired host identity', scope: 'Remote grants + target scope', authority: 'Remote dispatcher' },
 ] as const
-function MCPActivation() {
-  return <Figure number={3} title="MCP access without permanently loading every server"
-    diagramLabel="Portrait state machine: configured, activated on request, dispatched call, and released or idle, with four downward arrows. A separate ownership boundary follows."
-    caption="The transient OXP MCP activation pool exists in recent OpenFork source and must run in a deployed host build. Native Session Code-mode activation has separately owned connections.">
-    <PlateHeading section="03 / CONNECTION LIFECYCLE" index="MCP"/>
-    <div className="ofarch-plate-content ofarch-activation-content">
-      <div className="ofarch-lifecycle-lead"><strong>On-demand MCP</strong><span>Transient connection / OXP-owned</span></div>
-      <div className="ofarch-lifecycle" role="list">
-        {activation.map(([number, title, detail], i) => <div key={number} className="ofarch-lifecycle-group" role="listitem">
-          <div className="ofarch-lifecycle-card">
-            <span className="ofarch-index ofarch-index--solid">{number}</span>
-            <div><strong>{title}</strong><span>{detail}</span></div>
-          </div>
-          {i < activation.length - 1 && <Flow/>}
-        </div>)}
-      </div>
-      <div className="ofarch-boundary">
-        <span>SEPARATE CONNECTION OWNERS</span>
-        <strong>OXP transient</strong><span className="ofarch-boundary-divider">≠</span><strong>Native Session</strong>
-      </div>
-    </div>
-    <PlateFooter>Activation does not rewrite server settings</PlateFooter>
-  </Figure>
-}
 
-function PeerExchange() {
-  return <Figure number={4} title="One OXP entry can reach another OpenFork machine"
-    diagramLabel="Portrait route: ChatGPT enters OXP on Machine A, crosses an authenticated and permission-checked OFXP link, then reaches a separately owned OpenFork runtime on Machine B."
-    caption="Machine A's OXP entry calls its OFXP adapter. Machine B keeps independent Sessions, workspace roots and grants. Remote capability calls and authorized Session supervision work; remote worker creation and peer messaging are not currently dispatched.">
-    <PlateHeading section="04 / MACHINE-TO-MACHINE" index="OFXP"/>
-    <div className="ofarch-plate-content ofarch-peer-content">
-      <div className="ofarch-source-pill">CHATGPT <span>OXP connector</span></div>
-      <Flow/>
-      <Panel kicker="MACHINE A · LOCAL HOST" title="OpenFork A" description="OXP ingress · tools · Sessions">
-        <div className="ofarch-panel-tag">OFXP client / caller</div>
-      </Panel>
-      <Flow label="Authenticated route"/>
-      <div className="ofarch-exchange-gate">
-        <span>OFXP / PEER BOUNDARY</span>
-        <strong>Identity → grants → dispatch</strong>
-        <small>Peer pairing ≠ blanket authority</small>
-      </div>
-      <Flow/>
-      <Panel kicker="MACHINE B · REMOTE HOST" title="OpenFork B" description="Independent roots · Sessions · state">
-        <div className="ofarch-panel-tag">OFXP server / dispatcher</div>
-      </Panel>
-      <div className="ofarch-peer-status">
-        <div><span className="ofarch-status-indicator ofarch-status-indicator--solid"/><strong>Executable</strong><span>Tools + granted Session control</span></div>
-        <div><span className="ofarch-status-indicator ofarch-status-indicator--outline"/><strong>Not dispatched</strong><span>Remote workers + peer messages</span></div>
-      </div>
-    </div>
-    <PlateFooter>Paired hosts retain independent authority</PlateFooter>
-  </Figure>
-}
-
-const principals = [
-  { index: '01', name: 'Native Session', detail: 'Own Session + workspace permissions', kicker: 'LOCAL AGENT' },
-  { index: '02', name: 'ChatGPT via OXP', detail: 'Connector grants + approved roots', kicker: 'EXTERNAL AGENT' },
-  { index: '03', name: 'OpenFork via OFXP', detail: 'Peer grants + target root / action scope', kicker: 'REMOTE PEER' },
-] as const
 function Authority() {
-  return <Figure number={5} title="Identity is not authorization"
-    diagramLabel="Portrait authority model: three independently named principals are checked against route grants and action scope before shared OpenFork code executes."
-    caption="A discovered tool or paired machine is not automatic permission. Requests reach the same domain owners only after the authority checks for that entry point and action.">
-    <PlateHeading section="05 / TRUST & CONTROL" index="AUTH"/>
-    <div className="ofarch-plate-content ofarch-authority-content">
-      <span className="ofarch-section-label">The principal matters</span>
-      <div className="ofarch-principals" role="list">
-        {principals.map(p => <div className="ofarch-principal" role="listitem" key={p.index}>
-          <span className="ofarch-index">{p.index}</span>
-          <div className="ofarch-principal-content">
-            <span className="ofarch-kicker">{p.kicker}</span>
-            <strong>{p.name}</strong>
-            <span>{p.detail}</span>
-          </div>
+  return <Figure number={5}
+    title="Capability access is checked at the boundary"
+    label="An access-control matrix compares three principals: native Session, ChatGPT through OXP, and an OFXP peer. Each has its own identity, scope, and enforcement point before shared OpenFork services run."
+    caption="Discovery identifies an available operation; execution still depends on the caller's actual authority. A local grant cannot expand an OFXP peer's rights on the target machine.">
+    <div className="of-auth">
+      <div className="of-auth-table" role="table" aria-label="Principal authorization matrix">
+        <div className="of-auth-header" role="row">
+          <span role="columnheader">Caller</span><span role="columnheader">Identity</span><span role="columnheader">Authorized scope</span><span role="columnheader">Enforced by</span>
+        </div>
+        {permissions.map((p,index) => <div className="of-auth-row" role="row" key={p.principal}>
+          <strong role="cell"><span className="of-auth-num">0{index+1}</span>{p.principal}</strong>
+          <span role="cell">{p.identity}</span>
+          <span role="cell">{p.scope}</span>
+          <span role="cell">{p.authority}</span>
         </div>)}
       </div>
-      <Flow label="Permission boundary"/>
-      <div className="ofarch-authorization">
-        <span>EXECUTION GATE</span>
-        <strong>Identity + route grants + action scope</strong>
-        <div className="ofarch-gate-checks"><span>ROOT</span><span>TOOL</span><span>SESSION</span><span>PEER</span></div>
+      <div className="of-auth-result">
+        <span className="of-auth-result-mark" aria-hidden="true">∩</span>
+        <div>
+          <strong>Effective permission</strong>
+          <p>The intersection of every boundary the operation crosses.</p>
+        </div>
       </div>
-      <Flow/>
-      <Panel kicker="IF AUTHORIZED" title="Shared OpenFork implementation" description="One semantic owner, multiple controlled routes" emphasis/>
+      <div className="of-auth-outcome">
+        <strong>Shared OpenFork service</strong>
+        <span>Invoked only after authorization</span>
+      </div>
     </div>
-    <PlateFooter>Human control · explicit scope · traceable execution</PlateFooter>
   </Figure>
 }
 
 export function OXPArchitectureFigures({ sectionIndex }: { sectionIndex: number }) {
   switch (sectionIndex) {
-    case 0: return <EntryPoints/>
-    case 3: return <OXPBranches/>
-    case 5: return <MCPActivation/>
-    case 6: return <PeerExchange/>
+    case 0: return <Overview/>
+    case 3: return <SharedImplementation/>
+    case 5: return <MCPConnections/>
+    case 6: return <OFXPPeer/>
     case 9: return <Authority/>
     default: return null
   }
