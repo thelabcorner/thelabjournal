@@ -1,46 +1,34 @@
 /**
- * The two entry principals are intentionally separate.
- * Each row shows two independent routes to one capability family.
- * This is a topology matrix, not a sequential execution pipeline.
+ * Editorial connectivity matrix: two explicit principals, five capability
+ * families and ten independent routes. The line is the relationship; the
+ * words are not enclosed in redundant UI cards.
  */
-const capabilities = [
-  { number: '01', name: 'Native tools', detail: 'Project / Symbols / Edit / Test', external: 'execute', native: 'execute' },
-  { number: '02', name: 'Existing sessions', detail: 'inspect / send / supervise', external: 'supervise', native: 'control' },
-  { number: '03', name: 'Worker delegation', detail: 'create a durable native session', external: 'delegate', native: 'spawn' },
-  { number: '04', name: 'MCP integrations', detail: 'configured and permitted servers', external: 'invoke', native: 'invoke' },
-  { number: '05', name: 'OFXP peers', detail: 'separately authorized machines', external: 'connect', native: 'connect' },
+const rows = [
+  { number:'01', name:'Native tools', note:'Project · Symbols · Edit · Test' },
+  { number:'02', name:'Existing Sessions', note:'Inspect · Prompt · Supervise' },
+  { number:'03', name:'Worker delegation', note:'Durable native Sessions' },
+  { number:'04', name:'MCP integrations', note:'Configured server access' },
+  { number:'05', name:'OFXP peers', note:'Approved remote machines' },
 ] as const
 
 export function InterconnectionNetwork() {
-  return <div className="of-net" role="group" aria-label="Five shared OpenFork capability families, each accessible through independently authorized OXP and native-session routes">
+  return <div className="of-net" role="group"
+    aria-label="ChatGPT via OXP and native OpenFork Sessions have distinct authorized routes to five capability families">
     <div className="of-net-head">
-      <div className="of-net-principal">
-        <strong>ChatGPT <span>via OXP</span></strong>
-        <span>External principal</span>
-      </div>
-      <div className="of-net-center-head">OpenFork capabilities</div>
-      <div className="of-net-principal">
-        <strong>Native session</strong>
-        <span>Local principal</span>
-      </div>
+      <strong>ChatGPT <span>via OXP</span></strong>
+      <span>Shared capability</span>
+      <strong>Native Session</strong>
     </div>
     <div className="of-net-rows">
-      {capabilities.map(capability => <div className="of-net-row" key={capability.number}>
-        <div className="of-net-route of-net-route--external">
-          <span>{capability.external}</span><i aria-hidden="true"/>
-        </div>
+      {rows.map(row => <div className="of-net-row" key={row.number}>
+        <div className="of-net-route of-net-route--external"><i aria-hidden="true"/></div>
         <div className="of-net-capability">
-          <span className="of-net-index">{capability.number}</span>
-          <div><strong>{capability.name}</strong><small>{capability.detail}</small></div>
+          <span>{row.number}</span>
+          <div><strong>{row.name}</strong><small>{row.note}</small></div>
         </div>
-        <div className="of-net-route of-net-route--native">
-          <i aria-hidden="true"/><span>{capability.native}</span>
-        </div>
+        <div className="of-net-route of-net-route--native"><i aria-hidden="true"/></div>
       </div>)}
     </div>
-    <div className="of-net-bottom">
-      <div><span className="of-net-point"/>A worker is a native OpenFork session, with its own lifecycle.</div>
-      <div><span className="of-net-point of-net-point--outline"/>An OFXP peer retains independent authorization and state.</div>
-    </div>
+    <p className="of-net-note">Both routes execute under their own authority, not under shared credentials.</p>
   </div>
 }

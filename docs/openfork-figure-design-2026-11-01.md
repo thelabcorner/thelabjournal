@@ -1,31 +1,33 @@
-# OpenFork figure system — editorial design notes
+# OpenFork article diagrams — editorial reconstruction
 
-Revised: 2026-11-01
+Revised: November 1, 2026
 Article: `the-openfork-network-behind-one-oxp-connection`
 
-## Why these figures replaced the previous system
+## References and why the previous implementation failed
 
-The first published figure used an eight-node network with eleven curved and diagonal routes. The topology was difficult to trace visually, particularly on phones. Four subsequent figures repeated stacked cards and decorative micro-labels. Their geometry was dictated by fixed 9:16 / 16:9 artboards rather than the information that needed to fit.
+- [Diagram Design](https://github.com/cathrynlavery/diagram-design), MIT, skill: semantic choice before type, deletion first, one or two focal points, 4px geometry, connective paths with meaning. Its own guidance warns specifically against identical boxes for every node, generic three-card layouts, and reproducing automatic Mermaid spacing.
+- [SVG Diagram](https://github.com/pkt-lab/svg-diagram), MIT: measure-to-text, plan connectivity before drawing, check collisions, render and visually inspect the result.
+- The journal's own foreground, muted and rule tokens provide the actual identity. Do not paste an imported skill's default palette, headings, typefaces, or ornaments over the journal.
 
-A separate `fix/diagram-design-openfork-integration-20261026` branch had already identified the better topology: five capability families, two independent callers and direct edges with explicit authority boundaries. That branch's HTML/SVG assets were consulted, but not merged wholesale; it predates a later editorial publication commit and its embedded iframe would isolate diagram text from the article DOM.
+The earlier on-site diagrams were overly tall UI cards. The double frame around each figure, repeated card borders, generous internal padding, tiny technical labels, and mechanically forced aspect ratios obscured their purpose. Browser overflow checks passed because boxes fit, not because the diagrams looked or communicated well. The mobile screenshot of Figure 02 showed this failure clearly.
 
-## Editorial design contract
+The unmerged `fix/diagram-design-openfork-integration-20261026` branch previously introduced a useful conceptual correction: different caller principals should be visibly separate, and capability routes should be directly traceable. That reasoning is retained, not a wholesale merge of its iframe-based HTML assets.
 
-- The diagram exists to explain a specific mechanism. The page title and caption provide context. No secondary marketing headline, fake metric, eyebrow, scene, animation or avatar belongs inside the diagram.
-- Use the journal's own surface and foreground tokens, paired with restrained tabular monospaced numerals, hairline rules and Inter for content. This is computational printmaking with precise engineering semantics, not terminal cosplay.
-- Preserve selectable, accessible source text. Use semantic HTML and CSS connectors. Do not rasterize diagrams or embed external or sandboxed iframes.
-- Different architectural questions need different figures: paired-route topology, two-caller domain convergence, MCP connection lifetime, independent OFXP host boundaries, and authority matrix.
-- Show where capabilities overlap without conflating permission scopes. `ChatGPT / OXP`, a native `Session`, and an OFXP `peer` are distinct principals. Authorization occurs before executing the shared service.
-- Do not depict remote-worker creation or OFXP peer messaging as implemented. These are not currently executable remote dispatchers in the audited architecture.
-- Let the composition grow vertically on mobile rather than scaling down a desktop schematic. Never hide labels to preserve a predetermined aspect ratio.
-- Maintain high information density without relying on tiny text. Figures must remain useful at 320 px and at desktop width, in light/dark site modes and print.
+## Design decisions
+
+1. Each schematic uses one layout type matched to its argument: a two-principal capability topology, a two-caller convergence, an MCP lifecycle timeline, a federated-host boundary, and a real authorization matrix.
+2. Remove the inherited `research-figure` card wrapper and the redundant inset panel. A title, single pair of hairline rules, content and a caption suffice.
+3. Replace stacked padded cards with minimal typographic structure, precise straight connectors, and one focal node where topology requires it. Do not draw an enclosing card just because the object has a label.
+4. Avoid arbitrary aspect ratios. The diagram's intrinsic content dictates its height. CSS reflows at mobile widths; output remains native, text-selectable HTML.
+5. Preserve the journal's zinc/Inter theme tokens in light and dark mode, without external fonts, shadows, glow, illustrations, eyebrow labels or client-side diagram libraries.
+6. The code makes explicit the distinction between external OXP grants, native Session permissions, and target OFXP peer grants. Do not represent remote worker creation or peer messaging as dispatched capabilities.
 
 ## Files
 
-- `src/components/InterconnectionNetwork.tsx`: the five-row native topology.
-- `src/components/OXPArchitectureFigures.tsx`: five figure compositions and figure metadata.
-- `src/components/oxp-architecture-figures.css`: unified responsive journal design.
-- `scripts/oxp-architecture-audit.mjs`: Chrome audit for page errors, clipping, overflow, accessible native figures, route counts, host count and scope matrix at nine viewport widths.
-- `scripts/oxp-architecture-layout-audit.mjs`: compatibility entrypoint to the same browser checks.
+- `src/components/InterconnectionNetwork.tsx` — explicit two-principal / five-capability topology.
+- `src/components/OXPArchitectureFigures.tsx` — five diagrams with independent captions and semantic structure.
+- `src/components/oxp-architecture-figures.css` — content-sized, responsive editorial layout.
+- `scripts/oxp-architecture-audit.mjs` — browser geometry, content, 320–1440px page overflow and clipping checks.
+- `scripts/oxp-architecture-layout-audit.mjs` — compatibility entrypoint.
 
-The historical `fix/diagram-design-openfork-integration-20261026` branch was not discarded or force-merged. Its accurate independent-route premise has been incorporated without regressing the current main branch's unrelated changes.
+Visual review must inspect screenshots at representative phone and desktop widths, in both journal color schemes. A passed typecheck or bounds test alone is not evidence of design quality.
