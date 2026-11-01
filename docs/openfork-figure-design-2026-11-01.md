@@ -1,48 +1,45 @@
-# OpenFork article figure system — NCM visual parity
+# OpenFork article — illustrating implementation reuse
 
 November 1, 2026
 Article: `the-openfork-network-behind-one-oxp-connection`
 
-## Visual authority
+## The argument the diagram must communicate
 
-The authoritative visual reference is the existing journal's `JournalFigure` component, especially the two-panel neural-field/E Ink illustration and its mobile rendering. It defines the brand's scientific, modern-computational-nostalgia language: a softly rounded outer research plate; muted numbered figure header with selective dither; an editorial title; a separate vector illustration surface with rounded corners; and a contrasting inset-caption band.
+OpenCode supplies the underlying agent harness; OpenFork expands it through native tools, native Sessions and workers, connected MCP integrations, OXP's external ChatGPT ingress, and OFXP's access to other OpenFork installations.
 
-The portfolio shares restrained neutral zinc, deliberate negative space, soft geometry, subtle procedural point fields and native vector artwork. Neither the diagram-design skill's unmodified palette nor generic Mermaid cards should override these sources.
+**The achievement is interconnected reuse, not a collection of isolated pipes.** OXP is NOT a second OpenFork Session. A native OpenFork Session and an external ChatGPT/OXP caller can use the same authoritative ProjectInspection producer and other domain services under separate grants. OXP delegation creates actual native worker Sessions, which themselves reuse the native harness, tools, MCP services, and authorized peers. OFXP reaches another independently authorized OpenFork installation that reuses its own native capability implementations.
 
-The earlier OpenFork designs failed because they resembled dashboard widgets and raw unstyled topology notes. Excessive rectangular frames, fake technical eyebrows, too many tiny badges and text-only tables made the figures visually unlike the rest of the journal. Reducing padding alone did not address the underlying problem.
+The previous versions did not make this obvious. An abstract network of dots and generic curved paths obscured which node was the shared implementation, and a symbol-only Venn diagram explained neither permission boundaries nor execution reuse. The first illustration must contain ONE conspicuous shared core, visibly reached by both caller routes, with all five capability families grouped within that same core. The supporting figures should then show specific forms of reuse.
 
-## Source-backed design research
+## Why this matches the existing journal
 
-- Diagram Design: https://github.com/cathrynlavery/diagram-design (MIT) — deliberate focal points, deleting connections that do not contribute information, distinguish semantic roles, don't reproduce Mermaid's automatic graph spacing.
-- Diagram Design architecture reference: https://github.com/cathrynlavery/diagram-design/blob/main/skills/diagram-design/references/type-architecture.md — group by trust boundary, orthogonal routes when explicit routing is required.
-- SVG Diagram: https://github.com/pkt-lab/svg-diagram — prefer native SVG and visual render review to aesthetically unverified source generation.
+The source of visual truth is the `JournalFigure` component used by the neural-field/E Ink entry, not an imported graph library aesthetic:
+- Original rounded `research-figure` / `jf-figure` wrapper.
+- Muted Fig. n / Overview or Mechanism top strip with restrained first-figure dither.
+- Editorial title and one soft inset illustration panel with rounded boundaries.
+- Substantive evidence-aware bottom caption; no chart title duplicates or marketing eyebrows.
+- Inter, muted zinc, subtle hairlines, comfortable padding, accessible text.
+- Nothing rendered into a generated bitmap: editable React/CSS schematic source.
 
-These are reference techniques, not substitute branding.
+This intentionally balances the journal's nostalgic computational modernism with direct label-first information architecture. Curved connectors are only used if needed to explain a relationship; joining parallel authorized call paths is more legible with simple, unambiguous orthogonal geometry.
 
-## Architecture and editorial choices
+## Five figure-specific semantics
 
-Five separate figures answer different questions. Each is one source-owned, semantic SVG illustration with native, selectable supporting text and a substantive caption:
+1. **Overview:** Two callers — ChatGPT through OXP and a native OpenFork Session — both connect to ONE shared OpenFork implementation; the same core contains native tools, existing Sessions, delegated native workers, MCP integrations, and OFXP peers. An explicit native-worker return note emphasizes delegation reuse.
+2. **Project:** OXP `project` and native Project have different authorization gates, but ONE `ProjectInspection` producer; the external adapter does not reimplement repository inspection.
+3. **MCP:** ONE configured MCP server catalog is discoverable by both OXP and native Sessions. Connections are independently owned. Both clients may invoke the same configured external server without sharing one connection state.
+4. **OFXP:** Two separate physical installations both contain genuine OpenFork native capability services. A peer connection grants limited remote operations. Two machines do NOT share a database or silently confer permissions.
+5. **Authority:** Native, OXP and peer callers carry separate grants, while supported operations resolve to the same authoritative domain service on the target OpenFork host. Effective authority is the intersection of each request's crossed boundaries, not a union of caller grants.
 
-1. Two independent entry routes connect to five OpenFork capability families. Solid and dashed strokes differentiate external/native entry; they do not imply shared grants.
-2. An external OXP caller and native Session caller converge on one domain implementation after independent authorization.
-3. The on-demand MCP lifecycle uses a smooth, consecutive visual track and compact state descriptions, rather than four oversized boxes.
-4. Two distinct OpenFork hosts use an authenticated OFXP bridge; pairing is not blanket authority.
-5. Identity, route authorization and action scope intersect before the shared implementation executes.
+## Design references
 
-The diagrams are conceptual rather than execution traces or measurements. Don't claim OFXP remote worker creation or peer messaging are dispatched.
+- Existing journal: `src/components/JournalFigure.tsx`, `src/journal-figures.css`, `src/styles.css` and the author's reference screenshot from the neural-field/E Ink essay.
+- Portfolio: `portfolio_v3/src` design tokens and figure/brand treatments; use actual brand consistency rather than assuming the term NCM means terminal-themed decorations.
+- [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design) — deletion-first layout, semantic roles and bounded connector routing.
+- [pkt-lab/svg-diagram](https://github.com/pkt-lab/svg-diagram) — systematic labeling and visual inspection.
 
-### Presentation contract
+## Verification
 
-- Reuse `research-figure jf-figure`, `figure-top jf-top`, `jf-body`, `jf-title`, and `jf-caption` rather than authoring an incompatible diagram frame.
-- Match existing 8px rounded outer surfaces and 6–7px rounded inset illustrations. Use tapered curved paths, circular terminals, explicit dashed routes and soft line weights.
-- Use Inter for text, numeric tabular precision where relevant, and journal foreground/muted/card/inset tokens for responsive light/dark rendering.
-- Treat illustrations like technical plates, not control panels. No eyebrow labels, decorative icons, fabricated performance data, 3D effects, glowing palettes, rendered assets or external image requests.
-- Never rasterize diagrams or generate static images. SVG source is in the React figure component.
-- Do not force 9:16 or 16:9 on textual figures. Content determines intrinsic height; layout responds at 320px and desktop.
-- The user's supplied journal screenshot is the design oracle, not a mere screenshot to imitate verbatim.
+`scripts/oxp-architecture-audit.mjs` verifies all five figures, one shared implementation in the overview, one ProjectInspection producer, one MCP catalog, two independent clients, both OFXP hosts and the authorization lanes. Browser checks cover 320, 375, 390, 430, 600, 700, 768, 1024 and 1440 CSS-pixel widths, plus dark scheme at 375/430/768. No page overflow or visibly clipped labels. Screenshots are inspected after each significant layout change. TypeScript and the full production build are additional independent gates.
 
-### Validation
-
-`bun run typecheck`, `bun scripts/oxp-architecture-audit.mjs` (twelve browser combinations with light/dark and 320–1440px widths), `bun run build`, followed by actual browser screenshot inspection. Validate source/caption completeness, no visible clipping or horizontal overflow, rendered SVG presence and the canonical outer figure shell.
-
-Changes are isolated in the dedicated `lab-journal-diagrams-20261101` worktree so the older dirty main checkout remains untouched.
+Earlier diagrams' isolated meaningless circles and decorative flourishes must not be reintroduced to represent a capability that has a human-readable name. The visual objective is immediate recognition of the common implementation, distinct entry points and cross-system reachability.
