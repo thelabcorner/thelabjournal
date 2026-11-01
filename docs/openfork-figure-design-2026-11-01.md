@@ -1,33 +1,48 @@
-# OpenFork article diagrams — editorial reconstruction
+# OpenFork article figure system — NCM visual parity
 
-Revised: November 1, 2026
+November 1, 2026
 Article: `the-openfork-network-behind-one-oxp-connection`
 
-## References and why the previous implementation failed
+## Visual authority
 
-- [Diagram Design](https://github.com/cathrynlavery/diagram-design), MIT, skill: semantic choice before type, deletion first, one or two focal points, 4px geometry, connective paths with meaning. Its own guidance warns specifically against identical boxes for every node, generic three-card layouts, and reproducing automatic Mermaid spacing.
-- [SVG Diagram](https://github.com/pkt-lab/svg-diagram), MIT: measure-to-text, plan connectivity before drawing, check collisions, render and visually inspect the result.
-- The journal's own foreground, muted and rule tokens provide the actual identity. Do not paste an imported skill's default palette, headings, typefaces, or ornaments over the journal.
+The authoritative visual reference is the existing journal's `JournalFigure` component, especially the two-panel neural-field/E Ink illustration and its mobile rendering. It defines the brand's scientific, modern-computational-nostalgia language: a softly rounded outer research plate; muted numbered figure header with selective dither; an editorial title; a separate vector illustration surface with rounded corners; and a contrasting inset-caption band.
 
-The earlier on-site diagrams were overly tall UI cards. The double frame around each figure, repeated card borders, generous internal padding, tiny technical labels, and mechanically forced aspect ratios obscured their purpose. Browser overflow checks passed because boxes fit, not because the diagrams looked or communicated well. The mobile screenshot of Figure 02 showed this failure clearly.
+The portfolio shares restrained neutral zinc, deliberate negative space, soft geometry, subtle procedural point fields and native vector artwork. Neither the diagram-design skill's unmodified palette nor generic Mermaid cards should override these sources.
 
-The unmerged `fix/diagram-design-openfork-integration-20261026` branch previously introduced a useful conceptual correction: different caller principals should be visibly separate, and capability routes should be directly traceable. That reasoning is retained, not a wholesale merge of its iframe-based HTML assets.
+The earlier OpenFork designs failed because they resembled dashboard widgets and raw unstyled topology notes. Excessive rectangular frames, fake technical eyebrows, too many tiny badges and text-only tables made the figures visually unlike the rest of the journal. Reducing padding alone did not address the underlying problem.
 
-## Design decisions
+## Source-backed design research
 
-1. Each schematic uses one layout type matched to its argument: a two-principal capability topology, a two-caller convergence, an MCP lifecycle timeline, a federated-host boundary, and a real authorization matrix.
-2. Remove the inherited `research-figure` card wrapper and the redundant inset panel. A title, single pair of hairline rules, content and a caption suffice.
-3. Replace stacked padded cards with minimal typographic structure, precise straight connectors, and one focal node where topology requires it. Do not draw an enclosing card just because the object has a label.
-4. Avoid arbitrary aspect ratios. The diagram's intrinsic content dictates its height. CSS reflows at mobile widths; output remains native, text-selectable HTML.
-5. Preserve the journal's zinc/Inter theme tokens in light and dark mode, without external fonts, shadows, glow, illustrations, eyebrow labels or client-side diagram libraries.
-6. The code makes explicit the distinction between external OXP grants, native Session permissions, and target OFXP peer grants. Do not represent remote worker creation or peer messaging as dispatched capabilities.
+- Diagram Design: https://github.com/cathrynlavery/diagram-design (MIT) — deliberate focal points, deleting connections that do not contribute information, distinguish semantic roles, don't reproduce Mermaid's automatic graph spacing.
+- Diagram Design architecture reference: https://github.com/cathrynlavery/diagram-design/blob/main/skills/diagram-design/references/type-architecture.md — group by trust boundary, orthogonal routes when explicit routing is required.
+- SVG Diagram: https://github.com/pkt-lab/svg-diagram — prefer native SVG and visual render review to aesthetically unverified source generation.
 
-## Files
+These are reference techniques, not substitute branding.
 
-- `src/components/InterconnectionNetwork.tsx` — explicit two-principal / five-capability topology.
-- `src/components/OXPArchitectureFigures.tsx` — five diagrams with independent captions and semantic structure.
-- `src/components/oxp-architecture-figures.css` — content-sized, responsive editorial layout.
-- `scripts/oxp-architecture-audit.mjs` — browser geometry, content, 320–1440px page overflow and clipping checks.
-- `scripts/oxp-architecture-layout-audit.mjs` — compatibility entrypoint.
+## Architecture and editorial choices
 
-Visual review must inspect screenshots at representative phone and desktop widths, in both journal color schemes. A passed typecheck or bounds test alone is not evidence of design quality.
+Five separate figures answer different questions. Each is one source-owned, semantic SVG illustration with native, selectable supporting text and a substantive caption:
+
+1. Two independent entry routes connect to five OpenFork capability families. Solid and dashed strokes differentiate external/native entry; they do not imply shared grants.
+2. An external OXP caller and native Session caller converge on one domain implementation after independent authorization.
+3. The on-demand MCP lifecycle uses a smooth, consecutive visual track and compact state descriptions, rather than four oversized boxes.
+4. Two distinct OpenFork hosts use an authenticated OFXP bridge; pairing is not blanket authority.
+5. Identity, route authorization and action scope intersect before the shared implementation executes.
+
+The diagrams are conceptual rather than execution traces or measurements. Don't claim OFXP remote worker creation or peer messaging are dispatched.
+
+### Presentation contract
+
+- Reuse `research-figure jf-figure`, `figure-top jf-top`, `jf-body`, `jf-title`, and `jf-caption` rather than authoring an incompatible diagram frame.
+- Match existing 8px rounded outer surfaces and 6–7px rounded inset illustrations. Use tapered curved paths, circular terminals, explicit dashed routes and soft line weights.
+- Use Inter for text, numeric tabular precision where relevant, and journal foreground/muted/card/inset tokens for responsive light/dark rendering.
+- Treat illustrations like technical plates, not control panels. No eyebrow labels, decorative icons, fabricated performance data, 3D effects, glowing palettes, rendered assets or external image requests.
+- Never rasterize diagrams or generate static images. SVG source is in the React figure component.
+- Do not force 9:16 or 16:9 on textual figures. Content determines intrinsic height; layout responds at 320px and desktop.
+- The user's supplied journal screenshot is the design oracle, not a mere screenshot to imitate verbatim.
+
+### Validation
+
+`bun run typecheck`, `bun scripts/oxp-architecture-audit.mjs` (twelve browser combinations with light/dark and 320–1440px widths), `bun run build`, followed by actual browser screenshot inspection. Validate source/caption completeness, no visible clipping or horizontal overflow, rendered SVG presence and the canonical outer figure shell.
+
+Changes are isolated in the dedicated `lab-journal-diagrams-20261101` worktree so the older dirty main checkout remains untouched.
