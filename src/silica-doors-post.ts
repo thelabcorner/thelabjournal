@@ -13,7 +13,7 @@ export const silicaDoorsPost: Entry = {
   "minutes": 10,
   "issue": "J–004",
   "figure": "pdf",
-  "summary": "Silica started as an HTML-to-PDF experiment. Now I think it could become an entire HTML rendering engine, and maybe replace tools I never intended to compete with.",
+  "summary": "Silica began as an HTML-to-PDF engine. Its native layout and vector output suggest a shared rendering pipeline for PDF, SVG, and images.",
   "keywords": [
     "Silica",
     "HTML to PDF",
@@ -38,7 +38,7 @@ export const silicaDoorsPost: Entry = {
         "That sounds almost contradictory when the input is HTML. My first instinct was to lean on Chromium, because it's the obvious reference for what a page is supposed to look like. But carrying a browser around just to generate a PDF is a lot of machinery. I kept thinking there had to be a better way.",
         "We ended up experimenting with Rust and Blitz. Blitz brings together existing work on parsing, CSS, layout, and text, including Stylo, Taffy, and Parley. Instead of rebuilding an entire browser engine from nothing, we could use those components to interpret the document and feed its drawing information into Silica's PDF machinery.",
         "And it fucking works.",
-        "One of our restricted clipping test sets reproduced the reference pixels exactly. In a warm benchmark on that path, we measured roughly 4.2 times the speed of a reused Chromium baseline. I know that doesn't mean every HTML page in existence works perfectly. What excites me is that there's a functioning browserless path at all, with native geometry coming out the other end. We also have a route into WebAssembly, which makes the whole idea even more interesting.",
+        "One of our restricted clipping test sets reproduced the reference pixels exactly. In a warm benchmark on that path, we measured roughly 4.2 times the speed of a reused Chromium baseline. That result belongs to a restricted test path, not arbitrary HTML. What excites me is that there's a functioning browserless path at all, with native geometry coming out the other end. We also have a route into WebAssembly, which makes the whole idea even more interesting.",
         "It's still a prototype. A really successful prototype, in my opinion. I can see the thing working, inspect what it produces, and start imagining where else the same work could take us."
       ]
     },

@@ -17,7 +17,7 @@ export const firstPost: Entry = {
   minutes: 6,
   issue: 'J–001',
   figure: 'learning',
-  summary: 'I still learn by building things. AI changed which comes first: understanding the system, or having something imperfect to pull apart.',
+  summary: 'I learn by building. AI now lets me inspect a rough result before I fully understand the system, then work backward through what fails.',
   keywords: ['Learning', 'AI', 'Prototyping', 'Engineering', 'Research'],
   sections: [
     {
@@ -49,7 +49,7 @@ export const firstPost: Entry = {
       heading: 'The hard work moved',
       paragraphs: [
         'AI reduces the cost of producing an initial approach. That means I can investigate more approaches than I used to. It also increases the number of plausible mistakes available to me.',
-        'I spend more time checking whether something is correct, which assumptions were hidden in the implementation, and whether it still works outside the example that produced it. I look for boundary cases, compare alternatives, inspect intermediate states, and ask for measurements. When a claim sounds too clean, I want the test that could prove it wrong.',
+        'I spend more time checking correctness, tracing assumptions hidden in the implementation, and testing whether it survives cases beyond the example that produced it. I look for boundary cases, compare alternatives, inspect intermediate states, and ask for measurements. When a claim sounds too clean, I want the test that could prove it wrong.',
         'The useful part of this workflow is the feedback loop between a thing I can run and the explanation I am building for it. The output gives me specific questions. Research changes the model. The revised model changes the implementation. I repeat that cycle until I can explain the behavior instead of merely recognizing it.'
       ]
     },

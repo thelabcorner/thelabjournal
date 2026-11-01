@@ -12,7 +12,7 @@ export const processWorkPost: Entry = {
   "minutes": 7,
   "issue": "E–010",
   "figure": "agent",
-  "summary": "Why I resist elaborate Git workflows and procedural gates when they delay the experiments that could actually resolve the engineering problem.",
+  "summary": "I want Git history, ownership, and verification to protect real experiments, not turn each experiment into a procedural gate.",
   "keywords": [
     "Engineering process",
     "Git",
@@ -27,7 +27,7 @@ export const processWorkPost: Entry = {
       "heading": "The work I actually want to do",
       "paragraphs": [
         "I know why people use formal Git workflows, and I see the benefits of well-designed systems every day. I use them myself. I have never been particularly interested in doing Git the “right way” for its own sake. I use Git because I need to know what changed, recover when an experiment goes wrong, and keep work from colliding. I do not get much satisfaction out of turning every idea into a branch, every branch into a ceremony, and every small decision into a review process.",
-        "This is an observation about how I work, not an indictment of people who prefer more structure. Those processes solve real problems, especially when coordination and production risk demand them. I would rather spend that time finding out whether the idea works. That preference can look undisciplined from the outside. To me, the discipline is in the evidence: can I reproduce the result, identify the change that caused it, and safely undo it? A tidy commit history is useful, but it does not answer those questions by itself."
+        "Formal processes help when coordination and production risk demand them. I would rather spend that time finding out whether the idea works. That preference can look undisciplined from the outside. To me, the discipline is in the evidence: can I reproduce the result, identify the change that caused it, and safely undo it? A tidy commit history is useful, but it does not answer those questions by itself."
       ]
     },
     {

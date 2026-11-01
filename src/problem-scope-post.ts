@@ -16,7 +16,7 @@ export const problemScopePost: Entry = {
   "minutes": 8,
   "issue": "J–003",
   "figure": "frontier",
-  "summary": "Tedious work used to decide which ideas I could pursue. As models get smarter, the range of problems I can seriously attempt keeps expanding.",
+  "summary": "As coding agents shorten the path from idea to experiment, model reasoning increasingly determines which problems I can seriously investigate.",
   "keywords": [
     "Artificial intelligence",
     "Problem solving",
@@ -72,7 +72,7 @@ export const problemScopePost: Entry = {
       "paragraphs": [
         "The ease of generating another candidate creates its own problem. I can explore more hypotheses than before, including quite bad ones. An agent can confidently optimize the wrong thing, fit an example too closely, or make a benchmark appear impressive by changing what it measures.",
         "In one lossless-compression investigation, the experimental ideas survived correctness testing and still failed to beat established baselines on both speed and size. More experiments did not produce a hidden win. I came away with a clearer understanding of why the approaches were losing, which is a better result than carrying an untested idea around for years.",
-        "I still have to decide what counts as success, build tests that could falsify it, and recognize when the evidence says to stop. The ability to attempt a harder problem is valuable only if I remain capable of admitting that I have not solved it."
+        "I still have to decide what counts as success, build tests that could falsify it, and recognize when the evidence says to stop. Attempting harder problems is useful only when I can distinguish a tested result from an unfinished idea."
       ]
     },
     {

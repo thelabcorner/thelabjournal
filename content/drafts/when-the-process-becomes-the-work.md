@@ -5,7 +5,7 @@ author: "Jackson Cummings"
 status: working-notes
 slug: when-the-process-becomes-the-work
 category: "Engineering"
-summary: "Why I resist elaborate Git workflows and procedural gates when they delay the experiments that could actually resolve the engineering problem."
+summary: "I want Git history, ownership, and verification to protect real experiments, not turn each experiment into a procedural gate."
 tags: ["Git", "Engineering process", "Agent swarms", "ProofGate", "Workmark", "OpenFork"]
 ---
 

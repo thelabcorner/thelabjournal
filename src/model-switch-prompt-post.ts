@@ -13,7 +13,7 @@ export const modelSwitchPromptPost: Entry = {
   "minutes": 6,
   "issue": "E–011",
   "figure": "agent",
-  "summary": "A model-switch continuation prompt looks harmless until one preposition makes the new model sound like a tool the agent should use.",
+  "summary": "In a model-switch prompt, “with” can suggest delegation while “as” identifies the acting model; the safest continuation instruction may mention neither.",
   "keywords": [
     "Prompt engineering",
     "OpenFork",
@@ -37,7 +37,7 @@ export const modelSwitchPromptPost: Entry = {
       "paragraphs": [
         "The harness wants the newly selected model to be the agent doing the work. But “continue the task with the newly selected model” also admits another reading: the agent should continue the task by using the newly selected model. The model becomes something available to the agent, rather than the agent's current execution identity.",
         "Those are different instructions. If the agent can delegate to subagents, the second reading suddenly has an action attached to it. It may decide that it has been asked to invoke another model, even though the host has already performed the switch. The user wanted continuity. The prompt has introduced a new question about who should do the work.",
-        "Changing “with” to “as” moves the sentence closer to the intended meaning: “Continue the same task as the newly selected model.” One word changes the grammatical relationship between the agent and the model. That does not guarantee an entirely different response on every run, but it can change which actions seem relevant to the model. I think that is worth taking seriously."
+        "Changing “with” to “as” moves the sentence closer to the intended meaning: “Continue the same task as the newly selected model.” One word changes the grammatical relationship between the agent and the model. That does not guarantee an entirely different response on every run, but it can change which actions seem relevant to the model."
       ]
     },
     {

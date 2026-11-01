@@ -18,7 +18,7 @@ export const agentToolsPost: Entry = {
   "minutes": 10,
   "issue": "J–002",
   "figure": "agent",
-  "summary": "When I ask a coding agent to build something, it does the reading, editing, and testing. I've been rebuilding OpenFork's tools around what actually happens in that loop.",
+  "summary": "I direct the engineering problem; OpenFork's tools help agents inspect, edit, test, and recover without repeatedly guessing at repository state.",
   "keywords": [
     "Agentic engineering",
     "OpenFork",
@@ -49,7 +49,7 @@ export const agentToolsPost: Entry = {
     {
       "heading": "A tool error changes what the agent thinks it knows",
       "paragraphs": [
-        "The edit tool is probably the clearest example of why I've become so interested in this.",
+        "The edit tool makes this especially clear.",
         "During work on a PDF engine, an agent tried to change a coordinate conversion expression. The exact line existed in two places. The proposed edit didn't contain enough context to identify the intended occurrence. Guessing would have been dangerous. An opaque refusal would have been safe, but it would also have sent the agent back to reconstruct the situation from another read.",
         "I want a third outcome. The tool can refuse the ambiguous mutation while returning the candidate line numbers and the surrounding context that distinguishes them. The agent can then select the intended occurrence explicitly, or revise its plan if the repeated code means its original assumption was wrong. The failed call becomes useful new information.",
         "This distinction is easy to overlook when talking about coding agents. I'm not sitting there invoking edit operations by hand. The model is constructing the arguments, interpreting the return value, and choosing the next action. An error message is part of its working environment. A vague error invites another guess; a precise one lets it update its understanding of the file."

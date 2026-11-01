@@ -5,13 +5,13 @@ author: "Jackson Cummings"
 status: draft
 slug: agents-shouldnt-have-to-guess-twice
 category: "Essays"
-summary: "When I ask a coding agent to build something, it does the reading, editing, and testing. I've been rebuilding OpenFork's tools around what actually happens in that loop."
+summary: "I direct the engineering problem; OpenFork's tools help agents inspect, edit, test, and recover without repeatedly guessing at repository state."
 tags: ["Agentic engineering", "OpenFork", "OpenCode", "Coding agents", "Developer tools", "Tool recovery", "Software engineering"]
 ---
 
 # The tools around the model
 
-When I ask a coding agent to build something, it does the reading, editing, and testing. I've been rebuilding OpenFork's tools around what actually happens in that loop.
+I direct the engineering problem; OpenFork's tools help agents inspect, edit, test, and recover without repeatedly guessing at repository state.
 
 ## I give the agent a problem, not a diff
 
@@ -33,7 +33,7 @@ Then there's reading. When the agent already knows the five relevant files, maki
 
 ## A tool error changes what the agent thinks it knows
 
-The edit tool is probably the clearest example of why I've become so interested in this.
+The edit tool makes this especially clear.
 
 During work on a PDF engine, an agent tried to change a coordinate conversion expression. The exact line existed in two places. The proposed edit didn't contain enough context to identify the intended occurrence. Guessing would have been dangerous. An opaque refusal would have been safe, but it would also have sent the agent back to reconstruct the situation from another read.
 

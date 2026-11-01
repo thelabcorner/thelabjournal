@@ -23,7 +23,7 @@ The harness wants the newly selected model to be the agent doing the work. But �
 
 Those are different instructions. If the agent can delegate to subagents, the second reading suddenly has an action attached to it. It may decide that it has been asked to invoke another model, even though the host has already performed the switch. The user wanted continuity. The prompt has introduced a new question about who should do the work.
 
-Changing “with” to “as” moves the sentence closer to the intended meaning: “Continue the same task as the newly selected model.” One word changes the grammatical relationship between the agent and the model. That does not guarantee an entirely different response on every run, but it can change which actions seem relevant to the model. I think that is worth taking seriously.
+Changing “with” to “as” moves the sentence closer to the intended meaning: “Continue the same task as the newly selected model.” One word changes the grammatical relationship between the agent and the model. That does not guarantee an entirely different response on every run, but it can change which actions seem relevant to the model.
 
 ## Why delegation makes it interesting
 

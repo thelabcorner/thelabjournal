@@ -5,7 +5,7 @@ author: "Jackson Cummings"
 status: draft
 slug: i-started-with-html-to-pdf
 category: "Essays"
-summary: "Silica started as an HTML-to-PDF experiment. Now I think it could become an entire HTML rendering engine, and maybe replace tools I never intended to compete with."
+summary: "Silica began as an HTML-to-PDF engine. Its native layout and vector output suggest a shared rendering pipeline for PDF, SVG, and images."
 tags: ["Silica", "HTML to PDF", "Rust", "Blitz", "SVG", "Satori", "SnapDOM", "Rendering engines"]
 ---
 
@@ -29,7 +29,7 @@ We ended up experimenting with Rust and Blitz. Blitz brings together existing wo
 
 And it fucking works.
 
-One of our restricted clipping test sets reproduced the reference pixels exactly. In a warm benchmark on that path, we measured roughly 4.2 times the speed of a reused Chromium baseline. I know that doesn't mean every HTML page in existence works perfectly. What excites me is that there's a functioning browserless path at all, with native geometry coming out the other end. We also have a route into WebAssembly, which makes the whole idea even more interesting.
+One of our restricted clipping test sets reproduced the reference pixels exactly. In a warm benchmark on that path, we measured roughly 4.2 times the speed of a reused Chromium baseline. That result belongs to a restricted test path, not arbitrary HTML. What excites me is that there's a functioning browserless path at all, with native geometry coming out the other end. We also have a route into WebAssembly, which makes the whole idea even more interesting.
 
 It's still a prototype. A really successful prototype, in my opinion. I can see the thing working, inspect what it produces, and start imagining where else the same work could take us.
 

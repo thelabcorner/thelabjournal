@@ -13,7 +13,7 @@ export const beignetEinkPost: Entry = {
   minutes: 4,
   issue: 'R–002',
   figure: 'signals',
-  summary: 'An image-fitting demo reminded me of an E Ink refresh, and now I want to know whether multiresolution, physics-aware optimization could help design electrophoretic display waveforms.',
+  summary: 'A neural image-fitting demo reminded me of E Ink refreshes and raised a testable question about physics-aware waveform optimization.',
   keywords: ['E Ink', 'Neural fields', 'Fourier features', 'Electrophoretic displays', 'Optimization', 'Research candidates'],
   sections: [
     {
@@ -34,7 +34,7 @@ export const beignetEinkPost: Entry = {
       heading: 'The research candidate',
       paragraphs: [
         'I would like to investigate a physics-aware model that predicts an E Ink panel’s optical response to candidate drive waveforms. A multiresolution representation could then separate large-scale image error from edge and fine-detail error while a controller searches for an update sequence. The idea is to borrow the representation and optimization principles from beignet, with electrophoretic transport and measurable display behavior providing the actual physical model.',
-        'There is an important implementation question here: the optimized solution has to translate into voltage waveforms that real display hardware can produce. Spatially coarse and fine error terms do not automatically imply a coarse-to-fine sequence of physical refreshes. I would want the model to account for state history, residual ghosting, nearby-pixel interactions where relevant, and the cost of extra driving pulses.'
+        'Any optimized solution must become voltage waveforms that the display hardware can actually produce. Spatially coarse and fine error terms do not automatically imply a coarse-to-fine sequence of physical refreshes. I would want the model to account for state history, residual ghosting, nearby-pixel interactions where relevant, and the cost of extra driving pulses.'
       ]
     },
     {

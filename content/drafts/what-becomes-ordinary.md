@@ -5,13 +5,13 @@ author: "Jackson Cummings"
 status: draft
 slug: what-becomes-ordinary
 category: "Essays"
-summary: "Working on Nacre has me thinking about how much of what counts as difficult depends on when you happen to be alive."
+summary: "Working on Nacre has me thinking about how difficult research can become a starting point for later generations."
 tags: ["Nacre", "Learning", "Machine learning", "Research", "Scientific progress"]
 ---
 
 # What becomes ordinary
 
-Working on Nacre has me thinking about how much of what counts as difficult depends on when you happen to be alive.
+Working on Nacre has me thinking about how difficult research can become a starting point for later generations.
 
 ## A thought while working on Nacre
 
@@ -19,7 +19,7 @@ As I sit here working on Nacre, trying to reconstruct editable vector geometry f
 
 Somebody had to discover and formalize the mathematics we now teach in school. Once that knowledge was written down, the next generation could start further ahead. Over time, ideas that once required serious original work become things we assume an educated person knows.
 
-Machine learning feels like a current example. I was reading comments from the developers behind PerfectVector, who work on similar vectorization problems and have PhDs. I obviously cannot judge anyone’s intelligence from how they type on Reddit. What struck me was how ordinary the exchange felt. Highly technical work is becoming a more normal thing for people to learn, discuss, and participate in. I wonder how many more people can approach problems like these now than could fifteen years ago.
+Machine learning feels like a current example. I was reading comments from the developers behind PerfectVector, who work on similar vectorization problems and have PhDs. Their conversation felt ordinary despite the technical subject. Highly technical work is becoming a more normal thing for people to learn, discuss, and participate in. I wonder how many more people can approach problems like these now than could fifteen years ago.
 
 Newton comes to mind. We associate him with gravity because he helped establish a mathematical explanation for something everyone could observe. The work was extraordinary, but so much of the foundation of mathematical physics had yet to be established. Today’s researchers work on problems that would have been difficult even to describe without centuries of accumulated discoveries.
 

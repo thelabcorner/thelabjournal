@@ -5,13 +5,13 @@ author: "Jackson Cummings"
 status: working-notes
 slug: on-acyclicity-in-agentic-engineering
 category: "Engineering"
-summary: "A Workmark deadlock made me examine how verification gates can block the very work needed to satisfy them, particularly when several agents share the plan."
+summary: "Workmark's verification gates formed an unsatisfied dependency cycle: implementation was forbidden until evidence from that same implementation existed."
 tags: ["Agentic engineering", "Dependency graphs", "ProofGate", "OpenFork", "Agent swarms", "Verification", "Workmark"]
 ---
 
 # On acyclicity in agentic engineering
 
-A Workmark deadlock made me examine how verification gates can block the very work needed to satisfy them, particularly when several agents share the plan.
+Workmark's verification gates formed an unsatisfied dependency cycle: implementation was forbidden until evidence from that same implementation existed.
 
 ## A deadlock written into the plan
 
@@ -19,7 +19,7 @@ I ran into a peculiar problem while working on Workmark. The agents had tasks, o
 
 Gate 0 required the protocol and platform contracts to be frozen before Workmark-owned boundaries could be implemented. CCR-8, one of the gates we needed to close, required production-path evidence for authoritative Illustrator document identity, durable operation receipts, authenticated dispatch, and replay correctness. Some of that evidence could only be produced by the integration the earlier rule prohibited. Each requirement made sense when read alone. Together they formed a closed prerequisite chain.
 
-That matters because the blockage did not appear as a compiler error or a failed test. It looked like responsible engineering: another contract to finalize, another review to request, another report explaining why implementation could not begin. A swarm can keep generating those reports indefinitely.
+That matters because the blockage did not appear as a compiler error or a failed test. It looked like responsible engineering: another contract to finalize, another review to request, another report explaining why implementation could not begin. A swarm can keep producing status reports without closing the dependency cycle.
 
 ## Acyclicity is a property of the prerequisites
 
