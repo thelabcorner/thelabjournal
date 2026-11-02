@@ -19,6 +19,8 @@ Think about the work involved in building a house. People have built shelter fro
 
 Someone can live in a complicated building without knowing how to make a brick, calculate a load-bearing wall, or operate the machinery that made it possible. The building doesn't become less real because its occupant couldn't have built it. The necessary work has been distributed across other people and systems.
 
+And consider how proud people can be of the houses they commission. Someone can show friends an enormous, beautiful home and receive admiration for it, despite never having designed a structural connection or decided where a screw should go. They might have chosen the direction, paid for the work, and brought together people who knew how to realize it. Architects, engineers, and builders contributed expertise the owner didn't possess. We recognize the difference between commissioning a house and personally building it, yet we still understand why the person who made it possible can feel a sense of accomplishment.
+
 I think a lot of human progress can be understood through that change in what any one person must personally do. Tools reduce effort, specialization divides it, and each generation inherits methods the previous one had to develop. The range of things people can bring into existence grows without requiring everyone to master the entire process behind them. Each generation gets to begin with capabilities that earlier generations had to work to establish.
 
 ## We have been moving thought outside our heads for a long time
@@ -53,7 +55,7 @@ I suspect we'll gradually place less practical importance on personally owning e
 
 ## Why effort still shapes credibility
 
-Yet our judgments of competence can be slower to change than our tools. Show someone an AI-assisted result and they may instinctively compare it with the months or years it would have taken them to produce the same thing. That can make the shorter path feel less legitimate, even when the result is useful. We often judge the person through the difficulty we associate with the task, rather than examining what they contributed and whether the work holds up.
+Yet our judgments of competence can be slower to change than our tools. Show someone an AI-assisted result and they may instinctively compare it with the months or years it would have taken them to produce the same thing. That can make the shorter path feel less legitimate, even when the result is useful. We rarely ask someone to understand structural engineering before acknowledging their role in commissioning a house, yet we can be quick to apply that expectation to a person directing AI-assisted intellectual work. We often judge the person through the difficulty we associate with the task, rather than examining what they contributed and whether the work holds up.
 
 I wonder how much of that reaction comes from the place effort occupies in our sense of worth. A skill learned through years of difficult work can become part of someone's identity. When another person inherits a tool that removes much of that difficulty, it's tempting to think, "I had to do it, so you should have to do it too." But that would make each generation repeat the obstacles the previous one worked to overcome. Delegation doesn't excuse false claims of expertise or unreliable results. It challenges the idea that an accomplishment must require the old amount of labor to deserve recognition.
 
