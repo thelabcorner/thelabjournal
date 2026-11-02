@@ -24,11 +24,11 @@ export const journalFigureSpecs: Record<string, FigurePair> = {
       note: 'The work required by an objective can change without a matching change in human cognitive capacity.',
     },
     detail: {
-      title: 'Individual effort and collective output',
-      caption: 'A qualitative comparison, not a measured productivity effect or a claim about intelligence.',
+      title: 'How intellectual labor gets coordinated',
+      caption: 'A qualitative comparison of access and roles, not a ranking of contributors or a measured productivity effect.',
       kind: 'compare',
-      left: [['Individually performed', 'Learn and execute much of the intermediate work'], ['Contribution', 'Output depends more directly on personal expertise'], ['Available attention', 'Occupied by execution and prerequisites']],
-      right: [['Increasingly delegated', 'Initiate work and use external cognitive systems'], ['Contribution', 'Participate without executing every step'], ['Available attention', 'Can be redirected to learning, other work, or leisure']],
+      left: [['Earlier route', 'Learn the prerequisites or organize paid specialists'], ['Contribution', 'Personal expertise and funded cooperation'], ['Available attention', 'Often absorbed by execution and prerequisites']],
+      right: [['AI-assisted route', 'Direct increasingly accessible cognitive systems'], ['Contribution', 'Intellectual vision organizes delegated work'], ['Available attention', 'Can be redirected to learning, other work, or leisure']],
     },
   },
   'learning-in-reverse': {
