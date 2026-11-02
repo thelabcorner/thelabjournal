@@ -9,6 +9,7 @@ import { modelSwitchPromptPost } from './model-switch-prompt-post'
 import { whatBecomesOrdinaryPost } from './what-becomes-ordinary-post'
 import { beignetEinkPost } from './beignet-eink-post'
 import { wordsCarryPost } from './words-carry-post'
+import { cognitiveDelegationPost } from './cognitive-delegation-post'
 
 export type Topic = 'Essays' | 'Research' | 'Engineering' | 'Experiments' | 'Process'
 export type Stage = 'Editorial draft' | 'Under review' | 'Working notes' | 'Concept'
@@ -48,6 +49,7 @@ export const entries: Entry[] = [
   whatBecomesOrdinaryPost,
   beignetEinkPost,
   wordsCarryPost,
+  cognitiveDelegationPost,
   {
     slug: 'four-axis-lyophilization',
     title: 'Low-temperature lyophilization: three theses in a four-axis optimization framework',

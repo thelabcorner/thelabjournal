@@ -15,6 +15,21 @@ export interface JournalFigureSpec {
 }
 interface FigurePair { overview: JournalFigureSpec; detail?: JournalFigureSpec }
 export const journalFigureSpecs: Record<string, FigurePair> = {
+  'the-work-i-no-longer-have-to-do': {
+    overview: {
+      title: 'A question can outlive the work I personally do',
+      caption: 'Conceptual research pathway. Each stage may involve a different amount of human understanding; proposed models remain open to verification.',
+      kind: 'flow',
+      nodes: [['Human question', 'Recognize a problem worth investigating'], ['AI-assisted work', 'Develop candidate models and explanations'], ['Research artifact', 'Preserve assumptions and uncertainty'], ['Further inquiry', 'Human or AI interpretation and testing']],
+    },
+    detail: {
+      title: 'What cognitive delegation changes',
+      caption: 'The comparison concerns where effort is spent, not a change in innate cognitive capacity or a measured productivity gain.',
+      kind: 'compare',
+      left: [['Independent path', 'Learn the prerequisite methods'], ['Personal effort', 'Perform each intermediate step'], ['Next', 'Reach the question later']],
+      right: [['Delegated path', 'Start with a question and an agent'], ['Personal effort', 'Direct attention where it is most useful'], ['Next', 'Explore or learn selectively']],
+    },
+  },
   'learning-in-reverse': {
     overview: {
       title: 'Where learning begins',

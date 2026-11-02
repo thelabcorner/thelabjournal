@@ -4,9 +4,10 @@ import { agentToolsPost } from '../src/agent-tools-post'
 import { problemScopePost } from '../src/problem-scope-post'
 import { whatBecomesOrdinaryPost } from '../src/what-becomes-ordinary-post'
 import { wordsCarryPost } from '../src/words-carry-post'
+import { cognitiveDelegationPost } from '../src/cognitive-delegation-post'
 
 const quote = (s: string) => JSON.stringify(s)
-for (const post of [firstPost, agentToolsPost, problemScopePost, whatBecomesOrdinaryPost, wordsCarryPost]) {
+for (const post of [firstPost, agentToolsPost, problemScopePost, whatBecomesOrdinaryPost, wordsCarryPost, cognitiveDelegationPost]) {
   const lines = [
     '---',
     'title: ' + quote(post.title),
