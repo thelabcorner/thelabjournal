@@ -17,17 +17,18 @@ interface FigurePair { overview: JournalFigureSpec; detail?: JournalFigureSpec }
 export const journalFigureSpecs: Record<string, FigurePair> = {
   'the-work-i-no-longer-have-to-do': {
     overview: {
-      title: 'A question can outlive the work I personally do',
-      caption: 'Conceptual research pathway. Each stage may involve a different amount of human understanding; proposed models remain open to verification.',
-      kind: 'flow',
-      nodes: [['Human question', 'Recognize a problem worth investigating'], ['AI-assisted work', 'Develop candidate models and explanations'], ['Research artifact', 'Preserve assumptions and uncertainty'], ['Further inquiry', 'Human or AI interpretation and testing']],
+      title: 'What a person must do to accomplish a goal',
+      caption: 'Schematic progression of delegable work. These developments overlap rather than describe universal historical stages.',
+      kind: 'layers',
+      nodes: [['Tools and materials', 'Reduce physical effort and change what can be built'], ['Specialization and machinery', 'Distribute production across people and systems'], ['Records and computation', 'Externalize memory and numerical operations'], ['AI-assisted reasoning', 'Delegate parts of planning, synthesis, and verification']],
+      note: 'The work required by an objective can change without a matching change in human cognitive capacity.',
     },
     detail: {
-      title: 'What cognitive delegation changes',
-      caption: 'The comparison concerns where effort is spent, not a change in innate cognitive capacity or a measured productivity gain.',
+      title: 'Individual effort and collective output',
+      caption: 'A qualitative comparison, not a measured productivity effect or a claim about intelligence.',
       kind: 'compare',
-      left: [['Independent path', 'Learn the prerequisite methods'], ['Personal effort', 'Perform each intermediate step'], ['Next', 'Reach the question later']],
-      right: [['Delegated path', 'Start with a question and an agent'], ['Personal effort', 'Direct attention where it is most useful'], ['Next', 'Explore or learn selectively']],
+      left: [['Individually performed', 'Learn and execute much of the intermediate work'], ['Contribution', 'Output depends more directly on personal expertise'], ['Available attention', 'Occupied by execution and prerequisites']],
+      right: [['Increasingly delegated', 'Initiate work and use external cognitive systems'], ['Contribution', 'Participate without executing every step'], ['Available attention', 'Can be redirected to learning, other work, or leisure']],
     },
   },
   'learning-in-reverse': {
