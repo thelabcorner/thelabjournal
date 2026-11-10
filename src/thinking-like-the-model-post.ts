@@ -90,7 +90,7 @@ export const thinkingLikeTheModelPost: Entry = {
   shortTitle: 'Thinking Like the Model',
   contextLabel: 'Journal / 008',
   topic: 'Essays',
-  stage: 'Editorial draft',
+  stage: 'Published',
   type: 'Personal essay',
   date: '2026-11-09',
   minutes: 24,
