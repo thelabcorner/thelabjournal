@@ -54,77 +54,81 @@ And I think much of it begins with abandoning a mentality that I genuinely despi
 
 I genuinely despise the black-box mentality surrounding large language models.
 
-What horrifies me is the willingness to treat these systems as fundamentally unknowable, make absolutely no effort to understand their behavior, and then expect to use them competently.
+What horrifies me is the willingness to treat these systems as fundamentally unknowable, supply them with terrible instructions, and then act surprised when they behave in ways you never intended.
 
 I especially hate the attitude that, when an agent does something wrong, you can just *prompt it again*.
 
-Of course you can prompt it again. You can prompt it a hundred times if you want. Eventually, you might even get the result you were looking for.
+Of course you can prompt it again. You can prompt it a hundred times if you want. You might eventually get something that looks like the result you wanted.
 
-But if your entire approach to correcting a failure consists of blindly repeating an intervention until something works, **what exactly have you learned?**
+But **what are you actually accomplishing?**
 
-Imagine visiting a doctor who approaches your health the same way.
+Imagine visiting the most competent doctor in the world because something is wrong and you want it fixed.
 
-You explain your symptoms, and rather than investigating your medical history, considering possible causes, or attempting to understand the underlying problem, the doctor prescribes a medication.
+But you give the doctor a terrible description of your symptoms. You omit important details, describe something inaccurately, or contradict information you provided earlier. The doctor is now working from a representation of your condition that doesn't actually correspond to what you're experiencing.
 
-It doesn't work.
+They can ask questions, examine you, and run tests. A good doctor should challenge an inconsistent history rather than blindly accept it. But **even an extraordinary doctor cannot reliably diagnose a condition from information that fundamentally misrepresents it**, unless something else reveals what the description is missing.
 
-So they prescribe another.
+Now imagine the first medication doesn't work.
 
-That doesn't work either.
+You return to the same doctor and ask for another prescription. That doesn't work either, so you go back again. Perhaps one treatment creates a side effect, and now there's another problem to address. Yet throughout the entire process, you haven't corrected the symptoms you reported in the first place.
 
-Another medication. Another dose. Another attempt.
+You're repeatedly asking for a different solution to a problem you haven't accurately described.
 
-Eventually, perhaps you start feeling better.
+Would you tolerate a doctor who simply kept throwing medications at you without reconsidering the diagnosis? Of course not. That's a terrible way to practice medicine.
 
-Would you consider that good medicine? Would you trust a doctor whose approach to treating you was effectively to keep throwing medications at the problem until something appeared to work?
+**So why would you keep returning to that doctor, demanding another intervention, while continuing to supply the same misleading information?**
 
-Of course not.
+The doctor might be brilliant. That doesn't make them telepathic. If you misrepresent the problem, you constrain the diagnosis. If you keep asking for a different treatment without correcting that representation, you can end up accumulating complications rather than resolving the original condition.
 
-A competent doctor may reasonably try a treatment, evaluate the response, and adjust their understanding. Sometimes the response to a treatment is itself useful diagnostic information.
+And of course the doctor has responsibilities, too. They should investigate, ask questions, and reconsider assumptions when treatment fails. But their responsibility to investigate doesn't absolve you of yours to communicate what you're experiencing as accurately as you can.
 
-But there's an enormous difference between **deliberately testing a hypothesis** and **blindly cycling through interventions without attempting to understand what you're treating**.
+You didn't go to the doctor to learn pharmacology. You went to get better. **Providing useful information is part of getting better.** You don't need to know the correct diagnosis or medication yourself.
 
-So why do people tolerate the equivalent when working with AI agents?
+A treatment trial may be reasonable. An unsuccessful attempt may even provide useful evidence. The absurdity is **repeating interventions while preserving the defective account of the problem that guided them**.
 
-An agent misunderstands an instruction, modifies the wrong files, introduces an architectural problem, or produces an answer that doesn't satisfy the objective.
+So why tolerate the equivalent when working with AI agents?
+
+An agent can be extraordinarily capable and still misunderstand an objective you've represented poorly. It might modify the wrong files, follow an unintended interpretation of a requirement, or implement a solution to a problem you didn't actually have.
 
 "Just prompt it again."
 
-Why?
+The next instruction tells it to fix the result without first establishing what was changed incorrectly. So it builds another modification on top of the first.
 
-What went wrong?
+Now the new implementation conflicts with an earlier architectural decision. Another prompt introduces another workaround. The conversation acquires contradictory requirements; the repository accumulates patches whose original assumptions were never checked.
 
-Was the instruction ambiguous? Did the model lack relevant context? Did the wording unintentionally encourage the wrong behavior? Did the agent misunderstand its authority? Was the problem a limitation of the model, or was it something in the agent runtime?
+Eventually, something might appear to work.
 
-These are questions worth asking.
+But in the process, you've turned one problem into several. You've made the state of the work harder to reason about, harder to verify, and potentially harder to recover.
 
-Instead, some people seem perfectly content to throw another prompt at the problem and hope the next attempt happens to work.
+And then people wonder why the agent keeps doing things they never wanted it to do.
+
+Getting furious with an agent for failing to reconstruct the objective you misrepresented is rather like getting furious with the doctor for failing to treat the condition you never accurately described. The agent can make mistakes of its own, but that doesn't erase your role in constructing the context it received.
+
+**You are repeatedly supplying the conditions under which those unwanted outcomes become reasonable.**
+
+I'm not suggesting the model receives a fresh training reward every time you reprompt it. That's not how ordinary inference works. The reinforcement here is in the *methodology*: you keep relying on the same ineffective approach, and occasional apparent success gives you a reason to keep doing it. Meanwhile, the conversation, tool outputs, and modified artifacts can carry the consequences of earlier mistakes into subsequent attempts.
 
 I find that mentality intellectually repulsive.
 
-It's a kind of **voluntary disintellect**. An almost malicious compliance with your own ignorance. You're going through the motions of correcting a problem while actively avoiding the intellectual work required to understand it.
+It's a kind of **voluntary disintellect**. Not because everyone ought to study machine learning, but because people are voluntarily replacing a disciplined method of getting work done with blind intervention, even as the consequences of that method pile up around them.
 
-And the worst part is that a successful result can reinforce the behavior.
+I don't care whether someone wants to learn about neural networks for its own sake. Most people don't. They want the thing they asked for to be finished, correctly and efficiently. That's entirely reasonable.
 
-The agent finally does what you wanted. You conclude that reprompting solved the problem. But you have no meaningful explanation for why the earlier attempts failed, why the successful attempt worked, or whether the same failure is likely to happen again.
+But that makes this mentality *more* contradictory, not less.
 
-You've obtained an outcome without developing any understanding of the process that produced it.
+If you want a problem solved, why keep using a problem-solving method that creates more problems?
 
-That is an awful way to approach engineering.
+You wouldn't accept a doctor prescribing treatment after treatment without examining the information and assumptions behind each one. Nor should you expect even an exceptionally capable agent to infer an accurate objective from a continually distorted account of what you want. Its responsibility to question and investigate doesn't absolve you of the responsibility to communicate.
 
-I have no objection to people who don't yet understand language models. Everyone starts somewhere. What I despise is the deliberate indifference toward understanding something you increasingly depend on to perform consequential work.
+Sometimes a second prompt is all that's needed. If the intended correction is obvious, make it. I'm not advocating a forensic investigation into every imperfect response.
 
-If you refuse to develop even a working understanding of the system, you give up the ability to diagnose its failures in a principled way. You might occasionally stumble upon a correction, but you have no reliable basis for distinguishing a genuine fix from a fortunate accident.
+I'm objecting to **the refusal to distinguish a correction from another unexamined intervention**.
 
-And I'm not suggesting that every unexpected response demands a lengthy investigation. Sometimes a second prompt is an entirely reasonable way to clarify what you meant. Sometimes the problem is obvious enough that correcting it takes seconds.
+When an agent does something wrong, the useful question isn't how quickly I can tell it to try again. It's what needs to change so the next action addresses the actual problem instead of compounding it.
 
-The issue is the mentality that understanding the failure is unnecessary.
+That's a standard for getting work done, not a demand that everyone become an expert in LLMs. **You don't have to do the agent's work. You do have to give it a problem it can actually identify.**
 
-That you can substitute repeated intervention for comprehension indefinitely.
-
-That you can operate an increasingly capable autonomous system while remaining willfully ignorant of how your instructions influence its behavior.
-
-I reject that completely.
+And I reject the idea that treating the system as a black box excuses abandoning that standard.
 
 Modern neural networks are extraordinarily complicated. We cannot reliably explain every internal computation responsible for a particular response, and predicting their exact behavior is often difficult.
 
@@ -132,7 +136,7 @@ But we understand a great deal about how these systems are built, trained, and o
 
 You don't need to understand every weight in a neural network to develop a useful mental model of its behavior.
 
-You do, however, need to be willing to learn.
+What matters is developing enough of an operational understanding to choose interventions that actually help.
 
 Consider the distinction between pretraining and post-training.
 
