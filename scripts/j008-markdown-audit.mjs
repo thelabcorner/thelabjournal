@@ -38,11 +38,14 @@ try {
         sections: article.querySelectorAll('.prose-section h2').length,
         tables: article.querySelectorAll('.journal-markdown table').length,
         math: article.querySelectorAll('.journal-markdown .katex-display').length,
-        hasFundamentals: text.includes('context window') && text.includes('a prompt'),
-        hasArgument: text.includes('voluntary disintellect') && text.includes('If you recognize yourself in this, good.'),
-        hasExamples: text.includes("Don't create a new memory") && text.includes("Don't modify the code"),
-        hasClone: text.includes('clone of myself'),
-        strongPhrase: strong.some(el => el.textContent.includes('proper delegation begins before you press enter')),
+        hasFundamentals: text.includes('context window') && text.includes('A prompt is') && text.includes('pretraining') && text.includes('post-training'),
+        hasArgument: text.includes('voluntary disintellect') && text.includes('If you recognize yourself in this, good.') && text.includes('doctor'),
+        hasExamples: text.includes('Do not create or modify memories.') && text.includes('Continue the same task') && text.includes('predictive text on your phone'),
+        hasClone: text.includes('clone of myself') || text.includes('exact clone of myself'),
+        strongPhrase: strong.some(el => el.textContent.includes('You have the power to change the probability of what comes next.')),
+        hasDelegation: text.includes('Passive delegation') && text.includes('Active delegation') && text.includes('hybrid delegation') && text.includes('Autonomy is not the same thing as authority.'),
+        hasReasoning: text.includes('chain-of-thought reasoning') && text.includes('DeepSeek') && text.includes('Prompt Revisor'),
+        hasNoMath: article.querySelectorAll('.katex-display, .katex').length === 0,
         strongWeight: getComputedStyle(strong[0]).fontWeight,
         italicStyle: getComputedStyle(italic[0]).fontStyle,
         pageWidth: document.documentElement.scrollWidth,
@@ -54,7 +57,7 @@ try {
     assert.equal(stats.blockquotes, expected.blockquotes, width + ': quotes lost')
     assert.equal(stats.subsections, expected.subsections, width + ': nested headings lost')
     assert.equal(stats.sections, expected.sections, width + ': article sections lost')
-    assert.ok(stats.hasFundamentals && stats.hasArgument && stats.hasExamples && stats.hasClone && stats.strongPhrase, width + ': editorial content missing')
+    assert.ok(stats.hasFundamentals && stats.hasArgument && stats.hasExamples && stats.hasClone && stats.strongPhrase && stats.hasDelegation && stats.hasReasoning && stats.hasNoMath, width + ': editorial content missing or unwanted equation rendered')
     assert.ok(Number(stats.strongWeight) >= 600, width + ': bold is not styled as bold')
     assert.equal(stats.italicStyle, 'italic', width + ': italics are not styled')
     assert.ok(stats.pageWidth <= stats.viewportWidth + 1, width + ': horizontal overflow')
