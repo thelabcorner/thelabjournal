@@ -19,10 +19,14 @@ export type FigureType = 'learning' | 'pressure' | 'contours' | 'geometry' | 'to
 export interface Section {
   heading: string
   paragraphs: string[]
+  /** Full Markdown for fidelity-preserving journal rendering, when available. */
+  markdown?: string
   takeaway?: string
 }
 export interface Entry {
   intro?: string[]
+  /** Markdown source for the journal opening, instead of flattened paragraphs. */
+  introMarkdown?: string
   slug: string
   title: string
   shortTitle: string

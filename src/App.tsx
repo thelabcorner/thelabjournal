@@ -30,6 +30,7 @@ import { ResearchManuscriptBody, manuscriptNavigation } from './ResearchManuscri
 import { ResearchContents, ResearchMobileContents, useResearchOutline } from './ResearchContents'
 import { JournalSectionPicker } from './JournalSectionPicker'
 
+const JournalMarkdown = lazy(() => import('./components/JournalMarkdown').then(m => ({ default: m.JournalMarkdown })))
 const MobileNavigator = lazy(() => import('./components/MobileNavigator').then(m => ({ default: m.MobileNavigator })))
 const loadWindowedArchive = () => import('./components/WindowedArchive')
 const WindowedArchive = lazy(() => loadWindowedArchive().then(m => ({ default: m.WindowedArchive })))
@@ -343,10 +344,10 @@ function Article({ entry, onBack, onOpen, copied, onShare, isSaved, toggle }: {
         <h1>{entry.title}</h1>
         <p className="article-dek">{entry.summary}</p>
         <div className="article-meta"><AuthorAvatar className="author-avatar" decorative/><div><strong>Jackson Cummings</strong><span>{dateLabel(entry.date)} · {entry.minutes} min read</span></div><span className="article-category"><TopicBadge topic={entry.topic}/></span></div>
-        <div className="article-prose">{entry.intro && entry.intro.length > 0 && <div className="article-opening">{entry.intro.map((paragraph, i) => <p key={i}>{paragraph}</p>)}</div>}{entry.sections.map((section, i) => <section id={sectionId(i)} key={section.heading} className="prose-section">
+        <div className="article-prose">{(entry.introMarkdown || (entry.intro && entry.intro.length > 0)) && <div className="article-opening">{entry.introMarkdown ? <Suspense fallback={null}><JournalMarkdown markdown={entry.introMarkdown}/></Suspense> : entry.intro?.map((paragraph, i) => <p key={i}>{paragraph}</p>)}</div>}{entry.sections.map((section, i) => <section id={sectionId(i)} key={section.heading} className="prose-section">
           <div className="section-count">{String(i + 1).padStart(2, '0')} / {String(entry.sections.length).padStart(2, '0')}</div>
           <h2>{section.heading}</h2>
-          {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+          {section.markdown ? <Suspense fallback={null}><JournalMarkdown markdown={section.markdown}/></Suspense> : section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
           {entry.slug === 'the-openfork-network-behind-one-oxp-connection' && <OXPArchitectureFigures sectionIndex={i}/>}
           {i === 0 && entry.slug !== 'the-openfork-network-behind-one-oxp-connection' && <div className="article-evidence"><JournalFigure slug={entry.slug} variant="overview" className="article-figure"/>
             {entry.slug === draft.slug && <div className="editor-note"><FileText aria-hidden="true"/><div><strong>Editorial draft</strong><p>Prepared for review. Examples are generalized to avoid private implementation details.</p></div></div>}

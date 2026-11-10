@@ -1,0 +1,63 @@
+/* Editorial Markdown fidelity. Scoped to Markdown-backed journal entries. */
+.journal-markdown strong {
+  color: var(--foreground);
+  font-weight: 700;
+}
+.journal-markdown em { font-style: italic; }
+.journal-markdown blockquote {
+  margin: 3px 0 19px;
+  padding: 2px 0 2px 16px;
+  border-left: 2px solid var(--muted-foreground);
+  color: var(--foreground);
+}
+.journal-markdown blockquote p { margin-bottom: 9px; }
+.journal-markdown blockquote p:last-child { margin-bottom: 0; }
+.journal-markdown h3 {
+  margin: 26px 0 12px;
+  font-size: 16px;
+  font-weight: 650;
+  line-height: 1.4;
+  letter-spacing: -.018em;
+  color: var(--foreground);
+}
+.journal-markdown-table-scroll {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 20px 0 25px;
+}
+.journal-markdown table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.journal-markdown :is(th, td) {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  text-align: left;
+}
+.journal-markdown th {
+  font-weight: 650;
+  color: var(--foreground);
+  border-top: 1px solid var(--border);
+}
+.journal-markdown tr:nth-child(even) td { background: var(--inset); }
+.journal-markdown .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: 20px 0 23px;
+  padding: 6px 0;
+}
+.journal-markdown :is(code, pre) { font-size: .91em; }
+.journal-markdown :not(pre) > code {
+  padding: 1px 4px;
+  background: var(--inset);
+  border-radius: 3px;
+}
+.journal-markdown a {
+  color: var(--foreground);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
