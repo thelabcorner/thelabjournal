@@ -198,7 +198,7 @@ This is the part I find almost intellectually repulsive. It's **voluntary disint
 
 It's malicious compliance with your own ignorance.
 
-You aren't training the model to be worse every time you reprompt it. Ordinary inference doesn't work that way. **You're reinforcing your own shitty methodology**, and the conversation, files, tool results, and inherited assumptions can preserve its consequences for the next attempt.
+And the most fucked-up part is that every occasional success encourages you to keep doing it. The agent finally produces something that looks right, so you convince yourself that blindly reprompting works. Meanwhile, you haven't corrected the original misunderstanding, reconciled the contradictory instructions, or examined what the previous attempts actually changed. You've just piled another intervention onto a conversation and a project already contaminated by bad assumptions. **You're reinforcing the very methodology that keeps creating your problems, and then getting pissed off when those problems come back.**
 
 An agent can make mistakes all by itself. There are bad models, broken tools, missing permissions, and ordinary software bugs. But its failures don't excuse you from examining what you actually told it to do.
 
