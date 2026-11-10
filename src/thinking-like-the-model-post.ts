@@ -1,89 +1,63 @@
 import type { Entry, Section } from './data'
-// Vite's raw-asset import keeps the Markdown editorial source authoritative.
-import draft from '../content/drafts/thinking-like-the-model.md?raw'
+// The Markdown document is the canonical editorial source. Preserve its syntax
+// for the reader; plain paragraphs remain available for archive/search consumers.
+import manuscript from '../content/drafts/thinking-like-the-model.md?raw'
 
-const cleanInline = (text: string) => text
-  .replace(/\*\*(.+?)\*\*/g, '$1')
-  .replace(/\*(.+?)\*/g, '$1')
-  .replace(/`(.+?)`/g, '$1')
-  .replace(/\\mid/g, '|')
-  .replace(/\\leq/g, '≤')
-  .replace(/\\theta/g, 'θ')
-  .replace(/x_\{t\+1\}/g, 'xₜ₊₁')
-  .replace(/x_\{\\leq t\}/g, 'x₍≤ₜ₎')
-  .replace(/\\?\s*;/g, ';')
+const plainText = (value: string) => value
+  .replace(/\*\*(.*?)\*\*/g, '$1')
+  .replace(/\*([^*]+)\*/g, '$1')
+  .replace(/\x60+/g, '')
   .replace(/\s+/g, ' ')
   .trim()
 
-const parseEssay = (markdown: string) => {
-  const body = markdown.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n/, '')
-  const lines = body.split(/\r?\n/)
-  const intro: string[] = []
+const plainParagraphs = (markdown: string): string[] => markdown
+  .split(/\r?\n\s*\r?\n/)
+  .map(block => plainText(block
+    .replace(/^#{3,6}\s+/gm, '')
+    .replace(/^>\s?/gm, '')
+    .replace(/^\|[\s:|-]+\|\s*$/gm, '')
+    .replace(/^\|/gm, '')
+    .replace(/\|\s*$/gm, '')
+    .replace(/\s*\|\s*/g, ' / ')
+    .replace(/^\$\$\s*$/gm, '')))
+  .filter(Boolean)
+
+function parseEssay(markdown: string) {
+  const body = markdown.replace(/^---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/, '')
+  const introLines: string[] = []
   const sections: Section[] = []
-  let paragraph: string[] = []
-  let current: Section | undefined
-  let table: string[][] | undefined
-  let math = false
-  let mathLines: string[] = []
+  let current: { heading: string; lines: string[] } | undefined
 
-  const addParagraph = () => {
-    if (!paragraph.length) return
-    const text = cleanInline(paragraph.join(' ').replace(/^>\s?/gm, ''))
-    if (text) (current ? current.paragraphs : intro).push(text)
-    paragraph = []
-  }
-  const addTable = () => {
-    if (!table) return
-    const rows = table.filter(row => !row.every(cell => /^[-:]+$/.test(cell)))
-    const [headers, ...values] = rows
-    for (const row of values) {
-      const cells = row.map((cell, index) => `${headers[index]}: ${cleanInline(cell)}`)
-      ;(current ? current.paragraphs : intro).push(cells.join(' · '))
-    }
-    table = undefined
+  const finishSection = () => {
+    if (!current) return
+    const source = current.lines.join('\n').trim()
+    sections.push({
+      heading: current.heading,
+      paragraphs: plainParagraphs(source),
+      markdown: source,
+    })
   }
 
-  for (const line of lines) {
-    const heading = line.match(/^(#{1,6})\s+(.+?)\s*#*$/)
-    if (heading) {
-      addParagraph()
-      addTable()
-      if (heading[1].length === 1) continue
-      current = { heading: cleanInline(heading[2]), paragraphs: [] }
-      sections.push(current)
-      continue
+  for (const line of body.split(/\r?\n/)) {
+    // The article shell already renders the H1; section navigation owns H2s.
+    if (/^#\s+/.test(line)) continue
+    const section = /^##\s+(.+?)\s*$/.exec(line)
+    if (section) {
+      finishSection()
+      current = { heading: plainText(section[1]), lines: [] }
+    } else if (current) {
+      current.lines.push(line)
+    } else {
+      introLines.push(line)
     }
-    if (line.trim() === '$$') {
-      addParagraph()
-      if (math) {
-        paragraph.push(mathLines.join(' '))
-        mathLines = []
-      }
-      math = !math
-      continue
-    }
-    if (math) {
-      mathLines.push(line.trim())
-      continue
-    }
-    if (line.trim().startsWith('|')) {
-      addParagraph()
-      const cells = line.trim().replace(/^\||\|$/g, '').split('|').map(cell => cell.trim())
-      ;(table ??= []).push(cells)
-      continue
-    }
-    addTable()
-    if (!line.trim()) addParagraph()
-    else paragraph.push(line.trim().replace(/^>\s?/, ''))
   }
-  addParagraph()
-  addTable()
-  return { intro, sections }
+  finishSection()
+  const introMarkdown = introLines.join('\n').trim()
+  return { introMarkdown, intro: plainParagraphs(introMarkdown), sections }
 }
 
-const essay = parseEssay(draft)
+const essay = parseEssay(manuscript)
 
-/** Complete canonical essay, rendered in the journal reader's plain-text section format. */
 export const thinkingLikeTheModelPost: Entry = {
   slug: 'thinking-like-the-model',
   title: 'Thinking Like the Model',
@@ -98,6 +72,7 @@ export const thinkingLikeTheModelPost: Entry = {
   figure: 'agent',
   summary: 'Why understanding how language models interpret context is essential to prompt introspection, explicit instructions, and properly delegating work to agents.',
   keywords: ['Prompt engineering', 'AI agents', 'Delegation', 'Context engineering', 'Prompt introspection', 'Post-training', 'Metacognition', 'OpenFork'],
+  introMarkdown: essay.introMarkdown,
   intro: essay.intro,
   sections: essay.sections,
 }
