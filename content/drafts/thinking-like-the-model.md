@@ -6,789 +6,290 @@ status: published
 issue: "J–008"
 slug: thinking-like-the-model
 category: "Essays"
-summary: "Why understanding how language models interpret context is essential to prompt introspection, explicit instructions, and properly delegating work to agents."
-tags: ["Prompt engineering", "AI agents", "Delegation", "Context engineering", "Prompt introspection", "Post-training", "Metacognition", "OpenFork"]
+summary: "A practical introduction to prompting and agent delegation: what models can see, how context shapes their behavior, and why blindly reprompting can make a bad result worse."
+tags: ["Prompt engineering", "AI agents", "Delegation", "Context engineering", "Prompt introspection", "OpenFork"]
 ---
 
 # Thinking Like the Model
 
-*On prompt engineering, language, and the judgment we delegate to artificial intelligence.*
+*On the information we give AI agents, the decisions we let them make, and the problems we create when we don't think about either.*
 
-These days, I delegate practically everything I can to AI agents.
+I barely write code anymore.
 
-I rarely write code myself anymore. Occasionally, I'll make a small change manually, but even then, I'd usually rather delegate it. I've reached a point where I'd estimate that 99% of the work I encounter is more tedious to perform myself than it is to properly delegate.
+Occasionally I'll make a small change myself, but even then, I'd usually rather delegate it. The same goes for research, design work, investigating bugs, testing implementations, and most of the other things I spend my time on. I'd estimate that properly delegating the work is preferable to doing it manually in about 99% of the situations I encounter.
 
-And there's a very important word in that statement.
+**Properly** is doing a lot of work in that sentence.
 
-**Properly.**
+When delegation goes badly, it can be more tedious than doing the task yourself. You correct the agent, it misunderstands the correction, you try again, and suddenly you're spending more time untangling the result than you would have spent on the original problem.
 
-Poor delegation can be an absolute nightmare. You spend your time correcting misunderstandings, repeating instructions, recovering lost context, reviewing unnecessary changes, and trying to convince an agent to accomplish something you could have done yourself.
+When delegation goes well, I can explain what I want, give the agent the relevant information, and let it get on with the work. I can still investigate the interesting parts, question its decisions, and evaluate what it produces. I just don't have to personally execute every step.
 
-Proper delegation is a different experience. You communicate what you're trying to accomplish, establish the relevant constraints, and allow the agent to perform the work. You intervene when necessary, evaluate the result, and move on.
+I think a lot of the frustration people have with AI agents comes from misunderstanding what they're actually communicating to them. People assume the model understands the idea in their head because the sentence they wrote makes sense *to them*. When it doesn't, they keep sending more sentences.
 
-I still enjoy software engineering, graphic design, scientific research, and the countless other subjects I occupy myself with. I love understanding problems, investigating mechanisms, exploring possibilities, and developing ideas. What I've increasingly lost interest in is personally performing all the execution required to turn those ideas into something tangible.
+I've spent a ridiculous amount of time working with coding agents, and the more I use them, the more convinced I am that **proper delegation begins before you press enter**.
 
-If I understand how something should work, and I can competently evaluate whether it does, why should I insist on doing all the work myself?
+You need a basic understanding of what the model receives and how your language influences what it does. Not a degree in machine learning. Just enough to stop accidentally working against yourself.
 
-But getting to this point has required developing an intuition for how language models behave. I've spent an extraordinary amount of time interacting with them, particularly through coding agents capable of independently investigating problems, modifying codebases, running tests, and coordinating other agents.
+## What you're actually giving the model
 
-I've learned that the quality of a delegated task depends enormously on the quality of the communication preceding it.
+Start with the most ordinary thing imaginable: a prompt.
 
-And I think people routinely underestimate that.
+A prompt is the instruction or message you send to a model. It might be a question, a request to edit a document, or a task such as "find and fix this bug."
 
-One thing I've noticed is how quickly people tend to send prompts. They have an idea, formulate a sentence that seems to represent that idea, and immediately hit enter. When the model produces something unexpected, they blame the model, rewrite the request, or keep prompting until they get something closer to what they originally wanted.
+But the model doesn't receive the idea as it exists in your head. It receives the words you wrote, along with whatever other information the application gives it.
 
-There's nothing inherently wrong with iterating. In fact, interacting with these systems is one of the best ways to develop an understanding of their behavior.
+That surrounding information is **context**.
 
-But I think people overlook an opportunity to prevent misunderstandings before they happen.
+In a chat, context can include earlier messages. In a coding agent, it might include project instructions, files it has read, test results, and the output of tools it has used. The application can also provide instructions about how the agent should behave and which actions it is allowed to take.
 
-**Prompt engineering requires understanding how the model is likely to interpret what you've written, rather than assuming it will understand what you meant.**
+All of this matters because the model uses the context available to it when deciding what to say or do next.
 
-I've come to think of this as *prompt introspection*, or, somewhat more abstractly, *metacognating for the model*.
+There is also a limit to how much information it can work with at once. This is called the **context window**. Think of it as the model's working space for the current interaction. It isn't an unlimited record of every conversation you've ever had. An application might retrieve old information, summarize earlier work, or leave some of it out entirely.
 
-It's part of a broader philosophy I've developed around understanding these systems, managing the context they receive, and deciding how much autonomy to give them.
+That's why telling an agent to "continue where we left off" can be a perfectly reasonable instruction in one situation and a terrible one in another. Does it actually have the previous work? Does it know what was completed? Does it know what remains unresolved?
 
-And I think much of it begins with abandoning a mentality that I genuinely despise.
+If you don't know, why are you assuming it does?
 
-## The model isn't magic
+Consider asking a coding agent:
 
-I genuinely despise the black-box mentality surrounding large language models.
+> Fix the crash in my application.
 
-What horrifies me is the willingness to treat these systems as fundamentally unknowable, supply them with terrible instructions, and then act surprised when they behave in ways you never intended.
+Maybe the agent has already seen the crash logs, knows which version is affected, and understands the relevant architecture. Fine. That's probably enough.
 
-I especially hate the attitude that, when an agent does something wrong, you can just *prompt it again*.
-
-Of course you can prompt it again. You can prompt it a hundred times if you want. You might eventually get something that looks like the result you wanted.
-
-But **what are you actually accomplishing?**
-
-Imagine visiting the most competent doctor in the world because something is wrong and you want it fixed.
-
-But you give the doctor a terrible description of your symptoms. You omit important details, describe something inaccurately, or contradict information you provided earlier. The doctor is now working from a representation of your condition that doesn't actually correspond to what you're experiencing.
-
-They can ask questions, examine you, and run tests. A good doctor should challenge an inconsistent history rather than blindly accept it. But **even an extraordinary doctor cannot reliably diagnose a condition from information that fundamentally misrepresents it**, unless something else reveals what the description is missing.
-
-Now imagine the first medication doesn't work.
-
-You return to the same doctor and ask for another prescription. That doesn't work either, so you go back again. Perhaps one treatment creates a side effect, and now there's another problem to address. Yet throughout the entire process, you haven't corrected the symptoms you reported in the first place.
-
-You're repeatedly asking for a different solution to a problem you haven't accurately described.
-
-Would you tolerate a doctor who simply kept throwing medications at you without reconsidering the diagnosis? Of course not. That's a terrible way to practice medicine.
-
-**So why would you keep returning to that doctor, demanding another intervention, while continuing to supply the same misleading information?**
-
-The doctor might be brilliant. That doesn't make them telepathic. If you misrepresent the problem, you constrain the diagnosis. If you keep asking for a different treatment without correcting that representation, you can end up accumulating complications rather than resolving the original condition.
-
-And of course the doctor has responsibilities, too. They should investigate, ask questions, and reconsider assumptions when treatment fails. But their responsibility to investigate doesn't absolve you of yours to communicate what you're experiencing as accurately as you can.
-
-You didn't go to the doctor to learn pharmacology. You went to get better. **Providing useful information is part of getting better.** You don't need to know the correct diagnosis or medication yourself.
-
-A treatment trial may be reasonable. An unsuccessful attempt may even provide useful evidence. The absurdity is **repeating interventions while preserving the defective account of the problem that guided them**.
-
-So why tolerate the equivalent when working with AI agents?
-
-An agent can be extraordinarily capable and still misunderstand an objective you've represented poorly. It might modify the wrong files, follow an unintended interpretation of a requirement, or implement a solution to a problem you didn't actually have.
-
-"Just prompt it again."
-
-The next instruction tells it to fix the result without first establishing what was changed incorrectly. So it builds another modification on top of the first.
-
-Now the new implementation conflicts with an earlier architectural decision. Another prompt introduces another workaround. The conversation acquires contradictory requirements; the repository accumulates patches whose original assumptions were never checked.
-
-Eventually, something might appear to work.
-
-But in the process, you've turned one problem into several. You've made the state of the work harder to reason about, harder to verify, and potentially harder to recover.
-
-And then people wonder why the agent keeps doing things they never wanted it to do.
-
-Getting furious with an agent for failing to reconstruct the objective you misrepresented is rather like getting furious with the doctor for failing to treat the condition you never accurately described. The agent can make mistakes of its own, but that doesn't erase your role in constructing the context it received.
-
-**You are repeatedly supplying the conditions under which those unwanted outcomes become reasonable.**
-
-I'm not suggesting the model receives a fresh training reward every time you reprompt it. That's not how ordinary inference works. The reinforcement here is in the *methodology*: you keep relying on the same ineffective approach, and occasional apparent success gives you a reason to keep doing it. Meanwhile, the conversation, tool outputs, and modified artifacts can carry the consequences of earlier mistakes into subsequent attempts.
-
-I find that mentality intellectually repulsive.
-
-It's a kind of **voluntary disintellect**. Not because everyone ought to study machine learning, but because people are voluntarily replacing a disciplined method of getting work done with blind intervention, even as the consequences of that method pile up around them.
-
-I don't care whether someone wants to learn about neural networks for its own sake. Most people don't. They want the thing they asked for to be finished, correctly and efficiently. That's entirely reasonable.
-
-But that makes this mentality *more* contradictory, not less.
-
-If you want a problem solved, why keep using a problem-solving method that creates more problems?
-
-You wouldn't accept a doctor prescribing treatment after treatment without examining the information and assumptions behind each one. Nor should you expect even an exceptionally capable agent to infer an accurate objective from a continually distorted account of what you want. Its responsibility to question and investigate doesn't absolve you of the responsibility to communicate.
-
-Sometimes a second prompt is all that's needed. If the intended correction is obvious, make it. I'm not advocating a forensic investigation into every imperfect response.
-
-I'm objecting to **the refusal to distinguish a correction from another unexamined intervention**.
-
-When an agent does something wrong, the useful question isn't how quickly I can tell it to try again. It's what needs to change so the next action addresses the actual problem instead of compounding it.
-
-That's a standard for getting work done, not a demand that everyone become an expert in LLMs. **You don't have to do the agent's work. You do have to give it a problem it can actually identify.**
-
-And I reject the idea that treating the system as a black box excuses abandoning that standard.
-
-Modern neural networks are extraordinarily complicated. We cannot reliably explain every internal computation responsible for a particular response, and predicting their exact behavior is often difficult.
-
-But we understand a great deal about how these systems are built, trained, and operated.
-
-You don't need to understand every weight in a neural network to develop a useful mental model of its behavior.
-
-What matters is developing enough of an operational understanding to choose interventions that actually help.
-
-Consider the distinction between pretraining and post-training.
-
-During pretraining, language models learn from enormous collections of text and other training material. Through the task of predicting tokens, they develop representations of syntax, language, knowledge, relationships, programming concepts, and patterns of reasoning.
-
-I sometimes think about this in terms of *semantic positioning*. That's my own way of describing how words, concepts, and expressions acquire relationships through the patterns in which they appear.
-
-Two words might seem interchangeable to a human while having meaningfully different associations because of the contexts in which they've appeared during training.
-
-Pretraining is also responsible for developing substantial capabilities, including coding and reasoning. Post-training then shapes how those capabilities are expressed.
-
-This second stage is particularly relevant to conversational assistants and agents.
-
-Models can be trained on instruction-response examples, evaluated against preferred behaviors, and further optimized through various methods of feedback and reinforcement learning. Depending on the training system, desirable outcomes might involve following instructions, solving problems correctly, choosing tools appropriately, or producing useful responses.
-
-I like to explain reinforcement learning with a deliberately simplified analogy.
-
-**The model gets a cookie when it does something desirable.**
-
-Obviously, the model isn't receiving a new training reward every time I send it a prompt. The cookie was part of the training process. During ordinary inference, the model is applying behavior it learned previously.
-
-But the analogy helps explain why these systems develop recognizable conversational tendencies.
-
-They've been trained to respond to certain patterns of input with certain patterns of behavior.
-
-An agent capable of writing code, running tests, searching files, and modifying a repository is operating through an additional layer: its *agent runtime*. That runtime provides tools, permissions, instructions, and an execution loop through which the model can interact with its environment.
-
-The resulting behavior emerges from the combination of learned capabilities, post-training, the available context, and the tools the runtime exposes.
-
-This is important because **an agent doesn't independently possess knowledge of what I privately intend. It acts on what I've communicated and what its environment makes available.**
-
-## Changing the probability of what comes next
-
-Understanding the relationship between training and inference fundamentally changes how I think about writing prompts.
-
-At a simplified mathematical level, an autoregressive language model generates a probability distribution over possible next tokens, conditioned on its preceding context.
-
-We can represent this as:
-
-$$
-P(x_{t+1}\mid x_{\leq t};\theta)
-$$
-
-Here, \(x_{\leq t}\) represents the preceding tokens, and \(\theta\) represents the model's learned parameters.
-
-In ordinary terms, the model uses the context it has received to determine what tokens are likely to come next. The chosen decoding strategy also affects the actual output.
-
-What interests me is how much influence we have over that context.
-
-Imagine that, given a particular conversation and set of instructions, I can reasonably anticipate that an agent is likely to perform action XYZ.
-
-But I don't want XYZ.
-
-I want ABC.
-
-I can deliberately change the context to make ABC more likely.
-
-Perhaps I need to clarify the objective. Perhaps I need to provide an example, identify a constraint, correct a misleading assumption, or explicitly prohibit an unwanted operation.
-
-Sometimes I only need to change a single word.
-
-The model's behavior is probabilistic, so none of this guarantees a particular outcome. But an expectation that exists exclusively in my head has no reliable way of influencing the model.
-
-If I expect ABC, I need to communicate ABC.
-
-**Be explicit.**
-
-I don't mean that every instruction should become an enormous technical specification. Explicitness concerns the information that materially determines the intended behavior.
-
-If I ask an agent to "improve" something, I may be deliberately giving it freedom to decide what improvement means.
-
-But if I already know that improvement means reducing memory allocations while preserving functionality, why would I leave that to interpretation?
-
-The model can only respond to the intention I've managed to communicate through the context available to it.
-
-And the exact language I use can matter considerably.
-
-## The difference one word makes
-
-I previously wrote about an interesting problem involving my OpenFork project, a fork of OpenCode.
-
-The issue concerned an instruction supplied when switching between models during an existing task.
-
-Consider these two sentences:
-
-> Continue the same task **with** the newly selected model.
-
-> Continue the same task **as** the newly selected model.
-
-These sentences might appear almost interchangeable to someone casually reading them.
-
-But their connotations are different.
-
-*With* can position the newly selected model as an instrument or collaborator. It suggests performing an activity using something or alongside something.
-
-*As* instead suggests continuing in the identity or role of the newly selected model.
-
-In an ordinary conversation, that difference might be relatively inconsequential.
-
-In an agent runtime where delegation, model selection, and agent identities are actual operational concepts, the distinction becomes more interesting.
-
-We investigated this wording as a possible contributor to unintended delegation behavior. The semantic distinction was plausible, although the suspected runtime failure was not conclusively established to have been caused by that particular word.
-
-There was also a third possibility: remove the unnecessary model-switch language altogether.
-
-The agent already had a task to continue. Perhaps it didn't need additional context about which model had been selected.
-
-That's an important lesson in itself. Sometimes the best improvement to a prompt is removing language that introduces an unnecessary interpretation.
-
-Another example I find particularly interesting is the word *remember*.
-
-Suppose I tell an agent:
-
-> Remember what we discussed yesterday.
-
-To a human, the intention might seem obvious. I'm asking the agent to retrieve information from an earlier conversation.
-
-But the word *remember* carries several possible meanings.
-
-It can refer to recalling existing information. It can mean retaining new information for the future. It can even appear in the context of scheduling a reminder.
-
-When an agent has access to tools for searching memories, writing memories, and scheduling tasks, those distinctions can become operational.
-
-I have encountered cases where the intended meaning was historical retrieval, yet an agent interpreted similar language as a request to create a memory.
-
-Even when the surrounding context seemed sufficient to establish the intended meaning, the model still selected an unintended operation.
-
-I might therefore change the instruction to:
-
-> Recall our previous conversations about this project before proceeding.
-
-And if the distinction matters enough:
-
-> Search our previous sessions for completed work and unresolved decisions. Do not create or modify memories.
-
-Notice what happened.
-
-I haven't written an elaborate prompt. I've identified the intended operation and, when necessary, established a boundary around an unwanted side effect.
-
-This connects directly to what I call semantic positioning.
-
-Words acquire associations through their patterns of use, and models learn from those patterns. Post-training and the available tools can further influence how those associations translate into behavior.
-
-A word such as *review* may suggest examining something, while *fix* may suggest modifying it. *Verify* might encourage testing, but the model may also interpret it as merely checking an argument or reporting an assessment.
-
-The exact interpretation depends on the context.
-
-And that is why seemingly synonymous words can have materially different consequences in agentic workflows.
-
-When the agent can actually execute actions, an ambiguous instruction might cause it to modify a file, create a memory, delegate work, or perform another operation that I never intended to authorize.
-
-There's no need to become paranoid about every word. But recognizing these possibilities is part of becoming competent at communicating with models.
-
-## Context seeding, intentional and otherwise
-
-Understanding how language models interpret instructions also requires recognizing that everything relevant in their context can influence their behavior.
-
-This is what I mean by *context seeding*.
-
-We can intentionally supply information that helps a model behave in a particular way.
-
-A skill file might establish conventions for editing scientific manuscripts. A coding agent might receive architectural documentation and previous decisions about a project. A research agent might receive examples of how to distinguish measured evidence from hypotheses.
-
-We're giving the model information that can influence what it generates and how it approaches the task.
-
-Even a relatively simple instruction such as "think critically" may influence the style and direction of a response.
-
-But I generally prefer to be more specific when the intellectual operation matters.
-
-Suppose I'm asking an agent to evaluate an implementation.
-
-I could say:
-
-> Think critically about this code.
-
-Or I could say:
-
-> Evaluate the implementation against its requirements. Identify assumptions, investigate potential failure cases, and distinguish verified behavior from untested claims.
-
-The second instruction provides more information about the kind of evaluation I'm expecting.
-
-That doesn't automatically make it better in every situation. If the model already understands my expectations from the surrounding context, the shorter instruction might be entirely sufficient.
-
-What matters is whether I'm deliberately influencing the model toward the behavior I want.
-
-The same mechanism can also work against me.
-
-Suppose I write:
-
-> I've finally developed a really elegant solution to this problem. Can you verify that it works?
-
-Before the model has examined the solution, I've already introduced an expectation that it is elegant.
-
-It may still perform an independent evaluation. But I've provided a favorable framing that can influence the response.
+But if this is its first encounter with the problem, you might have given it almost nothing to work from.
 
 Compare that with:
 
-> Evaluate this solution independently. Identify strengths, weaknesses, and any claims that remain unverified.
+> The application crashes after being open for a while. Inspect the logs, establish what is causing it, and verify the correction. Preserve unrelated behavior.
 
-The task is similar. The context is different.
+That's not some magical prompt formula. It's the same request with a little more of the information that determines success.
 
-This becomes especially consequential when agents inherit information from other agents.
+**You can't expect an agent to work from context you never gave it.**
 
-Imagine one agent investigates a software defect and hypothesizes that a particular function is responsible.
+## Why the wording matters
 
-A second agent summarizes the investigation and writes:
+Models learn from enormous amounts of language, code, and other examples. Their initial training teaches them patterns: how words relate to one another, how explanations are structured, how code works, and how different kinds of text tend to continue.
 
-> The function responsible for the defect is X.
+Additional training shapes how they respond to instructions, carry on conversations, solve tasks, and use tools.
 
-The original hypothesis has now become an apparent fact.
+I sometimes explain that second part with a deliberately crude analogy: the model gets a cookie when it does something desirable.
 
-Another agent inherits that summary and begins working under the assumption that X is the established cause.
+The cookie happens during training, not while you're chatting with it. It isn't being rewarded anew every time you send a message. But its behavior today reflects patterns that were encouraged during training.
 
-Nobody necessarily intended to misrepresent anything. But somewhere during the transmission of context, uncertainty was lost.
+In everyday terms, **the model uses what came before to work out what should come next**.
 
-That is an example of unintentionally seeding the model with a conclusion.
+And you get to influence what came before.
 
-It explains why I place so much emphasis on recovering previous work, preserving the status of evidence, and distinguishing verified findings from speculation when supervising agents.
+If your wording makes a particular interpretation seem natural, you may make that interpretation more likely. If you want something else, you need to put that intention into the context. You can't silently expect the model to prefer the version of the request that only exists in your imagination.
 
-Context management is an ongoing responsibility, especially in long-running workflows.
+This is why I find individual words so interesting.
 
-More information isn't automatically better information. A large context filled with misleading assumptions, outdated decisions, and poorly attributed findings can make an agent less effective than a much smaller collection of carefully selected evidence.
+I've written before about an OpenFork instruction involving a model switch. One version said to continue a task *with* the newly selected model. Another said to continue *as* the newly selected model.
 
-The challenge is understanding which information is useful and how its presentation might influence the model.
+To a human, those sentences might sound nearly identical. But *with* can suggest using the model as an instrument, while *as* identifies the model doing the work. In an environment where agents can delegate to other agents, those interpretations can imply different actions. We investigated the distinction as a possible source of confusion, not as a proven cause of a particular failure. Removing the unnecessary phrase altogether was another option.
 
-## Prompt introspection: think like the model
+An even more obvious example is the word *remember*.
 
-This brings me to something I wish more people would do before sending a prompt.
+If I tell an agent to "remember what we did yesterday," I might mean **retrieve** yesterday's conversation. But an agent with memory-writing tools might interpret that as an instruction to **save** something for later.
 
-Actually read what you've written.
+Those are completely different actions.
 
-Not merely to check whether it sounds reasonable to you, but to consider how the model might interpret it.
+When the distinction matters, I can say:
 
-I sometimes describe this as needing to *be the model*, at least momentarily.
+> Search our earlier sessions for the decisions we already made. Don't create a new memory.
 
-Obviously, I cannot reproduce the internal computations of a neural network or calculate exactly how the model will respond.
+I haven't written a longer prompt for the sake of making it longer. I've clarified what I want the agent to do.
 
-But I can attempt to think from its perspective.
+This is what I mean by being explicit. The right word can matter more than another paragraph of elaborate instructions.
 
-I can set aside my own privileged knowledge of the objective and examine the instructions I've actually supplied.
+## The black-box mentality drives me fucking insane
 
-What information does the model have?
+I genuinely despise the attitude that large language models are some unknowable magic box, and that when they do something wrong, the solution is to blindly *prompt again*.
 
-What information am I assuming it has?
+Of course you can prompt again. You can do it fifty times. You might even get what you wanted on the fifty-first attempt.
 
-Are there several reasonable interpretations of my language?
+**But what are you actually accomplishing?**
 
-Have I unintentionally introduced a favorable or unfavorable conclusion?
+If the information you're giving the agent is bad, you may be asking it to solve the wrong problem over and over again. If your instructions are contradictory, you're making it choose between competing versions of what you want. If it has already made an unwanted change and you don't account for that change, the next prompt may build on the mistake instead of correcting it.
 
-What decisions will the model need to make because I haven't explicitly made them myself?
+And then people wonder why the fuck the agent keeps doing things they never wanted it to do.
 
-This is **prompt introspection**.
+Imagine visiting an extraordinarily competent doctor. You want to get better, so you describe your symptoms. But the description you give is inaccurate. You leave out an important detail, misunderstand another, and return the following week with a contradictory account.
 
-Consider the instruction:
+The doctor should ask questions, examine the evidence, and challenge inconsistencies. Competence matters. But even the best doctor cannot reliably diagnose a condition from a fundamentally inaccurate description unless some other evidence reveals what's missing.
 
-> Make this writing more professional.
+Now imagine you keep returning, demanding another medication each time the previous treatment fails, without ever correcting the original description of the problem.
 
-What does *professional* mean?
+Would you accept a doctor who blindly prescribed medication after medication without reconsidering the diagnosis? Of course not.
 
-Perhaps the model will make the writing more formal. Perhaps it will shorten sentences, remove colloquial language, introduce technical vocabulary, or replace the author's distinctive voice with something more conventional.
+**So why would you keep returning with the same bad information, expecting the next prescription to magically fix everything?**
 
-Any of those interpretations might be reasonable.
+You didn't go to the doctor to learn pharmacology. You went to solve a problem. You don't need to know which medication is appropriate. But providing an accurate account of your symptoms is part of giving the doctor a fair chance to help you.
 
-If my actual intention is to correct grammar and improve clarity while preserving the author's voice, I can communicate that:
+**The same applies to agents.**
 
-> Improve the clarity and grammar while preserving the original tone, opinions, and intended meaning. Avoid unnecessary formality.
+Suppose you ask a coding agent to "make the application faster," but the thing you actually care about is reducing memory usage without changing how the application behaves.
 
-I haven't dictated every editorial decision. I've simply resolved an ambiguity that matters to me.
+You never say that.
 
-The same principle applies outside of writing.
+The agent makes a plausible performance change that alters something you wanted preserved. You say, "No, fix that." The agent makes another change. That breaks an assumption elsewhere, so you tell it to fix that too.
 
-Suppose I ask an agent to find the best laptop for someone.
+Now you've got three sets of changes, several competing instructions, and an increasingly complicated codebase. The next prompt inherits the consequences of all the previous ones.
 
-Best according to what?
+You're accumulating problems while convincing yourself that each new prompt is progress.
 
-Performance? Battery life? Price? Portability? Repairability?
+And here's the part I find especially infuriating: **you helped create the conditions for the behavior you're now blaming the agent for**.
 
-Perhaps I want the agent to investigate those tradeoffs independently. In that case, leaving the request open-ended is useful.
+That doesn't mean an agent can never be at fault. Models make mistakes. Agent runtimes have bugs. Sometimes an instruction is clear and the model still gets it wrong.
 
-But if I know the person needs something lightweight with exceptional battery life and a limited budget, leaving out those requirements is an avoidable mistake.
+But you cannot keep misrepresenting the task, refuse to examine what went wrong, and then act shocked when an extraordinarily capable system keeps working from the wrong premises.
 
-A significant part of prompt engineering is recognizing the difference between **intentional freedom and accidental ambiguity**.
+That's what I mean by **voluntary disintellect**. It's malicious compliance with your own ignorance: continuing to follow a terrible problem-solving methodology because you don't want to examine the part you're contributing to it.
 
-And that is something I think you develop through experience.
+If you recognize yourself in this, good. That discomfort might be useful.
 
-After spending enough time interacting with language models, you begin recognizing how particular instructions tend to influence their behavior.
+You can deflect and tell yourself the model is smart enough, that it will figure everything out, that it already did most of the work anyway. You can blame the model for every bad outcome and treat every new prompt as a fresh start.
 
-You notice when a phrase is likely to generate an overly agreeable response. You recognize when an agent might interpret a request for analysis as permission to implement changes. You recognize when an instruction depends on context the model may not possess.
+But your deflection doesn't fix the project. It doesn't correct the context. It doesn't undo the previous changes.
 
-It's an intuition that improves through observation.
+You are the one who wanted something done. Defending the methodology that's making it harder to accomplish only hurts that objective.
 
-And I think that intuition is far more valuable than memorizing a collection of supposedly perfect prompts.
+And no, the model isn't receiving a new training reward whenever you do this. You're reinforcing **your own bad workflow**, while the conversation and the artifacts the agent changes can keep carrying its consequences forward.
+
+I don't need everyone to become fascinated by machine learning. Most people don't want to study language models. They want their work done.
+
+**Then stop voluntarily making that work harder.**
+
+## Think about what you're about to send
+
+I call this habit *prompt introspection*.
+
+Before I send an instruction, I try to read it as if I were the model receiving it. I sometimes describe that as trying to *think like the model*.
+
+I'm not pretending I can calculate exactly how a neural network will respond. I've simply spent enough time interacting with these systems to recognize some of the ways my language can be interpreted.
+
+What does the agent actually know right now? Does it have the relevant files or earlier decisions? What am I asking it to accomplish? What might it reasonably think I'm giving it permission to do?
+
+Those questions don't need to become a ceremony. Sometimes the entire thought takes two seconds.
+
+For example:
+
+> Review this implementation.
+
+Does that mean give me an assessment? Run tests? Fix the problems it finds? Rewrite the architecture?
+
+Maybe I deliberately want the agent to decide. But if I only want an assessment, I can say:
+
+> Review the implementation, run relevant tests, and report the problems you find. Don't modify the code.
+
+If I want it to investigate and repair the implementation, I can say that instead.
+
+Neither prompt is universally better. **The better prompt is the one that communicates the authority I actually intended to give.**
+
+And sometimes ambiguity is useful. If I'm exploring a design direction, I might want the model to propose interpretations I haven't considered. I don't need to specify every font, shape, or color before asking for ideas.
+
+The problem is *accidental* ambiguity: leaving something important unspecified while assuming the model will somehow know which interpretation you wanted.
 
 ### Sweep the low-hanging fruit
 
-There is an important qualification to all of this.
+I don't spend ten minutes engineering every trivial message. That would be a ridiculous way to use a tool I'm relying on to save time.
 
-Prompt introspection shouldn't become an excuse for analysis paralysis.
+I look for the obvious problems.
 
-I don't believe every prompt needs to be meticulously engineered. I don't believe you need to anticipate every conceivable misunderstanding before interacting with an agent.
+An ambiguous word. A missing constraint. A reference to context the agent may not have. An instruction that authorizes more than I intended. A favorable assumption that might contaminate an evaluation.
 
-That would defeat much of the purpose of delegation.
-
-The objective is to catch foreseeable communication problems that are inexpensive to correct.
-
-If replacing an ambiguous word takes a few seconds, do it.
-
-If I notice that I've omitted a relevant constraint, add it.
-
-If my instruction implies permission to modify something I only wanted inspected, clarify the boundary.
-
-But if I'm spending twenty minutes trying to perfect a trivial request that the model could answer in seconds, something has gone wrong with my allocation of effort.
-
-Sometimes the most efficient approach is to send an imperfect prompt, observe the result, and refine it.
-
-The distinction is whether that iteration teaches me something or merely becomes another blind attempt.
+If I notice one, I correct it. If the request is low-stakes and easy to retry, I may simply send it and see what happens.
 
 **Sweep the low-hanging fruit.**
 
-The goal is to make communication more effective without making the process of communicating unnecessarily expensive.
+Proper prompting isn't about maximum verbosity. It's about removing avoidable misunderstandings without making communication more expensive than the work itself.
 
-And sometimes, even after introspection, I still struggle to express what I actually mean.
+## You can accidentally tell the model what conclusion to reach
 
-## When the idea is clearer than the language
+There's another part of context that deserves attention: the assumptions you put into it.
 
-I frequently encounter situations where I have a fairly clear internal conception of what I want, but I don't know how to communicate it precisely.
+Suppose I write:
 
-I might mentally envision a design, understand the kind of behavior I want from a software system, or recognize a particular conceptual relationship without knowing exactly how to describe it.
+> I've built a really elegant solution. Verify that it's correct.
 
-The idea can feel remarkably clear in my head.
+I've already supplied a favorable description before the agent has inspected anything.
 
-Then I try to put it into words.
+It might still disagree with me. But I've given it a direction to lean.
 
-Suddenly, something that seemed obvious becomes difficult to explain.
+If I want an independent evaluation, I'd rather say:
 
-This happens particularly often with design work, where the intended result might involve typography, composition, historical references, material qualities, and other characteristics that interact in ways I find difficult to articulate individually.
+> Evaluate this implementation against the requirements. Identify what works, what fails, and what hasn't been verified.
 
-I might know immediately whether a proposed design matches what I have in mind, even if I couldn't have described that design from scratch.
+Both are prompts. Both are context. Only one avoids telling the model what I hope it will find.
 
-This is part of the motivation behind the **Prompt Revisor** I implemented in OpenFork.
+I see a similar problem when agents pass information between one another. One agent suspects a particular function caused a defect. Another summarizes the conversation as though that suspicion were a confirmed finding. The next agent takes it as established fact.
 
-The idea is relatively straightforward: delegate the process of improving a human-written prompt to another agent.
+Now a guess has become the foundation for more work.
 
-The revisor can examine the original request, consider relevant conversation history or project context, identify ambiguity, and produce a more actionable expression of the intended objective.
+This is why I care about preserving earlier decisions and distinguishing what an agent actually tested from what it merely proposed. And it's why I often explicitly tell an agent to recover prior work before proceeding, rather than repeat investigations we've already completed.
 
-But the most important requirement is preserving the original intention.
+**Context is powerful because it influences what the model does. Bad context is powerful for exactly the same reason.**
 
-Imagine I write:
+## Sometimes I know what I want but can't say it
 
-> I want the branding to feel nostalgic and computational, but not superficially retro. I can picture it, but I don't quite know how to describe it.
+There's a reason I don't think the answer is simply "write better prompts."
 
-A useful revisor might identify possible aesthetic interpretations, propose vocabulary that helps describe the direction, or ask a targeted clarification.
+Sometimes I have a very clear idea of what I want and an awful time translating it into language. I encounter this constantly with design. I can picture a particular visual direction and recognize it when I see it, but describing the exact qualities that make it work can be surprisingly difficult.
 
-It shouldn't silently decide that I want a specific typeface, color palette, or compositional system unless that decision follows from information I've provided.
+That's part of why I built the **Prompt Revisor** into OpenFork.
 
-That would be replacing my intention with its own assumptions.
+Its job is to help turn a rough instruction into a clearer one. It can use relevant session or project context, identify ambiguities, and propose wording that's easier for an execution agent to act on.
 
-A revised prompt can be considerably longer than the original and still be worse.
+But a revisor can make the same mistake as any other agent. If I say "simplify this workflow" and it silently rewrites the request to mean "remove all approval steps," it has invented a decision I never made.
 
-It might introduce requirements I never intended, remove nuances I cared about, or impose a level of specificity that actually prevents the execution agent from exploring useful alternatives.
+A longer, more detailed prompt is not necessarily a more faithful prompt.
 
-In OpenFork, the Prompt Revisor is designed around preserving intent, using available context, clarifying important ambiguities, and allowing the original prompt to be reviewed or restored.
+So I can delegate the *articulation* of my intent, inspect the revision, and decide whether it actually reflects what I meant.
 
-It also doesn't need to be invoked for everything.
+I don't need to personally struggle through every sentence if another agent can help. I do need to recognize when that agent has changed the objective.
 
-Sometimes my original prompt is already adequate.
+## Delegation is the point
 
-Sometimes I deliberately want the execution agent to interpret a loosely defined request.
+I often use a hypothetical question to decide how I want to work with agents: *what would I ask a clone of myself to do?*
 
-And sometimes I simply want help translating what I can mentally envision into language another model can act upon.
+If I had another version of myself who could investigate an algorithm, write the code, run the tests, and explain the result, I'd give him the work. Probably almost all of it.
 
-This is a particularly interesting form of delegation because **I'm delegating some of the work of expressing my intention without necessarily delegating ownership of that intention.**
+I like understanding things. I like developing ideas, making architectural decisions, experimenting, and figuring out why something works. I don't particularly need to be the person typing every line of code or manually performing every step.
 
-Which leads to a much broader question.
+I also don't restrict agents to mechanical tasks. I want them to reason, investigate, propose alternatives, and challenge assumptions. That's a huge part of their value.
 
-## What would I ask a clone of myself to do?
+The part I care about retaining is the ability to judge what comes back.
 
-One of the ways I like to think about agent delegation is through a hypothetical scenario.
+If I don't understand a domain, I can absolutely use agents to help me explore it. But I shouldn't treat an output as verified merely because the same agent that produced it says it's correct. I need some way to evaluate the work, whether that's understanding the mechanism myself, checking evidence, running tests, or having a genuinely independent evaluation performed.
 
-Imagine I had a clone of myself.
+That's the part of the clone analogy that matters to me: **I want to delegate the work without blindly surrendering judgment over whether it was done correctly.**
 
-Another Jackson, possessing my knowledge, curiosity, technical understanding, and general ability to solve problems.
+I think of delegation as varying between passive and active.
 
-What would I ask him to do?
+Passive delegation is perfectly reasonable when the goal is clear, the work is reversible, or I already trust the process. I can give an agent a task and let it complete it with little intervention.
 
-At this point, probably almost everything.
+Active delegation is what I use when the objective, boundaries, or evidence require closer attention. But active doesn't mean micromanaging. I don't want to direct every file read or command. I want to establish what we're trying to achieve, let the agent do its work, and step in at the decisions that actually matter.
 
-I don't particularly need to be the person typing code into an editor. I don't need to manually inspect thousands of files, implement every architectural decision, reproduce every calculation, or personally adjust every element of a design.
+Most of my more complicated work ends up somewhere between the two.
 
-Even when a problem is intellectually fascinating, performing all the work required to solve it can be tedious.
+I might define the outcome and the constraints, let an agent investigate and implement independently, and return when it needs a consequential decision or claims to have completed the task.
 
-I would rather spend my attention understanding the problem, developing the objective, considering alternatives, and evaluating what comes back.
+I've used this kind of supervision across OpenFork, WebSeal, Silica, and other projects. Agents can work alongside other agents, investigate in parallel, and even supervise one another. But the more capable and autonomous the workflow becomes, the more expensive a poorly communicated objective can be.
 
-And if I can delegate some of that intellectual investigation, I probably will.
+One ambiguous instruction can send several workers in the wrong direction. One unverified assumption can be repeated across multiple sessions. One missing instruction to check completed work can cause an agent to spend time doing something we've already finished.
 
-I don't view agents as things that should only perform repetitive mechanical tasks. I want them to investigate difficult problems, exercise reasoning, challenge assumptions, compare approaches, and contribute ideas.
+That's why I spend so much attention on the way I delegate, even though I rarely want to perform the underlying work myself.
 
-My interest lies in directing those capabilities toward something I actually want to accomplish.
+## Be explicit
 
-If my clone could independently investigate an algorithm, implement it, and demonstrate that it behaves correctly, why would I insist on performing all of those steps myself?
+There's no magic phrase that guarantees an agent will understand you. You don't need a giant prompt template, and you don't need to become an expert in how neural networks are built.
 
-My attention is finite.
+You do need to appreciate that the model only has the information available to it, that your wording changes how that information can be interpreted, and that an agent may turn an interpretation into an actual action.
 
-I can spend it manually completing one task, or I can spend it directing and evaluating several.
+If you want it to retrieve information, say retrieve. If you want it to modify something, say what should change and what needs to remain intact. If you want it to evaluate your idea, don't preload the answer you hope it gives you.
 
-But there's another part of this hypothetical that matters to me.
+And when something goes wrong, examine the problem you're presenting before you pile another instruction on top of it.
 
-Suppose I ask my clone to accomplish something I don't understand whatsoever.
+I delegate almost everything because, when I do it properly, it works better for me than doing the work manually.
 
-How would I grade his work?
-
-How would I recognize a convincing mistake?
-
-How would I distinguish a correct implementation from something that merely appears correct?
-
-This is why I generally prefer delegating work that I could perform or reconstruct myself, even if doing so would require considerable effort.
-
-That doesn't mean I need to remember every technical detail off the top of my head.
-
-For example, I might understand a computational problem without immediately remembering the exact implementation of an algorithm that solves it. If I can reconstruct the reasoning, examine the implementation, identify appropriate tests, and recognize the relevant failure conditions, I still have meaningful evaluation competence.
-
-And I absolutely use agents to explore subjects I don't yet understand.
-
-But I distinguish between asking an agent to help me develop understanding and blindly accepting the agent's output as correct.
-
-The latter is where delegation becomes dangerous.
-
-An agent can generate a substantial amount of convincing work. That work can even function correctly under the conditions someone happens to test.
-
-But if I cannot evaluate the architecture, question the assumptions, or recognize important limitations, I have very little basis for determining whether the result actually satisfies the problem I intended to solve.
-
-**I want to delegate almost all the work without surrendering responsibility for understanding what the work is supposed to accomplish.**
-
-That includes delegating implementation, investigation, experimentation, and a great deal of the reasoning involved.
-
-The part I want to retain is the judgment necessary to establish whether we're pursuing the intended objective and whether the result is acceptable.
-
-And this brings me to the distinction between passive and active delegation.
-
-## Passive, active, and hybrid delegation
-
-I've come to distinguish between *passive delegation* and *active delegation*, although I don't think they're mutually exclusive categories.
-
-Passive delegation involves giving an agent a task and allowing it substantial freedom to interpret and complete that task.
-
-Active delegation involves more deliberate human participation in establishing objectives, controlling important decisions, monitoring progress, and evaluating results.
-
-But I don't think active delegation is universally better, nor do I think passive delegation is inherently irresponsible.
-
-The appropriate approach depends on the task.
-
-Suppose I ask an agent to alphabetize a list, convert a document into a particular format, or apply an established naming convention across a small collection of files.
-
-I probably don't need to supervise every operation.
-
-The objective is reasonably clear, the work is straightforward to evaluate, and mistakes are usually easy to correct.
-
-Passive delegation makes perfect sense.
-
-Now imagine I ask an agent to redesign the architecture of an application.
-
-If I simply write "make the architecture better" and disappear, I'm transferring an enormous amount of judgment to the model.
-
-Better in what sense?
-
-Performance? Maintainability? Reliability? Development speed?
-
-Which existing decisions should remain intact? What tradeoffs am I willing to accept? What constitutes a successful redesign?
-
-The agent might make perfectly reasonable decisions according to its own interpretation of the request.
-
-But those decisions might be completely different from what I intended.
-
-The problem isn't that I delegated the architecture work.
-
-The problem is that I delegated consequential decisions without adequately establishing what I wanted.
-
-### Active delegation doesn't mean micromanagement
-
-I think this is a distinction people frequently overlook.
-
-Active delegation does not require personally controlling every step an agent performs.
-
-I don't want to tell a coding agent which file to open, which function to inspect, or which command to run unless there's a reason that instruction matters.
-
-If I had to manually direct every individual operation, I'd be recreating the tedium I was trying to eliminate.
-
-Instead, I might establish the objective, explain the architectural constraints, specify what must remain unchanged, and define what evidence would demonstrate successful completion.
-
-The agent can then perform the investigation and implementation independently.
-
-If it encounters an ordinary implementation detail, I want it to make a reasonable decision and continue.
-
-If it discovers a conflict with an established architectural requirement, I may want it to surface the conflict before proceeding.
-
-Once the implementation is complete, I can inspect the result, challenge its conclusions, or request further verification.
-
-That is active delegation without micromanagement.
-
-The agent is doing the work. I'm participating in the decisions and evaluations that matter.
-
-### Hybrid delegation
-
-In practice, I often prefer a hybrid approach.
-
-I might actively establish the task and its constraints, passively allow the agent to investigate and implement, and then become actively involved again when an important decision or completion claim requires evaluation.
-
-The level of involvement can change throughout the same task.
-
-Consider a coding agent investigating a performance problem.
-
-I can delegate the initial investigation without knowing exactly where the problem is.
-
-The agent profiles the system, inspects relevant code, and identifies a possible bottleneck.
-
-If the proposed correction is straightforward and preserves behavior, it might implement and test the change without needing additional direction.
-
-But suppose the investigation suggests replacing a major subsystem, changing a public API, or abandoning an architectural constraint.
-
-That's a different decision.
-
-I may want to evaluate the tradeoffs before authorizing that change.
-
-Afterward, the agent can return to autonomous implementation.
-
-This is the kind of delegation I find particularly effective.
-
-It allows the model to exercise its capabilities without granting it unrestricted authority over the objective.
-
-The distinction is important: **I don't want to remove the agent's ability to reason. I want to control which decisions it's authorized to make on my behalf.**
-
-## Delegating agents to supervise other agents
-
-This becomes even more interesting when working with multiple agents.
-
-In projects such as OpenFork, WebSeal, and Silica, I've spent considerable time coordinating agents that perform different investigations, implementations, and verification tasks.
-
-I don't want to personally inspect every line of code every worker writes.
-
-I also don't want to blindly accept every completion claim.
-
-So I can delegate portions of the supervisory work itself.
-
-A supervising agent can recover previous decisions, inspect a worker's progress, challenge an unsupported claim, compare an implementation against its acceptance criteria, or identify areas where additional verification is necessary.
-
-That supervisor might coordinate several other agents while I retain responsibility for the broader objective.
-
-But this introduces a familiar problem.
-
-If I tell a supervisor to "continue the work," what does that mean?
-
-Should it start another investigation? Should it inspect existing work? Should it create new tasks? Should it wait for a worker to finish? Should it modify the implementation itself?
-
-If the goal is to avoid redundant work, I might instead tell it to recover previous sessions, identify completed deliverables, inspect unresolved objectives, and continue only what remains necessary.
-
-These distinctions matter enormously in long-running agentic workflows.
-
-An agent that repeats a completed investigation is wasting resources. An agent that mistakes a worker's claim for verified evidence may permit a defective implementation to proceed. An agent that silently broadens the objective can consume significant effort on work nobody requested.
-
-And the more agents involved, the more opportunities there are for poorly communicated assumptions to propagate.
-
-That's why context preservation, prompt introspection, and clearly bounded autonomy become even more valuable as the workflow grows.
-
-Proper delegation isn't necessarily about making the initial prompt longer. It's about ensuring the relevant objectives, constraints, and evidence survive the process of assigning and executing work.
-
-## What does a good prompt look like?
-
-I don't think there is a universally correct answer.
-
-People often want a collection of prompt templates or special phrases that reliably make models behave better.
-
-But language contains too many degrees of freedom, and the same instruction can produce different results depending on the model, the available tools, and the surrounding context.
-
-Consider a few examples:
-
-| Vague instruction | More deliberate instruction |
-|---|---|
-| "Make this writing better." | "Improve clarity while preserving the author's voice and intended argument." |
-| "Find evidence that my idea works." | "Evaluate the idea, including evidence that could contradict it." |
-| "Fix this application." | "Identify the defect, investigate its cause, implement a correction, and verify the affected behavior." |
-| "Make this design more modern." | "Explore contemporary design treatments while preserving the existing brand's recognizable characteristics." |
-| "Remember what we did yesterday." | "Retrieve yesterday's decisions and completed work before proceeding." |
-| "Continue the project." | "Recover the established objective, inspect completed work, and continue from the unresolved requirements." |
-
-The second column isn't automatically superior.
-
-If I want to see how a model independently interprets "modern," the original design prompt might be exactly what I need.
-
-If the agent already possesses sufficient context about a project, "continue" might be perfectly adequate.
-
-If I'm asking a model to casually improve a sentence, a lengthy set of editorial constraints may add nothing useful.
-
-The distinction lies in whether the freedom I'm giving the model is intentional.
-
-Am I deliberately asking it to exercise judgment?
-
-Or have I accidentally transferred judgment because I haven't examined what I'm asking?
-
-And if I'm making that decision consciously, how will I determine whether the resulting work satisfies my intention?
-
-Those questions are more useful to me than any supposedly perfect prompt template.
-
-## Proper delegation is a learned skill
-
-I think people sometimes underestimate how much understanding is involved in becoming effective at delegating work to agents.
-
-A person who doesn't understand how these systems behave can still obtain useful results. Modern models are remarkably capable of interpreting imperfect requests.
-
-But relying entirely on that capability means depending on the model to resolve ambiguities, reconstruct missing intentions, and determine which decisions should be made independently.
-
-Sometimes it succeeds.
-
-Sometimes it doesn't.
-
-And without a useful mental model of the system, it becomes difficult to understand why.
-
-I've found that the better I become at anticipating an agent's behavior, the less effort I need to spend correcting it.
-
-I recognize when an instruction is likely to encourage an unwanted action. I notice when the context contains an assumption that should be challenged. I understand when a task needs explicit boundaries and when the agent can safely decide the details itself.
-
-That understanding makes delegation more efficient.
-
-It also changes how I respond to failures.
-
-Rather than automatically throwing another prompt at the agent, I can consider what caused the failure.
-
-Perhaps the objective was ambiguous. Perhaps the model lost an important piece of context. Perhaps a tool description made an unintended operation seem appropriate. Perhaps the agent's implementation was correct, but its verification was inadequate.
-
-Or perhaps the model simply made a mistake.
-
-The answer won't always be obvious. I don't expect to predict every behavior or explain every failure.
-
-But I can investigate.
-
-And when the investigation reveals something useful, I can apply that understanding to future interactions.
-
-That's how the intuition develops.
-
-Over time, prompt engineering becomes less about consciously constructing elaborate instructions and more about recognizing what information the model needs, how particular language might influence it, and where human judgment should enter the process.
-
-I don't want to spend my time personally executing work merely to prove that I'm capable of doing it.
-
-I want to explore ideas, understand problems, make decisions, and use agents to accomplish things.
-
-I want those agents to reason independently, investigate difficult questions, and carry out substantial amounts of work without requiring constant intervention.
-
-But I also want to understand the systems I'm directing.
-
-I want to know when I'm making an assumption, when the agent is making one, and when a result has actually been verified.
-
-Most of the time, I would rather properly delegate a task than perform it myself.
-
-And that's precisely why I care so much about getting delegation right.
-
-The more I depend on agents to do the work, the less willing I am to treat their behavior as something I shouldn't bother understanding.
+**I don't want to do the agent's job. I want to stop getting in the way of the job I asked it to do.**
