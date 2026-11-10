@@ -2,7 +2,7 @@
 title: "Thinking Like the Model"
 date: 2026-11-09
 author: "Jackson Cummings"
-status: draft
+status: published
 issue: "J–008"
 slug: thinking-like-the-model
 category: "Essays"
