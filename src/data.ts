@@ -13,7 +13,7 @@ import { cognitiveDelegationPost } from './cognitive-delegation-post'
 import { thinkingLikeTheModelPost } from './thinking-like-the-model-post'
 
 export type Topic = 'Essays' | 'Research' | 'Engineering' | 'Experiments' | 'Process'
-export type Stage = 'Editorial draft' | 'Under review' | 'Working notes' | 'Concept'
+export type Stage = 'Editorial draft' | 'Published' | 'Under review' | 'Working notes' | 'Concept'
 export type FigureType = 'learning' | 'pressure' | 'contours' | 'geometry' | 'tokens' | 'pdf' | 'storage' | 'system' | 'signals' | 'agent' | 'frontier'
 
 export interface Section {
