@@ -15,6 +15,33 @@ export interface JournalFigureSpec {
 }
 interface FigurePair { overview: JournalFigureSpec; detail?: JournalFigureSpec }
 export const journalFigureSpecs: Record<string, FigurePair> = {
+  'shake-the-8-ball-again': {
+    overview: {
+      title: 'An answer is a candidate, not a verdict',
+      caption: 'Reframing a question can reveal assumptions and alternative explanations. Evidence determines whether a factual claim holds up.',
+      kind: 'flow',
+      nodes: [
+        ['Ask', 'A question arrives with information and framing'],
+        ['Interpret', 'The model proposes an explanation or answer'],
+        ['Reframe', 'Test another assumption or perspective'],
+        ['Check', 'Use code, experiments, measurements or sources'],
+      ],
+      note: 'Your reaction can reveal a preference. Agreement alone cannot verify the answer.',
+    },
+    detail: {
+      title: 'What the same exchange can reveal',
+      caption: 'Reactions and arguments can inform a decision, while external claims still require independent support.',
+      kind: 'compare',
+      left: [
+        ['About my preference', 'Which answer I wanted to receive'],
+        ['About the framing', 'Which assumptions made an answer plausible'],
+      ],
+      right: [
+        ['About the question', 'What other interpretations deserve testing'],
+        ['About the world', 'What evidence supports the conclusion'],
+      ],
+    },
+  },
   'the-work-i-no-longer-have-to-do': {
     overview: {
       title: 'What a person must do to accomplish a goal',

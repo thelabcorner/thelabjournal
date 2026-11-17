@@ -11,6 +11,7 @@ import { beignetEinkPost } from './beignet-eink-post'
 import { wordsCarryPost } from './words-carry-post'
 import { cognitiveDelegationPost } from './cognitive-delegation-post'
 import { thinkingLikeTheModelPost } from './thinking-like-the-model-post'
+import { shakeThe8BallAgainPost } from './shake-the-8-ball-again-post'
 
 export type Topic = 'Essays' | 'Research' | 'Engineering' | 'Experiments' | 'Process'
 export type Stage = 'Editorial draft' | 'Published' | 'Under review' | 'Working notes' | 'Concept'
@@ -56,6 +57,7 @@ export const entries: Entry[] = [
   wordsCarryPost,
   cognitiveDelegationPost,
   thinkingLikeTheModelPost,
+  shakeThe8BallAgainPost,
   {
     slug: 'four-axis-lyophilization',
     title: 'Low-temperature lyophilization: three theses in a four-axis optimization framework',
