@@ -353,7 +353,7 @@ function Article({ entry, onBack, onOpen, copied, onShare, isSaved, toggle }: {
             {entry.slug === draft.slug && <div className="editor-note"><FileText aria-hidden="true"/><div><strong>Editorial draft</strong><p>Prepared for review. Examples are generalized to avoid private implementation details.</p></div></div>}
           </div>}
           {section.takeaway && <aside className="takeaway"><span className="section-label">Working principle</span><p>{section.takeaway}</p></aside>}
-          {entry.sections.length > 1 && i === Math.max(1, Math.floor(entry.sections.length / 2)) && hasJournalDetailFigure(entry.slug) && <JournalFigure slug={entry.slug} variant="detail" className="article-figure"/>}
+          {entry.sections.length > 1 && i === (entry.slug === 'when-risk-becomes-the-work' ? 3 : Math.max(1, Math.floor(entry.sections.length / 2))) && hasJournalDetailFigure(entry.slug) && <JournalFigure slug={entry.slug} variant="detail" className="article-figure"/>}
         </section>)}</div>
         <div className="article-bottom"><div><span className="section-label">End of entry</span><h3>Keep reading</h3></div><button onClick={onBack} className="button button--outline">All writing <ArrowRight/></button></div>
         <div className="related-list">{relatedEntries.map((item) => <PostLink entry={item} onOpen={onOpen} className="related-row" key={item.slug}><span>{item.shortTitle}</span><span>{item.issue}<ArrowUpRight/></span></PostLink>)}</div>

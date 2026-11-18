@@ -123,6 +123,49 @@ function Dependency({ nodes }: { nodes: readonly FigureNode[] }) {
     <div className="jf-loop-warning"><span aria-hidden="true">↶</span> C needs A, closing the directed cycle</div>
   </div>
 }
+function RiskLoop({ nodes }: { nodes: readonly FigureNode[] }) {
+  return <div className="jf-risk-loop">
+    <div className="jf-risk-sequence">
+      {nodes.map(([label, explanation], index) => <div className="jf-risk-step" key={label}>
+        <span className="jf-risk-step-index">{String(index + 1).padStart(2, '0')}</span>
+        <strong>{label}</strong>
+        <p>{explanation}</p>
+      </div>)}
+    </div>
+    <div className="jf-risk-loopback" aria-label="The sequence repeats when each new unknown becomes a prerequisite">
+      <span aria-hidden="true">↶</span>
+      <span>New possibilities restart the investigation</span>
+    </div>
+    <div className="jf-risk-gate">
+      <span className="jf-risk-gate-mark" aria-hidden="true">?</span>
+      <div><small>DECISION CHECKPOINT</small><strong>Would another check change the decision?</strong></div>
+      <span className="jf-risk-gate-outcome">A reason to investigate, or a reason to decide</span>
+    </div>
+  </div>
+}
+function RiskDecision({ left, right }: { left: readonly FigureNode[]; right: readonly FigureNode[] }) {
+  return <div className="jf-risk-decision">
+    <div className="jf-risk-constant">
+      <span className="jf-risk-constant-icon" aria-hidden="true">!</span>
+      <div><small>UNCHANGED POSSIBILITY</small><strong>The device could still be bricked</strong></div>
+    </div>
+    <div className="jf-risk-states">
+      <div className="jf-risk-state">
+        <div className="jf-risk-state-heading"><span>01 / BEFORE</span><strong>Open questions</strong></div>
+        {left.map(([label, explanation]) => <div className="jf-risk-state-row" key={label}><span>{label}</span><p>{explanation}</p></div>)}
+      </div>
+      <span className="jf-risk-state-arrow" aria-hidden="true">→</span>
+      <div className="jf-risk-state jf-risk-state--after">
+        <div className="jf-risk-state-heading"><span>02 / AFTER</span><strong>Evidence accumulated</strong></div>
+        {right.map(([label, explanation]) => <div className="jf-risk-state-row" key={label}><span>{label}</span><p>{explanation}</p></div>)}
+      </div>
+    </div>
+    <div className="jf-risk-decision-rule">
+      <strong>Same possible failure.</strong>
+      <span>Different basis for deciding whether to proceed.</span>
+    </div>
+  </div>
+}
 function Content({ spec, slug }: { spec: JournalFigureSpec; slug: string }) {
   const nodes=spec.nodes ?? [], left=spec.left ?? [],right=spec.right ?? []
   switch(spec.kind) {
@@ -136,6 +179,8 @@ function Content({ spec, slug }: { spec: JournalFigureSpec; slug: string }) {
     case 'bytes': return <BytesVisual left={left} right={right}/>
     case 'pdf': return <PdfVisual left={left} right={right}/>
     case 'dependency': return <Dependency nodes={nodes}/>
+    case 'risk-loop': return <RiskLoop nodes={nodes}/>
+    case 'risk-decision': return <RiskDecision left={left} right={right}/>
   }
 }
 export function JournalFigure({ slug, variant='overview', className }: Props) {

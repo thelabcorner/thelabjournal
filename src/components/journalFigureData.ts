@@ -3,7 +3,7 @@
  * not a measurement or simulated output. Keep labels faithful to article prose.
  */
 export type FigureNode = readonly [label: string, explanation: string]
-export type FigureKind = 'flow' | 'compare' | 'matrix' | 'layers' | 'cycle' | 'pixel' | 'arc' | 'bytes' | 'pdf' | 'dependency'
+export type FigureKind = 'flow' | 'compare' | 'matrix' | 'layers' | 'cycle' | 'pixel' | 'arc' | 'bytes' | 'pdf' | 'dependency' | 'risk-loop' | 'risk-decision'
 export interface JournalFigureSpec {
   title: string
   caption: string
@@ -15,6 +15,36 @@ export interface JournalFigureSpec {
 }
 interface FigurePair { overview: JournalFigureSpec; detail?: JournalFigureSpec }
 export const journalFigureSpecs: Record<string, FigurePair> = {
+  'when-risk-becomes-the-work': {
+    overview: {
+      title: 'How a potential failure becomes a permanent prerequisite',
+      caption: 'Illustrative feedback loop, not an observed trace of model reasoning. Each concern can be technically plausible without changing the underlying decision.',
+      kind: 'risk-loop',
+      nodes: [
+        ['Identify', 'A firmware update could brick the device'],
+        ['Investigate', 'Inspect more conditions and possible failures'],
+        ['Expand', 'The investigation generates more unknowns'],
+        ['Delay', 'The original action remains indefinitely pending'],
+      ],
+      note: 'The missing question: would another check materially change what should happen next?',
+    },
+    detail: {
+      title: 'The risk remains, but its decision context changes',
+      caption: 'Qualitative comparison of two stages in the Belkin project. No probability, time saving, or safety guarantee is implied.',
+      kind: 'risk-decision',
+      left: [
+        ['Information', 'Firmware layout and recovery behavior still unclear'],
+        ['Safeguards', 'Original flash contents not yet backed up'],
+        ['Next action', 'Investigate the concrete failure modes'],
+      ],
+      right: [
+        ['Information', 'Image structure and recovery possibilities investigated'],
+        ['Safeguards', 'Original flash contents preserved'],
+        ['Next action', 'Evaluate the remaining risk and decide whether to proceed'],
+      ],
+      note: '“Could brick the router” is true at both stages. The decision need not stay the same.',
+    },
+  },
   'shake-the-8-ball-again': {
     overview: {
       title: 'An answer is a candidate, not a verdict',

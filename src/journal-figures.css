@@ -82,3 +82,53 @@
   .jf-figure .jf-node,.jf-page,.jf-visual-column { background:#fff; }
   .jf-figure .figure-motion { display:none; }
 }
+
+/* Journal 010: qualitative risk/uncertainty illustrations. No data encoded by area or color. */
+.jf-risk-loop,.jf-risk-decision { min-width:0; }
+.jf-risk-sequence { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:9px; }
+.jf-risk-step { position:relative; display:flex; flex-direction:column; min-height:128px; padding:13px 12px; border:1px solid var(--border); border-radius:6px; background:var(--inset); min-width:0; }
+.jf-risk-step:not(:last-child)::after { content:'→'; position:absolute; top:calc(50% - 10px); right:-14px; z-index:2; width:18px; line-height:20px; text-align:center; font-size:15px; color:var(--foreground); background:var(--card); border:1px solid var(--border); border-radius:3px; }
+.jf-risk-step-index { font-size:10px; font-weight:700; color:var(--muted-foreground); letter-spacing:.045em; font-variant-numeric:tabular-nums; margin-bottom:9px; }
+.jf-risk-step strong { font-size:12.5px; line-height:1.35; font-weight:650; letter-spacing:-.015em; }
+.jf-risk-step p { margin:7px 0 0 !important; color:var(--muted-foreground); font-size:11.5px !important; line-height:1.45 !important; }
+.jf-risk-loopback { position:relative; margin:12px 0; min-height:35px; display:flex; align-items:center; justify-content:center; gap:10px; padding:6px 10px; border:1px dashed var(--border); border-radius:5px; background:var(--card); font-size:11px; color:var(--muted-foreground); line-height:1.4; text-align:center; }
+.jf-risk-loopback>span:first-child { font-size:20px; line-height:1; color:var(--foreground); }
+.jf-risk-gate { display:flex; align-items:center; gap:12px; min-width:0; background:var(--foreground); color:var(--background); border-radius:6px; padding:13px 15px; }
+.jf-risk-gate-mark { width:31px; height:31px; flex:0 0 31px; border:1px solid color-mix(in srgb,var(--background) 45%,transparent); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:17px; font-weight:650; }
+.jf-risk-gate>div { min-width:0; display:flex; flex-direction:column; gap:4px; }
+.jf-risk-gate small,.jf-risk-constant small { font-size:9.5px; line-height:1.3; letter-spacing:.095em; font-weight:700; opacity:.67; }
+.jf-risk-gate strong { font-size:12.7px; line-height:1.35; letter-spacing:-.01em; font-weight:650; }
+.jf-risk-gate-outcome { margin-left:auto; width:155px; flex:0 0 155px; border-left:1px solid color-mix(in srgb,var(--background) 30%,transparent); padding-left:12px; color:color-mix(in srgb,var(--background) 75%,transparent); font-size:10.8px; line-height:1.42; }
+.jf-risk-constant { display:flex; gap:11px; align-items:center; padding:12px 13px; border:1px solid var(--border); border-radius:6px; background:var(--inset); }
+.jf-risk-constant-icon { display:flex; flex:0 0 29px; width:29px; height:29px; border-radius:50%; align-items:center; justify-content:center; border:1px solid var(--foreground); color:var(--foreground); font-weight:700; font-size:15px; }
+.jf-risk-constant>div { display:flex; flex-direction:column; gap:3px; min-width:0; }
+.jf-risk-constant strong { font-size:12.8px; font-weight:650; line-height:1.35; }
+.jf-risk-states { display:grid; grid-template-columns:minmax(0,1fr) 26px minmax(0,1fr); gap:10px; margin-top:12px; align-items:stretch; }
+.jf-risk-state { border:1px solid var(--border); background:var(--inset); border-radius:6px; padding:0 12px; min-width:0; }
+.jf-risk-state--after { border-color:color-mix(in srgb,var(--foreground) 50%,var(--border)); background:var(--card); }
+.jf-risk-state-arrow { align-self:center; color:var(--foreground); font-size:22px; text-align:center; line-height:1; }
+.jf-risk-state-heading { display:flex; align-items:flex-start; flex-direction:column; gap:5px; padding:12px 0; border-bottom:1px solid var(--border); }
+.jf-risk-state-heading span { font-size:10px; letter-spacing:.055em; color:var(--muted-foreground); font-weight:700; }
+.jf-risk-state-heading strong { font-size:13px; line-height:1.35; font-weight:650; }
+.jf-risk-state-row { display:grid; grid-template-columns:82px minmax(0,1fr); gap:8px; padding:11px 0; border-bottom:1px solid var(--border); align-items:start; }
+.jf-risk-state-row:last-child { border-bottom:0; }
+.jf-risk-state-row>span { font-size:10.7px; color:var(--muted-foreground); line-height:1.48; font-weight:650; }
+.jf-risk-state-row p { margin:0 !important; font-size:11.4px !important; line-height:1.5 !important; }
+.jf-risk-decision-rule { display:flex; align-items:baseline; flex-wrap:wrap; gap:4px 7px; padding:12px 2px 0; line-height:1.5; }
+.jf-risk-decision-rule strong { font-size:12px; font-weight:650; }
+.jf-risk-decision-rule span { font-size:11.6px; color:var(--muted-foreground); }
+@media (max-width:690px) {
+  .jf-risk-sequence { grid-template-columns:minmax(0,1fr); gap:9px; }
+  .jf-risk-step { min-height:0; padding:11px 12px; }
+  .jf-risk-step-index { margin-bottom:5px; }
+  .jf-risk-step:not(:last-child)::after { content:'↓'; top:auto; bottom:-13px; right:calc(50% - 9px); }
+  .jf-risk-gate { align-items:flex-start; }
+  .jf-risk-gate-outcome { display:none; }
+  .jf-risk-states { grid-template-columns:minmax(0,1fr); gap:0; }
+  .jf-risk-state-arrow { transform:rotate(90deg); padding:7px 0; }
+  .jf-risk-state-row { grid-template-columns:83px minmax(0,1fr); }
+}
+@media print {
+  .jf-risk-step,.jf-risk-state,.jf-risk-constant,.jf-risk-loopback { background:#fff; }
+  .jf-risk-gate { background:#18181b; color:#fff; }
+}
