@@ -13,9 +13,32 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Validate archive sorting
+        run: bun run audit:archive
+      - name: Validate brand icon assets
+        run: bun run audit:icons
+      - name: Build canonical root-domain site
+        run: bun run build
+      - name: Audit homepage and per-article social previews
+        run: bun run audit:og
+      - name: Audit article links
+        run: bun scripts/article-route-audit.mjs
+      - name: HTTP smoke-test static article pages and images
+        run: bun scripts/article-http-audit.mjs
+
   deploy:
+    needs: verify
     # Enable only after the scoped Cloudflare GitHub secrets are installed.
-    # GitHub Pages remains a separate legacy deployment in pages.yml.
+    # This is the sole deployment workflow; do not restore a Pages mirror.
     if: vars.JOURNAL_CLOUDFLARE_DEPLOY_ENABLED == 'true'
     runs-on: ubuntu-latest
     environment:

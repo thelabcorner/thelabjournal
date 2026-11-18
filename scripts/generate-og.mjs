@@ -133,7 +133,7 @@ const foreground = h('div', {
 
   h('div', { style: { display: 'flex', position: 'absolute', left: 72, top: 545, width: 1056, height: 1, backgroundColor: '#52525b' } }),
   h('div', { style: { display: 'flex', position: 'absolute', left: 72, top: 564, width: 1056, justifyContent: 'space-between', alignItems: 'center' } },
-    txt('thelabcorner.github.io/thelabjournal', { color: muted, fontSize: 16, fontWeight: 500, letterSpacing: .45 }),
+    txt('journal.thedabcorner.site', { color: muted, fontSize: 16, fontWeight: 500, letterSpacing: .45 }),
     txt('VOL. 01    /    WORKBENCH', { color: '#a1a1aa', fontSize: 12, fontWeight: 500, letterSpacing: 1.9 })
   )
 )

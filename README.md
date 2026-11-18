@@ -16,18 +16,15 @@ Vite is configured for port **11264**, listening on `0.0.0.0`. The local preview
 
 ## Deployment
 
-The canonical source is [thelabcorner/thelabjournal](https://github.com/thelabcorner/thelabjournal), and the live site is [thelabcorner.github.io/thelabjournal](https://thelabcorner.github.io/thelabjournal/). This project has its own GitHub Pages deployment; it does not depend on the owner's homepage repository.
+The source is [thelabcorner/thelabjournal](https://github.com/thelabcorner/thelabjournal). The **only** production site is [journal.thedabcorner.site](https://journal.thedabcorner.site/), served from the `thelabjournal-live` Cloudflare Worker. There is no GitHub Pages mirror. All production, preview, PWA and article routes use the root path `/`.
 
-`.github/workflows/pages.yml` builds and deploys the site automatically on pushes to `main` via GitHub Actions.
-
-The workflow builds with `GITHUB_PAGES=true` and sets the Vite/PWA base path to `/thelabjournal/`. Local builds retain `/` as their base path, preserving the existing development and PWA audits. To inspect the Pages variant locally:
+From an authenticated Cloudflare Wrangler environment, publish a verified release using:
 
 ```sh
-GITHUB_PAGES=true bun run build
-bunx vite preview
+bun run deploy:cloudflare
 ```
 
-Open `/thelabjournal/` on the preview origin when validating a Pages build.
+`.github/workflows/cloudflare.yml` is the only deployment workflow. Automatic Cloudflare publishing is currently gated on scoped `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` GitHub Actions secrets and repository variable `JOURNAL_CLOUDFLARE_DEPLOY_ENABLED=true`. Until those are configured, GitHub pushes do **not** publish production; deploy explicitly with Wrangler. See [PWA.md](PWA.md).
 
 ## Information architecture
 
@@ -35,8 +32,8 @@ Open `/thelabjournal/` on the preview origin when validating a Pages build.
 - **Archive:** topic filters, category badges shared with the article reader, type/date metadata, keyword search, subject grouping (newest within each subject) by default, alternative chronological/reading-length sorts, item actions, selected entry, and saved view. No separate hero page for each topic.
 - **Journal landing background:** the existing ordered-dot WebSeal-style animation reused at exactly 2% opacity, with no paper ruling, margins, or artificial grain. The paint surface stays viewport-sized when scrolling, is excluded from printing, and exists only in Journal / All entries; other subjects, Saved, and article readers remain plain.
 - **Navigation:** full-width WebSeal-inspired ordered-dot information fields behind the top header and mobile bottom bar, drawn at 14 fps with legible foreground controls and suspended when hidden or reduced-motion is enabled.
-- **Brand assets:** the navbar's four-tile mark is shared with the generated SVG/ICO/PNG favicons, Apple touch icon and maskable PWA icon. Regenerate with `bun run generate:pwa-icons`; the reproducible format/geometry audit runs as `bun run audit:icons` and on GitHub Pages CI.
-- **Open Graph social artwork:** static 1200×630 Satori + Resvg rendering of the shared nav mark, Inter-only lettering, and a mathematically seeded stippled research globe. No image-generation service, remote images, gradient fills, serif or monospace typography. Regenerate with `bun run generate:og`, validate with `bun run audit:og`. The compact PNG is deployed, while the larger vector intermediate stays under ignored `artifacts/` to avoid unnecessary PWA precaching. Social tags reference the absolute Pages URL; the workflow regenerates and verifies the public asset.
+- **Brand assets:** the navbar's four-tile mark is shared with the generated SVG/ICO/PNG favicons, Apple touch icon and maskable PWA icon. Regenerate with `bun run generate:pwa-icons`; the reproducible format/geometry audit runs as `bun run audit:icons` and in release validation.
+- **Open Graph social artwork:** static 1200×630 Satori + Resvg rendering of the shared nav mark, Inter-only lettering, and a mathematically seeded stippled research globe. No image-generation service, remote images, gradient fills, serif or monospace typography. Regenerate with `bun run generate:og`, validate with `bun run audit:og`. The compact PNG is deployed, while the larger vector intermediate stays under ignored `artifacts/` to avoid unnecessary PWA precaching. Social tags reference the absolute Cloudflare custom-domain URL.
 - **Article reader:** back/actions bar, live reading-progress indicator, article contents rail at wide widths, and a native section picker at narrower widths. The first section appears **before** the supporting figure.
 - **Phone navigation:** persistent four-item bottom navigation (Journal, Browse, Saved, Search), safe-area-aware placement, and a bottom-sheet Browse menu. Breakpoint: below 768 px.
 - **Tablet navigation:** top-bar Browse opens a left drawer between 768 and 1023 px.

@@ -43,21 +43,21 @@ In Safari open the HTTPS site, choose **Share → Add to Home Screen → Add**, 
 
 ## Deployment considerations
 
-Serve the contents of `dist/` over HTTPS at the intended origin. GitHub Pages builds use the `/thelabjournal/` application root, while local and custom root-domain builds use `/`. Preserve:
+Serve the contents of `dist/` over HTTPS at `https://journal.thedabcorner.site/`. All builds use the root `/` application base. Preserve:
 - `<base>manifest.webmanifest` with `application/manifest+json` or a browser-compatible JSON type.
 - `<base>sw.js` with a JavaScript MIME type, registration scope, and navigation fallback bounded to the application root.
 - `<base>icons/*` and `<base>assets/*` as cacheable assets (hashed assets for long caching).
 - `index.html` with short/no-cache revalidation, so clients discover updates.
 - For Workers static assets, `public/_headers` specifies `no-store` for `sw.js`, revalidation for HTML/manifest, and immutable caching only for content-hashed `/assets/*`.
-- The app uses query-parameter article deep links so GitHub Pages needs no path rewrite. A future path-based router will require a fallback strategy.
+- The app supports query-parameter and physical article deep links; keep the Cloudflare single-page application fallback for navigation that is not served by physical HTML.
 - No Service-Worker-Allowed header is necessary because the worker sits at the application root.
 
 A locally accessible HTTP LAN preview may still be added as a basic Home Screen bookmark by Safari, but it is not equivalent to an HTTPS service-worker-backed offline PWA. Physical iOS Safari validation is a separate verification step.
 
 ## Cloudflare release automation
 
-The canonical `https://journal.thedabcorner.site/` site is hosted by the `thelabjournal-live` Cloudflare Worker, **not** the GitHub Pages deployment. `.github/workflows/pages.yml` only updates the legacy `/thelabjournal/` mirror. Publishing a Git commit does not update the canonical site unless Cloudflare deployment also runs.
+The only production site is `https://journal.thedabcorner.site/`, hosted by the `thelabjournal-live` Cloudflare Worker. The GitHub Pages deployment and its workflow were retired in November 2026. Publishing a Git commit does not update the production site unless Cloudflare deployment also runs.
 
-`.github/workflows/cloudflare.yml` builds the **root-domain** release, deploys via Wrangler, and checks that the live service-worker bytes, HTML entry chunk, and no-store response header match that release. It is initially disabled rather than producing broken CI runs before credentials exist. In the GitHub repo's Actions secrets, configure a scoped `CLOUDFLARE_API_TOKEN` (Worker deploy permission) and `CLOUDFLARE_ACCOUNT_ID`; then set repository Actions variable `JOURNAL_CLOUDFLARE_DEPLOY_ENABLED=true`. Future `main` pushes deploy both targets independently. The variable can be disabled to suspend automatic Cloudflare publishing.
+`.github/workflows/cloudflare.yml` builds the **root-domain** release, deploys via Wrangler, and checks that the live service-worker bytes, HTML entry chunk, and no-store response header match that release. Its deployment job is initially disabled rather than producing broken CI runs before credentials exist. In the GitHub repo's Actions secrets, configure a scoped `CLOUDFLARE_API_TOKEN` (Worker deploy permission) and `CLOUDFLARE_ACCOUNT_ID`; then set repository Actions variable `JOURNAL_CLOUDFLARE_DEPLOY_ENABLED=true`. Future `main` pushes deploy **only** to Cloudflare. The variable can be disabled to suspend automatic publishing.
 
 Use `bun run deploy:cloudflare` for an intentional local deployment. Because a deploy uploads **everything** currently in `dist/`, never publish an in-progress working tree merely to update service-worker behavior; confirm the complete article/manuscript release first. Neither upgrading the PWA nor deploying requires uninstalling it or deleting the user's local preferences/bookmarks.

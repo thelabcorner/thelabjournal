@@ -1,12 +1,12 @@
-# Article social cards / GitHub Pages
+# Article social cards / Cloudflare
 
-Each registered journal entry gets its own 1200 × 630 Satori + Resvg PNG and a real GitHub Pages article URL. Article HTML is generated at build time, so LinkedIn, Slack, Discord, X, Facebook and other link preview bots can read article-specific metadata without executing JavaScript.
+Each registered journal entry gets its own 1200 × 630 Satori + Resvg PNG and a physical article URL on the canonical custom domain. Article HTML is generated at build time, so LinkedIn, Slack, Discord, X, Facebook and other link preview bots can read article-specific metadata without executing JavaScript.
 
 ## Canonical route
 
-https://thelabcorner.github.io/thelabjournal/posts/<slug>/
+https://journal.thedabcorner.site/posts/<slug>/
 
-Legacy links at ?post=<slug> still load in the React reader and are upgraded in the browser. A static GitHub Pages host cannot emit distinct server-side Open Graph tags for the old query-string URLs. Copy or share the canonical path links.
+Legacy links at ?post=<slug> still load in the React reader and are upgraded in the browser. Query-string URLs cannot emit distinct server-side Open Graph tags. Copy or share the canonical path links.
 
 ## Source of truth
 
@@ -30,13 +30,13 @@ Inter sans-serif; grayscale shadcn-zinc surfaces; New York-style spacing; thin b
 ## Regression hazards
 
 - Static hosting requires physical HTML entrypoints; changing back to query-only sharing breaks metadata.
-- Vite emits base-prefixed asset URLs for Project Pages. Routes must point to those paths, not to relative ./assets.
+- Vite emits root-relative asset URLs for the Cloudflare custom domain. Routes must point to /assets/, not to relative ./assets.
 - Renaming an article slug breaks old external links. Prefer stable slugs.
 - OG caches can persist. URLs include a content-derived image hash query string so changed images get fresh cache identities.
 
 ## Delivery verification
 
-The deployment and pull-request workflows start a local Vite preview server in GitHub Pages mode, fetch every physical `/posts/<slug>/` URL and PNG over HTTP, assert correct content types and canonical metadata, and check legacy query links still return the application shell. The PWA precache deliberately excludes generated OG PNGs and duplicate article HTML shells; the application remains available offline through its indexed navigation fallback.
+The deployment and pull-request workflows use a root-domain Vite preview, fetch every physical `/posts/<slug>/` URL and PNG over HTTP, assert correct content types and canonical metadata, and check legacy query links still return the application shell. The PWA precache deliberately excludes generated OG PNGs and duplicate article HTML shells; the application remains available offline through its indexed navigation fallback.
 
 
 ## Snapchat and cross-platform sharing

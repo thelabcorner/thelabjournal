@@ -17,9 +17,9 @@ const W = 1200, H = 630
 const ROOT = resolve(import.meta.dir, '..')
 const PUBLIC = join(ROOT, 'public', 'og', 'articles')
 const DIST = join(ROOT, 'dist')
-// Cloudflare is the canonical journal origin. GitHub Pages remains a mirror.
+// Cloudflare is the only published journal origin.
 const BASE = 'https://journal.thedabcorner.site/'
-const APP_ASSET_BASE = process.env.GITHUB_PAGES === 'true' ? '/thelabjournal/' : '/'
+const APP_ASSET_BASE = '/'
 const colors = {
   bg: '#101012', surface: '#18181b', paper: '#fafafa', text: '#e4e4e7',
   muted: '#a1a1aa', quiet: '#71717a', line: '#3f3f46', subtle: '#27272a',

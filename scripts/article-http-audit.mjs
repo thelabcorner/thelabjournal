@@ -1,4 +1,4 @@
-/** HTTP integration test for GitHub Pages' project-base routing.
+/** HTTP integration test for Cloudflare's root-domain article routes.
  * Ensures actual static HTML and OG PNGs are served, not SPA fallback HTML.
  */
 import assert from 'node:assert/strict'
@@ -7,9 +7,9 @@ import { setTimeout as delay } from 'node:timers/promises'
 import { entries } from '../src/data.ts'
 
 const PORT = 13987
-const BASE = 'http://127.0.0.1:' + PORT + '/thelabjournal/'
+const BASE = 'http://127.0.0.1:' + PORT + '/'
 const server = spawn(process.execPath, ['node_modules/vite/bin/vite.js', 'preview', '--host', '127.0.0.1', '--port', String(PORT), '--strictPort'], {
-  cwd: new URL('..', import.meta.url), env: { ...process.env, GITHUB_PAGES: 'true' },
+  cwd: new URL('..', import.meta.url), env: process.env,
   stdio: 'pipe',
 })
 let logs = ''
@@ -73,7 +73,7 @@ try {
         assert.ok(crawlerHTML.includes(expected), entry.slug + ': ' + platform + ' readable server metadata ' + expected)
       }
     }
-    assert.ok(source.includes('src="/thelabjournal/assets/'), entry.slug + ': app bootstrap path')
+    assert.ok(source.includes('src="/assets/'), entry.slug + ': app bootstrap path')
     const image = await request('og/articles/' + entry.slug + '.png')
     assert.equal(image.status, 200, entry.slug + ': PNG URL serves HTTP 200')
     assert.match(image.headers.get('content-type') || '', /image\/png/, entry.slug + ': PNG content-type')

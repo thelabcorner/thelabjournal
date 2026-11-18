@@ -19,8 +19,6 @@ jobs:
         run: bun install --frozen-lockfile
       - name: Generate social assets and static article routes
         run: bun run build
-        env:
-          GITHUB_PAGES: 'true'
       - name: Verify Open Graph assets and metadata
         run: bun run audit:og
       - name: Verify article navigation and legacy links

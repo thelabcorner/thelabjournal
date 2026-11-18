@@ -3,9 +3,8 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
-// Project Pages hosts the application beneath /thelabjournal/. Keep local
-// development and previews at / so the existing audits remain representative.
-const base = process.env.GITHUB_PAGES === 'true' ? '/thelabjournal/' : '/'
+// The canonical Cloudflare Worker serves this application at the domain root.
+const base = '/'
 
 export default defineConfig({
   base,
