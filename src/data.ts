@@ -13,6 +13,7 @@ import { cognitiveDelegationPost } from './cognitive-delegation-post'
 import { thinkingLikeTheModelPost } from './thinking-like-the-model-post'
 import { shakeThe8BallAgainPost } from './shake-the-8-ball-again-post'
 import { whenRiskBecomesTheWorkPost } from './when-risk-becomes-the-work-post'
+import { thinkingBehindShortPromptsPost } from './thinking-behind-short-prompts-post'
 
 export type Topic = 'Essays' | 'Research' | 'Engineering' | 'Experiments' | 'Process'
 export type Stage = 'Editorial draft' | 'Published' | 'Under review' | 'Working notes' | 'Concept'
@@ -60,6 +61,7 @@ export const entries: Entry[] = [
   thinkingLikeTheModelPost,
   shakeThe8BallAgainPost,
   whenRiskBecomesTheWorkPost,
+  thinkingBehindShortPromptsPost,
   {
     slug: 'four-axis-lyophilization',
     title: 'Low-temperature lyophilization: three theses in a four-axis optimization framework',
