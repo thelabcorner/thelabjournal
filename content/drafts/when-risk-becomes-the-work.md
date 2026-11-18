@@ -6,7 +6,7 @@ status: published
 issue: "J–010"
 slug: when-risk-becomes-the-work
 category: "Essays"
-summary: "What two weeks of router-firmware work taught me about LLMs, manufactured uncertainty, disproportionate caution, and the judgment required to accept risk."
+summary: "What two weeks of router-firmware work revealed about LLMs, manufactured uncertainty, and the judgment to accept risk in engineering."
 tags: ["LLMs", "AI agents", "Risk management", "Engineering", "Uncertainty", "Decision-making", "Firmware", "Autonomous development"]
 ---
 
@@ -207,6 +207,44 @@ Sometimes the right recommendation is to stop because the risk remains unaccepta
 And sometimes it's to accept the remaining uncertainty and proceed.
 
 I don't want every unresolved question to become an automatic blocker. I want the decision to reflect what we know, what we stand to lose, and what additional investigation is actually expected to accomplish.
+
+## The same judgment applies beyond agents
+
+And the beauty of all this is that it applies outside of working with LLMs. The same principles apply to engineering in general, because humans can get caught in these loops too.
+
+We can become fixated on a possible failure, spend days trying to eliminate it, and gradually lose track of what we're actually trying to build. Sometimes the concern is justified. Sometimes the fact that something *could* happen becomes enough to keep us from acting, even after we've done the work necessary to make a reasonable decision.
+
+I think this is especially relevant to engineering students and people who are relatively new to building their own projects. I don't mean that condescendingly. Someone can understand the theory behind a system quite well and still have little experience deciding what to do when the evidence is incomplete. That judgment has to develop somewhere.
+
+Early on, failure can feel like proof that you didn't research enough, verify enough, or anticipate enough. The instinct is to keep working until no plausible failure remains.
+
+But there isn't always a path to that condition. The operative word in risk management is often *minimize*. We try to reduce the probability of failure, limit its consequences, and establish what residual risk we can reasonably accept.
+
+The distinction is easier to appreciate when the stakes change. A failed experiment that destroys an inexpensive, replaceable component is one thing. The same failure mechanism in equipment that protects human life is another. An engineer has to account for the consequences and the uncertainty in the estimate, not merely the frightening name attached to the failure.
+
+Even a numerical probability isn't enough by itself. Imagine, hypothetically, a 0.1% chance of failure during a particular operation. If failure means replacing a cheap part, that might be acceptable. If it means seriously injuring someone, the same number demands a different response. And if the 0.1% figure came from a weak assumption rather than sufficient evidence, its apparent precision shouldn't inspire much confidence.
+
+That brings me to NASA, which I think is an unusually good example precisely because its engineering failures can have extraordinary consequences.
+
+NASA's [technical risk-management guidance](https://www.nasa.gov/reference/6-4-technical-risk-management/) describes two complementary processes: *Risk-Informed Decision Making* and *Continuous Risk Management*. One helps select among alternatives using information about risks and uncertainties; the other manages risks as a project is developed and operated. NASA also describes mitigation continuing until the **remaining risk or its consequences are acceptable**.
+
+Its [agency risk-management requirements](https://nodis3.gsfc.nasa.gov/displayDir.cfm?Internal_ID=N_PR_8000_004C_&page_name=Chapter3) explicitly provide for accepting risks, documenting the rationale and assumptions behind that decision, and reviewing those assumptions later. The required rigor is supposed to match the significance and complexity of the decision. NASA even has [different risk-tolerance classes for different missions](https://nodis3.gsfc.nasa.gov/displayDir.cfm?Internal_ID=N_PR_8705_004B_&page_name=AppendixC), recognizing that a mission's purpose, lifetime, complexity, and cost influence the appropriate approach.
+
+I find that meaningful. If an organization operating spacecraft and crewed missions has a formal place for accepting residual risk, it seems strange to treat the elimination of every uncertainty as a prerequisite for engineering a spare router or a software prototype.
+
+I'm not suggesting that NASA uses some universal fractional percentage below which every failure becomes acceptable. The acceptable probability depends on the specific failure, the consequences, the available evidence, and the mission. In safety-critical engineering, the necessary precautions can be extensive. That is itself an exercise of proportionality.
+
+I think there's a useful lesson here for anyone learning to engineer. Thoroughness isn't measured by how many possible failures you can list or how long you can continue investigating. A good engineer learns to assign those possibilities appropriate weight. They recognize which failures require stronger safeguards, which can be made reversible, which should stop the project, and which are worth accepting.
+
+Experience helps develop that judgment. Building something, testing it, watching it fail, and figuring out why can calibrate your understanding in a way that speculation cannot. So can successfully completing an experiment and discovering that some of the things you feared never became relevant. Neither success nor failure alone proves that the original decision was good; what matters is how the decision held up against the evidence and consequences available at the time.
+
+There's also something to be said for designing *how* you take a risk. Sometimes the responsible solution is to preserve a backup, isolate the experiment, prepare a recovery path, or make the operation reversible. Then failure still teaches you something without costing more than you can afford to lose.
+
+I want to be better at recognizing that point in my own work. I can get deeply absorbed in understanding an edge case because the mechanism interests me. That curiosity is part of what I like about engineering. But I also have to recognize when I'm continuing because the investigation is genuinely useful and when I'm continuing because leaving a question unresolved makes me uncomfortable.
+
+The same applies when I'm supervising an agent. I can give it an objective, identify genuinely unacceptable outcomes, set boundaries on destructive actions, and establish the conditions under which a test is reasonable. Then I can expect the agent to explain what it knows, what remains uncertain, and whether additional analysis is likely to change its recommendation.
+
+That doesn't remove the need for human authorization or judgment. It makes the delegation more meaningful. And it gives both the person and the model a way to recognize when enough preparation has been done to move forward.
 
 ## The discretion I want from an agent
 
