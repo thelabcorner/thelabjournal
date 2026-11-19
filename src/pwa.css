@@ -53,7 +53,9 @@
   box-shadow: 0 8px 26px oklch(0 0 0 / .10);
   font-size: 12px;
   opacity: 0;
-  animation: journal-update-appear .2s ease-out .35s both;
+  /* The previous .35s delay could hide the entire notice during a fast
+     install. The lifecycle state is already debounced at check time. */
+  animation: journal-update-appear .14s ease-out both;
 }
 .pwa-update-indicator { display: grid; flex: 0 0 auto; grid-template-columns: repeat(2, 4px); gap: 3px; padding: 3px; }
 .pwa-update-indicator i { width: 4px; height: 4px; background: var(--foreground); opacity: .24; animation: journal-update-dither 1.15s steps(2, end) infinite; }

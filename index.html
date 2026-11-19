@@ -25,6 +25,20 @@
       document.querySelector('meta[name="theme-color"]').content = theme === 'dark' ? '#111113' : '#fafafa';
     })();
   </script>
+  <!-- First paint is destination-aware, even before React/Workbox finishes
+       fetching application modules. No network request or font is required. -->
+  <style>
+    .journal-boot{position:relative;width:min(100%,620px);margin:clamp(72px,12vh,136px) auto;padding:0 24px 36px;font:14px/1.55 -apple-system,BlinkMacSystemFont,"Inter",sans-serif;color:#18181b;opacity:0;animation:journal-boot-in .12s ease-out .18s both}
+    [data-theme="dark"] .journal-boot{color:#fafafa}
+    .journal-boot-dots{display:grid;grid-template-columns:repeat(2,5px);gap:4px;width:max-content;margin-bottom:25px}
+    .journal-boot-dots i{width:5px;height:5px;background:currentColor;opacity:.25;animation:journal-boot-pulse 1.15s steps(2,end) infinite}
+    .journal-boot-dots i:nth-child(2){animation-delay:.18s}.journal-boot-dots i:nth-child(3){animation-delay:.36s}.journal-boot-dots i:nth-child(4){animation-delay:.54s}
+    .journal-boot-label{font-size:11px;font-weight:550;color:inherit;opacity:.65}
+    .journal-boot h1{margin:14px 0 12px;font-size:clamp(23px,4vw,30px);line-height:1.18;font-weight:600;letter-spacing:-.035em}
+    .journal-boot p{margin:0;font-size:13px;opacity:.65;max-width:55ch}
+    @keyframes journal-boot-in{to{opacity:1}}@keyframes journal-boot-pulse{50%{opacity:1}}
+    @media(prefers-reduced-motion:reduce){.journal-boot{animation:none;opacity:1}.journal-boot-dots i{animation:none;opacity:.65}}
+  </style>
   <meta name="description" content="thelabjournal™: independent scientific research, engineering notes, and experimental work." />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="thelabjournal™" />
@@ -52,6 +66,31 @@
 </head>
 <body>
   <div id="root"></div>
+  <script>
+    (() => {
+      // A direct article/manuscript link must never display a false homepage
+      // during a slow initial script download or a PWA-controlled navigation.
+      const prefix = '%BASE_URL%'.replace(/\/$/, '');
+      const path = location.pathname.startsWith(prefix + '/')
+        ? location.pathname.slice(prefix.length) : location.pathname;
+      const title = /^\/posts\/[^/]+\/?$/.test(path) || new URLSearchParams(location.search).has('post') ? 'Opening article…'
+        : /^\/research\/[^/]+\/?$/.test(path) ? 'Opening manuscript…'
+        : /^\/research\/?$/.test(path) ? 'Opening manuscripts…'
+        : /^\/quotes\/collections\/[^/]+\/?$/.test(path) ? 'Opening collection…'
+        : /^\/quotes\/[^/]+\/?$/.test(path) ? 'Opening quotation…'
+        : /^\/quotes\/?$/.test(path) ? 'Opening quotations…'
+        : 'Opening journal…';
+      const root = document.getElementById('root');
+      const boot = document.createElement('main');
+      boot.className = 'journal-boot';
+      boot.id = 'journal-boot';
+      boot.setAttribute('role', 'status');
+      boot.setAttribute('aria-label', 'Preparing journal');
+      boot.innerHTML = '<span class="journal-boot-dots" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="journal-boot-label">The Lab Journal</span><h1></h1><p>Preparing your reading experience.</p>';
+      boot.querySelector('h1').textContent = title;
+      root.appendChild(boot);
+    })();
+  </script>
   <script type="module" src="/src/main.tsx"></script>
 </body>
 </html>

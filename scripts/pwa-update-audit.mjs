@@ -19,6 +19,21 @@ if (secondWorker === firstWorker) throw Error('Could not locate index.html revis
 let release = 1
 const networkDuringUpdate = []
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+const until = async (predicate, timeoutMs = 12000) => {
+  const deadline = Date.now() + timeoutMs
+  while (!predicate()) {
+    if (Date.now() > deadline) throw Error('Timed out waiting for the controlled update request')
+    await sleep(35)
+  }
+}
+let releaseScriptRequested = false
+let indexRequested = false
+let releaseScriptReleased = false
+let indexReleased = false
+let allowReleaseScript
+let allowChangedIndex
+const releaseScriptGate = new Promise(resolve => { allowReleaseScript = resolve })
+const changedIndexGate = new Promise(resolve => { allowChangedIndex = resolve })
 const mime = path => path.endsWith('.js') ? 'text/javascript' :
   path.endsWith('.css') ? 'text/css' : path.endsWith('.webmanifest') ? 'application/manifest+json' :
     path.endsWith('.html') ? 'text/html' : path.endsWith('.svg') ? 'image/svg+xml' :
@@ -36,18 +51,29 @@ const server = createServer(async (request, response) => {
     if (path === '/sw.js') {
       response.setHeader('Content-Type', 'text/javascript')
       response.setHeader('Cache-Control', 'no-store')
+      if (release === 2) {
+        // Delay update discovery itself. The app must say "checking" rather
+        // than silently showing its stale shell during this request.
+        releaseScriptRequested = true
+        await releaseScriptGate
+      }
       response.end(release === 1 ? firstWorker : secondWorker)
       return
     }
     // The revisioned index is the sole intentionally modified asset.
-    // A slow install provides enough time to verify the in-app notice.
-    if (release === 2 && path === '/index.html') await sleep(1700)
+    // Hold the actual changed precache response open. The "Downloading"
+    // notice MUST be visible before these bytes finish arriving.
+    if (release === 2 && path === '/index.html') {
+      indexRequested = true
+      await changedIndexGate
+    }
     let file = candidate
     try { if (!(await stat(file)).isFile()) file = resolve(root, 'index.html') }
     catch { file = resolve(root, 'index.html') }
     response.setHeader('Content-Type', mime(file))
-    response.setHeader('Cache-Control', file.endsWith('index.html') ? 'no-cache' : 'public, max-age=31536000, immutable')
-    response.end(await readFile(file))
+      response.setHeader('Cache-Control', file.endsWith('index.html') ? 'no-cache' : 'public, max-age=31536000, immutable')
+      response.end(await readFile(file))
+      if (release === 2 && path === '/index.html') indexReleased = true
   } catch (error) {
     response.writeHead(500).end(String(error))
   }
@@ -80,6 +106,9 @@ try {
   await page.evaluate(() => {
     const record = () => {
       const message = document.querySelector('.pwa-update')?.textContent ?? ''
+      if (message.includes('Checking for the latest version')) {
+        sessionStorage.setItem('__journal_update_check_seen', '1')
+      }
       if (message.includes('Downloading the latest version')) {
         sessionStorage.setItem('__journal_update_download_seen', '1')
       }
@@ -98,6 +127,19 @@ try {
   // Foreground checks are deliberately throttled at 15 seconds.
   await sleep(16000)
   await page.evaluate(() => window.dispatchEvent(new Event('focus')))
+  await until(() => releaseScriptRequested)
+  await page.waitForFunction(() =>
+    document.querySelector('.pwa-update')?.textContent?.includes('Checking for the latest version'),
+  null, { timeout: 10000 })
+  if (releaseScriptReleased) throw Error('Update checking banner arrived after worker script response')
+  releaseScriptReleased = true
+  allowReleaseScript()
+  await until(() => indexRequested)
+  await page.waitForFunction(() =>
+    document.querySelector('.pwa-update')?.textContent?.includes('Downloading the latest version'),
+  null, { timeout: 10000 })
+  if (indexReleased) throw Error('Downloading notice arrived only after update precache finished')
+  allowChangedIndex()
   await page.waitForFunction(previous => Number(sessionStorage.getItem('__journal_release_loads')) > previous,
     loads, { timeout: 45000 })
   await page.getByRole('heading', { name: /learning in reverse/i }).first().waitFor({ timeout: 15000 })
@@ -109,6 +151,8 @@ try {
   if (!optionalPreserved) throw Error('Optional cached module was lost across worker activation')
   const noticeSeen = await page.evaluate(() => sessionStorage.getItem('__journal_update_download_seen') === '1')
   if (!noticeSeen) throw Error('Download notice was not visible during a real slow update')
+  const checkSeen = await page.evaluate(() => sessionStorage.getItem('__journal_update_check_seen') === '1')
+  if (!checkSeen) throw Error('Checking notice was not visible before fetching the new worker')
   const workerCount = await page.evaluate(async () => (await navigator.serviceWorker.getRegistrations()).length)
   if (workerCount !== 1) throw Error(`Expected one service-worker registration, got ${workerCount}`)
   const assetRefetches = networkDuringUpdate.filter(path =>
@@ -130,6 +174,8 @@ try {
     pass: true,
     updatedWithoutCacheClear: true,
     downloadNoticeVisible: true,
+    checkingVisibleBeforeWorkerResponse: true,
+    downloadingVisibleBeforePrecacheResponse: true,
     originalArticlePreserved: true,
     readingPositionPreserved: true,
     unrecognizedArticleDoesNotShowLanding: true,
@@ -142,6 +188,8 @@ try {
     workers: workerCount,
   }))
 } finally {
+  allowReleaseScript()
+  allowChangedIndex()
   if (browser) await browser.close()
   await new Promise(resolve => server.close(resolve))
 }

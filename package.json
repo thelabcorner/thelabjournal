@@ -39,6 +39,7 @@
     "audit:pwa": "bun scripts/pwa-audit.mjs",
     "audit:pwa-cache": "bun scripts/pwa-cache-budget-audit.mjs",
     "audit:pwa-update": "bun scripts/pwa-update-audit.mjs",
+    "audit:pwa-first-paint": "bun scripts/pwa-first-paint-audit.mjs",
     "audit:reading": "bun scripts/scroll-restoration-audit.mjs",
     "audit:reading-perf": "bun scripts/reading-performance-bench.mjs",
     "audit:archive-sort": "bun scripts/archive-sort-popover-audit.mjs",

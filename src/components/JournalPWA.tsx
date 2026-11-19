@@ -1,6 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useSyncExternalStore } from 'react'
 import { useRegisterSW } from 'virtual:pwa-register/react'
 import { ArrowDownToLine, Check, CloudOff, Share2, Smartphone } from 'lucide-react'
+import {
+  beginReleaseCheck, beginReleaseObservation, observeReleaseRegistration, releasePhase, subscribeReleasePhase,
+} from '../lib/pwaReleaseObserver'
+
+// Module evaluation precedes the first React render and Workbox registration,
+// so updatefound can be observed before precache installation finishes.
+beginReleaseObservation()
 
 interface InstallPromptEvent extends Event {
   prompt(): Promise<void>
@@ -25,43 +32,15 @@ export function useJournalPWA() {
   const [installed, setInstalled] = useState(isStandalone)
   const [canInstall] = useState(() => window.isSecureContext)
   const [appleMobile] = useState(isAppleMobile)
-  const [registration, setRegistration] = useState<ServiceWorkerRegistration | null>(null)
-  const [updatePhase, setUpdatePhase] = useState<'idle' | 'downloading' | 'installing' | 'ready'>('idle')
+  const updatePhase = useSyncExternalStore(subscribeReleasePhase, releasePhase)
   const {
     needRefresh: [needRefresh, setNeedRefresh],
     offlineReady: [offlineReady],
     updateServiceWorker,
   } = useRegisterSW({
-    onRegisteredSW: (_url, registered) => setRegistration(registered ?? null),
+    onRegisteredSW: (_url, registered) => observeReleaseRegistration(registered),
     onRegisterError: (error) => console.warn('Journal offline registration unavailable:', error),
   })
-  useEffect(() => {
-    if (!registration) return
-    let worker: ServiceWorker | null = null
-    const onWorkerState = () => {
-      if (!worker) return
-      if (worker.state === 'installing') setUpdatePhase('downloading')
-      else if (worker.state === 'installed' || worker.state === 'activating') setUpdatePhase('installing')
-      else if (worker.state === 'activated') setUpdatePhase('ready')
-      else if (worker.state === 'redundant') setUpdatePhase('idle')
-    }
-    const onUpdateFound = () => {
-      // A first-time offline installation must never masquerade as an app
-      // update. Readers can already use the page during that installation.
-      const next = registration.installing
-      if (!next || !registration.active) return
-      worker?.removeEventListener('statechange', onWorkerState)
-      worker = next
-      worker.addEventListener('statechange', onWorkerState)
-      onWorkerState()
-    }
-    registration.addEventListener('updatefound', onUpdateFound)
-    onUpdateFound()
-    return () => {
-      registration.removeEventListener('updatefound', onUpdateFound)
-      worker?.removeEventListener('statechange', onWorkerState)
-    }
-  }, [registration])
   useEffect(() => {
     // Home-screen PWAs, especially on iOS, can resume without a new navigation.
     // Registration alone does not periodically check for new releases.
@@ -79,13 +58,16 @@ export function useJournalPWA() {
       if (now - lastCheck < minCheckIntervalMs) return
       lastCheck = now
       checking = true
+      const finishNotice = beginReleaseCheck()
       try {
         const registration = await navigator.serviceWorker.getRegistration(import.meta.env.BASE_URL)
+        observeReleaseRegistration(registration)
         if (!disposed && registration?.active) await registration.update()
       } catch (error) {
         // Transient connectivity problems must never interrupt offline reading.
         console.debug('Journal release check deferred:', error)
       } finally {
+        finishNotice()
         checking = false
       }
     }
@@ -170,7 +152,8 @@ export function InstallSection({ pwa }: { pwa: JournalPWA }) {
 
 export function PWAUpdateNotice({ pwa }: { pwa: JournalPWA }) {
   if (!pwa.needRefresh && pwa.updatePhase === 'idle') return null
-  const message = pwa.updatePhase === 'downloading' ? 'Downloading the latest version…'
+  const message = pwa.updatePhase === 'checking' ? 'Checking for the latest version…'
+    : pwa.updatePhase === 'downloading' ? 'Downloading the latest version…'
     : pwa.updatePhase === 'installing' ? 'Installing the updated journal…'
       : pwa.updatePhase === 'ready' ? 'Opening the updated journal…'
         : 'An update is ready to install.'
