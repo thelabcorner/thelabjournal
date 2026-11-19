@@ -8,6 +8,7 @@
     "build": "bun scripts/sync-silica-post.mjs && bun scripts/thca-manuscript-source-audit.mjs && bun scripts/sync-thca-manuscript.mjs && bun run generate:og && bun scripts/quote-feature-audit.mjs && tsc --noEmit && vite build && bun scripts/article-social.mjs pages && bun scripts/scholar-pages.mjs generate && bun scripts/quote-pages.mjs generate && bun scripts/article-social.mjs audit && bun scripts/scholar-pages.mjs audit && bun scripts/quote-pages.mjs audit",
     "audit:quotes": "bun scripts/quote-feature-audit.mjs && bun scripts/quote-pages.mjs audit",
     "audit:quotes:browser": "bun scripts/quote-browser-audit.mjs",
+    "audit:quotes:atlas": "bun scripts/quotes-mobile-atlas-audit.mjs && bun scripts/quotes-mobile-atlas-gestures-audit.mjs",
     "audit:scholar": "bun scripts/scholar-pages.mjs audit",
     "audit:thca-manuscript": "node scripts/thca-manuscript-reader-audit.mjs",
     "audit:thca-manuscript:source": "node scripts/thca-manuscript-source-audit.mjs",

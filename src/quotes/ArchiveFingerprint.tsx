@@ -13,6 +13,7 @@ import {
 const atlas = createArchiveAtlas(publishedQuotes, OWN_AUTHOR_ID)
 const quotes = new Map(publishedQuotes.map(quote => [quote.id, quote]))
 const PORTRAIT_BOUNDS = {x:0,y:0,width:PORTRAIT_GRAPH_WIDTH,height:PORTRAIT_GRAPH_HEIGHT}
+const LANDSCAPE_BOUNDS = {x:0,y:0,width:GRAPH_WIDTH,height:GRAPH_HEIGHT}
 
 function edgePath(link: AtlasLink, points: ReadonlyMap<string, AtlasNode>): string {
   const a = points.get(link.a)!, b = points.get(link.b)!
@@ -131,13 +132,13 @@ function AtlasCanvas({graph, portrait, selected, setSelected, roving, setRoving,
       onMouseLeave={() => setSelected(null)}>{artwork}</svg>
 }
 
-function PortraitCamera({graph, selected, setSelected, roving, setRoving, svgRef, nodesRef, onQuote}:
-  Omit<CanvasProps,'portrait'>) {
+function PortraitCamera({graph, bounds, selected, setSelected, roving, setRoving, svgRef, nodesRef, onQuote}:
+  Omit<CanvasProps,'portrait'> & {bounds: typeof PORTRAIT_BOUNDS}) {
   const engine = useZoomPort()
   const viewportRef = useRef<HTMLDivElement|null>(null)
   const downPointers = useRef(new Set<number>())
   const pendingTap = useRef<{pointerId:number,quoteId:string,x:number,y:number}|null>(null)
-  const fit = () => engine.fit({x:0,y:0,width:PORTRAIT_GRAPH_WIDTH,height:PORTRAIT_GRAPH_HEIGHT},24,false)
+  const fit = () => engine.fit(bounds,24,false)
 
   // ZoomPort captures pointers on the viewport so the final synthetic click
   // can be retargeted away from a child SVG node. Identify taps in the capture
@@ -225,6 +226,10 @@ function AtlasCaption({selected}: {selected: string | null}) {
  */
 export function ArchiveFingerprint({onQuote}: {onQuote:(quote:Quote)=>void}) {
   const [expanded,setExpanded] = useState(false)
+  // In a short landscape phone viewport the portrait projection shrinks all
+  // 83 nodes. Reuse the existing deterministic landscape graph instead.
+  const [landscape,setLandscape] = useState(() =>
+    typeof window !== 'undefined' && window.matchMedia('(max-width: 767px) and (orientation: landscape)').matches)
   const [selected,setSelected] = useState<string|null>(null)
   const [roving,setRoving] = useState(0)
   const [inView,setInView] = useState(false)
@@ -236,8 +241,16 @@ export function ArchiveFingerprint({onQuote}: {onQuote:(quote:Quote)=>void}) {
   const closeButton = useRef<HTMLButtonElement|null>(null)
   // The portrait dither/coordinates are calculated only if the user expands.
   const portraitCache = useRef<ArchiveAtlas|null>(null)
-  if (expanded && !portraitCache.current) portraitCache.current = projectArchiveAtlasPortrait(atlas)
-  const portrait = expanded ? portraitCache.current : null
+  if (expanded && !landscape && !portraitCache.current) portraitCache.current = projectArchiveAtlasPortrait(atlas)
+  const expandedGraph = expanded ? (landscape ? atlas : portraitCache.current) : null
+  const expandedBounds = landscape ? LANDSCAPE_BOUNDS : PORTRAIT_BOUNDS
+
+  useEffect(() => {
+    const orientation = window.matchMedia('(max-width: 767px) and (orientation: landscape)')
+    const sync = () => setLandscape(orientation.matches)
+    orientation.addEventListener('change',sync)
+    return () => orientation.removeEventListener('change',sync)
+  }, [])
 
   useEffect(() => {
     const svg = inlineSvg.current
@@ -308,7 +321,7 @@ export function ArchiveFingerprint({onQuote}: {onQuote:(quote:Quote)=>void}) {
       <AtlasCaption selected={selected}/>
     </figure>
 
-    {expanded && portrait && typeof document!=='undefined' && createPortal(
+    {expanded && expandedGraph && typeof document!=='undefined' && createPortal(
       <section className="quotes-atlas-viewport" role="dialog" aria-modal="false"
         aria-label="Expanded thought atlas">
         <div className="quotes-atlas-viewport-header">
@@ -317,45 +330,49 @@ export function ArchiveFingerprint({onQuote}: {onQuote:(quote:Quote)=>void}) {
             <ArrowLeft size={17} aria-hidden="true"/> Quotes
           </button>
           <span className="quotes-atlas-viewport-title">
-            Thought atlas <span className="quotes-atlas-viewport-count">{portrait.quoteCount}</span>
+            Thought atlas <span className="quotes-atlas-viewport-count">{expandedGraph.quoteCount}</span>
           </span>
           <button type="button" ref={closeButton} className="quotes-atlas-viewport-close"
             onClick={close} aria-label="Close expanded atlas"><X size={18} aria-hidden="true"/></button>
         </div>
         <figure className="quotes-fingerprint quotes-fingerprint--portrait is-visible">
           <div className="quotes-atlas-interactive-stage">
-            <ZoomPort.Root
+            <ZoomPort.Root key={landscape ? 'atlas-landscape' : 'atlas-portrait'}
               minScale={.25} maxScale={5}
-              bounds={PORTRAIT_BOUNDS}
+              bounds={expandedBounds}
               centerWhenSmaller
               enablePan enablePinch enableInertia
               wheelMode="zoom" wheelAtBounds="capture"
               pointerMoveScheduling="frame"
               clickDistance={9} suppressClickOnDrag>
-              <PortraitCamera graph={portrait} selected={selected} setSelected={setSelected}
+              <PortraitCamera graph={expandedGraph} bounds={expandedBounds} selected={selected} setSelected={setSelected}
                 roving={roving} setRoving={setRoving}
                 svgRef={expandedSvg} nodesRef={expandedNodes} onQuote={openQuote}/>
             </ZoomPort.Root>
-          </div>
-          <div className={'quotes-atlas-inspector'+(selected ? ' has-selection' : '')} aria-live="polite">
-            {selected && quotes.get(selected) ? <>
-              <div className="quotes-atlas-inspector-heading">
-                <span>Selected quotation <span aria-hidden="true">/</span> {authorName(quotes.get(selected)!.authorId)}</span>
-                <button type="button" className="quotes-atlas-inspector-clear"
-                  aria-label="Clear selected quotation" onClick={() => setSelected(null)}>
-                  <X size={15} aria-hidden="true"/>
-                </button>
-              </div>
-              <p>“{textPreview(quotes.get(selected)!) }”</p>
-              <button type="button" className="quotes-atlas-inspector-read"
-                onClick={() => openQuote(quotes.get(selected)!)}>
-                Read entry <ArrowUpRight size={15} aria-hidden="true"/>
-              </button>
-            </> : <>
-              <div className="quotes-atlas-inspector-empty">
-                <span>Tap a point to inspect</span>
-                <span>Drag to pan · Pinch to zoom</span>
-              </div>
+           </div>
+           <div className={'quotes-atlas-inspector'+(selected ? ' has-selection' : '')} aria-live="polite">
+             {selected && quotes.get(selected) ? <>
+               <div className="quotes-atlas-inspector-heading">
+                 <span title={'Selected quotation / '+authorName(quotes.get(selected)!.authorId)}
+                   aria-label={'Selected quotation by '+authorName(quotes.get(selected)!.authorId)}>
+                   {authorName(quotes.get(selected)!.authorId)}
+                 </span>
+                 <div className="quotes-atlas-inspector-actions">
+                   <button type="button" className="quotes-atlas-inspector-read"
+                     onClick={() => openQuote(quotes.get(selected)!)}>
+                     Read entry <ArrowUpRight size={15} aria-hidden="true"/>
+                   </button>
+                   <button type="button" className="quotes-atlas-inspector-clear"
+                     aria-label="Clear selected quotation" onClick={() => setSelected(null)}>
+                     <X size={15} aria-hidden="true"/>
+                   </button>
+                 </div>
+               </div>
+               <p>“{textPreview(quotes.get(selected)!) }”</p>
+             </> : <>
+               <div className="quotes-atlas-inspector-empty">
+                 <span>Tap a point to inspect</span>
+               </div>
               <div className="quotes-atlas-portrait-legend">
                 <i className="quotes-atlas-legend-solid"/> Original
                 <i className="quotes-atlas-legend-ring"/> Collected
