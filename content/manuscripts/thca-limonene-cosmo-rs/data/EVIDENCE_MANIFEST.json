@@ -1,0 +1,57 @@
+{
+  "status": "staged manuscript data, computational outputs not measured physical solubility",
+  "original_data": [
+    {
+      "source": "C:\\Users\\slooshied\\.local\\share\\openfork\\chats\\1792520728520-6di9bg\\sle_rebuild_20261021\\sle_rebuild_results.json",
+      "target": "data\\sle_rebuild_results.json",
+      "sha256": "4331b9c6bb5695b6c1c292b51e30f2957b81f6c12a64f42bfe152a1b1844173a",
+      "bytes": 31214
+    },
+    {
+      "source": "C:\\Users\\slooshied\\.local\\share\\openfork\\chats\\1792520728520-6di9bg\\sle_rebuild_20261021\\sle_rebuild_verification.json",
+      "target": "data\\sle_rebuild_verification.json",
+      "sha256": "10e80059f37f6909eb3745e754d4ff2bdd7c11e9afa7fcb7715fa1e9f752d672",
+      "bytes": 11069
+    },
+    {
+      "source": "C:\\Users\\slooshied\\.local\\share\\openfork\\chats\\1792520728520-6di9bg\\sle_rebuild_20261021\\gamma_grid.csv",
+      "target": "data\\gamma_grid.csv",
+      "sha256": "68dfdd0cc6ce1a91c4153301a24ebdcbbb2d18a75bb63385ca5bec2428b17a53",
+      "bytes": 36520
+    },
+    {
+      "source": "C:\\Users\\slooshied\\.local\\share\\openfork\\chats\\1792520728520-6di9bg\\sle_rebuild_20261021\\sle_results.csv",
+      "target": "data\\sle_results.csv",
+      "sha256": "2b72ac370043888f9a7a43bab4eaf34bcc1ff81aa98f2abf9e7099f2df1c5144",
+      "bytes": 8743
+    },
+    {
+      "source": "C:\\Users\\slooshied\\.local\\share\\openfork\\chats\\1792520728520-6di9bg\\solubility_cycle_aligned_rerun.json",
+      "target": "data\\solubility_cycle_aligned_rerun.json",
+      "sha256": "59929cd6b9c5129d2027346386d8d6b4b55a39bb7c743c3ac5556dfeb041f1c3",
+      "bytes": 7156
+    },
+    {
+      "source": "C:\\Users\\slooshied\\.local\\share\\openfork\\chats\\1792520728520-6di9bg\\thca_temperature_solubility_report.md",
+      "target": "data\\thca_temperature_solubility_report.md",
+      "sha256": "a3371e94da812dfda794e0f27f3604a1c2b60602ccbbe1cc80162b40caa4998e",
+      "bytes": 6681
+    },
+    {
+      "source": "C:\\Users\\slooshied\\.local\\share\\openfork\\chats\\1792520728520-6di9bg\\cosmo_24a_activity_output_recheck.json",
+      "target": "data\\cosmo_24a_activity_output_recheck.json",
+      "sha256": "1e03eb6e688ca01f07d1955bcf0f4ffee274fb2718e975fa56c914a3e16015ff",
+      "bytes": 1963
+    }
+  ],
+  "derived": {
+    "figure-series.dat": "cd52474e9fa1c09cebc7578e675a06e1ab129876d8cb11a8f8695da5e7e50a3a",
+    "figure-activity.dat": "35276954d4af7b4abf6dc93e434b01abf1ee3288497be33bcd0ed76921e90cc2",
+    "data/lattice_crosswalk.json": "94a4360794c50969c542302b8dac4538c70626cc63095d32df944910a5a7d4d6"
+  },
+  "verification": {
+    "root_cases": 41,
+    "max_abs_ln_activity_closure": 7.182935338190255e-07,
+    "numerical_status": "PASSED"
+  }
+}

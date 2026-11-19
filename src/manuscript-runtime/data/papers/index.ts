@@ -4,6 +4,8 @@ import { sublimationEntry } from './sublimation/entry';
 import { sublimationNavSections, sublimationSectionIds } from './sublimation/nav';
 import { gravimetricDecarboxylationEntry } from './gravimetric-decarboxylation/entry';
 import { gravimetricDecarboxylationNavSections, gravimetricDecarboxylationSectionIds } from './gravimetric-decarboxylation/nav';
+import { thcaLimoneneEntry } from './thca-limonene-cosmo-rs/entry';
+import { thcaLimoneneNav, thcaLimoneneSectionIds } from './thca-limonene-cosmo-rs/nav';
 
 const SublimationPaperBody = lazy(() =>
   import('./sublimation/index').then((module) => ({ default: module.PaperBody }))
@@ -13,7 +15,17 @@ const GravimetricDecarboxylationBody = lazy(() =>
   import('./gravimetric-decarboxylation/index').then((module) => ({ default: module.PaperBody }))
 );
 
+const ThcaLimonenePaperBody = lazy(() =>
+  import('./thca-limonene-cosmo-rs/index').then((module) => ({ default: module.PaperBody }))
+);
+
 export const PAPER_DEFINITIONS: PaperDefinition[] = [
+  {
+    entry: thcaLimoneneEntry,
+    navSections: thcaLimoneneNav,
+    sectionIds: thcaLimoneneSectionIds,
+    PaperBody: ThcaLimonenePaperBody,
+  },
   {
     entry: gravimetricDecarboxylationEntry,
     navSections: gravimetricDecarboxylationNavSections,

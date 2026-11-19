@@ -51,8 +51,8 @@ function ResearchIntegrityNotice() {
       <details className="group rounded-lg border border-[var(--border)] bg-[var(--sidenote-bg)]">
         <summary className="flex cursor-pointer list-none items-start justify-between gap-4 rounded-lg px-4 py-3 transition-colors duration-150 hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)]">
-              AI-Assisted Research Disclosure
+            <p className="text-xs font-semibold text-[var(--text)]">
+              AI-assisted research disclosure
             </p>
             <p className="mt-1 text-xs leading-relaxed text-[var(--text-muted)]">
               Material AI assistance was used. Outputs are treated as provisional until independently checked.

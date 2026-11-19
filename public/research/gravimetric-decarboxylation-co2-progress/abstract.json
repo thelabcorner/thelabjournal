@@ -1,0 +1,8 @@
+{
+  "manuscriptVersion": "v0.11.0",
+  "fingerprint": "be0e1be8b84abe68098be4586ffcc413bd991ff5c643e549d158044435ba9929",
+  "paragraphs": [
+    "This paper presents a gravimetric method for estimating progress of CO2-evolving decarboxylation from initial and subsequent gross-mass readings. Observed loss is normalized against either a stoichiometric CO2 capacity or an empirically defined reference endpoint. The derivation concerns measurable mass transfer, not a particular route of reaction initiation. Developed through Decarboxulator since 2023, its principal worked applications concern thermal cannabinoid processing, lot calibration, readability, and scaled stopping targets.",
+    "The established manual thermal workflow is extended through two heater–balance load paths and a proposed continuous-acquisition controller. Complementary pressure-inventory calculations address gas retained in or vented from closed vessels. The stoichiometric and gravimetric framework also applies to characterized enzyme-catalyzed decarboxylations, provided dissolved carbon, gas escape, and competing mass transfers are considered. Existing calculations and procedures are distinguished from proposed instrumentation and experimental evaluation."
+  ]
+}

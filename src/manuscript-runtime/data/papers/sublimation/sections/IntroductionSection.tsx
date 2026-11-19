@@ -1,47 +1,67 @@
 import { SubsectionLabel } from '../../../../components/sections/Abstract';
+import { ChapterLabel } from '../../../../components/sections/ChapterLabel';
 import { InlineCite } from '../../../../components/prose/InlineCite';
 import { InlineMath, MathBlock } from '../ScientificMath';
+import { GasConductionAnalogyFigure } from '../figures/GasConductionAnalogyFigure';
 
 const prose = 'text-sm leading-relaxed text-[var(--text)]';
 
 export function IntroductionSection() {
   return <section id="introduction" aria-labelledby="intro-heading" className="prose-heading mb-10">
-    <div className="research-chapter-label mb-4">
-      <span className="research-heading-number">1</span>
-      <h2 id="intro-heading" className="text-base font-semibold text-[var(--text)] tracking-tight">Introduction</h2>
-    </div>
+<ChapterLabel number="1" id="intro-heading" title="Introduction" />
     <div className="space-y-4">
-      <p className={prose}>
-         Chamber pressure is often treated as a direct indication of drying performance, although pressure
-         alone reveals neither the rate of sublimation nor the amount of ice remaining in the product.
-         During primary drying, heat must reach that ice while the resulting water vapor moves toward the
-         refrigerated inner wall of the chamber, where it deposits. Lower pressure can favor vapor transport
-         and simultaneously weaken gas-mediated heat delivery. A low shelf-temperature setting can also
-         restrict heater input even as water remains to be removed from the frozen product. These limitations
-         explain why freeze-dryer operation cannot be interpreted from any single pressure or temperature
-         reading. <InlineCite refs={['pikal1984', 'ganguly2013']} />
-      </p>
-      <div id="introduction-motivation" className="prose-heading">
-         <SubsectionLabel number="1.1" title="Interpreting the operating conditions" />
-        <p className={prose}>
-           A falling pressure reading may reflect rapid capture of water vapor on the cold wall, reduced vapor
-           generation at the product, continued evacuation of non-condensable gases, or more than one of these
-           processes. A stable reading is equally ambiguous. Heater duty provides additional information,
-           but does not independently establish how much heat reaches the ice because thermal contact,
-           radiation, gas conduction, and product resistance all affect the energy balance.
-        </p>
-        <p className={prose}>
-          The examined Harvest Right unit has seven product shelves in one cylindrical vacuum chamber.
-           Copper evaporator tubing cools the chamber wall from outside, and water vapor from the product accumulates
-           as ice on its inner circumference. The vacuum pump evacuates gas through a separate connection;
-           there is no separate condenser vessel. This geometry links heater control, chamber
-          pressure, gas composition, and tray-to-product heat path. Published vial experiments establish
-          parts of the underlying physics; the machine-specific questions are evaluated through explicit
-          calculations and proposed measurements. Their implications are developed in the order that heat
-          enters the product, ice sublimates, and vapor deposits on the cold chamber wall.
-           <InlineCite refs={['harvestRightHowWorks']} />
-        </p>
-      </div>
+       <p className={prose}>
+          During primary drying, heat reaches frozen product while water vapor leaves the
+          ice interface and deposits on a colder surface. The attainable rate depends on
+          both processes. A chamber-pressure trace records part of the vapor balance;
+          shelf temperature describes the heater-side boundary. Neither measurement
+          alone determines how much water is leaving the remaining ice. These distinctions
+          underlie several practical misconceptions concerning vacuum, condenser
+          temperature, heater regulation and primary-drying completion
+          <InlineCite refs={['biopharma2019misconceptions']} />.
+       </p>
+       <p className={prose}>
+         Vacuum insulation provides a familiar example of pressure-dependent
+         gas heat transfer. Evacuating the gap between two walls reduces
+         molecular energy transport and helps preserve their temperature
+         difference, although radiation and solid connections continue to
+         carry heat. In a freeze dryer, residual gas can carry energy from
+         warmer surroundings to ice across gaps in the thermal path.
+         Pump-down can therefore weaken useful heat delivery as the
+         water-vapor pressure potential for sublimation increases
+         <InlineCite refs={['pikal1984', 'ganguly2013']} />.
+         A thermocouple vacuum gauge employs the same molecular heat transfer
+         in its measurement: surrounding gas cools a heated sensing element,
+         and its temperature response is converted to an indicated pressure.
+         The composition of that gas affects both the instrument response
+         and heat exchange with the product
+         <InlineCite refs={['agilent531']} />.
+       </p>
+       <GasConductionAnalogyFigure />
+       <div id="introduction-motivation" className="prose-heading">
+         <SubsectionLabel number="1.1" title="The integrated chamber and its measured signals" />
+         <p className={prose}>
+           A central geometric distinction is whether ice collects in a separate
+           condenser vessel or on a refrigerated wall in the product chamber.
+           Introductory condenser schematics often depict the former
+           <InlineCite refs={['biopharma2019misconceptions']} />. This paper
+           examines the latter: a shared chamber in which sublimation, internal
+           deposition, pump exhaust, and product heating determine the same gas
+           inventory. Harvest Right, Stay Fresh, and Blue Alpine document versions
+           of this architecture with different controls and capacities
+           <InlineCite refs={['harvestRightHowWorks', 'stayFreshManual', 'blueAlpine2024support']} />.
+         </p>
+         <p className={prose}>
+           The same equipment can exhibit different operating behavior as a batch dries.
+           Water-vapor generation declines as the remaining wet area contracts and
+           the vapor path through the dried product becomes more resistant. Continued
+           pumping then changes total pressure and the gas composition that governs
+           heat exchange. In a seven-shelf Harvest Right Pharmaceutical configuration,
+           this process also depends on the position and heat supply of the last wet
+           shelf. That geometry serves as a worked case; thermal coefficients and
+           controller behavior remain specific to the equipment measured.
+         </p>
+       </div>
       <div id="introduction-pressure-notation" className="prose-heading">
         <SubsectionLabel number="1.2" title="Pressure and measurement notation" />
         <p className={prose}>
@@ -71,9 +91,11 @@ export function IntroductionSection() {
       <div id="introduction-thermodynamic" className="prose-heading">
          <SubsectionLabel number="1.3" title="Vapor-pressure potential and sublimative cooling" />
         <p className={prose}>
-          Water-vapor partial pressure, rather than total chamber pressure alone, enters the interfacial
-          sublimation driving force. At ordinary freeze-drying pressures the pressure correction to condensed-phase
-          chemical potential is small; the idealized relation may be written:
+           The expression commonly called a sublimation driving force is a thermodynamic
+           potential for vapor transfer, not a mechanical force exerted on the ice. At a
+           specified interface temperature, its sign depends on the water-vapor partial
+           pressure relative to ice equilibrium. The corresponding chemical-potential
+           difference, including a small condensed-phase pressure correction, is
         </p>
         <MathBlock
           math={String.raw`\Delta\mu=RT\ln\left(\frac{p_{\mathrm{H_2O}}}{P_{\mathrm{sub}}(T_i)}\right)-v_{\mathrm{ice}}\left[P_{\mathrm{total}}-P_{\mathrm{sub}}(T_i)\right]`}
@@ -88,17 +110,19 @@ export function IntroductionSection() {
            its direct correction to phase equilibrium is negligible.
          </p>
          <p className={prose}>
-           The conventional expression “sublimation driving force” names a pressure difference, not a
-           mechanical force or a measurement of ongoing drying. The vapor-pressure driving potential
+           The vapor-pressure driving potential
            {' '}<InlineMath math={String.raw`\Delta p_w=P_{\mathrm{sub}}(T_i)-p_{\mathrm{H_2O}}`}/>{' '}
-           indicates whether the local pressure state favors vapor leaving the ice. It cannot, by itself,
-           determine the sublimation rate. That rate also depends on the heat supplied to the interface,
-           the resistance through the product, and the ability of the chamber wall to capture the vapor.
-           Sublimation can initially consume stored sensible heat even without additional heater input.
-           The resulting sublimative cooling lowers the ice temperature and its equilibrium vapor pressure,
-           reducing the available potential. During sustained primary drying, heat must replenish the latent
-           energy absorbed by sublimation; sublimative cooling does not necessarily imply a continuously
-           falling product temperature when that energy balance is maintained.
+           expresses the available pressure difference for vapor transfer from ice.
+           A positive value permits net sublimation in the idealized local pressure
+           balance, but does not compel any particular water-removal rate. It is
+           thermodynamic headroom, not accumulated water, energy, or throughput.
+           Actual flux also requires a heat supply to replace sublimation enthalpy
+           and a finite-conductance path through the product and chamber.
+           A large potential can therefore coexist with negligible drying.
+           Sublimation can initially consume stored sensible heat even without additional heater input;
+           the resulting sublimative cooling lowers the ice temperature and its equilibrium vapor pressure.
+           Sustained drying requires replacement of that latent energy, although product temperature
+           need not continue falling when the heat balance is maintained.
          </p>
 
       </div>

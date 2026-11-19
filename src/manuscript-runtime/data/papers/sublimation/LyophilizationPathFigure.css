@@ -1,0 +1,324 @@
+/* WebSeal / TheLabJournal manuscript figure.
+ * Shadcn zinc, New York density, borderless neutral badges.
+ * The mobile composition is the default; wider manuscript containers add columns.
+ */
+.research-body .lyo-paper figure.lyo-loop-figure {
+  container-type: inline-size;
+  min-width: 0;
+  max-width: 100%;
+  margin: 12px 0 18px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--foreground);
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif);
+}
+.research-body .lyo-paper .lyo-loop-figure * { box-sizing: border-box; }
+.research-body .lyo-paper .lyo-loop-figure .lyo-loop-caption {
+  margin: 0;
+  padding: 0 0 11px;
+  border-bottom: 1px solid var(--border);
+}
+.research-body .lyo-paper .lyo-loop-figure .lyo-loop-caption > span:first-child {
+  display: block;
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--foreground);
+  text-wrap: balance;
+}
+.research-body .lyo-paper .lyo-loop-figure .lyo-loop-caption > span:last-child {
+  display: block;
+  margin-top: 3px;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--muted-foreground);
+  font-weight: 400;
+}
+.research-body .lyo-paper .lyo-loop-premise {
+  padding: 10px 0 12px;
+}
+.research-body .lyo-paper .lyo-loop-premise > strong {
+  display: block;
+  color: var(--foreground);
+  font-size: 12.5px;
+  line-height: 1.45;
+  font-weight: 600;
+}
+.research-body .lyo-paper .lyo-loop-premise > p {
+  margin: 3px 0 0;
+  color: var(--prose-ink);
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+.research-body .lyo-paper .lyo-loop-layout {
+  display: grid;
+  grid-template-columns: minmax(0,1fr);
+  align-items: start;
+  gap: 10px;
+}
+.research-body .lyo-paper .lyo-loop-panel,
+.research-body .lyo-paper .lyo-loop-feedback {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  box-shadow: none;
+}
+.research-body .lyo-paper .lyo-loop-panel-head {
+  display: flex;
+  min-height: 35px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  background: var(--inset);
+}
+.research-body .lyo-paper .lyo-loop-panel-head > strong,
+.research-body .lyo-paper .lyo-loop-panel-head > h3 {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--foreground);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.research-body .lyo-paper .lyo-loop-chip {
+  display: inline-flex;
+  flex: 0 0 auto;
+  max-width: 100%;
+  align-items: center;
+  min-height: 18px;
+  border: 0;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--foreground) 5.5%, var(--card));
+  color: var(--prose-ink);
+  padding: 1px 6px;
+  font-size: 10.5px;
+  font-weight: 550;
+  line-height: 16px;
+  letter-spacing: 0;
+  white-space: normal;
+}
+.research-body .lyo-paper .lyo-loop-row {
+  display: grid;
+  grid-template-columns: 20px minmax(0,1fr);
+  gap: 8px;
+  padding: 9px 10px;
+  min-width: 0;
+  border-bottom: 1px solid var(--border);
+}
+.research-body .lyo-paper .lyo-loop-number {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--foreground) 6%, var(--card));
+  color: var(--muted-foreground);
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 550;
+  font-variant-numeric: tabular-nums;
+}
+.research-body .lyo-paper .lyo-loop-row-content { min-width: 0; }
+.research-body .lyo-paper .lyo-loop-row-content > strong {
+  display: block;
+  color: var(--foreground);
+  font-size: 12.5px;
+  font-weight: 520;
+  line-height: 1.43;
+}
+.research-body .lyo-paper .lyo-loop-row-content > p {
+  margin: 2px 0 0;
+  font-size: 11.5px;
+  font-weight: 400;
+  line-height: 1.52;
+  color: var(--prose-ink);
+}
+.research-body .lyo-paper .lyo-loop-math {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 8px;
+  align-items: center;
+  margin-top: 6px;
+  min-width: 0;
+  color: var(--foreground);
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+.research-body .lyo-paper .lyo-loop-math > .katex,
+.research-body .lyo-paper .lyo-loop-balance-equation .katex,
+.research-body .lyo-paper .lyo-loop-threshold .katex { font-size: .96em; }
+.research-body .lyo-paper .lyo-loop-math > .lyo-loop-chip {
+  font-size: 10px;
+  font-weight: 500;
+}
+.research-body .lyo-paper .lyo-loop-sinks {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  min-width: 0;
+  gap: 1px;
+  background: var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.research-body .lyo-paper .lyo-loop-sink {
+  min-width: 0;
+  padding: 9px 10px;
+  background: var(--card);
+}
+.research-body .lyo-paper .lyo-loop-sink strong {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 520;
+  line-height: 1.4;
+  color: var(--foreground);
+}
+.research-body .lyo-paper .lyo-loop-sink p {
+  font-size: 10.75px;
+  line-height: 1.5;
+  color: var(--muted-foreground);
+  margin: 3px 0 0;
+}
+.research-body .lyo-paper .lyo-loop-balance { padding: 8px 10px 10px; }
+.research-body .lyo-paper .lyo-loop-balance > span {
+  display: block;
+  font-size: 11px;
+  font-weight: 520;
+  line-height: 1.4;
+  color: var(--muted-foreground);
+}
+.research-body .lyo-paper .lyo-loop-balance-equation,
+.research-body .lyo-paper .lyo-loop-threshold {
+  margin-top: 4px;
+  color: var(--foreground);
+  font-size: 11.2px;
+  line-height: 1.5;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+}
+.research-body .lyo-paper .lyo-loop-feedback-intro {
+  margin: 0;
+  padding: 9px 10px 0;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--prose-ink);
+}
+.research-body .lyo-paper .lyo-loop-feedback .lyo-loop-threshold {
+  padding: 7px 8px;
+  margin: 7px 10px 9px;
+  border-radius: 5px;
+  border: 0;
+  background: var(--inset);
+  font-size: 11px;
+}
+.research-body .lyo-paper .lyo-loop-cycle {
+  margin: 0;
+  padding: 0 10px;
+}
+.research-body .lyo-paper .lyo-loop-cycle-row {
+  display: grid;
+  grid-template-columns: 8px minmax(0,1fr) 19px;
+  gap: 8px;
+  align-items: start;
+  padding: 7px 0 8px;
+  border-bottom: 1px solid var(--border);
+}
+.research-body .lyo-paper .lyo-loop-cycle-dot {
+  display: block;
+  width: 6px;
+  height: 6px;
+  margin: 5px 0 0 1px;
+  border-radius: 50%;
+  background: var(--muted-foreground);
+}
+.research-body .lyo-paper .lyo-loop-cycle-row strong {
+  display: block;
+  color: var(--foreground);
+  font-size: 12px;
+  font-weight: 520;
+  line-height: 1.4;
+}
+.research-body .lyo-paper .lyo-loop-cycle-row p {
+  margin: 2px 0 0;
+  color: var(--muted-foreground);
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+.research-body .lyo-paper .lyo-loop-cycle-index {
+  color: var(--muted-foreground);
+  font-size: 10px;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.research-body .lyo-paper .lyo-loop-return {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  background: var(--inset);
+  border-bottom: 1px solid var(--border);
+}
+.research-body .lyo-paper .lyo-loop-return > span {
+  color: var(--muted-foreground);
+  font-size: 17px;
+  line-height: 1;
+}
+.research-body .lyo-paper .lyo-loop-return > strong {
+  font-size: 11.5px;
+  font-weight: 520;
+  line-height: 1.45;
+  color: var(--foreground);
+}
+.research-body .lyo-paper .lyo-loop-boundary {
+  margin: 0;
+  padding: 8px 10px 9px;
+  color: var(--muted-foreground);
+  font-size: 10.75px;
+  line-height: 1.5;
+}
+.research-body .lyo-paper .lyo-loop-conclusion {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  min-width: 0;
+  margin-top: 10px;
+  padding: 10px 0 0;
+  border-top: 1px solid var(--border);
+}
+.research-body .lyo-paper .lyo-loop-conclusion .lyo-loop-chip { margin-top: 1px; }
+.research-body .lyo-paper .lyo-loop-conclusion p {
+  flex: 1;
+  margin: 0;
+  color: var(--prose-ink);
+  font-size: 11.5px;
+  line-height: 1.56;
+}
+.research-body .lyo-paper .lyo-loop-conclusion p strong { color: var(--foreground); font-weight: 550; }
+
+@container (min-width: 700px) {
+  .research-body .lyo-paper .lyo-loop-layout {
+    grid-template-columns: minmax(0,1fr) minmax(0,.92fr);
+    gap: 10px;
+  }
+}
+@container (max-width: 309px) {
+  .research-body .lyo-paper .lyo-loop-sinks { grid-template-columns: minmax(0,1fr); }
+  .research-body .lyo-paper .lyo-loop-conclusion {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+}
+@media print {
+  .research-body .lyo-paper .lyo-loop-layout { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .research-body .lyo-paper .lyo-loop-panel,
+  .research-body .lyo-paper .lyo-loop-feedback { break-inside: avoid; }
+}

@@ -1,0 +1,157 @@
+/* Portrait atlas: ZoomPort owns camera/input; no nested scrollport.
+   Keep the shared journal header and tabbar visible and interactive. */
+@media (max-width: 767px) {
+  .quotes-atlas-expand {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+  .quotes-atlas-expand > svg {
+    flex: 0 0 14px;
+    width: 14px;
+    height: 14px;
+  }
+
+  .quotes-atlas-interactive-stage {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .quotes-atlas-zoom-area {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .quotes-atlas-zoom-area .quotes-atlas-camera {
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+    overscroll-behavior: none;
+    cursor: grab;
+  }
+  .quotes-atlas-zoom-area .quotes-atlas-camera:active { cursor: grabbing; }
+  .quotes-fingerprint--portrait .quotes-atlas-zoom-area svg.quotes-atlas-svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+  }
+  .quotes-atlas-camera-controls {
+    position: absolute;
+    z-index: 1;
+    right: 9px;
+    bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--card);
+    overflow: hidden;
+  }
+  .quotes-atlas-camera-controls button {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--foreground);
+    cursor: pointer;
+  }
+  .quotes-atlas-camera-controls button + button { border-top: 1px solid var(--border); }
+  .quotes-atlas-camera-controls button:hover { background: var(--secondary); }
+  .quotes-atlas-viewport .quotes-atlas-camera:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: -2px;
+  }
+
+  .quotes-atlas-inspector {
+    position: relative;
+    flex: 0 0 145px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    height: 145px;
+    min-height: 145px;
+    max-height: 145px;
+    padding: 11px 3px 2px;
+    margin: 0;
+    border-top: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .quotes-atlas-inspector:not(.has-selection) { justify-content: center; }
+  .quotes-atlas-inspector-heading,
+  .quotes-atlas-inspector-empty {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    color: var(--muted-foreground);
+    font-size: 10px;
+    font-weight: 550;
+  }
+  .quotes-atlas-inspector-heading span span { opacity: .5; }
+  .quotes-atlas-inspector-clear {
+    display: grid;
+    flex: 0 0 28px;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: 5px;
+    background: transparent;
+    color: var(--muted-foreground);
+    cursor: pointer;
+  }
+  .quotes-atlas-inspector-clear:hover { background: var(--secondary); color: var(--foreground); }
+  .quotes-atlas-inspector p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    margin: 0;
+    font-size: 13px;
+    font-weight: 570;
+    line-height: 1.47;
+    color: var(--foreground);
+  }
+  .quotes-atlas-inspector-read {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-end;
+    justify-content: center;
+    gap: 7px;
+    min-height: 31px;
+    margin-top: -2px;
+    padding: 0 8px;
+    border: 0;
+    border-radius: 5px;
+    background: transparent;
+    color: var(--foreground);
+    font: inherit;
+    font-size: 11px;
+    font-weight: 635;
+    cursor: pointer;
+  }
+  .quotes-atlas-inspector-read:hover { background: var(--secondary); }
+  .quotes-atlas-portrait-legend { color: var(--muted-foreground); font-size: 10px; }
+  .quotes-atlas-portrait-legend .quotes-atlas-legend-solid { margin-left: 0; }
+
+  @media (max-height: 650px) {
+    .quotes-fingerprint--portrait { padding-top: 3px; padding-bottom: 5px; }
+    .quotes-atlas-inspector {
+      flex-basis: 118px;
+      height: 118px;
+      min-height: 118px;
+      max-height: 118px;
+      gap: 5px;
+      padding-top: 7px;
+    }
+    .quotes-atlas-inspector p { -webkit-line-clamp: 2; font-size: 12px; }
+    .quotes-atlas-camera-controls button { width: 34px; height: 34px; }
+  }
+}

@@ -11,14 +11,6 @@
 }
 .research-body .lyo-paper .research-section-label {margin-bottom:9px;}
 .research-body .lyo-paper .research-section-label h3 {letter-spacing:-.015em;}
-.research-body .lyo-paper .lyo-abstract-card {
-  background:var(--research-blue-wash);border-color:var(--border);
-  border-left-color:var(--research-line-blue);box-shadow:none;
-}
-.research-body .lyo-paper .lyo-kicker {
-  color:var(--muted-foreground);font:620 10.5px/1.4 var(--font-sans);
-  text-transform:uppercase;letter-spacing:.08em;
-}
 .research-body .lyo-paper .lyo-evidence-intro {
   display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
   margin-top:15px;margin-bottom:9px;
@@ -52,6 +44,239 @@
 .research-body .lyo-paper .lyo-evidence-item > p {
   margin:5px 0 0;color:var(--prose-ink);font-size:11.5px;line-height:1.58;
 }
+.research-body .lyo-paper .lyo-gas-analogy {
+  margin:14px 0 22px;
+  padding:14px;
+  border:1px solid var(--border);
+  border-radius:7px;
+  background:var(--card);
+}
+.research-body .lyo-paper .lyo-gas-analogy-grid {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+}
+.research-body .lyo-paper .lyo-gas-analogy-cell {
+  min-width:0;
+  padding:9px 11px 11px;
+  border:1px solid var(--border);
+  border-radius:6px;
+  background:var(--inset);
+}
+.research-body .lyo-paper .lyo-gas-analogy-sketch svg {
+  display:block;
+  max-width:175px;
+  height:134px;
+  width:100%;
+  margin:0 auto 7px;
+  color:var(--foreground);
+}
+.research-body .lyo-paper .lyo-gas-analogy-sketch svg text {
+  font:9px var(--font-sans);
+  fill:var(--muted-foreground);
+}
+.research-body .lyo-paper .lyo-gas-analogy-cell strong {
+  display:block;
+  font-size:11.5px;
+  line-height:1.4;
+  font-weight:620;
+  color:var(--foreground);
+}
+.research-body .lyo-paper .lyo-gas-analogy-cell p {
+  margin:6px 0 0;
+  font-size:10.8px;
+  line-height:1.56;
+  color:var(--prose-ink);
+}
+.research-body .lyo-paper .lyo-gas-analogy-detail {
+  color:var(--muted-foreground)!important;
+}
+@media(max-width:680px) {
+  .research-body .lyo-paper .lyo-gas-analogy-grid {
+    grid-template-columns:1fr;
+  }
+  .research-body .lyo-paper .lyo-gas-analogy-cell {
+    display:grid;
+    grid-template-columns:118px minmax(0,1fr);
+    column-gap:10px;
+    align-items:start;
+  }
+  .research-body .lyo-paper .lyo-gas-analogy-sketch {
+    grid-row:span 3;
+  }
+  .research-body .lyo-paper .lyo-gas-analogy-sketch svg {
+    height:110px;
+  }
+}
+.research-body .lyo-paper .lyo-evidence-figure {
+  margin:16px 0 20px;padding:13px;
+  border:1px solid var(--border);border-radius:7px;background:var(--card);
+}
+.research-body .lyo-paper .lyo-model-transfer {
+  margin:16px 0 22px;padding:14px;
+  border:1px solid var(--border);border-radius:7px;background:var(--card);
+}
+.research-body .lyo-paper .lyo-model-transfer-equation {
+  margin:10px 0 0;font-size:11.5px;line-height:1.6;color:var(--prose-ink);
+}
+.research-body .lyo-paper .lyo-model-transfer-plot {margin:12px 0 16px;}
+.research-body .lyo-paper .lyo-model-transfer-shares {
+  border-top:1px solid var(--border);padding-top:11px;
+}
+.research-body .lyo-paper .lyo-model-transfer-legend {
+  display:flex;flex-wrap:wrap;gap:6px 13px;margin-bottom:9px;
+}
+.research-body .lyo-paper .lyo-model-transfer-legend span {
+  display:inline-flex;align-items:center;gap:5px;font-size:10px;color:var(--prose-ink);
+}
+.research-body .lyo-paper .lyo-model-transfer-legend i {
+  display:inline-block;width:10px;height:10px;border-radius:2px;
+}
+.research-body .lyo-paper .lyo-model-transfer-row {
+  display:grid;grid-template-columns:76px minmax(0,1fr) 96px;
+  gap:9px;align-items:center;margin-bottom:8px;
+  font-size:10.5px;color:var(--prose-ink);
+}
+.research-body .lyo-paper .lyo-model-transfer-bar {
+  display:flex;height:14px;width:100%;overflow:hidden;border-radius:2px;background:var(--inset);
+}
+.research-body .lyo-paper .lyo-model-transfer-bar > span {height:100%;flex-shrink:0;}
+.research-body .lyo-paper .lyo-model-transfer-value {text-align:right;font-variant-numeric:tabular-nums;}
+@media(max-width:560px){
+  .research-body .lyo-paper .lyo-model-transfer-row {grid-template-columns:68px minmax(0,1fr);}
+  .research-body .lyo-paper .lyo-model-transfer-value {grid-column:2;margin-top:-5px;}
+}
+
+.research-body .lyo-paper .lyo-evidence-equation {
+  padding:10px 12px;margin:0 0 15px;border:1px solid var(--border);
+  background:var(--inset);border-radius:7px;
+}
+.research-body .lyo-paper .lyo-evidence-equation strong {
+  display:block;font-size:12px;font-weight:620;color:var(--foreground);
+}
+.research-body .lyo-paper .lyo-evidence-equation p {
+  margin:5px 0 8px;color:var(--prose-ink);font-size:11px;line-height:1.55;
+}
+.research-body .lyo-paper .lyo-evidence-equation-math {
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  font-size:12px;color:var(--foreground);
+}
+.research-body .lyo-paper .lyo-evidence-equation-math > span {
+  color:var(--muted-foreground);
+}
+.research-body .lyo-paper .lyo-evidence-panel {
+  padding:12px 0;border-bottom:1px solid var(--border);
+}
+.research-body .lyo-paper .lyo-evidence-panel-heading {
+  display:flex;align-items:baseline;gap:6px 12px;flex-wrap:wrap;margin-bottom:10px;
+}
+.research-body .lyo-paper .lyo-evidence-panel-heading strong {
+  font-size:12px;font-weight:630;color:var(--foreground);
+}
+.research-body .lyo-paper .lyo-evidence-panel-heading span {
+  font-size:10.5px;color:var(--muted-foreground);
+}
+.research-body .lyo-paper .lyo-evidence-plot {
+  display:block;width:100%;height:auto;max-height:310px;
+  overflow:visible;color:var(--foreground);
+}
+.research-body .lyo-paper .lyo-evidence-plot-axis-title {
+  fill:var(--prose-ink);font-size:11px;font-weight:560;
+}
+.research-body .lyo-paper .lyo-evidence-plot-tick {
+  fill:var(--muted-foreground);font-size:10.5px;font-variant-numeric:tabular-nums;
+}
+.research-body .lyo-paper .lyo-evidence-gridline {
+  stroke:var(--border);stroke-width:1;
+}
+.research-body .lyo-paper .lyo-evidence-gridline--vertical {stroke-dasharray:2 3;}
+.research-body .lyo-paper .lyo-evidence-trace {
+  fill:none;stroke-width:3;stroke-linejoin:round;stroke-linecap:round;
+}
+.research-body .lyo-paper .lyo-evidence-trace--contact {stroke:var(--research-thermal);}
+.research-body .lyo-paper .lyo-evidence-trace--gap {stroke:var(--research-line-blue);}
+.research-body .lyo-paper .lyo-evidence-trace--radiation {
+  stroke:#8895a8;stroke-width:3;stroke-dasharray:6 4;
+}
+.research-body .lyo-paper .lyo-evidence-plot-key {fill:var(--prose-ink);font-size:10.5px;}
+.research-body .lyo-paper .lyo-evidence-denominator {
+  margin:8px 0;padding:9px 11px;border-radius:5px;background:var(--inset);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  font-size:11px;line-height:1.5;color:var(--prose-ink);
+}
+.research-body .lyo-paper .lyo-evidence-denominator strong {
+  color:var(--foreground);font-variant-numeric:tabular-nums;
+}
+@media (max-width:650px){
+  .research-body .lyo-paper .lyo-evidence-denominator {display:block;}
+  .research-body .lyo-paper .lyo-evidence-denominator > span:nth-child(2) {display:block;padding:3px 0;}
+}
+
+.research-body .lyo-paper .lyo-evidence-legend {display:flex;flex-wrap:wrap;gap:8px 13px;margin-bottom:11px;}
+.research-body .lyo-paper .lyo-evidence-legend span {display:inline-flex;align-items:center;gap:5px;font-size:10.5px;color:var(--prose-ink);}
+.research-body .lyo-paper .lyo-evidence-legend i {display:inline-block;width:10px;height:10px;border-radius:2px;}
+.research-body .lyo-paper .lyo-evidence-rows {display:grid;gap:9px;}
+.research-body .lyo-paper .lyo-evidence-row {
+  display:grid;grid-template-columns:minmax(120px,1.15fr) minmax(120px,3fr) minmax(85px,1fr);
+  align-items:center;gap:8px;
+}
+.research-body .lyo-paper .lyo-evidence-label,.research-body .lyo-paper .lyo-evidence-sum {
+  font-size:10.5px;line-height:1.4;color:var(--prose-ink);
+}
+.research-body .lyo-paper .lyo-evidence-sum {text-align:right;font-variant-numeric:tabular-nums;}
+.research-body .lyo-paper .lyo-evidence-bar {
+  width:100%;height:15px;display:flex;overflow:hidden;border-radius:2px;background:var(--inset);
+}
+.research-body .lyo-paper .lyo-evidence-bar span {height:100%;flex-shrink:0;}
+.research-body .lyo-paper .lyo-mode-radiation {background:#8895a8;}
+.research-body .lyo-paper .lyo-mode-contact {background:#a18662;}
+.research-body .lyo-paper .lyo-mode-gas {background:#4387b6;}
+.research-body .lyo-paper .lyo-mode-flow {background:#7c6eac;}
+.research-body .lyo-paper .lyo-evidence-figure .lyo-evidence-note,
+.research-body .lyo-paper .lyo-evidence-fit p {
+  margin:11px 0 0;font-size:11px;line-height:1.55;color:var(--prose-ink);
+}
+.research-body .lyo-paper .lyo-evidence-fit {
+  margin-top:13px;padding-top:10px;border-top:1px solid var(--border);
+}
+.research-body .lyo-paper .lyo-evidence-fit strong {display:block;font-size:11.5px;color:var(--foreground);}
+.research-body .lyo-paper .lyo-evidence-fit .overflow-x-auto {margin-top:10px;}
+.research-body .lyo-paper .lyo-evidence-fit th,
+.research-body .lyo-paper .lyo-evidence-fit td {font-size:10px;padding:6px 7px;}
+@media(max-width:650px){
+  .research-body .lyo-paper .lyo-evidence-row {grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);}
+  .research-body .lyo-paper .lyo-evidence-sum {grid-column:1/-1;text-align:right;margin-top:-5px;}
+}
+
+.research-body .lyo-paper .lyo-controller-figure {
+  margin:15px 0 18px;padding:13px;background:var(--card);
+  border:1px solid var(--border);border-radius:7px;
+}
+.research-body .lyo-paper .lyo-controller-inputs {
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;
+}
+.research-body .lyo-paper .lyo-controller-inputs section,
+.research-body .lyo-paper .lyo-controller-merge,
+.research-body .lyo-paper .lyo-controller-output {
+  min-width:0;padding:11px;border:1px solid var(--border);border-radius:5px;
+}
+.research-body .lyo-paper .lyo-controller-inputs section:first-child {border-top:2px solid var(--research-line-blue);}
+.research-body .lyo-paper .lyo-controller-inputs section:last-child {border-top:2px solid var(--research-thermal);}
+.research-body .lyo-paper .lyo-controller-merge,.research-body .lyo-paper .lyo-controller-output {
+  margin-top:8px;text-align:center;background:var(--inset);
+}
+.research-body .lyo-paper .lyo-controller-tag {
+  display:block;font-size:10px;color:var(--muted-foreground);margin-bottom:5px;
+}
+.research-body .lyo-paper .lyo-controller-figure strong {
+  display:block;font-size:11.5px;font-weight:620;color:var(--foreground);line-height:1.4;
+}
+.research-body .lyo-paper .lyo-controller-figure p {
+  font-size:11px;line-height:1.55;color:var(--prose-ink);margin:5px 0 0;
+}
+@media (max-width:600px) {
+  .research-body .lyo-paper .lyo-controller-inputs {grid-template-columns:1fr;}
+}
 .research-body .lyo-paper .lyo-process-figure {
   margin:15px 0 18px;padding:13px;background:var(--card);
 }
@@ -62,6 +287,19 @@
 .research-body .lyo-paper .lyo-process-node {
   min-width:0;padding:9px 8px 10px;border:1px solid var(--border);
   border-radius:6px;background:var(--inset);
+}
+.research-body .lyo-paper .lyo-process-return {
+  margin-top:9px;
+  padding-top:8px;
+  border-top:1px solid var(--border);
+  color:var(--muted-foreground);
+  font-size:11px;
+  line-height:1.5;
+}
+.research-body .lyo-paper .lyo-process-return span {
+  font-size:16px;
+  margin-right:5px;
+  vertical-align:-1px;
 }
 .research-body .lyo-paper .lyo-process-node--gas {background:var(--research-blue-wash);}
 .research-body .lyo-paper .lyo-process-node--measure {background:var(--research-sage-wash);}
@@ -136,11 +374,629 @@
   .research-body .lyo-paper .lyo-process-grid {grid-template-columns:repeat(2,minmax(0,1fr));}
   .research-body .lyo-paper .lyo-process-node {padding:9px;}
   .research-body .lyo-paper .lyo-process-figure {padding:11px;}
-  .research-body .lyo-paper .lyo-abstract-card {padding:14px 15px;}
   .research-body .lyo-paper .overflow-x-auto {overscroll-behavior-x:contain;scrollbar-width:thin;}
 }
 @media print {
   .research-body .lyo-paper .lyo-process-node,
   .research-body .lyo-paper .lyo-evidence-item {break-inside:avoid;}
   .research-body .lyo-paper .lyo-process-grid {grid-template-columns:repeat(3,minmax(0,1fr));}
+}
+
+/* Causal system figure: three state classes, two independent removal paths. */
+.research-body .lyo-paper .lyo-process-grid {
+  display:grid;grid-template-columns:minmax(0,1fr) 40px minmax(0,1fr) 40px minmax(0,1fr);
+  align-items:stretch;gap:7px;
+}
+.research-body .lyo-paper .lyo-process-figure {border:1px solid var(--border);border-radius:7px;}
+.research-body .lyo-paper .lyo-process-arrow {
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:var(--muted-foreground);font-size:22px;font-weight:500;gap:4px;
+}
+.research-body .lyo-paper .lyo-process-arrow span {
+  font-size:9px;line-height:1.35;text-align:center;
+}
+.research-body .lyo-paper .lyo-process-removal {
+  border-top:1px solid var(--border);margin-top:12px;padding-top:10px;
+  color:var(--muted-foreground);font-size:10px;
+}
+.research-body .lyo-paper .lyo-process-removal > span {display:block;margin-bottom:8px;font-weight:620;}
+.research-body .lyo-paper .lyo-process-sinks {
+  display:grid;grid-template-columns:1fr 1fr;gap:9px;
+}
+.research-body .lyo-paper .lyo-process-sinks > section {
+  padding:9px 11px;border:1px solid var(--border);border-radius:5px;background:var(--inset);
+}
+.research-body .lyo-paper .lyo-process-sinks strong,
+.research-body .lyo-paper .lyo-process-return strong {
+  display:block;color:var(--foreground);font-size:11px;font-weight:620;
+}
+.research-body .lyo-paper .lyo-process-sinks p,
+.research-body .lyo-paper .lyo-process-return p {
+  margin:3px 0 0;font-size:10.5px;line-height:1.5;color:var(--prose-ink);
+}
+.research-body .lyo-paper .lyo-process-return {
+  display:flex;align-items:flex-start;gap:10px;margin-top:11px;padding:10px;
+  border:1px solid var(--border);border-radius:5px;background:var(--research-blue-wash);
+}
+.research-body .lyo-paper .lyo-process-return-glyph {
+  margin:0;font-size:23px;line-height:1;color:var(--research-line-blue);
+}
+@media(max-width:790px) {
+  .research-body .lyo-paper .lyo-process-grid {grid-template-columns:1fr;gap:5px;}
+  .research-body .lyo-paper .lyo-process-arrow {font-size:18px;flex-direction:row;gap:8px;}
+  .research-body .lyo-paper .lyo-process-arrow::first-letter {font-size:0;}
+  .research-body .lyo-paper .lyo-process-arrow {transform:none;}
+  .research-body .lyo-paper .lyo-process-sinks {grid-template-columns:1fr 1fr;}
+}
+@media(max-width:470px) {
+  .research-body .lyo-paper .lyo-process-sinks {grid-template-columns:1fr;}
+}
+@media print {
+  .research-body .lyo-paper .lyo-process-grid {
+    grid-template-columns:minmax(0,1fr) 30px minmax(0,1fr) 30px minmax(0,1fr);
+  }
+}
+
+/* Build-specific two-lane controller diagram. */
+.research-body .lyo-paper .lyo-control-lanes {
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;
+}
+.research-body .lyo-paper .lyo-control-lane {
+  min-width:0;padding:11px;border:1px solid var(--border);border-radius:6px;background:var(--inset);
+}
+.research-body .lyo-paper .lyo-control-lane--pressure {border-top:2px solid var(--research-line-blue);}
+.research-body .lyo-paper .lyo-control-lane--temperature {border-top:2px solid var(--research-thermal);}
+.research-body .lyo-paper .lyo-control-lane-title {
+  display:flex;align-items:baseline;gap:7px;justify-content:space-between;margin-bottom:11px;
+}
+.research-body .lyo-paper .lyo-control-lane-title strong {
+  font-size:12px;font-weight:650;color:var(--foreground);
+}
+.research-body .lyo-paper .lyo-control-lane-title span {
+  font-size:10px;color:var(--muted-foreground);font-variant-numeric:tabular-nums;
+}
+.research-body .lyo-paper .lyo-control-step {
+  padding:9px 10px;border:1px solid var(--border);border-radius:5px;background:var(--card);
+}
+.research-body .lyo-paper .lyo-control-step strong {font-size:11.5px;}
+.research-body .lyo-paper .lyo-control-step p {
+  margin:4px 0 0;font-size:10.5px;line-height:1.5;color:var(--prose-ink);
+}
+.research-body .lyo-paper .lyo-control-link {
+  height:21px;display:flex;justify-content:center;align-items:center;
+  font-size:16px;color:var(--muted-foreground);
+}
+.research-body .lyo-paper .lyo-control-shared {
+  text-align:center;margin-top:9px;padding:10px 12px;
+  border:1px solid var(--border);border-radius:6px;background:var(--research-sage-wash);
+}
+.research-body .lyo-paper .lyo-control-shared > span {
+  display:block;font-size:17px;line-height:1;color:var(--muted-foreground);margin-bottom:6px;
+}
+.research-body .lyo-paper .lyo-control-shared strong {
+  color:var(--foreground);font-size:11.5px;font-weight:620;
+}
+.research-body .lyo-paper .lyo-control-shared p {
+  margin:5px 0 0;font-size:10.7px;color:var(--prose-ink);line-height:1.55;
+}
+@media(max-width:620px) {
+  .research-body .lyo-paper .lyo-control-lanes {grid-template-columns:1fr;}
+}
+
+.research-body .lyo-paper .lyo-evidence-source-table {
+  margin:12px 0 2px;padding:9px 10px;border:1px solid var(--border);
+  border-radius:5px;color:var(--prose-ink);
+}
+.research-body .lyo-paper .lyo-evidence-source-table summary {
+  cursor:pointer;list-style:revert;font-size:11px;font-weight:600;
+  color:var(--foreground);
+}
+.research-body .lyo-paper .lyo-evidence-source-table p {
+  font-size:10.5px;line-height:1.55;color:var(--muted-foreground);
+}
+.research-body .lyo-paper .lyo-evidence-dataset {margin:12px 0;}
+.research-body .lyo-paper .lyo-evidence-dataset > strong {
+  display:block;font-size:11.5px;color:var(--foreground);margin-bottom:7px;
+}
+.research-body .lyo-paper .lyo-evidence-plot-scroll {
+  width:100%;overflow-x:auto;overscroll-behavior-x:contain;
+}
+.research-body .lyo-paper .lyo-evidence-plot-scroll > svg {
+  min-width:600px;max-width:none;
+}
+.research-body .lyo-paper .lyo-pressure-explorer {
+  margin:16px 0 10px;padding:14px;border:1px solid var(--border);
+  border-radius:7px;background:var(--card);
+}
+.research-body .lyo-paper .lyo-pressure-controls {
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;
+  padding:10px;margin:11px 0;border:1px solid var(--border);
+  border-radius:5px;background:var(--inset);
+}
+.research-body .lyo-paper .lyo-pressure-metrics {
+  display:flex;flex-wrap:wrap;gap:7px 16px;margin-bottom:13px;
+  border-bottom:1px solid var(--border);padding-bottom:10px;
+}
+.research-body .lyo-paper .lyo-pressure-metrics > span {
+  font-size:10.5px;line-height:1.5;color:var(--muted-foreground);
+}
+.research-body .lyo-paper .lyo-pressure-metrics strong {
+  display:inline-block;margin-left:4px;font-size:11px;font-weight:640;
+  color:var(--foreground);font-variant-numeric:tabular-nums;
+}
+.research-body .lyo-paper .lyo-pressure-panel {
+  border-bottom:1px solid var(--border);padding:10px 0 5px;
+}
+.research-body .lyo-paper .lyo-pressure-panel:first-child {padding-top:0;}
+.research-body .lyo-paper .lyo-pressure-panel:last-child {border-bottom:0;}
+.research-body .lyo-paper .lyo-pressure-panel-head {
+  display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline;
+}
+.research-body .lyo-paper .lyo-pressure-panel-head strong {
+  font-size:11.5px;font-weight:620;color:var(--foreground);
+}
+.research-body .lyo-paper .lyo-pressure-panel-head span {
+  font-size:10px;color:var(--muted-foreground);
+}
+@media(max-width:760px){
+  .research-body .lyo-paper .lyo-pressure-controls {grid-template-columns:1fr;}
+}
+
+.research-body .lyo-paper .lyo-window-figure {
+  margin:16px 0 20px;padding:14px;border:1px solid var(--border);
+  border-radius:7px;background:var(--card);
+}
+.research-body .lyo-paper .lyo-window-controls {
+  margin:11px 0;padding:11px;display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;
+  border:1px solid var(--border);border-radius:5px;background:var(--inset);
+}
+.research-body .lyo-paper .lyo-window-metrics {
+  display:flex;flex-wrap:wrap;gap:7px 14px;margin-bottom:12px;
+}
+.research-body .lyo-paper .lyo-window-metrics span {
+  font-size:10.5px;line-height:1.5;color:var(--muted-foreground);
+}
+.research-body .lyo-paper .lyo-window-metrics strong {
+  font-size:11px;color:var(--foreground);font-variant-numeric:tabular-nums;
+}
+@media(max-width:640px) {
+  .research-body .lyo-paper .lyo-window-controls {grid-template-columns:1fr;}
+}
+@media print {
+  .research-body .lyo-paper .lyo-evidence-source-table {
+    break-inside:avoid;
+  }
+  .research-body .lyo-paper .lyo-evidence-source-table:not([open]) > :not(summary) {display:block;}
+  .research-body .lyo-paper .lyo-evidence-source-table > summary {display:none;}
+  .research-body .lyo-paper .lyo-model-transfer,
+  .research-body .lyo-paper .lyo-controller-figure,
+  .research-body .lyo-paper .lyo-pressure-explorer,
+  .research-body .lyo-paper .lyo-evidence-figure {
+    break-inside:avoid;
+  }
+}
+
+.research-body .lyo-paper .lyo-gas-analogy-common {
+  margin-top:11px;padding:9px 11px;border:1px solid var(--border);
+  border-radius:5px;background:var(--inset);
+}
+.research-body .lyo-paper .lyo-gas-analogy-common strong {
+  display:block;font-size:11px;font-weight:630;color:var(--foreground);
+}
+.research-body .lyo-paper .lyo-gas-analogy-common p {
+  margin:5px 0 0;font-size:11px;line-height:1.55;color:var(--prose-ink);
+}
+
+.research-body .lyo-paper .lyo-model-transfer-line-legend {
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;
+  padding:4px 0 7px;min-height:24px;
+}
+.research-body .lyo-paper .lyo-model-transfer-line-legend > span {
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:10.5px;line-height:1.35;color:var(--prose-ink);
+}
+.research-body .lyo-paper .lyo-model-transfer-line-legend i {
+  flex-shrink:0;display:inline-block;width:16px;height:3px;border-radius:2px;
+}
+
+
+/*
+ * Mobile-primary figure system. 320–430px is the reference composition.
+ * The larger-screen rules ADD columns, rather than scaling charts downward.
+ */
+.research-body .lyo-paper .lyo-evidence-figure,
+.research-body .lyo-paper .lyo-model-transfer,
+.research-body .lyo-paper .lyo-pressure-explorer,
+.research-body .lyo-paper .lyo-window-figure,
+.research-body .lyo-paper .lyo-controller-figure,
+.research-body .lyo-paper .lyo-process-figure,
+.research-body .lyo-paper .lyo-gas-analogy {
+  padding:12px;margin:15px 0 21px;min-width:0;
+  border-radius:9px;
+}
+/* The standalone process-loop figure has its own authored caption.
+ * All other scientific figures now use ScientificFigureCaption instead of
+ * these old unscoped span selectors, which doubled title/detail spacing. */
+.research-body .lyo-paper .lyo-loop-figure > figcaption.lyo-loop-caption {
+  margin-bottom:13px;
+}
+.research-body .lyo-paper .lyo-mini-science-plot {width:100%;min-width:0;margin:7px 0 9px;}
+.research-body .lyo-paper .lyo-mini-science-plot > svg {
+  display:block;max-width:400px;margin-inline:auto;overflow:visible;
+  height:auto;aspect-ratio:300/228;
+}
+.research-body .lyo-paper .lyo-mini-grid {
+  stroke:var(--border);stroke-width:.8;vector-effect:non-scaling-stroke;
+}
+.research-body .lyo-paper .lyo-mini-grid--vertical {stroke-dasharray:3 5;}
+.research-body .lyo-paper .lyo-mini-tick {
+  font:12.5px/1 var(--font-sans);fill:var(--prose-ink);
+  font-variant-numeric:tabular-nums;
+}
+.research-body .lyo-paper .lyo-mini-axis-name {
+  font:12px/1 var(--font-sans);fill:var(--prose-ink);
+}
+.research-body .lyo-paper .lyo-mini-marker-label {
+  fill:var(--foreground);font:650 11px/1 var(--font-sans);
+}
+.research-body .lyo-paper .lyo-mini-zero {
+  stroke:var(--foreground);stroke-opacity:.65;stroke-width:1.2;
+  vector-effect:non-scaling-stroke;
+}
+.research-body .lyo-paper .lyo-mini-line-key {
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 10px;
+  padding:5px 2px 9px;
+}
+.research-body .lyo-paper .lyo-mini-line-key > span {
+  display:flex;align-items:center;gap:7px;
+  font-size:11.5px;color:var(--prose-ink);min-width:0;line-height:1.3;
+}
+.research-body .lyo-paper .lyo-mini-line-key i {
+  width:19px;height:3px;flex:none;border-radius:2px;
+}
+.research-body .lyo-paper .lyo-mobile-radiation-fact {
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;margin:11px 0 9px;
+}
+.research-body .lyo-paper .lyo-mobile-radiation-fact > div {
+  padding:10px;min-width:0;border:1px solid var(--border);
+  background:var(--inset);border-radius:7px;
+}
+.research-body .lyo-paper .lyo-mobile-radiation-fact > div:first-child {
+  grid-column:span 2;
+}
+.research-body .lyo-paper .lyo-mobile-radiation-fact span {
+  display:block;font:600 10.5px/1.4 var(--font-sans);
+  color:var(--muted-foreground);
+}
+.research-body .lyo-paper .lyo-mobile-radiation-fact strong {
+  display:block;margin:3px 0;
+  font:650 23px/1.15 var(--font-sans);
+  letter-spacing:-.03em;color:var(--foreground);
+  font-variant-numeric:tabular-nums;
+}
+.research-body .lyo-paper .lyo-mobile-radiation-fact small {
+  font-size:11px;font-weight:550;letter-spacing:0;
+}
+.research-body .lyo-paper .lyo-mobile-radiation-fact em {
+  display:block;font-size:10.5px;line-height:1.4;font-style:normal;
+  color:var(--muted-foreground);
+}
+.research-body .lyo-paper .lyo-evidence-equation {
+  padding:10px 11px;margin-bottom:12px;
+}
+.research-body .lyo-paper .lyo-evidence-equation strong {font-size:12.5px;}
+.research-body .lyo-paper .lyo-evidence-equation p {font-size:11.5px;}
+.research-body .lyo-paper .lyo-evidence-row {
+  display:flex;flex-direction:column;gap:6px;
+  padding:9px 0;border-bottom:1px solid var(--border);
+}
+.research-body .lyo-paper .lyo-evidence-row:last-child {border-bottom:none;}
+.research-body .lyo-paper .lyo-evidence-label {
+  font-size:12px;font-weight:620;color:var(--foreground);
+}
+.research-body .lyo-paper .lyo-evidence-bar {
+  width:100%;height:17px;border-radius:3px;
+}
+.research-body .lyo-paper .lyo-evidence-sum {
+  width:100%;text-align:left;margin:0;
+  font-size:11px;color:var(--prose-ink);
+}
+.research-body .lyo-paper .lyo-evidence-legend {
+  gap:8px 12px;margin-bottom:6px;
+}
+.research-body .lyo-paper .lyo-evidence-panel {
+  padding:12px 0 14px;
+}
+.research-body .lyo-paper .lyo-evidence-panel-heading {
+  display:block;margin-bottom:7px;
+}
+.research-body .lyo-paper .lyo-evidence-panel-heading strong {
+  display:block;font-size:13px;
+}
+.research-body .lyo-paper .lyo-evidence-panel-heading > span {
+  display:block;margin-top:3px;font-size:11px;
+}
+.research-body .lyo-paper .lyo-evidence-figure .lyo-evidence-note,
+.research-body .lyo-paper .lyo-evidence-fit p,
+.research-body .lyo-paper .lyo-model-transfer .lyo-evidence-note {
+  font-size:11.5px;line-height:1.6;
+}
+.research-body .lyo-paper .lyo-mobile-model-statement {
+  margin:10px 0 11px;padding:12px;
+  border:1px solid var(--border);
+  background:var(--inset);border-radius:7px;
+}
+.research-body .lyo-paper .lyo-mobile-model-statement > .manuscript-label {
+  display:block;
+}
+.research-body .lyo-paper .lyo-mobile-model-statement > strong {
+  display:block;margin:5px 0;font:650 23px/1.2 var(--font-sans);
+  letter-spacing:-.025em;color:var(--foreground);
+  font-variant-numeric:tabular-nums;
+}
+.research-body .lyo-paper .lyo-mobile-model-statement small {
+  font-size:12px;font-weight:510;
+}
+.research-body .lyo-paper .lyo-mobile-model-statement p {
+  margin:5px 0 0;color:var(--prose-ink);font-size:11.5px;line-height:1.55;
+}
+.research-body .lyo-paper .lyo-mobile-pressure-picks {
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:7px;margin:12px 0 9px;
+}
+.research-body .lyo-paper .lyo-mobile-pressure-picks button,
+.research-body .lyo-paper .lyo-mobile-lens-tabs button,
+.research-body .lyo-paper .lyo-mobile-controller-tabs button {
+  min-height:46px;border-radius:6px;border:1px solid var(--border);
+  background:var(--card);color:var(--prose-ink);
+  font-size:12px;font-weight:620;cursor:pointer;
+  touch-action:manipulation;
+}
+.research-body .lyo-paper .lyo-mobile-pressure-picks button[aria-pressed="true"],
+.research-body .lyo-paper .lyo-mobile-lens-tabs button[aria-pressed="true"],
+.research-body .lyo-paper .lyo-mobile-controller-tabs button[aria-pressed="true"] {
+  border-color:var(--foreground);background:var(--inset);color:var(--foreground);
+  box-shadow:inset 0 -2px 0 var(--foreground);
+}
+.research-body .lyo-paper button:focus-visible {
+  outline:2px solid var(--foreground);outline-offset:2px;
+}
+.research-body .lyo-paper .lyo-mobile-pressure-picks button > span {
+  display:block;font-size:9px;font-weight:400;margin-top:2px;
+  color:var(--muted-foreground);
+}
+.research-body .lyo-paper .lyo-mobile-normalized {
+  padding-top:12px;border-top:1px solid var(--border);
+}
+.research-body .lyo-paper .lyo-mobile-section-name {
+  font-size:12px;font-weight:640;color:var(--foreground);margin-bottom:9px;
+}
+.research-body .lyo-paper .lyo-mobile-composition-legend {
+  display:flex;flex-wrap:wrap;gap:7px 13px;margin-bottom:12px;
+}
+.research-body .lyo-paper .lyo-mobile-composition-legend span {
+  display:flex;align-items:center;gap:5px;color:var(--prose-ink);font-size:11px;
+}
+.research-body .lyo-paper .lyo-mobile-composition-legend i {
+  display:block;width:10px;height:10px;border-radius:2px;
+}
+.research-body .lyo-paper .lyo-mobile-composition {
+  padding:8px 0;
+}
+.research-body .lyo-paper .lyo-mobile-composition-head {
+  display:flex;align-items:center;justify-content:space-between;
+  gap:9px;margin-bottom:7px;font-size:12px;
+}
+.research-body .lyo-paper .lyo-mobile-composition-head strong {color:var(--foreground);font-weight:630;}
+.research-body .lyo-paper .lyo-mobile-composition-head span {color:var(--prose-ink);}
+.research-body .lyo-paper .lyo-mobile-composition-bar {
+  display:flex;height:22px;background:var(--inset);border-radius:3px;overflow:hidden;
+}
+.research-body .lyo-paper .lyo-mobile-composition-bar > span {height:100%;}
+.research-body .lyo-paper .lyo-mobile-comparison-arrow {
+  text-align:center;padding:4px 0;font-size:10.5px;
+  color:var(--muted-foreground);
+}
+.research-body .lyo-paper .lyo-mobile-comparison-arrow strong {color:var(--foreground);}
+.research-body .lyo-paper .lyo-mobile-normalized > p {
+  margin:8px 0 3px;font-size:11.5px;line-height:1.6;
+}
+.research-body .lyo-paper .lyo-mobile-figure-method,
+.research-body .lyo-paper .lyo-mobile-data-disclosure {
+  margin-top:13px;padding:10px 12px;
+  border:1px solid var(--border);border-radius:7px;background:var(--card);
+}
+.research-body .lyo-paper .lyo-mobile-figure-method > summary,
+.research-body .lyo-paper .lyo-mobile-data-disclosure > summary {
+  cursor:pointer;font-size:12px;line-height:1.5;
+  color:var(--foreground);font-weight:620;
+}
+.research-body .lyo-paper .lyo-mobile-figure-method p {
+  font-size:11.5px;line-height:1.58;color:var(--prose-ink);margin:10px 0 0;
+}
+.research-body .lyo-paper .lyo-mobile-data-disclosure {margin:7px 0 18px;}
+.research-body .lyo-paper .lyo-mobile-data-disclosure > figure {margin:10px 0 0;}
+.research-body .lyo-paper .lyo-pressure-controls,
+.research-body .lyo-paper .lyo-window-controls {
+  display:grid;grid-template-columns:1fr;gap:13px;padding:12px;
+  margin:10px 0;background:var(--inset);border:1px solid var(--border);
+  border-radius:7px;
+}
+.research-body .lyo-paper .lyo-pressure-metrics,
+.research-body .lyo-paper .lyo-window-metrics {
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:9px;margin:11px 0;padding:0;border:0;
+}
+.research-body .lyo-paper .lyo-pressure-metrics > span,
+.research-body .lyo-paper .lyo-window-metrics > span {
+  display:block;font-size:11px;padding:9px 10px;line-height:1.5;
+  border:1px solid var(--border);border-radius:6px;background:var(--inset);
+}
+.research-body .lyo-paper .lyo-pressure-metrics strong,
+.research-body .lyo-paper .lyo-window-metrics strong {
+  display:block;margin:2px 0 0;font-size:15px;font-weight:650;
+  font-variant-numeric:tabular-nums;
+}
+.research-body .lyo-paper .lyo-mobile-lens-tabs {
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:6px;margin:13px 0 10px;
+}
+.research-body .lyo-paper .lyo-mobile-lens-tabs button span {
+  margin-right:6px;font-size:10px;color:var(--muted-foreground);
+}
+.research-body .lyo-paper .lyo-pressure-panel {
+  display:none;border:0;padding:0;margin:0 0 9px;
+}
+.research-body .lyo-paper .lyo-pressure-panel[data-active="true"] {display:block;}
+.research-body .lyo-paper .lyo-pressure-panel-head {
+  display:grid;grid-template-columns:24px 1fr;gap:3px 9px;
+  align-items:start;margin:11px 0;
+}
+.research-body .lyo-paper .lyo-pressure-panel-head .lyo-mobile-panel-index {
+  grid-row:span 2;font-size:10px;font-weight:680;color:var(--muted-foreground);
+  padding-top:2px;
+}
+.research-body .lyo-paper .lyo-pressure-panel-head strong {
+  display:block;font-size:13px;font-weight:650;color:var(--foreground);
+}
+.research-body .lyo-paper .lyo-pressure-panel-head > span:last-child {
+  font-size:11px;grid-column:2;color:var(--muted-foreground);
+}
+.research-body .lyo-paper .lyo-mobile-panel-meaning {
+  margin:9px 0 12px;font-size:11.5px;line-height:1.55;
+  color:var(--prose-ink);
+}
+.research-body .lyo-paper .lyo-mobile-controller-tabs {
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:7px;margin-bottom:12px;
+}
+.research-body .lyo-paper .lyo-control-lanes {display:block;}
+.research-body .lyo-paper .lyo-control-lane {display:none;}
+.research-body .lyo-paper .lyo-control-lane[data-active="true"] {display:block;}
+.research-body .lyo-paper .lyo-control-lane-title strong {font-size:13px;}
+.research-body .lyo-paper .lyo-control-step strong {font-size:12px;}
+.research-body .lyo-paper .lyo-control-step p {font-size:11.5px;}
+.research-body .lyo-paper .lyo-control-shared p {font-size:11.5px;}
+.research-body .lyo-paper .lyo-process-grid {grid-template-columns:1fr;gap:4px;}
+.research-body .lyo-paper .lyo-process-node {padding:12px;}
+.research-body .lyo-paper .lyo-process-node > strong {font-size:12.5px;}
+.research-body .lyo-paper .lyo-process-node > p {font-size:11.5px;}
+.research-body .lyo-paper .lyo-process-arrow {
+  font-size:0;display:flex;flex-direction:column;gap:0;min-height:37px;
+}
+.research-body .lyo-paper .lyo-process-arrow::before {
+  content:"↓";font-size:20px;line-height:22px;color:var(--foreground);
+}
+.research-body .lyo-paper .lyo-process-arrow span {font-size:10px;}
+.research-body .lyo-paper .lyo-process-sinks {grid-template-columns:1fr;gap:7px;}
+.research-body .lyo-paper .lyo-process-sinks p,
+.research-body .lyo-paper .lyo-process-return p {font-size:11.5px;}
+.research-body .lyo-paper .lyo-gas-analogy-cell {
+  padding:10px;display:grid;grid-template-columns:90px minmax(0,1fr);
+  align-items:center;column-gap:11px;
+}
+.research-body .lyo-paper .lyo-gas-analogy-sketch {
+  grid-row:span 3;min-width:0;
+}
+.research-body .lyo-paper .lyo-gas-analogy-sketch svg {height:91px;}
+.research-body .lyo-paper .lyo-gas-analogy-cell strong {font-size:12px;}
+.research-body .lyo-paper .lyo-gas-analogy-cell p {font-size:11.5px;margin-top:4px;}
+@media(min-width:740px) {
+  .research-body .lyo-paper .lyo-evidence-figure,
+  .research-body .lyo-paper .lyo-model-transfer,
+  .research-body .lyo-paper .lyo-pressure-explorer,
+  .research-body .lyo-paper .lyo-window-figure,
+  .research-body .lyo-paper .lyo-controller-figure,
+  .research-body .lyo-paper .lyo-process-figure,
+  .research-body .lyo-paper .lyo-gas-analogy {padding:17px;}
+  .research-body .lyo-paper .lyo-mobile-radiation-fact {grid-template-columns:repeat(3,minmax(0,1fr));}
+  .research-body .lyo-paper .lyo-mobile-radiation-fact > div:first-child {grid-column:auto;}
+  .research-body .lyo-paper .lyo-mobile-pressure-picks {grid-template-columns:repeat(6,minmax(0,1fr));}
+  .research-body .lyo-paper .lyo-pressure-controls {grid-template-columns:repeat(3,minmax(0,1fr));}
+  .research-body .lyo-paper .lyo-window-controls {grid-template-columns:repeat(3,minmax(0,1fr));}
+  .research-body .lyo-paper .lyo-pressure-panels {display:grid;grid-template-columns:1fr;gap:10px;}
+  .research-body .lyo-paper .lyo-pressure-panel,
+  .research-body .lyo-paper .lyo-pressure-panel[data-active="true"] {
+    display:block;padding:12px 0;border-bottom:1px solid var(--border);
+  }
+  .research-body .lyo-paper .lyo-mobile-lens-tabs {display:none;}
+  .research-body .lyo-paper .lyo-control-lanes {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+  .research-body .lyo-paper .lyo-control-lane {display:block;}
+  .research-body .lyo-paper .lyo-mobile-controller-tabs {display:none;}
+  .research-body .lyo-paper .lyo-process-grid {
+    grid-template-columns:minmax(0,1fr) 22px minmax(0,1fr) 22px minmax(0,1fr);
+  }
+  .research-body .lyo-paper .lyo-process-arrow {font-size:18px;}
+  .research-body .lyo-paper .lyo-process-arrow::before {content:"→";}
+  .research-body .lyo-paper .lyo-process-sinks {grid-template-columns:repeat(2,minmax(0,1fr));}
+  .research-body .lyo-paper .lyo-gas-analogy-cell {display:block;}
+  .research-body .lyo-paper .lyo-gas-analogy-sketch svg {height:130px;}
+  .research-body .lyo-paper .lyo-mini-line-key {grid-template-columns:repeat(4,minmax(0,1fr));}
+  .research-body .lyo-paper .lyo-evidence-row {
+    display:grid;grid-template-columns:minmax(110px,1fr) minmax(0,2fr) minmax(105px,1fr);gap:9px;
+  }
+  .research-body .lyo-paper .lyo-evidence-sum {text-align:right;}
+}
+@media print {
+  .research-body .lyo-paper .lyo-pressure-panel {display:block!important;}
+  .research-body .lyo-paper .lyo-control-lane {display:block!important;}
+  .research-body .lyo-paper .lyo-mobile-lens-tabs,
+  .research-body .lyo-paper .lyo-mobile-controller-tabs {display:none;}
+  .research-body .lyo-paper .lyo-process-grid {grid-template-columns:1fr;}
+  .research-body .lyo-paper .lyo-process-arrow::before {content:"↓";}
+}
+
+
+/* Published-source and model tables become labeled records on phones. */
+@media(max-width:739px) {
+  .research-body .lyo-paper .lyo-mobile-data-disclosure .overflow-x-auto,
+  .research-body .lyo-paper .lyo-evidence-dataset .overflow-x-auto,
+  .research-body .lyo-paper .lyo-evidence-fit .overflow-x-auto {
+    overflow:visible;max-width:100%;
+  }
+  .research-body .lyo-paper .lyo-mobile-data-disclosure table,
+  .research-body .lyo-paper .lyo-evidence-dataset table,
+  .research-body .lyo-paper .lyo-evidence-fit table {
+    display:block;min-width:0!important;width:100%;border:0;
+    background:transparent;
+  }
+  .research-body .lyo-paper .lyo-mobile-data-disclosure thead,
+  .research-body .lyo-paper .lyo-evidence-dataset thead,
+  .research-body .lyo-paper .lyo-evidence-fit thead {
+    display:none;
+  }
+  .research-body .lyo-paper .lyo-mobile-data-disclosure tbody,
+  .research-body .lyo-paper .lyo-evidence-dataset tbody,
+  .research-body .lyo-paper .lyo-evidence-fit tbody {
+    display:grid;grid-template-columns:1fr;gap:10px;
+  }
+  .research-body .lyo-paper .lyo-mobile-data-disclosure tbody tr,
+  .research-body .lyo-paper .lyo-evidence-dataset tbody tr,
+  .research-body .lyo-paper .lyo-evidence-fit tbody tr {
+    display:block;padding:6px 9px;border:1px solid var(--border);
+    border-radius:6px;background:var(--inset);
+  }
+  .research-body .lyo-paper .lyo-mobile-data-disclosure tbody tr td,
+  .research-body .lyo-paper .lyo-evidence-dataset tbody tr td,
+  .research-body .lyo-paper .lyo-evidence-fit tbody tr td {
+    display:flex;justify-content:space-between;align-items:baseline;gap:9px;
+    width:100%;min-width:0;max-width:100%;padding:7px 3px;
+    text-align:right!important;overflow-wrap:anywhere;
+    border-bottom:1px solid var(--border);
+    font-size:11.5px;line-height:1.4;
+  }
+  .research-body .lyo-paper .lyo-mobile-data-disclosure tbody tr td:last-child,
+  .research-body .lyo-paper .lyo-evidence-dataset tbody tr td:last-child,
+  .research-body .lyo-paper .lyo-evidence-fit tbody tr td:last-child {
+    border-bottom:0;
+  }
+  .research-body .lyo-paper .lyo-mobile-data-disclosure tbody td::before,
+  .research-body .lyo-paper .lyo-evidence-dataset tbody td::before,
+  .research-body .lyo-paper .lyo-evidence-fit tbody td::before {
+    content:attr(data-label);
+    flex:0 0 43%;font-family:var(--font-sans);
+    font-size:10.5px;font-weight:560;text-align:left;color:var(--muted-foreground);
+  }
 }

@@ -1,0 +1,788 @@
+/*
+ * thelabjournal™ / Scientific Publication System
+ * PDF-FIRST EDITORIAL DESIGN — shadcn Zinc, New York compact.
+ * A standalone publication layout, unrelated to the site's browser chrome.
+ * All design language is flat: no gradients, translucency, or glass effects.
+ */
+@page {
+  size: A4;
+  margin: 17mm 15.5mm 18mm;
+}
+:root[data-theme="light"] {
+  color-scheme: light !important;
+}
+html,body {
+  background: #fff !important;
+  color: #18181b !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  overflow: visible !important;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+body.pdf-export-mode > :not(#pdf-publication) { display:none !important; }
+#pdf-publication {
+  --foreground: #18181b;
+  --text: #18181b;
+  --text-secondary: #52525b;
+  --text-muted: #71717a;
+  --muted-foreground: #71717a;
+  --border: #e4e4e7;
+  --card: #fff;
+  --background: #fff;
+  --inset: #f4f4f5;
+  --figure-bg: #fafafa;
+  --sidenote-bg: #fafafa;
+  --latex-badge-bg: #f4f4f5;
+  --latex-badge-border: #d4d4d8;
+  --latex-badge-label: #3f3f46;
+  --badge-bg: #f4f4f5;
+  --prose-ink: #27272a;
+  --accent: #3f3f46;
+  --accent-hover: #18181b;
+  --research-gas: #52525b;
+  --research-line-blue: #52525b;
+  --research-thermal: #71717a;
+  --research-blue-wash: #fafafa;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  font-family: Inter, Arial, Helvetica, sans-serif !important;
+  font-size: 10pt;
+  line-height: 1.53;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+/* Unified Inter sans-serif for every editorial element. KaTeX retains
+   the dedicated scientific math glyphs needed for equation typesetting. */
+#pdf-publication :not(.katex):not(.katex *) {
+  font-family: Inter, Arial, Helvetica, sans-serif !important;
+}
+#pdf-publication * {
+  box-sizing: border-box;
+}
+#pdf-publication a[href] {
+  color: #27272a !important;
+  text-decoration: underline;
+  text-decoration-color: #a1a1aa;
+  text-underline-offset: 2px;
+}
+/* COVER / full page self-contained editorial composition */
+#pdf-publication .pdf-cover {
+  height: 251mm;
+  display: flex;
+  flex-direction: column;
+  page-break-after: always;
+  break-after: page;
+  position: relative;
+  color: #18181b;
+}
+#pdf-publication .pdf-cover__topline {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #d4d4d8;
+  padding: 0 0 6.2mm;
+}
+#pdf-publication .pdf-brand {
+  display:flex;
+  align-items:center;
+  gap: 9px;
+}
+#pdf-publication .pdf-brand svg {
+  width: 26px;
+  height: 26px;
+  display:block;
+}
+#pdf-publication .pdf-brand__wordmark {
+  font-size: 13pt;
+  line-height: 1.1;
+  font-weight: 740;
+  letter-spacing: -.052em;
+}
+#pdf-publication .pdf-cover__brand-meta {
+  color: #71717a;
+  font-size: 7.25pt;
+  line-height: 1.5;
+  text-align:right;
+}
+#pdf-publication .pdf-dither {
+  position: relative;
+  flex: 0 0 auto;
+  height: 25mm;
+  margin: 5.5mm 0 9.5mm;
+  overflow: hidden;
+  border-top: 1px solid #f4f4f5;
+  border-bottom: 1px solid #e4e4e7;
+}
+#pdf-publication .pdf-dither svg {
+  display: block;
+  width: 100%;
+  height:100%;
+}
+#pdf-publication .pdf-cover__series {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  font-size:8pt;
+  color:#52525b;
+  margin-bottom: 4mm;
+}
+#pdf-publication .pdf-cover__badge {
+  display:inline-flex;
+  align-items:center;
+  padding: 4px 8px;
+  border:1px solid #d4d4d8;
+  border-radius:5px;
+  background:#fafafa;
+  color:#3f3f46;
+  font-size:7.25pt;
+  font-weight:630;
+}
+#pdf-publication .pdf-cover__title {
+  font-size:28pt !important;
+  letter-spacing: -.042em !important;
+  line-height:1.17 !important;
+  font-weight:750 !important;
+  margin:0 0 2.8mm;
+  overflow-wrap:break-word;
+  color:#09090b !important;
+}
+#pdf-publication .pdf-cover__subtitle {
+  font-size:12pt;
+  line-height:1.55;
+  font-weight: 400;
+  max-width:94%;
+  margin: 0;
+  color:#52525b;
+}
+#pdf-publication .pdf-cover__authorship {
+  margin-top:6mm;
+  border-top:1px solid #e4e4e7;
+  padding:3.8mm 0;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8mm;
+}
+#pdf-publication .pdf-cover__label,
+#pdf-publication .pdf-cover__bibliographic-label {
+  color:#71717a;
+  font-size:7.5pt;
+  margin-bottom:3mm;
+  line-height:1.25;
+}
+#pdf-publication .pdf-cover__value {
+  color:#27272a;
+  font-size:9pt;
+  font-weight:600;
+  line-height:1.5;
+}
+#pdf-publication .pdf-cover__meta {
+  font-weight:400;
+  color:#52525b;
+  font-size:8pt;
+  margin-top:2px;
+  line-height:1.6;
+}
+#pdf-publication .pdf-cover__foot {
+  margin-top:auto;
+  border-top:1px solid #d4d4d8;
+  padding-top:5mm;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:1rem;
+  font-size:8pt;
+  color:#52525b;
+}
+/* Dedicated contents page, not a website TOC or collapsed sidebar */
+#pdf-publication .pdf-contents {
+  page-break-after:always;
+  break-after:page;
+  min-height:247mm;
+  padding-top:6mm;
+}
+#pdf-publication .pdf-contents__strap {
+  font-size:8pt;
+  color:#71717a;
+  margin-bottom:5mm;
+}
+#pdf-publication .pdf-contents h2 {
+  font-weight:760;
+  color:#09090b;
+  font-size:25pt;
+  letter-spacing:-.04em;
+  line-height:1.18;
+  margin:0 0 7mm;
+  border-bottom:1px solid #d4d4d8;
+  padding-bottom:5mm;
+}
+#pdf-publication .pdf-contents__table {
+  display:block;
+  margin-top:5mm;
+}
+#pdf-publication .pdf-contents__item {
+  display:grid;
+  grid-template-columns: 12mm 1fr 15mm;
+  align-items:baseline;
+  gap: 3mm;
+  padding:3.2mm 0;
+  border-bottom:1px solid #f4f4f5;
+  break-inside:avoid;
+}
+#pdf-publication .pdf-contents__number {
+  font-size:8pt;
+  color:#71717a;
+  font-variant-numeric:tabular-nums;
+}
+#pdf-publication .pdf-contents__item a {
+  text-decoration:none !important;
+  font-size:10pt;
+  font-weight:550;
+  color:#27272a !important;
+  line-height:1.3;
+}
+#pdf-publication .pdf-contents__target {
+  color:#a1a1aa;
+  text-align:right;
+  font-size:7.2pt;
+}
+#pdf-publication .pdf-contents__note {
+  color:#71717a;
+  font-size:8.5pt;
+  margin-top:7mm;
+  padding-top:5mm;
+  border-top:1px solid #e4e4e7;
+}
+#pdf-publication .pdf-contents__note a {
+  color:#3f3f46 !important;
+}
+/* ARTICLE CONTENT — separate scholarly typesetting profile */
+#pdf-publication article.research-body {
+  display:block !important;
+  margin:0 !important;
+  padding:0 !important;
+  max-width:none !important;
+  width:100% !important;
+  min-width:0 !important;
+  overflow:visible !important;
+  background:white !important;
+  font-size: 9.5pt !important;
+  line-height:1.54 !important;
+  font-family:Inter,Arial,Helvetica,sans-serif !important;
+}
+#pdf-publication .research-body #title {
+  display:none !important;
+}
+#pdf-publication .research-body .research-heading-number {
+  display:inline !important;
+  position:static !important;
+  width:auto !important;
+  font-size:8pt !important;
+  font-weight:650 !important;
+  color:#71717a !important;
+  margin-right:8px !important;
+}
+#pdf-publication .research-body .research-chapter-label,
+#pdf-publication .research-body .research-section-label {
+  display:flex !important;
+  align-items:baseline;
+  border-bottom:1px solid #d4d4d8;
+  border-top:none !important;
+  margin:0 0 5mm !important;
+  padding:0 0 3mm !important;
+  gap:0;
+  break-after:avoid;
+}
+#pdf-publication .research-body > section.prose-heading:not(#abstract):not(#title),
+#pdf-publication .research-body .lyo-paper > section.prose-heading:not(#abstract):not(#title) {
+  break-before:page;
+}
+#pdf-publication .research-body .research-chapter-label h2,
+#pdf-publication .research-body .research-section-label h2 {
+  display:block;
+  font-size:16.5pt !important;
+  line-height:1.26 !important;
+  letter-spacing:-.025em;
+  font-weight:720 !important;
+  color:#18181b !important;
+  padding:0 !important;
+  margin:0 !important;
+}
+#pdf-publication .research-body .research-section-label h3 {
+  font-size:11.4pt !important;
+  font-weight:670 !important;
+  font-family:Inter,Arial,Helvetica,sans-serif !important;
+  line-height:1.3 !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+#pdf-publication .research-body .prose-heading p {
+  line-height:1.59 !important;
+  font-size:9.5pt !important;
+  color:#27272a !important;
+  orphans:3;
+  widows:3;
+}
+#pdf-publication .research-body #abstract {
+  page-break-before:auto !important;
+  break-before:auto !important;
+  margin:0 0 10mm !important;
+  padding-top:7mm;
+}
+#pdf-publication .research-body #abstract .research-editorial-abstract__body {
+  padding:0 !important;
+  margin:0 0 4mm !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  break-inside:auto !important;
+}
+#pdf-publication .research-body #abstract .research-editorial-abstract__body p {
+  font-size:9.65pt !important;
+  line-height:1.67 !important;
+}
+#pdf-publication .research-body figure,
+#pdf-publication .research-body .research-data-table,
+#pdf-publication .research-body .math-block,
+#pdf-publication .research-body .katex-display-wrap {
+  max-width:100% !important;
+  min-width:0 !important;
+}
+#pdf-publication .research-body figure {
+  margin-top:5mm !important;
+  margin-bottom:5mm !important;
+  break-inside:avoid !important;
+  page-break-inside:avoid !important;
+}
+#pdf-publication .research-body svg {
+  max-width:100% !important;
+  height:auto;
+}
+#pdf-publication .research-body figcaption,
+#pdf-publication .research-body .math-block__caption {
+  color:#71717a !important;
+  font-size:8pt !important;
+  line-height:1.46 !important;
+  margin-top:2.3mm;
+}
+#pdf-publication .research-body .research-scientific-note,
+#pdf-publication .research-body .research-evidence-note,
+#pdf-publication .research-body aside {
+  border:1px solid #e4e4e7 !important;
+  border-radius:5px !important;
+  background:#fafafa !important;
+  box-shadow:none !important;
+}
+#pdf-publication .research-body table {
+  border-collapse:collapse;
+  font-size:8.3pt !important;
+  width:100%;
+  max-width:100%;
+}
+#pdf-publication .research-body th {
+  background:#f4f4f5 !important;
+  color:#3f3f46 !important;
+  font-weight:650 !important;
+  border-bottom:1px solid #d4d4d8 !important;
+}
+#pdf-publication .research-body td,
+#pdf-publication .research-body th {
+  padding:6px 7px !important;
+}
+#pdf-publication .research-body .math-block__toolbar,
+#pdf-publication .research-body .math-block__code,
+#pdf-publication .research-body .math-block__code-heading,
+#pdf-publication .research-body .math-block__code-context {
+  display:none !important;
+}
+#pdf-publication .research-body .math-block {
+  break-inside:avoid;
+  margin:4.5mm 0 !important;
+}
+#pdf-publication .research-body .math-block .math-block__formula,
+#pdf-publication .research-body .math-block .math-block__shell {
+  overflow:visible !important;
+  box-shadow:none !important;
+}
+#pdf-publication .research-body .katex-display {
+  white-space:normal !important;
+  overflow:visible !important;
+}
+#pdf-publication .research-body details > * {
+  display:block !important;
+}
+#pdf-publication .research-body details summary { list-style:none !important; }
+#pdf-publication .research-body .reference-entry {
+  display:flex !important;
+  gap:3mm !important;
+  margin:0 !important;
+  padding:2mm 0 !important;
+  break-inside:avoid;
+  border-bottom:1px solid #f4f4f5;
+}
+#pdf-publication .research-body .reference-entry p {
+  font-size:8.15pt !important;
+  line-height:1.46 !important;
+}
+#pdf-publication .research-body #references,
+#pdf-publication .research-body .lyo-paper #references {
+  break-before:page;
+}
+#pdf-publication .research-body [id] {scroll-margin-top:0;}
+#pdf-publication .research-body .research-keywords {
+  display:none !important;
+}
+#pdf-publication .research-body .overflow-x-auto {
+  overflow:visible !important;
+}
+#pdf-publication .research-body .research-integrity-note {
+  border-top:1px solid #e4e4e7;
+}
+
+/* Full scientific provenance is back matter, not a web accordion wedged
+   between abstract and the beginning of the actual paper. */
+#pdf-publication .pdf-provenance {
+  break-before: page;
+  padding-top: 7mm;
+  color: #27272a;
+}
+#pdf-publication .pdf-provenance > h2 {
+  font-size: 17pt;
+  letter-spacing: -.025em;
+  line-height: 1.28;
+  margin: 0 0 6mm;
+  padding-bottom: 4mm;
+  border-bottom: 1px solid #d4d4d8;
+  font-weight: 710;
+}
+#pdf-publication .pdf-provenance aside {
+  border: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+#pdf-publication .pdf-provenance details {
+  border: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+#pdf-publication .pdf-provenance summary {
+  display: none !important;
+}
+#pdf-publication .pdf-provenance details > div {
+  display:block !important;
+  border: none !important;
+  padding: 0 !important;
+  background: #fff !important;
+}
+#pdf-publication .pdf-provenance p {
+  font-size: 9.5pt !important;
+  line-height: 1.7 !important;
+  color:#52525b !important;
+}
+
+/* LaTeX-like article rules. Chapter headings follow their content unless a
+   deliberate break is warranted; hard page breaks are reserved for references
+   and the separate editorial front matter. */
+#pdf-publication .research-body > section.prose-heading:not(#abstract):not(#title),
+#pdf-publication .research-body .lyo-paper > section.prose-heading:not(#abstract):not(#title) {
+  break-before: auto !important;
+  margin-top: 9mm !important;
+}
+#pdf-publication .research-body .prose-heading > p,
+#pdf-publication .research-body .prose-heading > div > p,
+#pdf-publication .research-body .prose-heading p {
+  font-family: Inter, Arial, Helvetica, sans-serif !important;
+  font-size: 9.8pt !important;
+  line-height:1.53 !important;
+  letter-spacing: 0 !important;
+  color: #27272a !important;
+  orphans:3;
+  widows:3;
+}
+#pdf-publication .research-body .research-chapter-label h2,
+#pdf-publication .research-body .research-section-label h2,
+#pdf-publication .research-body .research-section-label h3,
+#pdf-publication .research-body figcaption,
+#pdf-publication .research-body table {
+  font-family: Inter, Arial, Helvetica, sans-serif !important;
+}
+#pdf-publication .pdf-cover__authorship {
+  grid-template-columns:1.4fr 1fr;
+  margin-top:4.5mm;
+  padding:3.4mm 0;
+}
+#pdf-publication .pdf-cover__authorship .pdf-cover__label {
+  margin-bottom:1.5mm;
+}
+#pdf-publication .pdf-cover__abstract {
+  padding:4.4mm 0 1mm;
+  border-top:1px solid #d4d4d8;
+  margin:0 0 4.5mm;
+}
+#pdf-publication .pdf-cover__abstract > h2 {
+  font:700 11.5pt/1.4 Inter,Arial,Helvetica,sans-serif !important;
+  margin:0 0 3mm;
+  color:#18181b;
+}
+#pdf-publication .pdf-cover__abstract .research-editorial-abstract__body {
+  border:0 !important;
+  border-radius:0 !important;
+  padding:0 !important;
+  margin:0 !important;
+  background:#fff !important;
+  box-shadow:none !important;
+  display:block !important;
+}
+#pdf-publication .pdf-cover__abstract .research-editorial-abstract__body p {
+  font:400 9.25pt/1.48 Inter,Arial,Helvetica,sans-serif !important;
+  margin:0 0 2.5mm !important;
+  color:#3f3f46 !important;
+  orphans:3;
+  widows:3;
+}
+#pdf-publication .pdf-cover__title {
+  font-size:27pt !important;
+  line-height:1.15 !important;
+}
+#pdf-publication .pdf-cover__subtitle {
+  font-size:10.7pt !important;
+  line-height:1.42;
+}
+#pdf-publication .pdf-cover__foot {
+  padding-top:3mm;
+}
+#pdf-publication .research-body #graphical-abstract {
+  margin-top:0 !important;
+  margin-bottom:7mm !important;
+}
+#pdf-publication .research-body #graphical-abstract .research-section-label {
+  margin-top:0 !important;
+}
+#pdf-publication .research-body .research-section-label {
+  break-after:avoid !important;
+}
+#pdf-publication .research-body .reference-entry p {
+  font-family:Inter,Arial,Helvetica,sans-serif !important;
+}
+
+/* === SCIENTIFIC ARTICLE PAGINATION: true paired reading columns. ===
+   Cover and TOC are full width; only the actual scholarly research article
+   flows in consecutive left-to-right columns. */
+#pdf-publication article.research-body {
+  column-count:2 !important;
+  column-gap:7.5mm !important;
+  column-rule:none !important;
+  column-fill:auto !important;
+  width:100% !important;
+  max-width:100% !important;
+  font-size:8.25pt !important;
+  line-height:1.43 !important;
+}
+#pdf-publication .research-body .prose-heading > p,
+#pdf-publication .research-body .prose-heading > div > p,
+#pdf-publication .research-body .prose-heading p {
+  font-size:8.35pt !important;
+  line-height:1.47 !important;
+}
+#pdf-publication .research-body .research-chapter-label h2,
+#pdf-publication .research-body .research-section-label h2 {
+  font-size:12.8pt !important;
+  line-height:1.25 !important;
+}
+#pdf-publication .research-body .research-section-label h3 {
+  font-size:9.65pt !important;
+  line-height:1.35 !important;
+}
+#pdf-publication .research-body .prose-heading {
+  break-inside:auto !important;
+}
+#pdf-publication .research-body .research-section-label,
+#pdf-publication .research-body .research-chapter-label {
+  break-inside:avoid !important;
+  break-after:avoid !important;
+}
+#pdf-publication .research-body figure,
+#pdf-publication .research-body .math-block {
+  break-inside:avoid !important;
+}
+#pdf-publication .research-body figure svg,
+#pdf-publication .research-body figure canvas,
+#pdf-publication .research-body figure img {
+  max-width:100% !important;
+}
+#pdf-publication .research-body .research-section-content {
+  width:100% !important;
+  min-width:0 !important;
+}
+#pdf-publication .research-body #references {
+  column-break-before: auto;
+}
+
+/* Large scientific exhibits bridge the column gutter, as figure-star in TeX. */
+#pdf-publication .research-body figure,
+#pdf-publication .research-body .research-scientific-figure {
+  column-span:all !important;
+  break-inside:avoid !important;
+  width:100% !important;
+}
+
+/* A figure-star scientific plate for the three pressure-response relations.
+   Two plots share a row; the third occupies a half-width panel beside the
+   methodological note. The mobile tab stack is never reproduced in print. */
+#pdf-publication .research-body .lyo-pressure-explorer .lyo-pressure-panels {
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:3.5mm 5mm !important;
+  align-items:start !important;
+}
+#pdf-publication .research-body .lyo-pressure-explorer .lyo-pressure-panel,
+#pdf-publication .research-body .lyo-pressure-explorer .lyo-pressure-panel[data-active="true"] {
+  display:block !important;
+  border:0 !important;
+  border-top:1px solid #d4d4d8 !important;
+  margin:0 !important;
+  padding:2mm 0 0 !important;
+  min-width:0 !important;
+  break-inside:avoid !important;
+}
+#pdf-publication .research-body .lyo-pressure-explorer .lyo-pressure-panel:last-child {
+  grid-column:1/-1 !important;
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  column-gap:5mm !important;
+  align-items:start !important;
+}
+#pdf-publication .research-body .lyo-pressure-explorer .lyo-pressure-panel:last-child .lyo-pressure-panel-head {
+  grid-column:1/-1 !important;
+}
+#pdf-publication .research-body .lyo-pressure-explorer .lyo-pressure-panel:last-child .lyo-mini-science-plot {
+  grid-column:1 !important;
+  margin:0 !important;
+}
+#pdf-publication .research-body .lyo-pressure-explorer .lyo-pressure-panel:last-child .lyo-mobile-panel-meaning {
+  grid-column:2 !important;
+  margin:2mm 0 0 !important;
+  padding:3mm !important;
+  background:#fafafa !important;
+  border:1px solid #e4e4e7 !important;
+}
+#pdf-publication .research-body .lyo-pressure-explorer .lyo-mini-science-plot {
+  display:block !important;
+  width:100% !important;
+  margin:1.5mm 0 2mm !important;
+}
+#pdf-publication .research-body .lyo-pressure-explorer .lyo-mini-science-plot > svg {
+  width:100% !important;
+  max-width:100% !important;
+  height:auto !important;
+  aspect-ratio:300/228 !important;
+}
+#pdf-publication .research-body .lyo-pressure-explorer .lyo-pressure-panel-head {
+  display:block !important;
+  margin:0 0 1.5mm !important;
+  font-size:8pt !important;
+}
+#pdf-publication .research-body .lyo-pressure-explorer .lyo-pressure-panel-head strong {
+  font-size:9pt !important;
+}
+#pdf-publication .research-body .lyo-pressure-explorer .lyo-pressure-panel-head > span {
+  display:block !important;
+  margin:1mm 0 !important;
+  font-size:7.2pt !important;
+}
+#pdf-publication .research-body .lyo-pressure-explorer .lyo-mobile-panel-meaning {
+  font-size:7.75pt !important;
+  line-height:1.4 !important;
+}
+#pdf-publication .research-body .lyo-pressure-explorer .lyo-mobile-lens-tabs,
+#pdf-publication .research-body .lyo-pressure-explorer .lyo-pressure-controls {
+  display:none !important;
+}
+#pdf-publication .research-body .lyo-pressure-explorer .lyo-pressure-metrics {
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  margin:1.5mm 0 3mm !important;
+}
+#pdf-publication .research-body .lyo-pressure-explorer .lyo-pressure-metrics > span {
+  padding:2mm !important;
+  font-size:7.5pt !important;
+}
+#pdf-publication .research-body .lyo-pressure-explorer .lyo-pressure-metrics strong {
+  font-size:10pt !important;
+}
+
+/* LaTeX-style numbered mathematics: short equations belong inside the
+   research columns. Only measured-overflow equations become span-all. */
+#pdf-publication .research-body figure.math-block {
+  column-span:none !important;
+  border:0 !important;
+  background:transparent !important;
+  margin:3mm 0 !important;
+  padding:0 !important;
+  break-inside:avoid !important;
+}
+#pdf-publication .research-body figure.math-block.pdf-wide-equation {
+  column-span:all !important;
+  margin:3.2mm 0 !important;
+}
+#pdf-publication .research-body .math-block__shell,
+#pdf-publication .research-body .math-block__content,
+#pdf-publication .research-body .math-block__formula {
+  border:0 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  background:#fff !important;
+}
+#pdf-publication .research-body .math-block__shell {
+  padding:2mm 0.5mm !important;
+  overflow:visible !important;
+}
+#pdf-publication .research-body .math-block__formula {
+  gap:2mm !important;
+}
+#pdf-publication .research-body .math-block .katex-display {
+  margin:.3em 0 !important;
+}
+#pdf-publication .research-body .math-block .katex {
+  font-size:0.88em !important;
+}
+#pdf-publication .research-body .math-block__formula > span:last-child {
+  font-family:Inter,Arial,Helvetica,sans-serif !important;
+  font-size:7.25pt !important;
+  font-weight:500 !important;
+  color:#71717a !important;
+  white-space:nowrap !important;
+}
+#pdf-publication .research-body .math-block figcaption {
+  padding:0 !important;
+  margin:1.1mm auto 0 !important;
+  font-size:7.15pt !important;
+}
+
+/* Scientific data tables requiring more than three variables span the complete
+   text measure; short tables remain embedded in the paired research columns. */
+#pdf-publication .research-body .pdf-wide-table {
+  column-span:all !important;
+  width:100% !important;
+  max-width:100% !important;
+  break-inside:avoid !important;
+  margin:2.5mm 0 4mm !important;
+  overflow:visible !important;
+}
+#pdf-publication .research-body .pdf-wide-table.pdf-tall-table {
+  break-inside:auto !important;
+}
+#pdf-publication .research-body .pdf-wide-table table {
+  width:100% !important;
+  table-layout:auto !important;
+  border-collapse:collapse !important;
+}
+#pdf-publication .research-body .pdf-wide-table thead {
+  display:table-header-group !important;
+}
+#pdf-publication .research-body .pdf-wide-table tr {
+  break-inside:avoid !important;
+}

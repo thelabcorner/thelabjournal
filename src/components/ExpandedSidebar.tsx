@@ -1,7 +1,8 @@
 import { useState, type MouseEvent } from 'react'
-import { BookOpen, Bookmark, ChevronDown, FileText, FlaskConical, Library, Microscope, Workflow, Wrench } from 'lucide-react'
+import { BookOpen, Bookmark, ChevronDown, FileText, FlaskConical, Library, Microscope, Quote as QuoteIcon, Workflow, Wrench } from 'lucide-react'
 import { entries, topics, topicCount, type Entry, type Topic } from '../data'
 import { manuscripts, manuscriptPath, type Manuscript } from '../research'
+import { collectionPath, publishedCollections, publishedQuotes, quotePath, type Quote, type QuoteCollection } from '../quotes/data'
 
 type Filter = Topic | 'All'
 type View = 'all' | 'saved'
@@ -10,7 +11,11 @@ interface ExpandedSidebarProps {
   active: Filter
   view: View
   researchMode: boolean
+  quotesActive: boolean
   activePaperId: string | null
+  onQuotes: () => void
+  openQuote: (quote: Quote) => void
+  openQuoteCollection: (collection: QuoteCollection) => void
   onResearch: () => void
   openManuscript: (paper: Manuscript) => void
   onFilter: (topic: Filter) => void
@@ -42,7 +47,7 @@ const unmodifiedClick = (event: MouseEvent<HTMLAnchorElement>) =>
   event.button === 0 && !event.metaKey && !event.ctrlKey && !event.altKey && !event.shiftKey
 
 export function ExpandedSidebar({
-  active, view, researchMode, activePaperId, onResearch, openManuscript, onFilter, showSaved,
+  active, view, researchMode, quotesActive, activePaperId, onQuotes, openQuote, openQuoteCollection, onResearch, openManuscript, onFilter, showSaved,
   openArticle, selected, savedCount, close,
 }: ExpandedSidebarProps) {
   const [subjectsOpen, setSubjectsOpen] = useState(true)
@@ -95,10 +100,10 @@ export function ExpandedSidebar({
             <span className="side-section-count">{twoDigits(entries.length)} articles</span>
           </div>
           <nav className="side-items" aria-label="Journal articles">
-            <button type="button" className="side-nav-row" data-active={!researchMode && !selected && view === 'all' && active === 'All'} aria-current={!researchMode && !selected && view === 'all' && active === 'All' ? 'page' : undefined} onClick={() => navigate(() => onFilter('All'))}>
+            <button type="button" className="side-nav-row" data-active={!quotesActive && !researchMode && !selected && view === 'all' && active === 'All'} aria-current={!quotesActive && !researchMode && !selected && view === 'all' && active === 'All' ? 'page' : undefined} onClick={() => navigate(() => onFilter('All'))}>
               <Library aria-hidden="true"/><span className="side-nav-name">All articles</span><span className="side-count">{twoDigits(entries.length)}</span>
             </button>
-            <button type="button" className="side-nav-row" data-active={!researchMode && !selected && view === 'saved'} aria-current={!researchMode && !selected && view === 'saved' ? 'page' : undefined} onClick={() => navigate(showSaved)}>
+            <button type="button" className="side-nav-row" data-active={!quotesActive && !researchMode && !selected && view === 'saved'} aria-current={!quotesActive && !researchMode && !selected && view === 'saved' ? 'page' : undefined} onClick={() => navigate(showSaved)}>
               <Bookmark aria-hidden="true"/><span className="side-nav-name">Saved articles</span><span className="side-count">{twoDigits(savedCount)}</span>
             </button>
           </nav>
@@ -110,7 +115,7 @@ export function ExpandedSidebar({
             {subjectsOpen && <nav id="side-subject-items" className="side-items" aria-label="Journal subjects">
               {topics.filter((topic): topic is Topic => topic !== 'All').map((topic) => {
                 const Icon = topicIcons[topic]
-                const isActive = !researchMode && !selected && view === 'all' && active === topic
+                const isActive = !quotesActive && !researchMode && !selected && view === 'all' && active === topic
                 return <button key={topic} type="button" className="side-nav-row" data-active={isActive} aria-current={isActive ? 'page' : undefined} onClick={() => navigate(() => onFilter(topic))}>
                   <Icon aria-hidden="true"/><span className="side-nav-name">{topic === 'Research' ? 'Research notes' : topic}</span><span className="side-count">{twoDigits(topicCount(topic))}</span>
                 </button>
@@ -141,6 +146,30 @@ export function ExpandedSidebar({
           </nav>
         </section>
 
+        <section className="side-group side-group--quotes" aria-labelledby="side-quotes-heading">
+          <div className="side-section-heading side-domain-heading">
+            <h2 id="side-quotes-heading">Quotes</h2>
+            <span className="side-section-count">{twoDigits(publishedQuotes.length)} quotes</span>
+          </div>
+          <nav className="side-items" aria-label="Quotes and collections">
+            <button type="button" className="side-nav-row" data-active={quotesActive} aria-current={quotesActive ? 'page' : undefined} onClick={() => navigate(onQuotes)}>
+              <QuoteIcon aria-hidden="true"/><span className="side-nav-name">All quotations</span><span className="side-count">{twoDigits(publishedQuotes.length)}</span>
+            </button>
+            {publishedCollections.slice(0, 3).map(collection => <a key={collection.id}
+              href={collectionPath(collection.id)} className="side-article" title={collection.title}
+              onClick={event => { if (!unmodifiedClick(event)) return; event.preventDefault(); navigate(() => openQuoteCollection(collection)) }}>
+              <span className="side-article-identity"><span className="side-article-ref">Collection</span></span>
+              <span className="side-article-title">{collection.title}</span>
+            </a>)}
+            {publishedQuotes.slice(0, 2).map(quote => <a key={quote.id} href={quotePath(quote.id)}
+              className="side-article" title={quote.text}
+              onClick={event => { if (!unmodifiedClick(event)) return; event.preventDefault(); navigate(() => openQuote(quote)) }}>
+              <span className="side-article-identity"><span className="side-article-ref">Quotation</span></span>
+              <span className="side-article-title">{quote.text}</span>
+            </a>)}
+          </nav>
+        </section>
+
         {selected && !selectedIsRecent && <section className="side-group side-group--current" aria-label="Open article">
           <div className="side-section-heading"><h2>Open article</h2><span className="side-section-count">ACTIVE</span></div>
           <nav className="side-items" aria-label="Current article">{renderRecent(selected, true)}</nav>
@@ -155,8 +184,8 @@ export function ExpandedSidebar({
       </div>
 
       <div className="sidebar-footer" aria-label="Archive information">
-        <div className="side-footer-line"><span className="side-footer-mark" aria-hidden="true"/><strong>Archive index</strong><span className="side-footer-total">{twoDigits(entries.length + manuscripts.length)}</span></div>
-        <div className="side-footer-detail">{entries.length} journal entries <span aria-hidden="true">/</span> {manuscripts.length} manuscripts</div>
+        <div className="side-footer-line"><span className="side-footer-mark" aria-hidden="true"/><strong>Archive index</strong><span className="side-footer-total">{twoDigits(entries.length + manuscripts.length + publishedQuotes.length)}</span></div>
+        <div className="side-footer-detail">{entries.length} journal entries <span aria-hidden="true">/</span> {manuscripts.length} manuscripts <span aria-hidden="true">/</span> {publishedQuotes.length} quotations</div>
       </div>
     </aside>
   )

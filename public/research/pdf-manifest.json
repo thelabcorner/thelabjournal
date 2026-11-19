@@ -1,0 +1,36 @@
+{
+  "gravimetric-decarboxylation-co2-progress": {
+    "fingerprint": "be0e1be8b84abe68098be4586ffcc413bd991ff5c643e549d158044435ba9929",
+    "bytes": 2215293,
+    "sha256": "bff55040fa23acf655f1598ab6079e7d61efbe0bf2f06d4573ac3283604d7d29",
+    "textVerified": true,
+    "pages": 22,
+    "textCharacters": 70252,
+    "nativeChapterLinks": 11,
+    "outlineEntries": 57,
+    "pageNumbersResolved": true,
+    "pairedColumnPages": 13,
+    "fullWidthFigurePagesAndShortSections": 6,
+    "columnLayout": "two-column-with-full-width-plates",
+    "publisherStyle": "thelabjournal-zinc-scientific",
+    "manuscriptVersion": "v0.11.0",
+    "type": "searchable-pdf"
+  },
+  "low-temp-lyophilization-three-theses": {
+    "fingerprint": "1954f9b6bf0bd75720d64857a9398cbfbcc00cc66dd511f6b5a28be347b9a506",
+    "bytes": 2390736,
+    "sha256": "c62273a90ae64a924a0c5d1b9b245c71d89793d42d6f8edb14cc56c47baef604",
+    "textVerified": true,
+    "pages": 31,
+    "textCharacters": 98336,
+    "nativeChapterLinks": 9,
+    "outlineEntries": 38,
+    "pageNumbersResolved": true,
+    "pairedColumnPages": 15,
+    "fullWidthFigurePagesAndShortSections": 13,
+    "columnLayout": "two-column-with-full-width-plates",
+    "publisherStyle": "thelabjournal-zinc-scientific",
+    "manuscriptVersion": "v1.2.1",
+    "type": "searchable-pdf"
+  }
+}

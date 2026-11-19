@@ -1,10 +1,13 @@
+import { ManuscriptLabel } from '../../../components/typography/ManuscriptLabel';
+import { ScientificFigureCaption } from '../../../components/typography/ScientificFigureCaption';
+
 export function CalibrationWorkflowFigure() {
   return (
     <figure className="research-scientific-figure research-calibration-figure my-5 rounded-lg border border-[var(--border)] bg-[var(--figure-bg)] p-3 sm:p-4">
-      <figcaption className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
-        <span className="text-xs font-semibold text-[var(--text)]">Figure 3. One reactor, two sequential operating modes</span>
-        <span className="text-[11px] text-[var(--text-muted)]">Proposed control workflow</span>
-      </figcaption>
+      <ScientificFigureCaption
+        title="Figure 3. One reactor, two sequential operating modes"
+        detail="Proposed control workflow"
+      />
       <div className="rounded-md border border-[var(--border)] bg-[var(--bg-panel)] px-3 py-3">
         <p className="text-center text-sm font-semibold text-[var(--text)]">Same heated vessel and weighing system</p>
         <p className="mt-1 text-center text-xs text-[var(--text-secondary)]">Tare → weigh loaded sample → heat → log mass and temperature</p>
@@ -12,8 +15,11 @@ export function CalibrationWorkflowFigure() {
       <div className="grid grid-cols-1 gap-3 pt-3 sm:grid-cols-2">
         <div className="research-calibration-mode research-calibration-mode--reference rounded-md border border-[var(--border)] bg-[var(--bg-panel)]">
           <div className="border-b border-[var(--border)] px-3 py-2">
-            <span className="font-mono text-[11px] text-[var(--text-muted)]">MODE A · WHEN A LOT IS NEW</span>
-            <p className="mt-1 text-sm font-semibold text-[var(--text)]">Calibrate a representative aliquot</p>
+            <div className="research-calibration-mode__heading">
+              <p>Calibrate a representative aliquot</p>
+              <span className="research-calibration-mode__badge">Mode A</span>
+            </div>
+            <ManuscriptLabel className="research-calibration-mode__context">When a lot is new</ManuscriptLabel>
           </div>
           <div className="space-y-2 px-3 py-3 text-xs leading-relaxed text-[var(--text-secondary)]">
             <p><strong className="text-[var(--text)]">01</strong> Measure aliquot mass.</p>
@@ -23,8 +29,11 @@ export function CalibrationWorkflowFigure() {
         </div>
         <div className="research-calibration-mode research-calibration-mode--process rounded-md border border-[var(--border)] bg-[var(--bg-panel)]">
           <div className="border-b border-[var(--border)] px-3 py-2">
-            <span className="font-mono text-[11px] text-[var(--text-muted)]">MODE B · FOR LATER PORTIONS</span>
-            <p className="mt-1 text-sm font-semibold text-[var(--text)]">Process the bulk sample</p>
+            <div className="research-calibration-mode__heading">
+              <p>Process the bulk sample</p>
+              <span className="research-calibration-mode__badge">Mode B</span>
+            </div>
+            <ManuscriptLabel className="research-calibration-mode__context">For later portions</ManuscriptLabel>
           </div>
           <div className="space-y-2 px-3 py-3 text-xs leading-relaxed text-[var(--text-secondary)]">
             <p><strong className="text-[var(--text)]">01</strong> Select a saved calibration for the same lot.</p>

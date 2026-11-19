@@ -1,35 +1,46 @@
+import { ChapterLabel } from '../../../../components/sections/ChapterLabel';
+import { InlineCite } from '../../../../components/prose/InlineCite';
+
 const prose = 'text-sm leading-relaxed text-[var(--text)]';
 
 export function ConclusionSection() {
   return (
     <section id="conclusion" aria-labelledby="conclusion-heading" className="prose-heading mb-10">
-      <div className="research-chapter-label mb-4">
-        <span className="research-heading-number">6</span>
-        <h2 id="conclusion-heading" className="text-base font-semibold text-[var(--text)] tracking-tight">Conclusion</h2>
-      </div>
+      <ChapterLabel number="6" id="conclusion-heading" title="Conclusions" />
       <div className="space-y-4">
         <p className={prose}>
-          The principal misconception in low-temperature freeze drying is that chamber pressure
-          independently describes sublimation performance. A low indicated pressure does not
-          establish how much water is leaving the product. The pressure difference conventionally
-          termed a sublimation driving force represents potential for vapor transport rather than
-          work already performed. Heat must still reach the ice, vapor must escape the product,
-          and the refrigerated wall must capture it.
+          The operating assumptions examined here fail when pressure, vapor
+          transfer, and heat delivery are treated as independent measurements
+          of drying. Maximum pump-down is not a universal objective for
+          primary drying. A vapor-pressure difference is a potential for
+          sublimation, not a mechanical force or a measure of water loss.
+          Total pressure and water-vapor partial pressure play different
+          roles; a thermal-conductivity gauge measures neither composition
+          nor residual product ice directly.
         </p>
         <p className={prose}>
-          This is why maximum vacuum is not a universal objective, why a cold shelf setting can
-          coexist with inadequate heat delivery, and why a gas-dependent thermocouple gauge
-          cannot be treated as an absolute-pressure reference. In the examined single-chamber
-          machine, product water can accumulate as ice inside the chamber while gas-phase
-          water pressure falls. Tray contact, heater control and differences between shelf
-          positions affect when the final wet region completes primary drying.
+          These distinctions are consequential in integrated cold-wall
+          chambers. Sublimed water can accumulate on the refrigerated wall
+          without leaving the apparatus, while the pump removes gas from
+          the same volume. Late in primary drying, falling vapor generation
+          can permit continued pump-down. If the resulting pressure decline
+          reduces heat delivery to surviving ice, sublimation can weaken
+          further. Dried-layer resistance, sublimative cooling, heater
+          regulation, and heterogeneous tray contact modify this recursive
+          response. A low-pressure trace may therefore represent either
+          a completed batch or a heat-limited wet region.
         </p>
         <p className={prose}>
-          The purpose of the calculations is to clarify these physical relationships for
-          practical interpretation. They do not demonstrate a faster cycle or a preferred
-          operating pressure. Those conclusions require measured heat delivery, product
-          temperature, water loss, wall deposition and shelf-specific responses under
-          controlled operating conditions.
+          Harvest Right, Stay Fresh, and Blue Alpine document comparable
+          chamber principles, not identical controller performance. The
+          proposed failure and any benefit from metered gas admission
+          remain to be quantified. Discriminating tests require independent
+          absolute-pressure and composition-sensitive measurements,
+          heater power, product temperatures, gas and water throughput,
+          and evidence of residual ice at the slowest drying location.
+          Only a demonstrated increase in water-removal rate under matched
+          product constraints establishes an efficiency improvement
+          <InlineCite refs={['pikal1985', 'tchessalov2023']} />.
         </p>
       </div>
     </section>

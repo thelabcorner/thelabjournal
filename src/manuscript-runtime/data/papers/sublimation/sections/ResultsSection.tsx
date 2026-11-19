@@ -1,10 +1,11 @@
 import { SubsectionLabel } from '../../../../components/sections/Abstract';
+import { ChapterLabel } from '../../../../components/sections/ChapterLabel';
 import { Callout } from '../../../../components/prose/Callout';
 import { InlineCite } from '../../../../components/prose/InlineCite';
 import { InlineMath, MathBlock } from '../ScientificMath';
 import { PressureTransferChart } from '../figures/PressureTransferChart';
-import { PressureTransferTable } from '../figures/PressureTransferTable';
 import { FluxContributorsChart } from '../figures/FluxContributorsChart';
+import { PressureTemperatureControlFigure } from '../figures/PressureTemperatureControlFigure';
 import { WindowEstimatorWidget } from '../widgets/WindowEstimatorWidget';
 
 interface ResultsSectionProps {
@@ -14,34 +15,46 @@ interface ResultsSectionProps {
 export function ResultsSection({ isDark = false }: ResultsSectionProps) {
   return (
     <section id="results" aria-labelledby="results-heading" className="prose-heading mb-10">
-      <div className="research-chapter-label mb-4">
-        <span className="research-heading-number">4</span>
-        <h2 id="results-heading" className="text-base font-semibold text-[var(--text)] tracking-tight">Field interpretation of drying behavior</h2>
-      </div>
+      <ChapterLabel number="4" id="results-heading" title="Interpretation of operating behavior" />
 
       <div className="space-y-4">
         <p className="text-sm text-[var(--text)] leading-relaxed">
-          Low pressure does not prove rapid sublimation, a stable shelf temperature does not prove
-          adequate heater power, and a rising thermal-gauge reading does not prove that absolute
-          pressure rose by the same amount. The calculations below show why those shortcuts fail
-          and what additional observations would resolve them. Their coefficients and
-          controller comparisons are illustrative, not measured performance claims for this dryer.
+          The preceding balances describe how gas pressure, ice temperature and heat delivery
+          jointly determine sublimation. Their practical consequences become visible in the
+          pressure, temperature and heater-state histories of an operating dryer. The following
+          interpretations begin with the controller signals, then examine the pressure-dependent
+          thermal pathway and changing vapor composition before returning to the deposition
+          boundary and the tray-to-product heat path. Calculated values retain the experimental
+          geometry or stated assumptions from which they were obtained.
         </p>
 
         <div id="results-thesis1" className="prose-heading">
-          <SubsectionLabel number="4.1" title="Why a low shelf target can restrict useful heating" />
+           <SubsectionLabel number="4.1" title="Pressure-gated temperature control and latent-heat demand" />
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
-            An archived firmware interpretation suggests temperature regulation within a
-            pressure-enabled state <InlineCite refs={['cummings2024']} />. Harvest Right patents
-            describe pressure-activated heater cycling <InlineCite refs={['hrpatent2016', 'hrpatent2022']} />.
-            Because these are not proof of one common implementation, the calculation below
-            isolates only how a proportional temperature-feedback path could limit heater duty.
-            It does not verify the actual controller of the examined machine.
-          </p>
+             Controller operation cannot be inferred solely from an operator setpoint
+             or a patent diagram. Static analysis of Harvest Right v5.5.25 identifies
+             pressure-selected heater duty levels of 25%, 50% and 75%, with hysteresis
+             and state-dependent conditions. By contrast, Blue Alpine v3.3.4 has
+             a temperature-PID pathway and a pressure-permission gate. These
+             implementations differ despite sharing integrated cold-wall
+             thermodynamics <InlineCite refs={['firmwareAnalysis2026']} />.
+           </p>
+           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
+             An earlier annotated Harvest Right flowchart depicted pressure-gated
+             temperature-PID duty control and included comparative batch traces
+             <InlineCite refs={['cummingsControllerComposite']} />. That diagram
+             remains a useful interpretation of the observed cycling and pump-down,
+             but the newer analyzed Harvest Right firmware does not support treating
+             its proposed PID law as universal. Firmware generation, hardware
+             revisions and software configuration are relevant independent
+             variables. Neither firmware study included a live cycle.
+           </p>
+           <PressureTemperatureControlFigure />
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
-            The temperature-feedback path can be represented by a conventional PID law.
+             For the identified temperature-PID architecture, the generic
+             controller law is
           </p>
 
           <MathBlock
@@ -62,20 +75,46 @@ export function ResultsSection({ isDark = false }: ResultsSectionProps) {
           />
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
-            The proportional component becomes smaller as shelf temperature approaches its target,
-            even if ice remains. This does not establish that total heater output disappears:
-            integral action, supervisory constraints, and pressure-based switching can alter the
-            actual controller response. The calculation describes one feedback contribution,
-            not a failure proven in the installed controller.
-          </p>
+             In this illustrative PID, the proportional contribution declines as shelf-temperature error decreases.
+            A PID controller may nevertheless maintain heater duty through its
+            integral term, while the supervisory pressure gate can independently
+            interrupt the output. Proportional decay alone determines neither
+            the actual duty cycle nor the heat absorbed as sublimation enthalpy.
+           </p>
+           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
+              A pressure-gated controller may be represented schematically by
+             {' '}<InlineMath math={String.raw`u_{h}(t)=g_p(P_{\mathrm{app}}(t))\,\operatorname{clip}(u_{\mathrm{PID}}(t),0,1)`}/>,
+             where the pressure-permission function
+             {' '}<InlineMath math={String.raw`g_p\in\{0,1\}`}/> represents
+              a pressure-permission gate. This representation applies to
+              the illustrative temperature-controlled architecture, not the
+              pressure-selected duty logic identified in Harvest Right v5.5.25.
+             Because the pressure signal can originate from a composition-sensitive
+             thermocouple gauge, a fixed indicated switching threshold need not
+             correspond to a fixed absolute pressure as water-vapor fraction evolves.
+           </p>
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
-            The field question is whether heater power remains restricted while product ice is
-            present and product temperature stays below its permitted limit. A synchronized
-            record of heater duty, shelf and product temperatures, and pressure is needed to
-            distinguish temperature regulation from pressure-based cycling. A small shelf
-            temperature error is not evidence that latent-heat demand has ended.
-          </p>
+            The controller condition of interest is continued temperature regulation
+            while product ice still requires latent heat. Synchronized heater power,
+            shelf temperature, product temperature and pressure would distinguish
+            pressure-based inhibition from the ordinary response of a regulated shelf.
+           </p>
+           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
+             The archived composite places a pressure-cycling trace, with oscillatory
+             pressure and heater-state transitions, beside two traces annotated
+             as inefficient drying. In the latter, pressure declines through
+             an extended drying interval while the plotted temperature continues
+             to undergo comparatively small regulated excursions. The annotations
+             identify large transient pressure spikes as operator batch pauses or
+             inspections; those transients cannot be interpreted as ordinary
+             sublimation responses. The traces support examining whether a
+             pressure-permitted temperature loop can coexist with reduced vapor
+             generation. They do not independently show residual product ice,
+             heater electrical power, actual gas partial pressures, controller
+             gains or a mass-loss rate, and the underlying time series are
+             unavailable for reanalysis <InlineCite refs={['cummingsControllerComposite']} />.
+           </p>
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
             Earlier illustrative controller calculations gave nearly identical integrated
             heater energies over a 24-hour period. Integrated energy does not reveal when
@@ -85,13 +124,16 @@ export function ResultsSection({ isDark = false }: ResultsSectionProps) {
         </div>
 
         <div id="results-thesis2" className="prose-heading">
-          <SubsectionLabel number="4.2" title="Why deeper vacuum need not accelerate drying" />
+          <SubsectionLabel number="4.2" title="Gas-mediated heating during pump-down" />
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
-            Pikal (1984) measured pressure-dependent molecular gas conduction. Ganguly (2013) resolved gas conduction
-            separately from a flow-associated contribution in laboratory vial geometry. The Smoluchowski term is
-            mathematically monotonic and concave; the Harvest Right fourth term above the measured range remains
-            model-family uncertainty, not a universal convection law.
+              The fall in chamber pressure changes the heat-transfer pathway
+              examined in Section 2. Pikal (1984) measured pressure-dependent
+              molecular gas conduction, while Ganguly (2013) identified an
+              additional flow-associated contribution in laboratory vial geometry.
+              The Smoluchowski term approaches a plateau as pressure rises.
+              The flow term's high-pressure response remains unidentified
+              for the worked tray geometry.
           </p>
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
@@ -105,17 +147,35 @@ export function ResultsSection({ isDark = false }: ResultsSectionProps) {
              gap width. Changing only the transition pressure therefore does not constitute a
              consistent geometric scale-up. A vial-scale coefficient cannot be assigned to the
              much larger shelf spacing without identifying the actual heat-transfer gap.
-             Higher gas conduction need not increase sublimation when vapor backpressure,
-             product resistance and cold-wall capture change simultaneously
-             <InlineCite refs={['pikal1984', 'ganguly2013']} />.
-          </p>
-          <FluxContributorsChart isDark={isDark} />
+              Higher gas conduction need not increase sublimation when vapor backpressure,
+              product resistance and cold-wall capture change simultaneously
+              <InlineCite refs={['pikal1984', 'ganguly2013']} />.
+           </p>
+           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
+             A pressure setpoint is useful only to the extent that the installed control system can
+             regulate pressure as the gas load changes. During active sublimation, water vapor contributes
+             to the chamber gas inventory while the refrigerated wall captures it and the pump removes
+             non-condensable gas. As wet area or sublimation flux declines, continued pumping may become
+             dominant and pressure may move toward the attainable pump-down limit. The original
+             pressure setpoint can remain unchanged while the thermal regime does not.
+           </p>
+           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
+             An illustrative progression from roughly 600 to 100 mTorr is useful for examining
+             the gas-transfer sensitivity, not as a calibrated equipment history. In the illustrative
+             <InlineMath math="K_g=C_2P/(P+C_3)" /> relation with an assumed
+             <InlineMath math="C_3=162\,\mathrm{mTorr}" />, the gas-conduction
+             fraction of its plateau falls from approximately 0.79 to 0.38 between those
+             pressures. The comparison concerns that modeled gas term only. It cannot establish
+             actual heat flux, a drying-rate penalty, or an optimum for the Harvest Right
+             chamber, especially without independent pressure and gas-composition measurements.
+           </p>
+           <FluxContributorsChart isDark={isDark} />
 
 
         </div>
 
         <div id="results-thesis3" className="prose-heading">
-          <SubsectionLabel number="4.3" title="Why pressure depends on the gas mixture" />
+          <SubsectionLabel number="4.3" title="Changing gas composition and vapor-pressure potential" />
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
             In the free-molecular limit, energy transfer depends on the number of gas molecules striking a surface and their heat capacity. At fixed pressure and temperature the molecular-speed contribution scales as the inverse square root of molar mass. The accommodation coefficient and heat-capacity ratio also matter.
@@ -227,48 +287,42 @@ export function ResultsSection({ isDark = false }: ResultsSectionProps) {
         </div>
 
         <div id="results-coupled-model" className="prose-heading">
-          <SubsectionLabel number="4.4" title="Why cold-wall capture constrains sublimation" />
+          <SubsectionLabel number="4.4" title="Wall deposition and shared-chamber pressure response" />
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
-            More heater power can increase sublimation, but the newly generated vapor must
-            still be captured by the chamber's refrigerated inner wall. If deposition cannot
-            increase at the same rate, the water-vapor partial pressure rises and reduces
-            the potential for additional sublimation. The simultaneous heat and mass balances
-            describe why the wall and the product constrain the benefit of greater heating.
-          </p>
+              Water sublimed from the product reaches the refrigerated chamber
+              wall or the pump exhaust. The wall's finite deposition conductance
+              couples the wet shelves through a shared vapor inventory. At high
+              generation rates, insufficient capture increases water-vapor partial
+              pressure and reduces the interfacial vapor-pressure potential.
+              At lower generation rates, deposition and pump exhaust can
+              remove gas faster than sublimation replenishes it, allowing total
+              pressure to decline. The same balances describe both operating
+              conditions.
+           </p>
 
-          <MathBlock
+           <MathBlock
             math="K_{eff}=K_c+K_r+K_g+K_f,\qquad K_{eff}(T_s-T_i)=\Delta H_{sub}\Gamma j,\qquad j=\frac{P_{sub}(T_i)-p_{H_2O}}{R_p}"
             label="(4.4)"
             caption="Four-way heat delivery coupled to the product-side mass-transfer resistance"
           />
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
-            The September nonlinear research compared a saturating gas-transfer law
-            with a continued-flow extension. Their calculated pressure optima
-            diverged substantially as dried-layer resistance changed. In a broad
-            simulation of uncalibrated parameters, the median theoretical optimum
-            was near 520 mTorr for one family and 890 mTorr for the other.
-            These are distributions over assumed model parameters, not measured
-            uncertainty, and neither pressure is an operating recommendation.
-            Their disagreement demonstrates that fitting a pressure optimum before
-            identifying the actual tray-transfer law is not defensible
-            <InlineCite refs={['cummings2026']} />.
+             Equation (3.11) represents the shared inventory with a finite
+             water-vapor removal conductance. Its seven-shelf numerical baseline
+             conserves water for unequal exposed areas and product resistances.
+             The well-mixed approximation omits local vapor-pressure gradients
+             created by rack geometry. Cold-wall deposition conductance remains
+             unmeasured for the worked equipment.
           </p>
 
-          <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
-            The simplified shared-chamber balance in Equation (3.11) makes that limit explicit.
-            At limited cold-wall deposition capacity and pump water-vapor throughput,
-            greater vapor generation raises the shared chamber water-vapor pressure and reduces the
-            benefit of increased heat delivery. The numerical seven-shelf baseline satisfies molar
-            conservation for unequal shelf resistances and exposed areas. Its common pressure cannot
-            produce a local vertical vapor-pressure gradient, so measured deviations from this baseline
-            would help identify where a spatial transport model is necessary. No effective wall-deposition
-            conductance has been fitted to the target dryer.
-          </p>
+        </div>
+
+        <div id="results-hardware" className="prose-heading">
+          <SubsectionLabel number="4.5" title="Tray conductivity within the complete thermal pathway" />
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
-            The examined hardware configuration has seven product shelves and eight approximately 163 W heating
+            The worked Harvest Right configuration has seven product shelves and eight approximately 163 W heating
             elements, and a nominal full heater-bank rating of <strong>1,304 W</strong>. Seven tray footprints total about
             0.610 m², so the gross electrical ceiling is about 2.14 kW/m² before losses. The eighth element is physically
             above the top shelf, creating a top-specific radiative boundary condition in addition to the ordinary shelf
@@ -302,10 +356,7 @@ export function ResultsSection({ isDark = false }: ResultsSectionProps) {
             resistance, and the last wet region must all be characterized before
             evaluating such hardware <InlineCite refs={['pikal1985']} />.
           </p>
-        </div>
 
-        <div id="results-hardware" className="prose-heading">
-          <SubsectionLabel number="4.5" title="Why tray contact matters more than material labels" />
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
             The target-machine trays are identified as stainless steel by the equipment owner. For a uniform tray layer, conductive resistance scales as
@@ -405,7 +456,22 @@ export function ResultsSection({ isDark = false }: ResultsSectionProps) {
         </div>
 
         <div id="results-tables" className="prose-heading">
-          <SubsectionLabel number="4.6" title="How to interpret model pressure comparisons" />
+          <SubsectionLabel number="4.6" title="Pressure sensitivity of the reduced transfer model" />
+
+          <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
+            The September nonlinear research compared a saturating gas-transfer law
+            with a continued-flow extension. Their calculated pressure optima
+            diverged substantially as dried-layer resistance changed. In a broad
+            simulation of uncalibrated parameters, the median theoretical optimum
+            was near 520 mTorr for one family and 890 mTorr for the other.
+            These are distributions over assumed model parameters, not measured
+            uncertainty, and neither pressure is an operating recommendation.
+            Their disagreement demonstrates that fitting a pressure optimum before
+            identifying the actual tray-transfer law is not defensible
+            <InlineCite refs={['cummings2026']} />.
+          </p>
+
+
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-2">
             The following chart and table evaluate the fixed-parameter saturating heat-transfer model. They show <InlineMath math="K_c+K_r+K_g" />,
@@ -413,9 +479,7 @@ export function ResultsSection({ isDark = false }: ResultsSectionProps) {
             The uncertain flow term <InlineMath math="K_f" /> is omitted rather than assigned an unsupported square-root pressure law.
           </p>
 
-          <PressureTransferChart isDark={isDark} />
-
-          <PressureTransferTable />
+           <PressureTransferChart isDark={isDark} />
 
           <Callout
             type="info"
@@ -425,15 +489,17 @@ export function ResultsSection({ isDark = false }: ResultsSectionProps) {
         </div>
 
         <div id="results-estimator" className="prose-heading">
-          <SubsectionLabel number="4.7" title="Exploring sensitivity without selecting a setpoint" />
+          <SubsectionLabel number="4.7" title="Moving pressure optima as product resistance changes" />
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-2">
-            The interactive widget below exposes the distinction between the legacy screening product and the current
-            linearized series-resistance model. Adjust product temperature, vapor fraction, and η to see why the stationary
-            pressure moves as product-side resistance becomes more important.
+             The screening objective neglects the series-resistance penalty,
+             so its stationary pressure does not change with η. The second curve
+             shows how the stationary point of the coupled series model shifts
+             as resistance increases, with interface temperature and assumed
+             vapor fraction held fixed. Both curves use the same pressure bounds.
           </p>
 
-          <WindowEstimatorWidget />
+           <WindowEstimatorWidget isDark={isDark} />
 
           <Callout
             type="info"

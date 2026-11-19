@@ -1,143 +1,80 @@
-import { useMemo } from 'react';
-import { ResearchChart } from '../../../../components/charts/ResearchChart';
-import { Callout } from '../../../../components/prose/Callout';
-import { InlineMath } from '../ScientificMath';
-import { getChartTokens } from '../../../../theme/chartTokens';
-import { RECONSTRUCTED_GANGULY_DATA as DATA } from './gangulyContributionModel';
+import { useMemo, useState } from 'react';
+import { ManuscriptLabel } from '../../../../components/typography/ManuscriptLabel';
+import { ScientificFigureCaption } from '../../../../components/typography/ScientificFigureCaption';
+import { SATURATING_PARAMS, kgSaturating, kSaturating } from '../pressureModel';
+import { ScientificLinePlot } from './ScientificLinePlot';
 
-interface FluxContributorsChartProps {
-  isDark?: boolean;
+interface FluxContributorsChartProps { isDark?: boolean }
+const { kc, kr, c2, c3 } = SATURATING_PARAMS;
+const steps = [10, 50, 100, 200, 500, 1500] as const;
+const pressures = Array.from({ length: 150 }, (_, i) => 10 * (150 ** (i / 149)));
+const shareAt = (pressure: number) => {
+  const total = kSaturating(pressure);
+  return { pressure, contact: 100 * kc / total, radiation: 100 * kr / total, gas: 100 * kgSaturating(pressure) / total };
+};
+function CompositionBar({ pressure }: { pressure: number }) {
+  const d = shareAt(pressure);
+  return (
+    <div className="lyo-mobile-composition">
+      <div className="lyo-mobile-composition-head">
+        <strong>{pressure.toLocaleString()} mTorr</strong><span>{d.radiation.toFixed(1)}% radiation</span>
+      </div>
+      <div className="lyo-mobile-composition-bar" role="img" aria-label={`At ${pressure} millitorr, constant contact coefficient represents ${d.contact.toFixed(1)}%, constant radiative coefficient ${d.radiation.toFixed(1)}%, gas conduction ${d.gas.toFixed(1)}% of the total`}>
+        <span style={{width:d.contact+'%',background:'#a18662'}} />
+        <span style={{width:d.radiation+'%',background:'#8895a8'}} />
+        <span style={{width:d.gas+'%',background:'#4387b6'}} />
+      </div>
+    </div>
+  );
 }
 
-/**
- * All bars are a reconstructed model interpolation from archived research
- * anchors, NOT digitized experimental percentages.
- */
-
-export function FluxContributorsChart({ isDark = false }: FluxContributorsChartProps) {
-  const option = useMemo(() => {
-    const theme = getChartTokens(isDark);
-
-    return {
-      animation: false,
-      backgroundColor: 'transparent',
-      aria: {
-        enabled: true,
-        description: 'Modeled heat-transfer pathway percentages between 10 and 100 millitorr from explicitly stated archived anchors and assumptions, not digitized experimental measurements.',
-      },
-      grid: { top: 22, right: 26, bottom: 52, left: 62 },
-      legend: {
-        bottom: 4,
-        textStyle: { color: theme.text, fontSize: 11 },
-        data: ['Radiation', 'Contact', 'Gas conduction', 'Flow-associated'],
-      },
-      tooltip: {
-        trigger: 'axis' as const,
-        axisPointer: { type: 'shadow' as const },
-        formatter: (params: any) => {
-          if (!Array.isArray(params) || params.length === 0) return '';
-          const idx = params[0].dataIndex;
-          const d = DATA[idx];
-          const total = d.radiation + d.contact + d.gas + d.flow;
-          return [
-            `<strong>P_total = ${d.pressure} mTorr</strong>`,
-            `Radiation: <strong>${d.radiation.toFixed(1)}%</strong>`,
-            `Contact: <strong>${d.contact.toFixed(1)}%</strong>`,
-            `Gas conduction: <strong>${d.gas.toFixed(1)}%</strong>`,
-            `Flow-associated: <strong>${d.flow.toFixed(1)}%</strong>`,
-            `<span style="font-size:11px;color:${theme.text}">Modeled contribution total: ${total.toFixed(1)}%</span>`,
-          ].join('<br/>');
-        },
-      },
-      xAxis: {
-        type: 'category' as const,
-        data: DATA.map((d) => `${d.pressure}`),
-        name: 'Chamber Pressure P_total (mTorr)',
-        nameLocation: 'middle' as const,
-        nameGap: 30,
-        axisLine: { lineStyle: { color: theme.border } },
-        axisLabel: { fontSize: 11, color: theme.text },
-        nameTextStyle: { fontSize: 11, color: theme.text },
-      },
-      yAxis: {
-        type: 'value' as const,
-        name: 'Reconstructed heat-transfer share (%)',
-        nameLocation: 'middle' as const,
-        nameGap: 45,
-        min: 0,
-        max: 100,
-        axisLine: { lineStyle: { color: theme.border } },
-        splitLine: { lineStyle: { color: theme.grid, type: 'dashed' as const } },
-        axisLabel: { fontSize: 11, color: theme.text },
-        nameTextStyle: { fontSize: 11, color: theme.text },
-      },
-      series: [
-        {
-          name: 'Radiation',
-          type: 'bar' as const,
-          stack: 'share',
-          itemStyle: { color: theme.radiation },
-          data: DATA.map((d) => d.radiation),
-        },
-        {
-          name: 'Contact',
-          type: 'bar' as const,
-          stack: 'share',
-          itemStyle: { color: theme.contact },
-          data: DATA.map((d) => d.contact),
-        },
-        {
-          name: 'Gas conduction',
-          type: 'bar' as const,
-          stack: 'share',
-          itemStyle: { color: theme.gas },
-          data: DATA.map((d) => d.gas),
-        },
-        {
-          name: 'Flow-associated',
-          type: 'bar' as const,
-          stack: 'share',
-          itemStyle: { color: theme.flow },
-          data: DATA.map((d) => d.flow),
-        },
-      ],
-    };
-  }, [isDark]);
-
+export function FluxContributorsChart({ isDark: _isDark = false }: FluxContributorsChartProps) {
+  const [selected, setSelected] = useState<number>(500);
+  const selectedShare = shareAt(selected);
+  const series = useMemo(() => [
+    { name: 'Total', color: 'var(--foreground)', values: pressures.map(x => ({x, y:kSaturating(x)})), thickness:3.1 },
+    { name: 'Gas conduction', color: '#4387b6', values: pressures.map(x => ({x,y:kgSaturating(x)})) },
+    { name: 'Radiation · fixed', color: '#8895a8', dashed:true, values: [{x:10,y:kr},{x:1500,y:kr}] },
+    { name: 'Contact · fixed', color: '#a18662', dashed:true, values: [{x:10,y:kc},{x:1500,y:kc}] },
+  ], []);
   return (
-    <div className="space-y-3">
-      <figure className="my-5">
-        <div className="bg-[var(--figure-bg)] border border-[var(--border)] rounded-lg p-4">
-          <p className="text-xs font-medium text-[var(--text-secondary)] mb-1">
-            <span className="font-mono text-[var(--accent)] mr-1">Fig. 2</span>
-            Illustrative four-path decomposition reconstructed from archived Ganguly research anchors.
-          </p>
-          <p className="text-xs text-[var(--text-muted)] mb-3">
-            Modeled interpolation from 10 to 100 mTorr. The bars are not independently digitized experimental results.
-          </p>
-          <ResearchChart option={option} style={{ height: '320px', width: '100%' }} opts={{ renderer: 'canvas' }} />
-        </div>
-        <figcaption className="mt-2 text-xs text-[var(--text-muted)] leading-relaxed px-2 space-y-1">
-          <p>
-            The reconstruction keeps absolute radiation and contact contributions fixed while
-            interpolating pressure-responsive gas and flow terms. Their combined modeled share
-            increases from 14% at 10 mTorr to 44% at the 100 mTorr anchor.
-          </p>
-          <p>
-            The approximate endpoints come from the September research notes, not independently
-            digitized measurements. Intermediate percentages are calculated rather than measured.
-            Ganguly described the fourth contribution as convection in vial geometry; here it is
-            treated as the flow-associated coefficient <InlineMath math="K_f" /> without assuming
-            that the same transport mechanism applies to the Harvest Right chamber.
-          </p>
-        </figcaption>
-      </figure>
-
-      <Callout
-        type="info"
-        title="Limits of this reconstruction"
-        body="The source research records approximate contribution anchors at 10 and 100 mTorr. This figure interpolates between them and does not present those percentages as direct measurements. Ganguly also tested higher pressures, but a quantitative pathway-share curve above 100 mTorr is not supported by the verified anchor data available here. Independent digitization or machine measurements would be needed before extending the figure."
+    <figure className="lyo-model-transfer research-scientific-figure">
+      <ScientificFigureCaption
+        title="The radiation fraction falls while its coefficient remains constant"
+        detail="Reduced-order coefficients, not measured tray heat flux."
       />
-    </div>
+      <div className="lyo-mobile-model-statement">
+        <ManuscriptLabel>Fixed model coefficient</ManuscriptLabel>
+        <strong>K<sub>r</sub> = {kr.toFixed(1)} W/(m²·K)</strong>
+        <p>Radiation has the same assigned coefficient at every pressure. Rising gas conduction increases the denominator.</p>
+      </div>
+      <div className="lyo-mobile-pressure-picks" aria-label="Compare modeled pressure conditions">
+        {steps.map(p => <button key={p} type="button" aria-pressed={p===selected}
+          onClick={()=>setSelected(p)}>{p >= 1000 ? (p/1000).toFixed(1)+'k' : p}<span>mTorr</span></button>)}
+      </div>
+      <ScientificLinePlot
+        series={series} xDomain={[10,1500]} xScale="log"
+        yDomain={[0,17]} xTicks={[10,50,200,500,1500]} yTicks={[0,5,10,15]}
+        xLabel="Total pressure (mTorr) · log scale" yLabel="W/(m²·K)"
+        markerX={selected}
+        description="Total and gas-conduction model heat-transfer coefficients increase across 10 to 1500 millitorr. Radiation is a flat 2.0 and contact a flat 1.2 watts per square meter per kelvin."
+      />
+      <div className="lyo-mobile-normalized" aria-label="Compare absolute constants and normalized percentage">
+        <div className="lyo-mobile-section-name">The same model normalized to 100%</div>
+        <div className="lyo-mobile-composition-legend">
+          <span><i style={{background:'#a18662'}}/>Contact</span>
+          <span><i style={{background:'#8895a8'}}/>Radiation</span>
+          <span><i style={{background:'#4387b6'}}/>Gas conduction</span>
+        </div>
+        <CompositionBar pressure={10} />
+        <div className="lyo-mobile-comparison-arrow" aria-hidden="true">↓ pressure changes; <strong>K<sub>r</sub> does not</strong></div>
+        <CompositionBar pressure={selected} />
+        <p>Radiation is <strong>{kr.toFixed(1)} W/(m²·K)</strong> in both cases, but its share changes from <strong>{shareAt(10).radiation.toFixed(1)}%</strong> to <strong>{selectedShare.radiation.toFixed(1)}%</strong>.</p>
+      </div>
+      <details className="lyo-mobile-figure-method">
+        <summary>Model assumptions and equation</summary>
+        <p>K<sub>total</sub> = K<sub>c</sub> + K<sub>r</sub> + K<sub>g</sub>(P), where K<sub>c</sub> = {kc}, K<sub>r</sub> = {kr}, and K<sub>g</sub>(P) = C<sub>2</sub>P/(P+C<sub>3</sub>), C<sub>2</sub> = {c2} W/(m²·K), C<sub>3</sub> = {c3} mTorr. The flow term is omitted. These prescribed coefficients require a temperature difference to represent heat flux.</p>
+      </details>
+    </figure>
   );
 }

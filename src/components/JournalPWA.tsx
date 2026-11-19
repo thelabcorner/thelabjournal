@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useRegisterSW } from 'virtual:pwa-register/react'
-import { ArrowDownToLine, Check, CloudOff, RefreshCw, Share2, Smartphone } from 'lucide-react'
+import { ArrowDownToLine, Check, CloudOff, Share2, Smartphone } from 'lucide-react'
 
 interface InstallPromptEvent extends Event {
   prompt(): Promise<void>
@@ -25,13 +25,43 @@ export function useJournalPWA() {
   const [installed, setInstalled] = useState(isStandalone)
   const [canInstall] = useState(() => window.isSecureContext)
   const [appleMobile] = useState(isAppleMobile)
+  const [registration, setRegistration] = useState<ServiceWorkerRegistration | null>(null)
+  const [updatePhase, setUpdatePhase] = useState<'idle' | 'downloading' | 'installing' | 'ready'>('idle')
   const {
     needRefresh: [needRefresh, setNeedRefresh],
     offlineReady: [offlineReady],
     updateServiceWorker,
   } = useRegisterSW({
+    onRegisteredSW: (_url, registered) => setRegistration(registered ?? null),
     onRegisterError: (error) => console.warn('Journal offline registration unavailable:', error),
   })
+  useEffect(() => {
+    if (!registration) return
+    let worker: ServiceWorker | null = null
+    const onWorkerState = () => {
+      if (!worker) return
+      if (worker.state === 'installing') setUpdatePhase('downloading')
+      else if (worker.state === 'installed' || worker.state === 'activating') setUpdatePhase('installing')
+      else if (worker.state === 'activated') setUpdatePhase('ready')
+      else if (worker.state === 'redundant') setUpdatePhase('idle')
+    }
+    const onUpdateFound = () => {
+      // A first-time offline installation must never masquerade as an app
+      // update. Readers can already use the page during that installation.
+      const next = registration.installing
+      if (!next || !registration.active) return
+      worker?.removeEventListener('statechange', onWorkerState)
+      worker = next
+      worker.addEventListener('statechange', onWorkerState)
+      onWorkerState()
+    }
+    registration.addEventListener('updatefound', onUpdateFound)
+    onUpdateFound()
+    return () => {
+      registration.removeEventListener('updatefound', onUpdateFound)
+      worker?.removeEventListener('statechange', onWorkerState)
+    }
+  }, [registration])
   useEffect(() => {
     // Home-screen PWAs, especially on iOS, can resume without a new navigation.
     // Registration alone does not periodically check for new releases.
@@ -113,6 +143,7 @@ export function useJournalPWA() {
     appleMobile,
     offlineReady,
     needRefresh,
+    updatePhase,
     dismissUpdate: () => setNeedRefresh(false),
     applyUpdate: () => void updateServiceWorker(true),
   }
@@ -138,9 +169,14 @@ export function InstallSection({ pwa }: { pwa: JournalPWA }) {
 }
 
 export function PWAUpdateNotice({ pwa }: { pwa: JournalPWA }) {
-  if (!pwa.needRefresh) return null
-  return <div className="pwa-update" role="status">
-    <span><RefreshCw size={15}/><span>A journal update is ready.</span></span>
-    <div><button type="button" onClick={pwa.dismissUpdate}>Later</button><button type="button" onClick={pwa.applyUpdate}>Update</button></div>
+  if (!pwa.needRefresh && pwa.updatePhase === 'idle') return null
+  const message = pwa.updatePhase === 'downloading' ? 'Downloading the latest version…'
+    : pwa.updatePhase === 'installing' ? 'Installing the updated journal…'
+      : pwa.updatePhase === 'ready' ? 'Opening the updated journal…'
+        : 'An update is ready to install.'
+  return <div className="pwa-update" role="status" aria-live="polite" aria-atomic="true">
+    <span className="pwa-update-indicator" aria-hidden="true"><i/><i/><i/><i/></span>
+    <span className="pwa-update-copy"><strong>Updating journal</strong><small>{message}</small></span>
+    {pwa.needRefresh && <div className="pwa-update-actions"><button type="button" onClick={pwa.dismissUpdate}>Later</button><button type="button" onClick={pwa.applyUpdate}>Update</button></div>}
   </div>
 }

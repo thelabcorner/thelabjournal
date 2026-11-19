@@ -1,0 +1,23 @@
+{
+  "crystal_2021_120K": {
+    "a": 11.4069,
+    "b": 17.9819,
+    "c": 19.1565,
+    "volume": 3929.3
+  },
+  "patent_2026_100K": {
+    "a": 11.4635,
+    "b": 18.0506,
+    "c": 19.2347,
+    "volume": 3980.1
+  },
+  "percent_delta_patent_over_cif": {
+    "a": 0.4961909019979095,
+    "b": 0.38205084001134343,
+    "c": 0.4082165322475344,
+    "volume": 1.2928511439696568
+  },
+  "interpretation": "closely similar cell metrics and matching stated P212121/Z8; requires same-condition diffraction/atomic structural comparison for polymorph equivalence",
+  "patent_source": "https://patents.google.com/patent/US20260008762A1/en",
+  "2021_cif_source": "Skell et al. 2021 supplement cu3167sup1.cif"
+}

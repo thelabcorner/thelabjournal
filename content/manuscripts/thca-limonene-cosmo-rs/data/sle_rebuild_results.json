@@ -1,0 +1,865 @@
+{
+  "created_utc": "2026-10-21T06:50:48.420940+00:00",
+  "status": "CONDITIONAL, NOT EXPERIMENTAL SOLUBILITY",
+  "thermodynamic_equation": "ln(x)+ln(gamma_pure_liquid_reference(x,T))=-G_fusion(T)/(R*T)",
+  "gamma_reference_type": 0,
+  "gamma_source": "live_openCOSMO_RS_24a_mode0_HTTP_service",
+  "x_grid": [
+    1e-08,
+    1e-07,
+    1e-06,
+    1e-05,
+    0.0001,
+    0.001,
+    0.003,
+    0.006,
+    0.01,
+    0.02,
+    0.03,
+    0.04,
+    0.05,
+    0.06,
+    0.07,
+    0.08,
+    0.09,
+    0.1,
+    0.12,
+    0.14,
+    0.16,
+    0.18,
+    0.2,
+    0.22,
+    0.24,
+    0.26,
+    0.28,
+    0.3,
+    0.32,
+    0.34,
+    0.36,
+    0.38,
+    0.4,
+    0.42,
+    0.44,
+    0.46,
+    0.48,
+    0.5,
+    0.52,
+    0.54,
+    0.56,
+    0.58,
+    0.6,
+    0.62,
+    0.64,
+    0.66,
+    0.68,
+    0.7,
+    0.72,
+    0.74,
+    0.76,
+    0.78,
+    0.8,
+    0.82,
+    0.84,
+    0.86,
+    0.88,
+    0.9,
+    0.92,
+    0.94,
+    0.96,
+    0.98,
+    0.985,
+    0.995,
+    0.9999,
+    1.0
+  ],
+  "temperature_C": [
+    15.0,
+    25.0,
+    35.0,
+    45.0,
+    55.0,
+    65.0,
+    75.0
+  ],
+  "scenarios": [
+    {
+      "id": "patent_146C_16p3kJ_cp0",
+      "tm_c": 146.0,
+      "hfus_kj": 16.3,
+      "dcp_j": 0.0,
+      "kind": "patent-specific extrapolation"
+    },
+    {
+      "id": "patent_146C_16p3kJ_cpPlus50",
+      "tm_c": 146.0,
+      "hfus_kj": 16.3,
+      "dcp_j": 50.0,
+      "kind": "unmeasured heat-capacity sensitivity"
+    },
+    {
+      "id": "patent_146C_16p3kJ_cpMinus50",
+      "tm_c": 146.0,
+      "hfus_kj": 16.3,
+      "dcp_j": -50.0,
+      "kind": "unmeasured heat-capacity sensitivity"
+    },
+    {
+      "id": "hypothetical_100C_16p3kJ",
+      "tm_c": 100.0,
+      "hfus_kj": 16.3,
+      "dcp_j": 0.0,
+      "kind": "mixed-source hypothetical, NOT phase-specific"
+    },
+    {
+      "id": "historical_70C_16p3kJ",
+      "tm_c": 70.0,
+      "hfus_kj": 16.3,
+      "dcp_j": 0.0,
+      "kind": "mixed-source hypothetical, NOT phase-specific"
+    },
+    {
+      "id": "hypothetical_146C_30kJ",
+      "tm_c": 146.0,
+      "hfus_kj": 30.0,
+      "dcp_j": 0.0,
+      "kind": "unmeasured enthalpy sensitivity"
+    }
+  ],
+  "rows": [
+    {
+      "scenario": "patent_146C_16p3kJ_cp0",
+      "temperature_C": 15.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.07619785515580113
+      ],
+      "x_saturation": 0.07619785515580113,
+      "wt_percent": 17.83354740935657,
+      "mg_THCA_per_g_final_mixture": 178.3354740935657,
+      "mg_THCA_per_mL_initial_limonene": 184.23413543680917,
+      "rhs_ln_activity": -2.126359151183945,
+      "fusion_dg_kj_mol": 5.094357628533938,
+      "density_initial_limonene_g_ml": 0.8488420731707317,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": -3.197817566302774e-09
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cp0",
+      "temperature_C": 25.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.11069479664707402
+      ],
+      "x_saturation": 0.11069479664707402,
+      "wt_percent": 24.672337064119795,
+      "mg_THCA_per_g_final_mixture": 246.72337064119796,
+      "mg_THCA_per_mL_initial_limonene": 275.4239231687926,
+      "rhs_ln_activity": -1.8981673787094737,
+      "fusion_dg_kj_mol": 4.705475366813789,
+      "density_initial_limonene_g_ml": 0.8409029268292683,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": -1.5681491549734972e-07
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cp0",
+      "temperature_C": 35.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.15245629553994056
+      ],
+      "x_saturation": 0.15245629553994056,
+      "wt_percent": 32.12647559092633,
+      "mg_THCA_per_g_final_mixture": 321.26475590926333,
+      "mg_THCA_per_mL_initial_limonene": 394.26552245443366,
+      "rhs_ln_activity": -1.684786040924244,
+      "fusion_dg_kj_mol": 4.316593105093642,
+      "density_initial_limonene_g_ml": 0.8329637804878048,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": 2.728956529640669e-07
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cp0",
+      "temperature_C": 45.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.2007792916777143
+      ],
+      "x_saturation": 0.2007792916777143,
+      "wt_percent": 39.79696747590533,
+      "mg_THCA_per_g_final_mixture": 397.9696747590533,
+      "mg_THCA_per_mL_initial_limonene": 545.3791471185762,
+      "rhs_ln_activity": -1.4848185857594902,
+      "fusion_dg_kj_mol": 3.927710843373494,
+      "density_initial_limonene_g_ml": 0.8250246341463414,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": 1.3832874179442456e-08
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cp0",
+      "temperature_C": 55.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.25498563774165417
+      ],
+      "x_saturation": 0.25498563774165417,
+      "wt_percent": 47.38495330036561,
+      "mg_THCA_per_g_final_mixture": 473.8495330036561,
+      "mg_THCA_per_mL_initial_limonene": 735.8647404243326,
+      "rhs_ln_activity": -1.2970386945237171,
+      "fusion_dg_kj_mol": 3.5388285816533456,
+      "density_initial_limonene_g_ml": 0.817085487804878,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": -1.5185235358039506e-07
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cp0",
+      "temperature_C": 65.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.3145886403227084
+      ],
+      "x_saturation": 0.3145886403227084,
+      "wt_percent": 54.704680647190685,
+      "mg_THCA_per_g_final_mixture": 547.0468064719068,
+      "mg_THCA_per_mL_initial_limonene": 977.2332514497097,
+      "rhs_ln_activity": -1.1203651106211268,
+      "fusion_dg_kj_mol": 3.149946319933199,
+      "density_initial_limonene_g_ml": 0.8091463414634146,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": 7.661852508000777e-08
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cp0",
+      "temperature_C": 75.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.3793205436227568
+      ],
+      "x_saturation": 0.3793205436227568,
+      "wt_percent": 61.65820387731288,
+      "mg_THCA_per_g_final_mixture": 616.5820387731288,
+      "mg_THCA_per_mL_initial_limonene": 1288.4372037951646,
+      "rhs_ln_activity": -0.9538408062763464,
+      "fusion_dg_kj_mol": 2.76106405821305,
+      "density_initial_limonene_g_ml": 0.8012071951219513,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": -3.8469227803261674e-13
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpPlus50",
+      "temperature_C": 15.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.15092416981875242
+      ],
+      "x_saturation": 0.15092416981875242,
+      "wt_percent": 31.867403526188692,
+      "mg_THCA_per_g_final_mixture": 318.6740352618869,
+      "mg_THCA_per_mL_initial_limonene": 397.02571567393414,
+      "rhs_ln_activity": -1.646011484267019,
+      "fusion_dg_kj_mol": 3.9435347301800974,
+      "density_initial_limonene_g_ml": 0.8488420731707317,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": 5.457694385313516e-08
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpPlus50",
+      "temperature_C": 25.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.1873725037815241
+      ],
+      "x_saturation": 0.1873725037815241,
+      "wt_percent": 37.761697495040146,
+      "mg_THCA_per_g_final_mixture": 377.61697495040147,
+      "mg_THCA_per_mL_initial_limonene": 510.19903608537834,
+      "rhs_ln_activity": -1.5060563303103203,
+      "fusion_dg_kj_mol": 3.733448926999945,
+      "density_initial_limonene_g_ml": 0.8409029268292683,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": 2.397583218627375e-07
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpPlus50",
+      "temperature_C": 35.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.22747199538274981
+      ],
+      "x_saturation": 0.22747199538274981,
+      "wt_percent": 43.65582231069074,
+      "mg_THCA_per_g_final_mixture": 436.5582231069074,
+      "mg_THCA_per_mL_initial_limonene": 645.3855621557233,
+      "rhs_ln_activity": -1.3686380819764021,
+      "fusion_dg_kj_mol": 3.506589896000669,
+      "density_initial_limonene_g_ml": 0.8329637804878048,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": 3.523446008291131e-07
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpPlus50",
+      "temperature_C": 45.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.2712368686011088
+      ],
+      "x_saturation": 0.2712368686011088,
+      "wt_percent": 49.4785841886147,
+      "mg_THCA_per_g_final_mixture": 494.785841886147,
+      "mg_THCA_per_mL_initial_limonene": 807.9949891089854,
+      "rhs_ln_activity": -1.233723367867185,
+      "fusion_dg_kj_mol": 3.263502151824569,
+      "density_initial_limonene_g_ml": 0.8250246341463414,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": -9.529674849240166e-08
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpPlus50",
+      "temperature_C": 55.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.3187862177136533
+      ],
+      "x_saturation": 0.3187862177136533,
+      "wt_percent": 55.18487970457643,
+      "mg_THCA_per_g_final_mixture": 551.8487970457643,
+      "mg_THCA_per_mL_initial_limonene": 1006.150693239842,
+      "rhs_ln_activity": -1.1012703321211597,
+      "fusion_dg_kj_mol": 3.0046959615713833,
+      "density_initial_limonene_g_ml": 0.817085487804878,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": -2.741431734953892e-07
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpPlus50",
+      "temperature_C": 65.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.3703483042477004
+      ],
+      "x_saturation": 0.3703483042477004,
+      "wt_percent": 60.74905480689215,
+      "mg_THCA_per_g_final_mixture": 607.4905480689215,
+      "mg_THCA_per_mL_initial_limonene": 1252.3233568650069,
+      "rhs_ln_activity": -0.971231003292882,
+      "fusion_dg_kj_mol": 2.730650477799476,
+      "density_initial_limonene_g_ml": 0.8091463414634146,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": -1.1004633659883467e-07
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpPlus50",
+      "temperature_C": 75.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.4262408031531677
+      ],
+      "x_saturation": 0.4262408031531677,
+      "wt_percent": 66.15688838418171,
+      "mg_THCA_per_g_final_mixture": 661.5688838418171,
+      "mg_THCA_per_mL_initial_limonene": 1566.2086743676211,
+      "rhs_ln_activity": -0.8435531268518163,
+      "fusion_dg_kj_mol": 2.4418165006341703,
+      "density_initial_limonene_g_ml": 0.8012071951219513,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": -9.850142379530524e-08
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpMinus50",
+      "temperature_C": 15.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.038948977477519735
+      ],
+      "x_saturation": 0.038948977477519735,
+      "wt_percent": 9.636555266805127,
+      "mg_THCA_per_g_final_mixture": 96.36555266805128,
+      "mg_THCA_per_mL_initial_limonene": 90.52237411987814,
+      "rhs_ln_activity": -2.6067068181008706,
+      "fusion_dg_kj_mol": 6.245180526887779,
+      "density_initial_limonene_g_ml": 0.8488420731707317,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": 7.997731366060634e-10
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpMinus50",
+      "temperature_C": 25.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.06484485618450848
+      ],
+      "x_saturation": 0.06484485618450848,
+      "wt_percent": 15.430651772683607,
+      "mg_THCA_per_g_final_mixture": 154.30651772683606,
+      "mg_THCA_per_mL_initial_limonene": 153.43242570174687,
+      "rhs_ln_activity": -2.2902784271086274,
+      "fusion_dg_kj_mol": 5.6775018066276335,
+      "density_initial_limonene_g_ml": 0.8409029268292683,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": -1.2047341790832888e-08
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpMinus50",
+      "temperature_C": 35.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.1008323554492054
+      ],
+      "x_saturation": 0.1008323554492054,
+      "wt_percent": 22.78464784647391,
+      "mg_THCA_per_g_final_mixture": 227.8464784647391,
+      "mg_THCA_per_mL_initial_limonene": 245.79032378881087,
+      "rhs_ln_activity": -2.0009339998720863,
+      "fusion_dg_kj_mol": 5.1265963141866155,
+      "density_initial_limonene_g_ml": 0.8329637804878048,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": -1.6754929710316446e-07
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpMinus50",
+      "temperature_C": 45.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.14701534463471821
+      ],
+      "x_saturation": 0.14701534463471821,
+      "wt_percent": 31.20171584500569,
+      "mg_THCA_per_g_final_mixture": 312.0171584500569,
+      "mg_THCA_per_mL_initial_limonene": 374.1689856940306,
+      "rhs_ln_activity": -1.7359138036517952,
+      "fusion_dg_kj_mol": 4.591919534922419,
+      "density_initial_limonene_g_ml": 0.8250246341463414,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": -5.359970933760394e-08
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpMinus50",
+      "temperature_C": 55.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.20254069079044473
+      ],
+      "x_saturation": 0.20254069079044473,
+      "wt_percent": 40.05939021258742,
+      "mg_THCA_per_g_final_mixture": 400.5939021258742,
+      "mg_THCA_per_mL_initial_limonene": 546.0729630396852,
+      "rhs_ln_activity": -1.4928070569262748,
+      "fusion_dg_kj_mol": 4.072961201735308,
+      "density_initial_limonene_g_ml": 0.817085487804878,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": -2.2453161974134161e-07
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpMinus50",
+      "temperature_C": 65.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.2662170369121519
+      ],
+      "x_saturation": 0.2662170369121519,
+      "wt_percent": 48.84014523559306,
+      "mg_THCA_per_g_final_mixture": 488.40145235593064,
+      "mg_THCA_per_mL_initial_limonene": 772.4577213111261,
+      "rhs_ln_activity": -1.2694992179493716,
+      "fusion_dg_kj_mol": 3.569242162066922,
+      "density_initial_limonene_g_ml": 0.8091463414634146,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": 4.1744385725905886e-13
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpMinus50",
+      "temperature_C": 75.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.3369638004266664
+      ],
+      "x_saturation": 0.3369638004266664,
+      "wt_percent": 57.21539818747259,
+      "mg_THCA_per_g_final_mixture": 572.1539818747259,
+      "mg_THCA_per_mL_initial_limonene": 1071.4459585352042,
+      "rhs_ln_activity": -1.0641284857008766,
+      "fusion_dg_kj_mol": 3.08031161579193,
+      "density_initial_limonene_g_ml": 0.8012071951219513,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": -6.472344393770868e-08
+    },
+    {
+      "scenario": "hypothetical_100C_16p3kJ",
+      "temperature_C": 15.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.1723273578393504
+      ],
+      "x_saturation": 0.1723273578393504,
+      "wt_percent": 35.39496134717526,
+      "mg_THCA_per_g_final_mixture": 353.9496134717526,
+      "mg_THCA_per_mL_initial_limonene": 465.05246334096125,
+      "rhs_ln_activity": -1.54978079642969,
+      "fusion_dg_kj_mol": 3.712984054669704,
+      "density_initial_limonene_g_ml": 0.8488420731707317,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": -9.064467176855828e-09
+    },
+    {
+      "scenario": "hypothetical_100C_16p3kJ",
+      "temperature_C": 25.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.23726785242103565
+      ],
+      "x_saturation": 0.23726785242103565,
+      "wt_percent": 45.011195530769754,
+      "mg_THCA_per_g_final_mixture": 450.11195530769754,
+      "mg_THCA_per_mL_initial_limonene": 688.3227672841713,
+      "rhs_ln_activity": -1.3215890239552193,
+      "fusion_dg_kj_mol": 3.27616240117915,
+      "density_initial_limonene_g_ml": 0.8409029268292683,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": -3.1582436665900104e-08
+    },
+    {
+      "scenario": "hypothetical_100C_16p3kJ",
+      "temperature_C": 35.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.3108199957036606
+      ],
+      "x_saturation": 0.3108199957036606,
+      "wt_percent": 54.26983337332091,
+      "mg_THCA_per_g_final_mixture": 542.6983337332091,
+      "mg_THCA_per_mL_initial_limonene": 988.5117179238972,
+      "rhs_ln_activity": -1.1082076861699894,
+      "fusion_dg_kj_mol": 2.8393407476885977,
+      "density_initial_limonene_g_ml": 0.8329637804878048,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": -9.803609701819482e-08
+    },
+    {
+      "scenario": "hypothetical_100C_16p3kJ",
+      "temperature_C": 45.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.39238606601846177
+      ],
+      "x_saturation": 0.39238606601846177,
+      "wt_percent": 62.95310144558399,
+      "mg_THCA_per_g_final_mixture": 629.5310144558399,
+      "mg_THCA_per_mL_initial_limonene": 1401.9489219112904,
+      "rhs_ln_activity": -0.9082402310052355,
+      "fusion_dg_kj_mol": 2.402519094198044,
+      "density_initial_limonene_g_ml": 0.8250246341463414,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": -2.0971649450363117e-07
+    },
+    {
+      "scenario": "hypothetical_100C_16p3kJ",
+      "temperature_C": 55.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.48189957101822745
+      ],
+      "x_saturation": 0.48189957101822745,
+      "wt_percent": 70.99344081475677,
+      "mg_THCA_per_g_final_mixture": 709.9344081475678,
+      "mg_THCA_per_mL_initial_limonene": 1999.8135541902902,
+      "rhs_ln_activity": -0.7204603397694627,
+      "fusion_dg_kj_mol": 1.96569744070749,
+      "density_initial_limonene_g_ml": 0.817085487804878,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": 1.9000769035937282e-07
+    },
+    {
+      "scenario": "hypothetical_100C_16p3kJ",
+      "temperature_C": 65.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.5797130389106994
+      ],
+      "x_saturation": 0.5797130389106994,
+      "wt_percent": 78.39938636385179,
+      "mg_THCA_per_g_final_mixture": 783.9938636385178,
+      "mg_THCA_per_mL_initial_limonene": 2936.7951169279495,
+      "rhs_ln_activity": -0.5437867558668722,
+      "fusion_dg_kj_mol": 1.5288757872169378,
+      "density_initial_limonene_g_ml": 0.8091463414634146,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": 4.390396191045198e-08
+    },
+    {
+      "scenario": "hypothetical_100C_16p3kJ",
+      "temperature_C": 75.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.6865080364776945
+      ],
+      "x_saturation": 0.6865080364776945,
+      "wt_percent": 85.21221237414053,
+      "mg_THCA_per_g_final_mixture": 852.1221237414053,
+      "mg_THCA_per_mL_initial_limonene": 4616.8256803358745,
+      "rhs_ln_activity": -0.3772624515220919,
+      "fusion_dg_kj_mol": 1.092054133726384,
+      "density_initial_limonene_g_ml": 0.8012071951219513,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": 4.043407408893529e-08
+    },
+    {
+      "scenario": "historical_70C_16p3kJ",
+      "temperature_C": 15.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.3114425722367116
+      ],
+      "x_saturation": 0.3114425722367116,
+      "wt_percent": 54.341914209645395,
+      "mg_THCA_per_g_final_mixture": 543.4191420964539,
+      "mg_THCA_per_mL_initial_limonene": 1010.2855237861512,
+      "rhs_ln_activity": -1.0904693961764498,
+      "fusion_dg_kj_mol": 2.61256010491039,
+      "density_initial_limonene_g_ml": 0.8488420731707317,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": -1.8838603721427205e-07
+    },
+    {
+      "scenario": "historical_70C_16p3kJ",
+      "temperature_C": 25.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.4086706394321352
+      ],
+      "x_saturation": 0.4086706394321352,
+      "wt_percent": 64.52066780318266,
+      "mg_THCA_per_g_final_mixture": 645.2066780318266,
+      "mg_THCA_per_mL_initial_limonene": 1529.2175764667356,
+      "rhs_ln_activity": -0.8622776237019794,
+      "fusion_dg_kj_mol": 2.137549176744865,
+      "density_initial_limonene_g_ml": 0.8409029268292683,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": -1.7802289964397033e-07
+    },
+    {
+      "scenario": "historical_70C_16p3kJ",
+      "temperature_C": 35.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.5169384334431956
+      ],
+      "x_saturation": 0.5169384334431956,
+      "wt_percent": 73.7937971461406,
+      "mg_THCA_per_g_final_mixture": 737.937971461406,
+      "mg_THCA_per_mL_initial_limonene": 2345.534780073914,
+      "rhs_ln_activity": -0.6488962859167492,
+      "fusion_dg_kj_mol": 1.6625382485793394,
+      "density_initial_limonene_g_ml": 0.8329637804878048,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": -5.167172447695378e-07
+    },
+    {
+      "scenario": "historical_70C_16p3kJ",
+      "temperature_C": 45.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.6370560819800668
+      ],
+      "x_saturation": 0.6370560819800668,
+      "wt_percent": 82.2022150610069,
+      "mg_THCA_per_g_final_mixture": 822.022150610069,
+      "mg_THCA_per_mL_initial_limonene": 3810.5220755950413,
+      "rhs_ln_activity": -0.4489288307519954,
+      "fusion_dg_kj_mol": 1.1875273204138141,
+      "density_initial_limonene_g_ml": 0.8250246341463414,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": 2.863869918989792e-08
+    },
+    {
+      "scenario": "historical_70C_16p3kJ",
+      "temperature_C": 55.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.770444102817371
+      ],
+      "x_saturation": 0.770444102817371,
+      "wt_percent": 89.82856226673543,
+      "mg_THCA_per_g_final_mixture": 898.2856226673543,
+      "mg_THCA_per_mL_initial_limonene": 7216.05111718745,
+      "rhs_ln_activity": -0.26114893951622264,
+      "fusion_dg_kj_mol": 0.7125163922482889,
+      "density_initial_limonene_g_ml": 0.817085487804878,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": 7.182935338190255e-07
+    },
+    {
+      "scenario": "historical_70C_16p3kJ",
+      "temperature_C": 65.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.9191228508387517
+      ],
+      "x_saturation": 0.9191228508387517,
+      "wt_percent": 96.7641575494549,
+      "mg_THCA_per_g_final_mixture": 967.641575494549,
+      "mg_THCA_per_mL_initial_limonene": 24196.5933949414,
+      "rhs_ln_activity": -0.08447535561363169,
+      "fusion_dg_kj_mol": 0.23750546408276355,
+      "density_initial_limonene_g_ml": 0.8091463414634146,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": -3.8675197946980155e-08
+    },
+    {
+      "scenario": "historical_70C_16p3kJ",
+      "temperature_C": 75.0,
+      "status": "above_assumed_melt",
+      "x_saturation": null
+    },
+    {
+      "scenario": "hypothetical_146C_30kJ",
+      "temperature_C": 15.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.0078481187883886
+      ],
+      "x_saturation": 0.0078481187883886,
+      "wt_percent": 2.039012944089546,
+      "mg_THCA_per_g_final_mixture": 20.390129440895464,
+      "mg_THCA_per_mL_initial_limonene": 17.66825781058216,
+      "rhs_ln_activity": -3.9135444500317997,
+      "fusion_dg_kj_mol": 9.376118334725039,
+      "density_initial_limonene_g_ml": 0.8488420731707317,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": 6.248335182590381e-13
+    },
+    {
+      "scenario": "hypothetical_146C_30kJ",
+      "temperature_C": 25.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.0144175849242405
+      ],
+      "x_saturation": 0.0144175849242405,
+      "wt_percent": 3.7065983130007965,
+      "mg_THCA_per_g_final_mixture": 37.065983130007965,
+      "mg_THCA_per_mL_initial_limonene": 32.36867028661235,
+      "rhs_ln_activity": -3.4935595927168226,
+      "fusion_dg_kj_mol": 8.660384110700225,
+      "density_initial_limonene_g_ml": 0.8409029268292683,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": -3.0459072597466275e-08
+    },
+    {
+      "scenario": "hypothetical_146C_30kJ",
+      "temperature_C": 35.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.025276788691847636
+      ],
+      "x_saturation": 0.025276788691847636,
+      "wt_percent": 6.387815891184985,
+      "mg_THCA_per_g_final_mixture": 63.87815891184985,
+      "mg_THCA_per_mL_initial_limonene": 56.83896091556404,
+      "rhs_ln_activity": -3.100833204155051,
+      "fusion_dg_kj_mol": 7.944649886675416,
+      "density_initial_limonene_g_ml": 0.8329637804878048,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": 1.0151879337172431e-12
+    },
+    {
+      "scenario": "hypothetical_146C_30kJ",
+      "temperature_C": 45.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.04241902445380665
+      ],
+      "x_saturation": 0.04241902445380665,
+      "wt_percent": 10.43953015566299,
+      "mg_THCA_per_g_final_mixture": 104.39530155662989,
+      "mg_THCA_per_mL_initial_limonene": 96.16820414525948,
+      "rhs_ln_activity": -2.732794943115626,
+      "fusion_dg_kj_mol": 7.228915662650603,
+      "density_initial_limonene_g_ml": 0.8250246341463414,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": 8.150524699601647e-09
+    },
+    {
+      "scenario": "hypothetical_146C_30kJ",
+      "temperature_C": 55.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.0681929284804567
+      ],
+      "x_saturation": 0.0681929284804567,
+      "wt_percent": 16.147608620501153,
+      "mg_THCA_per_g_final_mixture": 161.47608620501154,
+      "mg_THCA_per_mL_initial_limonene": 157.34764923818557,
+      "rhs_ln_activity": -2.387187781331995,
+      "fusion_dg_kj_mol": 6.513181438625789,
+      "density_initial_limonene_g_ml": 0.817085487804878,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": 4.330614356007345e-08
+    },
+    {
+      "scenario": "hypothetical_146C_30kJ",
+      "temperature_C": 65.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.1049581794313471
+      ],
+      "x_saturation": 0.1049581794313471,
+      "wt_percent": 23.58064795522448,
+      "mg_THCA_per_g_final_mixture": 235.8064795522448,
+      "mg_THCA_per_mL_initial_limonene": 249.6775294709015,
+      "rhs_ln_activity": -2.062021675989804,
+      "fusion_dg_kj_mol": 5.797447214600979,
+      "density_initial_limonene_g_ml": 0.8091463414634146,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": 4.718966239991573e-08
+    },
+    {
+      "scenario": "hypothetical_146C_30kJ",
+      "temperature_C": 75.0,
+      "status": "conditional_single_root",
+      "roots": [
+        0.15464325902034287
+      ],
+      "x_saturation": 0.15464325902034287,
+      "wt_percent": 32.49448463287769,
+      "mg_THCA_per_g_final_mixture": 324.9448463287769,
+      "mg_THCA_per_mL_initial_limonene": 385.6694486080644,
+      "rhs_ln_activity": -1.7555352262754844,
+      "fusion_dg_kj_mol": 5.081712990576166,
+      "density_initial_limonene_g_ml": 0.8012071951219513,
+      "direct_live_solver_rounds": 36,
+      "direct_live_ln_activity_residual": 1.761710217706991e-07
+    }
+  ],
+  "thermodynamic_sources": {
+    "COSMO_activity": "saved cosmo_24a_activity_output_recheck.json, openCOSMO-RS 24a mode-0 pure-component reference",
+    "DSC_patent": "US20260008762A1, 146 C and 16.3 kJ/mol, DSC 20 C/min, TGA degradation onset near 125 C",
+    "historical_melt": "Filer 2021 cites earlier patent claiming 70 C; secondary and phase unverified",
+    "kinetics": "Wang et al. 2016, THCA decarboxylation at 80-110 C in non-limonene conditions",
+    "equation": "SCM COSMO-RS 2026.1 Calculation of properties, Eq. 33"
+  },
+  "old_25C_results_mg_per_mL": {
+    "soft_external_modes": 3.785946717011483e-12,
+    "stiff_external_modes": 6.254867621676059e-08
+  },
+  "diagnostics": {
+    "live_COSMO_points": 462,
+    "direct_live_solver": {
+      "cases": 41,
+      "iterations": 36,
+      "max_abs_ln_activity_residual": 7.182935338190255e-07
+    },
+    "conditional_roots": 41,
+    "nonunique_or_unbracketed": [],
+    "ln_gamma_25C_1e_minus6": 0.9089760503628116
+  },
+  "warnings": [
+    "Patent DSC (146 C,16.3 kJ/mol) may not match simulated crystallographic phase; observed TGA decomposition begins around 125 C.",
+    "Fixed \u0394Cp=0 is scenario only; \u00b150 J/mol/K are illustrative sensitivity, not measured THCA parameters.",
+    "Mode-0 compatibility on legacy ORCA_COSMO_TZVPD descriptors, single THCA and limonene conformers; not a benchmark validated for this pair.",
+    "No self-association dimer/oligomer explicitly resolved; do not attribute discrepancy to it without measurements.",
+    "Thermodynamics alone does not predict nucleation delay, metastable zone width, or crystal growth rates.",
+    "mg/mL values use initial limonene volume, NOT final mixed solution volume; no density extrapolation to solute-rich mixtures.",
+    "When multiple roots exist, phase stability and LLE must be resolved independently; no root silently selected.",
+    "Original crystal\u2192gas cycle is unvalidated and excluded from predicted SLE input."
+  ]
+}

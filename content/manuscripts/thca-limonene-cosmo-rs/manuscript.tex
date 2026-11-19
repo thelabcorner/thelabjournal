@@ -1,0 +1,280 @@
+\documentclass[10pt,a4paper,twocolumn]{article}
+\usepackage[margin=17mm,top=19mm,bottom=20mm,columnsep=7mm]{geometry}
+\usepackage{fontspec}
+\IfFontExistsTF{Inter}{\setmainfont{Inter}\setsansfont{Inter}}{\setmainfont{Arial}\setsansfont{Arial}}
+\usepackage{amsmath,amssymb,graphicx,booktabs,tabularx,array}
+\usepackage{siunitx,caption,microtype,titlesec,fancyhdr,lastpage}
+\usepackage{tikz,pgfplots,xcolor,hyperref}
+\pgfplotsset{compat=1.18}
+\definecolor{zinc950}{HTML}{18181B}
+\definecolor{zinc800}{HTML}{27272A}
+\definecolor{zinc600}{HTML}{52525B}
+\definecolor{zinc500}{HTML}{71717A}
+\definecolor{zinc300}{HTML}{D4D4D8}
+\definecolor{zinc100}{HTML}{F4F4F5}
+\hypersetup{colorlinks=true,linkcolor=zinc800,citecolor=zinc800,urlcolor=zinc600,
+ pdfauthor={Jackson Cummings}, pdftitle={Reassessment of THCA-A Solubility in Limonene by Composition-Dependent COSMO-RS},
+ pdfsubject={Computational solid-liquid equilibrium sensitivity study, research manuscript draft},
+ pdfkeywords={THCA-A,limonene,COSMO-RS,solid-liquid equilibrium,crystallization}}
+\urlstyle{same}
+\setlength{\parindent}{1em}
+\setlength{\parskip}{0pt}
+\setlength{\columnsep}{7mm}
+\setlength{\columnseprule}{0pt}
+\emergencystretch=2em
+\renewcommand{\baselinestretch}{1.07}
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+\titleformat{\section}{\fontsize{11}{13}\selectfont\bfseries\color{zinc950}}{\thesection}{0.55em}{}
+\titleformat{\subsection}{\fontsize{9.5}{12}\selectfont\bfseries\color{zinc800}}{\thesubsection}{0.5em}{}
+\titlespacing*{\section}{0pt}{12pt plus 2pt}{5pt}
+\titlespacing*{\subsection}{0pt}{9pt plus 2pt}{4pt}
+\captionsetup{font=footnotesize,labelfont={bf,color=zinc950},labelsep=period,
+ justification=raggedright,singlelinecheck=false,skip=4pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\color{zinc600}\scriptsize thelabjournal™\enspace / \enspace independent applied research}
+\fancyhead[R]{\color{zinc600}\scriptsize computational thermodynamics}
+\renewcommand{\headrulewidth}{0.25pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyfoot[L]{\color{zinc600}\scriptsize Manuscript draft · 21 October 2026 · v0.1}
+\fancyfoot[R]{\color{zinc600}\scriptsize\thepage\enspace/\enspace\pageref{LastPage}}
+\setlength{\headheight}{13pt}
+\makeatletter
+\newcommand{\fullwidthtitle}{%
+{\raggedright
+\includegraphics[width=\textwidth,height=8mm]{dither.png}\par
+\vspace{3mm}
+{\color{zinc600}\fontsize{8}{9}\selectfont thelabjournal™ \quad / \quad COMPUTATIONAL RESEARCH MANUSCRIPT \quad / \quad DRAFT v0.1}\par
+\vspace{3mm}
+{\color{zinc950}\fontsize{20}{24}\selectfont\bfseries Reassessing THCA-A Solubility in Limonene Through Composition-Dependent COSMO-RS and Solid--Liquid Equilibrium\par}
+\vspace{2mm}
+{\color{zinc600}\fontsize{10}{12}\selectfont Solid-state reference sensitivity, finite-composition activity, and crystallization interpretation\par}
+\vspace{3mm}
+{\color{zinc800}\fontsize{9}{11}\selectfont\bfseries Jackson Cummings}\enspace
+{\color{zinc600}\fontsize{8}{10}\selectfont Independent process engineer \quad · \quad Independent applied research \quad · \quad
+\href{mailto:jackson@thedabcorner.site}{jackson@thedabcorner.site}}\par
+\vspace{2.7mm}
+{\color{zinc500}\rule{\textwidth}{0.4pt}}\par
+\vspace{2mm}
+\noindent{\fontsize{9}{11}\selectfont\bfseries Abstract}\enspace
+{\fontsize{9}{12.4}\selectfont
+An earlier crystal-to-gas-to-solution free-energy cycle for $\Delta^9$-tetrahydrocannabinolic acid A (THCA-A) in limonene produced mole-fraction estimates of $1.71\times10^{-15}$ to $2.83\times10^{-11}$ at \SI{298.15}{K}. The crystal reference was based on a constrained periodic calculation with an unverified phonon approximation and no converged basis-set study. A separate solid--liquid equilibrium formulation was evaluated using composition-dependent pure-liquid-reference activity coefficients computed by openCOSMO-RS 24a. The new calculation comprises 462 activity evaluations across seven temperatures and 66 compositions, with 41 equilibrium roots independently rechecked against the live solver. Adopting the reported, form-specific thermal parameters $T_{\mathrm m}=\SI{419.15}{K}$ and $\Delta H_{\mathrm{fus}}=\SI{16.3}{kJ.mol^{-1}}$ gives a conditional \SI{298.15}{K} root of $x_{\mathrm{THCA}}=0.110695$, equivalent to 275.42 mg of THCA-A per mL of initially charged limonene. Numerical closure reached $7.19\times10^{-7}$ in maximum absolute log-activity residual. The thermal parameters originate in a patent that also reports degradation before the observed endotherm, and crystal-form equivalence has not been established. The results quantify model sensitivity and provide a reproducible computational baseline for phase-specific measurement.}\par
+\vspace{2mm}
+{\fontsize{7.8}{10}\selectfont\color{zinc600}\textbf{Keywords}\quad THCA-A · limonene · solid--liquid equilibrium · COSMO-RS · crystallization · fusion thermodynamics · sensitivity}\par
+{\color{zinc500}\rule{\textwidth}{0.4pt}}\par
+\vspace{4mm}
+}}
+\makeatother
+\begin{document}
+\twocolumn[{\fullwidthtitle}]
+\section{Introduction}\label{sec:introduction}
+Solubility in molecular organic solvents is governed by the free-energy cost of transferring material from a specified solid phase to the solution. Consequently, a liquid-mixture activity calculation and a crystal chemical potential are both needed to determine a saturation concentration. The distinction becomes acute for THCA-A, where available crystalline forms and reported thermal events complicate the assignment of a single solid-state reference. A crystallographic structure of THCA-A was reported by Skell and coworkers \cite{skell}. A later patent application reports an orthorhombic THCa structure with closely related lattice parameters, together with differential scanning calorimetry and thermogravimetric measurements \cite{patent}. The structural relationship between the two reported materials is assessed from their published unit cells in Section~\ref{sec:crosswalk}.
+
+The computational question addressed in this study arose from an earlier prediction of exceptionally low THCA-A solubility in neat limonene. Its values were several orders of magnitude below ordinary preparative concentrations. That result came from a gas-transfer cycle with an approximate low-temperature crystal treatment. Informal process observations of persistent liquid clarity followed by gradual crystallization further motivated an independent calculation and a distinction between equilibrium saturation and delayed nucleation. Those observations were not accompanied by time-resolved concentration assays and are not used as equilibrium data.
+
+This work reconstructs the original model's numerical basis and evaluates an alternative, composition-dependent solid--liquid equilibrium route. The central objective is to determine how strongly the inferred saturation point depends on the solid-phase free energy while verifying the numerical consistency of the new liquid-activity calculation.
+
+\section{Thermodynamic formulation}\label{sec:theory}
+\subsection{Liquid activity and the solid reference}
+For one specified crystalline polymorph in equilibrium with a binary liquid mixture, equality of chemical potentials gives
+\begin{equation}
+\mu_{\mathrm{s}}(T)=\mu_{\ell}^{*}(T)+RT\ln\!\left[x\gamma(x,T)\right],
+\label{eq:mu}
+\end{equation}
+where $x$ denotes THCA-A mole fraction, $\gamma$ its mole-fraction activity coefficient relative to the pure (possibly subcooled) THCA-A liquid reference, and $\mu_{\ell}^{*}$ the corresponding pure-liquid chemical potential. Defining $\Delta G_{\mathrm{fus}}=\mu_{\ell}^{*}-\mu_{\mathrm{s}}$ produces
+\begin{equation}
+\ln x+\ln\gamma(x,T)
+=-\frac{\Delta G_{\mathrm{fus}}(T)}{RT}.
+\label{eq:sle}
+\end{equation}
+Both logarithm arguments are dimensionless. Equation~\ref{eq:sle} uses a pure-liquid reference activity coefficient (type 0 in the deployed COSMO-RS interface). The gas-to-solution free energy available from the original type-4 calculation uses a different standard-state construction and is not added to Eq.~\ref{eq:sle}.
+
+For temperature $T<T_{\mathrm m}$, a constant heat-capacity difference between liquid and solid gives
+\begin{align}
+\Delta G_{\mathrm{fus}}(T)
+={}&\Delta H_{\mathrm{fus}}(T_{\mathrm m})
+\left(1-\frac{T}{T_{\mathrm m}}\right)\notag\\
+&+\Delta C_p\left[(T-T_{\mathrm m})
+-T\ln\left(\frac{T}{T_{\mathrm m}}\right)\right].
+\label{eq:fusion}
+\end{align}
+Here $\Delta C_p=C_{p,\ell}-C_{p,\mathrm s}$ and $R=\SI{8.314462618}{J.mol^{-1}.K^{-1}}$. The constant-$\Delta C_p$ expression is a sensitivity model. A measured temperature dependence of the actual crystalline form would be needed for a phase-specific fusion free energy.
+
+\subsection{Mass-loading convention}
+The model reports a practical charging ratio separate from final-solution volumetric concentration. For a solvent initially charged at density $\rho_{\mathrm{lim}}(T)$ and molar mass $M_{\mathrm{lim}}$, the solute mass per initial milliliter of limonene is
+\begin{equation}
+L_0(x,T)=10^{3}\rho_{\mathrm{lim}}(T)
+\frac{M_{\mathrm{THCA}}}{M_{\mathrm{lim}}}
+\frac{x}{1-x},
+\label{eq:loading}
+\end{equation}
+with $\rho$ in \si{g.mL^{-1}} and $L_0$ in \si{mg.mL^{-1}}. This is an initial solvent charge-volume normalization. Conversion to mass per milliliter of final solution would require composition-dependent liquid-mixture density. Mass fraction is evaluated independently as
+\begin{equation}
+w=\frac{xM_{\mathrm{THCA}}}
+{xM_{\mathrm{THCA}}+(1-x)M_{\mathrm{lim}}}.
+\label{eq:massfrac}
+\end{equation}
+The molecular masses were $M_{\mathrm{THCA}}=\SI{358.48}{g.mol^{-1}}$ and $M_{\mathrm{lim}}=\SI{136.234}{g.mol^{-1}}$.
+
+\section{Computational methods}\label{sec:methods}
+\subsection{Original crystal-to-gas cycle}
+The earlier cycle used a reported 120 K THCA-A crystal structure, represented by an eight-formula-unit periodic cell. Its heavy-atom coordinates and lattice were held fixed while hydrogen atoms were relaxed at PBE-D3(BJ)/SZV-MOLOPT-SR-GTH. A corresponding gas-phase electronic reference was combined with a 293-conformer harmonic rigid-rotor ensemble, ideal-gas standard-state corrections, and openCOSMO-RS gas-to-liquid transfer free energies. Crystal external vibrations were represented by six equal-frequency Einstein oscillators evaluated at \SI{20}{cm^{-1}} and \SI{100}{cm^{-1}}. Neither a completed periodic larger-basis convergence calculation nor a fully resolved lattice-phonon calculation was available. The original scripts, checkpoint data and outputs were preserved.
+
+At \SI{298.15}{K}, the saved crystal-to-gas static electronic term was \SI{212.3064}{kJ.mol^{-1}}. After all stated cycle terms, the two crystal-to-solution free energies were \SI{79.7767}{kJ.mol^{-1}} and \SI{55.7001}{kJ.mol^{-1}}, respectively. The resulting concentrations were computed using a nominal 1 M liquid standard state. These numbers are treated as outputs of the original approximation, not as experimentally established solubilities.
+
+\subsection{Composition-dependent activity calculations}
+The independent liquid-mixture calculation used the existing openCOSMO-RS 24a-compatible service with legacy ORCA\_COSMO\_TZVPD molecular surface descriptors for one THCA-A conformer and one limonene conformer. Published 24a parameters \cite{muller} were applied using the compatible atomic-number segmentation and polarizability mode 0; mode 7 was unavailable for the retained descriptor format. Seven temperatures from \SI{15}{\celsius} to \SI{75}{\celsius} were sampled at 66 mole fractions each, giving 462 recomputed activity-coefficient evaluations.
+
+At \SI{298.15}{K} and $x=10^{-6}$, the pure-component-reference result was $\ln\gamma=0.90897605$, reproducing the retained activity checkpoint. Across the grid, equilibrium roots of Eq.~\ref{eq:sle} were first bracketed by $f(x)=\ln x+\ln\gamma(x,T)+\Delta G_{\mathrm{fus}}/(RT)$ and then refined through 36 iterations of batch bisection. Each iteration requested fresh COSMO-RS activity values at the current brackets. The roots were re-queried independently by a second verification script. No fixed infinite-dilution activity coefficient was substituted for the finite-composition values.
+
+\subsection{Thermal scenarios and provenance}
+A U.S. patent application published in 2026 reports a DSC event at \SI{146}{\celsius} and an integrated enthalpy of \SI{16.3}{kJ.mol^{-1}} for a described crystalline THCA form \cite{patent}. The same source reports a TGA degradation onset near \SI{125}{\celsius}. The DSC and TGA protocols are not identical, and their reported events require phase and reaction analysis before the endotherm can be assigned an equilibrium fusion enthalpy of chemically intact THCA-A.
+
+The 146\,$^\circ$C, 16.3\,kJ\,mol$^{-1}$ pair with $\Delta C_p=0$ is therefore a \emph{conditional reference scenario}. Additional sensitivity cases changed $\Delta C_p$ by $\pm\SI{50}{J.mol^{-1}.K^{-1}}$ or $\Delta H_{\mathrm{fus}}$ to \SI{30}{kJ.mol^{-1}}. A 70\,$^\circ$C melting assertion appears in a 2021 letter citing an older patent \cite{filer}; combining that or an illustrative 100\,$^\circ$C transition with the separate patent enthalpy was used only to quantify parameter sensitivity, without assuming the values describe a common phase.
+
+\subsection{Crystallographic reference crosswalk}\label{sec:crosswalk}
+The deposited \SI{120}{K} crystal structure used for the original periodic calculation has $a=\SI{11.4069}{\angstrom}$, $b=\SI{17.9819}{\angstrom}$, $c=\SI{19.1565}{\angstrom}$, and $V=\SI{3929.3}{\angstrom\cubed}$ (supporting CIF accompanying Ref.~\cite{skell}). The patent reports a \SI{100}{K} orthorhombic cell with $a=\SI{11.4635}{\angstrom}$, $b=\SI{18.0506}{\angstrom}$, $c=\SI{19.2347}{\angstrom}$, and $V=\SI{3980.1}{\angstrom\cubed}$ \cite{patent}. Both sources identify space group $P2_12_12_1$ and $Z=8$.
+
+\begin{table}[t]
+\centering
+\caption{Published THCA crystalline-cell metrics used for structural reference comparison. The patent reports a cell measured at 100 K; the deposited 2021 CIF was measured at 120 K. Differences are evaluated relative to the CIF.}
+\label{tab:lattice}
+\footnotesize
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Quantity & 2021 CIF & 2026 patent & Difference (\%)\\
+\midrule
+$a$ (\si{\angstrom}) & 11.4069 & 11.4635 & +0.496\\
+$b$ (\si{\angstrom}) & 17.9819 & 18.0506 & +0.382\\
+$c$ (\si{\angstrom}) & 19.1565 & 19.2347 & +0.408\\
+$V$ (\si{\angstrom\cubed}) & 3929.3 & 3980.1 & +1.293\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The unit-cell similarities identify a close crystallographic correspondence worth direct structure refinement and phase-matching analysis. Unit-cell dimensions alone do not resolve atomic correspondence, solid-state disorder, sample composition, or the identity of the thermally analyzed specimen. Thus, the available records neither require treating the materials as different polymorphs nor establish that the patent's fusion parameters characterize the exact periodic cell used in the original computational cycle.
+
+\section{Numerical results}\label{sec:results}
+The conditional 146\,$^\circ$C fusion scenario gives $x=0.110695$ at \SI{25}{\celsius}, or $w=0.2467$ from Eq.~\ref{eq:massfrac}. Equation~\ref{eq:loading} gives $L_0=\SI{275.42}{mg.mL^{-1}}$ of initially charged limonene. Table~\ref{tab:temps} and Fig.~\ref{fig:curve} summarize the modeled temperature dependence. The figures are conditional saturation solutions of the stated numerical model.
+
+\begin{table}[t]
+\centering
+\caption{Conditional SLE calculations for the cited 146\,$^\circ$C and 16.3\,kJ\,mol$^{-1}$ thermal case, with $\Delta C_p=0$. Mass loading refers to initial neat limonene volume.}
+\label{tab:temps}
+\small
+\begin{tabular}{@{}S[table-format=2.0] S[table-format=1.5] S[table-format=4.2]@{}}
+\toprule
+{$T$ (\si{\celsius})} & {$x_{\mathrm{THCA}}$} & {$L_0$ (\si{mg.mL^{-1}})}\\
+\midrule
+15 & 0.07620 & 184.23\\
+25 & 0.11069 & 275.42\\
+35 & 0.15246 & 394.27\\
+45 & 0.20078 & 545.38\\
+55 & 0.25499 & 735.86\\
+65 & 0.31459 & 977.23\\
+75 & 0.37932 & 1288.44\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+ width=\columnwidth,height=57mm,
+ xmin=15,xmax=75,ymin=0,ymax=1400,
+ xtick={15,25,35,45,55,65,75},
+ ytick={0,350,700,1050,1400},
+ axis lines=left,grid=both,
+ grid style={draw=zinc300,line width=0.2pt},
+ tick label style={font=\scriptsize,color=zinc600},
+ label style={font=\footnotesize,color=zinc800},
+ xlabel={Temperature (\si{\celsius})},
+ ylabel={$L_0$ (\si{mg.mL^{-1}})},
+ legend style={draw=none,fill=none,font=\scriptsize},
+ every axis plot/.append style={line width=1.2pt,mark=*,mark size=1.2pt}
+]
+\addplot[color=zinc800] table[x=T,y=patent_mgml] {figure-series.dat};
+\end{axis}
+\end{tikzpicture}
+\caption{Computed mass loading from a single conditional thermal scenario. The vertical axis reports THCA-A mass per volume of \emph{starting} limonene. Solution-phase density, phase identity, chemical conversion, and nucleation rates were not fitted.}
+\label{fig:curve}
+\end{figure}
+
+The 25\,$^\circ$C root shifts markedly with the assumed solid-state parameters. Retaining the 146\,$^\circ$C transition while increasing $\Delta H_{\mathrm{fus}}$ to \SI{30}{kJ.mol^{-1}} gives $x=0.014418$ and $L_0=\SI{32.37}{mg.mL^{-1}}$. For $\Delta H_{\mathrm{fus}}=\SI{16.3}{kJ.mol^{-1}}$, setting $\Delta C_p=-\SI{50}{J.mol^{-1}.K^{-1}}$ gives $x=0.064845$ and $L_0=\SI{153.43}{mg.mL^{-1}}$, while the positive counterpart gives $x=0.187373$ and $L_0=\SI{510.20}{mg.mL^{-1}}$. These thermal variations are parameter tests, not statistical bounds.
+
+The new composition-dependent activity calculation was essential at the larger mole fractions. Holding the saved infinite-dilution $\gamma_\infty\approx2.482$ fixed would have yielded $x\approx0.060$ for the base thermal case at 25\,$^\circ$C. Solving with recomputed $\gamma(x,T)$ instead gave $x=0.110695$. The discrepancy arises from a changing liquid-phase activity coefficient at finite THCA concentration.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{semilogxaxis}[
+ width=\columnwidth,height=56mm,
+ xmin=0.000001,xmax=1,ymin=-0.08,ymax=1.16,
+ xtick={0.000001,0.0001,0.01,1},
+ xticklabels={$10^{-6}$,$10^{-4}$,$10^{-2}$,$1$},
+ axis lines=left,grid=major,
+ grid style={draw=zinc300,line width=0.2pt},
+ tick label style={font=\scriptsize,color=zinc600},
+ label style={font=\footnotesize,color=zinc800},
+ xlabel={THCA-A mole fraction, $x$},
+ ylabel={$\ln\gamma_{\mathrm{THCA}}$},
+ legend style={at={(0.98,0.97)},anchor=north east,draw=none,fill=white,
+ font=\scriptsize,row sep=0.5pt},
+ every axis plot/.append style={line width=1.1pt,no marks}
+]
+\addplot[color=zinc950] table[x=x,y=gamma15] {figure-activity.dat};
+\addlegendentry{15\,$^\circ$C}
+\addplot[color=zinc600,dash pattern=on 4pt off 2pt] table[x=x,y=gamma25] {figure-activity.dat};
+\addlegendentry{25\,$^\circ$C}
+\addplot[color=zinc500,densely dotted] table[x=x,y=gamma55] {figure-activity.dat};
+\addlegendentry{55\,$^\circ$C}
+\addplot[color=zinc300,dash pattern=on 6pt off 2pt] table[x=x,y=gamma75] {figure-activity.dat};
+\addlegendentry{75\,$^\circ$C}
+\end{semilogxaxis}
+\end{tikzpicture}
+\caption{OpenCOSMO-RS pure-component-reference activity coefficients recomputed across THCA-A/limonene compositions. The plotted ordinate is $\ln\gamma(x,T)$ rather than solubility. Values were generated from the archived 462-point COSMO-RS grid; the full temperature and composition table is retained with the reproducibility files.}
+\label{fig:activity}
+\end{figure}
+
+\subsection{Independent numerical verification}
+Of 42 temperature–scenario combinations, 41 had unique bracketed roots within the assumed solid domain. The 70\,$^\circ$C scenario was correctly excluded at \SI{75}{\celsius}. Direct re-evaluation at all 41 computed roots gave a maximum absolute residual in $\ln[x\gamma]-(-\Delta G_{\mathrm{fus}}/RT)$ of $7.183\times10^{-7}$ and mean absolute residual $1.224\times10^{-7}$. The saved 462-point activity matrix reproduced the prior 25\,$^\circ$C dilute-limit result. No decreasing-solute-activity intervals were found over the discrete model grid; the maximum secant Gibbs–Duhem diagnostic discrepancy was 0.00259. These checks establish internal numerical agreement under the chosen COSMO-RS implementation and assumptions.
+
+\section{Discussion}\label{sec:discussion}
+The original low-concentration predictions differed from the conditional fusion-based value by approximately $3.9\times10^9$ to $6.5\times10^{13}$ in mole fraction at 25\,$^\circ$C. Both methods performed deterministic calculations, but they assigned substantially different free-energy penalties to releasing THCA-A from a crystalline phase. The original cycle's crystal-to-solution free-energy difference of \SIrange{55.70}{79.78}{kJ.mol^{-1}} corresponds to a much larger energetic penalty than the patent-based reference under the phase-matching assumption. Its constrained periodic geometry, small basis, unmeasured lattice vibrations, and differing electronic/thermal calculations provide identifiable sources of uncertainty.
+
+This comparison isolates a modeling dependency rather than independently fixing the true thermodynamic chemical potential of THCA-A crystals. In the present solid--liquid route, the observed DSC endotherm occurs above the same patent's reported degradation onset. The effective fusion parameters may be polymorph-specific, and the crystallographic structure used in the original periodic calculation may correspond to another solid form. Resolving these relations requires thermal analysis paired with chemical and phase characterization.
+
+The available THCA-A crystal structure includes an intermolecular carboxylic-acid hydrogen-bonded ring \cite{skell}. Explicit, concentration-dependent carboxylic-acid association in a weakly polar solvent is a chemically plausible mechanism deserving independent study. The mean-field COSMO-RS calculation used one monomeric molecular surface descriptor, and it does not explicitly solve for solution dimer or aggregate populations. Solution association constants, THCA conformer populations, limonene composition, and solvent impurity contributions were not determined in this campaign.
+
+The observation of slowly developing crystals from previously clear solutions introduces a second, kinetic dimension. Even when an equilibrium solid–liquid chemical potential is known, the time to obtain detectable crystallization depends on nucleation barriers, available seed surfaces, impurity content, temperature history, and subsequent growth rates. An equilibrium solubility root is therefore a useful input to crystallization analysis, while induction times and metastable-zone widths require additional kinetic measurements. Rates of THCA-A decarboxylation published at elevated temperatures for extracts \cite{wang} cannot be transferred quantitatively to limonene without solvent-specific measurements.
+
+\section{Validation requirements}\label{sec:validation}
+A phase-specific experimental test would first identify the crystalline material by diffraction and chemical assay. Matched samples of assayed THCA-A and characterized limonene should then be studied at controlled temperatures, including at least one condition near \SI{25}{\celsius} and a relevant incubation temperature. Concentration versus elapsed time can be measured in replicated, excess-solid, seeded, and initially clear preparations while preserving temperature, solvent inventory, and the remaining solid phase. Liquid chromatography should resolve THCA-A from THC and other cannabinoids, especially in heated samples. Agreement between stationary concentrations approached from undersaturation and supersaturation would provide the primary equilibrium check. Independent DSC/TGA with appropriate heating-rate and chemical-conversion controls would constrain the thermal reference used in Eq.~\ref{eq:fusion}.
+
+\section{Conclusion}\label{sec:conclusion}
+The separate solid--liquid equilibrium implementation produced a reproducible 462-point openCOSMO-RS activity grid and 41 independently checked numerical roots. Using a reported form-specific thermal parameter pair, its conditional 25\,$^\circ$C result was $x_{\mathrm{THCA}}=0.110695$ with $L_0=\SI{275.42}{mg.mL^{-1}}$ of initially charged limonene. The pronounced disagreement with the earlier crystal-to-gas cycle demonstrates that the solid-state reference dominates the present computational uncertainty. Experimental identification of the solid phase and equilibration measurements are required to assign a quantitative solubility limit for a particular THCA-A–limonene system.
+
+\section*{Reproducibility and research provenance}\label{sec:provenance}
+The source calculation and independent verifier are \texttt{thca\_sle\_activity\_rebuild.py} and \texttt{verify\_thca\_sle\_activity\_rebuild.py}. The 462 activity evaluations, 42 scenario records, and validation hashes are retained in \texttt{sle\_rebuild\_20261021/} under the homelab research workspace \texttt{E:\textbackslash opencosmo-rs\textbackslash research\textbackslash thca-limonene}. A mirror and source-level audit are retained in the authorized OpenFork session. The homelab's mode-0 compatibility service, legacy descriptor files, exact COSMO-RS parameters, and thermal scenario choices are recorded with the datasets. No new wet-laboratory solubility measurement was performed in this computational campaign.
+
+\section*{References}\label{sec:references}
+\begin{thebibliography}{9}\setlength{\itemsep}{3pt}\small
+\bibitem{skell}
+Skell, J. M.; Kahn, M.; Foxman, B. M. $\Delta^9$-Tetrahydrocannabinolic acid A, the precursor to $\Delta^9$-tetrahydrocannabinol (THC). \emph{Acta Crystallogr. C} \textbf{2021}, \emph{77}, 84--89.
+\href{https://doi.org/10.1107/S2053229621000280}{doi:10.1107/S2053229621000280}.
+\bibitem{patent}
+Yarger, J. L.; Davidowski, S.; Seth, M. \emph{Cannabinoid acids crystalline forms, methods of producing, and uses thereof}. U.S. Patent Application US20260008762A1, 2026.
+\href{https://patents.google.com/patent/US20260008762A1/en}{Patent document and thermal data}.
+\bibitem{muller}
+Müller, S.; Nevolianis, T.; Garcia-Ratés, M.; Riplinger, C.; Leonhard, K.; Smirnova, I. Predicting solvation free energies for neutral molecules in any solvent with openCOSMO-RS. \emph{Fluid Phase Equilib.} \textbf{2025}, \emph{589}, 114250.
+\href{https://doi.org/10.1016/j.fluid.2024.114250}{doi:10.1016/j.fluid.2024.114250}.
+\bibitem{filer}
+Filer, C. N. Letter to the Editor: On the reluctant decarboxylation of THCA-B. \emph{Cannabis Cannabinoid Res.} \textbf{2021}, \emph{6}, 446--448.
+\href{https://doi.org/10.1089/can.2021.0003}{doi:10.1089/can.2021.0003}.
+\bibitem{wang}
+Wang, M.; Wang, Y.-H.; Avula, B.; et al. Decarboxylation study of acidic cannabinoids: A novel approach using ultra-high-performance supercritical fluid chromatography/photodiode array-mass spectrometry. \emph{Cannabis Cannabinoid Res.} \textbf{2016}, \emph{1}, 262--271.
+\href{https://doi.org/10.1089/can.2016.0020}{doi:10.1089/can.2016.0020}.
+\end{thebibliography}
+\end{document}

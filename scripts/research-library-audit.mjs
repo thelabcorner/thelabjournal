@@ -1,9 +1,13 @@
 import assert from 'node:assert/strict'
 import { mkdir } from 'node:fs/promises'
 import { chromium } from 'playwright-core'
+import { manuscripts } from '../src/research.ts'
 
 const origin = process.env.JOURNAL_ORIGIN ?? 'http://127.0.0.1:11264/'
 const widths = [320, 375, 390, 430, 768, 1024, 1440, 1920]
+const draftCount = manuscripts.filter(paper => paper.status === 'Draft').length
+const underReviewCount = manuscripts.filter(paper => paper.status === 'Under review').length
+assert.equal(manuscripts.find(paper => paper.id === 'low-temp-lyophilization-three-theses')?.status, 'Draft', 'lyophilization manuscript must remain a draft')
 const browser = await chromium.launch({
   executablePath: process.env.CHROME_PATH ?? 'C:/Program Files/Google/Chrome/Application/chrome.exe',
   headless: true,
@@ -24,12 +28,13 @@ try {
       await page.goto(new URL('research/', origin).href, { waitUntil: 'domcontentloaded' })
       await page.evaluate(theme => { document.documentElement.dataset.theme = theme }, theme)
       await page.locator('.research-library').waitFor()
-      assert.equal(await page.locator('.research-publication').count(), 2, 'two manuscript records required')
-      assert.equal(await page.locator('.research-publication h3').count(), 2)
+      assert.equal(await page.locator('.research-publication').count(), manuscripts.length, 'publication count must match canonical registry')
+      assert.equal(await page.locator('.research-publication h3').count(), manuscripts.length)
       assert.equal(await page.locator('.research-library [id="research-index-title"]').innerText(), 'Manuscript index')
-      assert.equal(await page.locator('.research-publication-status[data-status="Draft"]').count() > 0, true)
-      assert.equal(await page.locator('.research-publication-status[data-status="Under review"]').count() > 0, true)
-      assert.match(await page.locator('.research-publication').first().innerText(), /decarboxylation/i)
+      assert.equal(await page.locator('.research-publication-status[data-status="Draft"]').count(), draftCount * 2)
+      assert.equal(await page.locator('.research-publication-status[data-status="Under review"]').count(), underReviewCount * 2)
+      assert.equal(await page.locator('.research-publication[href*="low-temp-lyophilization-three-theses"] .research-publication-status[data-status="Draft"]').count(), 2)
+      assert.match(await page.locator('.research-publication[href*="gravimetric-decarboxylation-co2-progress"] h3').innerText(), /decarboxylation/i)
       const geometry = await page.evaluate(() => {
         const width = innerWidth
         const rect = selector => {
@@ -63,9 +68,9 @@ try {
         assert.notEqual(geometry.aside, 'none', 'desktop manuscript evidence rail must be visible')
       }
       const filters = page.getByRole('group', { name: 'Filter manuscripts by status' })
-      await filters.getByRole('button', { name: /Under review/ }).click()
-      assert.equal(await page.locator('.research-publication').count(), 1, 'status filter must work')
-      assert.match(await page.locator('.research-publication h3').innerText(), /lyophilization/i)
+      await filters.getByRole('button', { name: /^Draft/ }).click()
+      assert.equal(await page.locator('.research-publication').count(), draftCount, 'draft filter must show all draft manuscripts')
+      assert.match(await page.locator('.research-publication[href*="low-temp-lyophilization-three-theses"] h3').innerText(), /freeze drying/i)
       await filters.getByRole('button', { name: /All papers/ }).click()
       await page.getByRole('searchbox', { name: 'Search research manuscripts' }).fill('gravimetric')
       assert.equal(await page.locator('.research-publication').count(), 1, 'search must find scientific terms')
@@ -73,13 +78,13 @@ try {
       await page.getByRole('searchbox', { name: 'Search research manuscripts' }).fill('no-such-paper-2917')
       assert.equal(await page.locator('.research-publication').count(), 0, 'unknown terms must not show irrelevant records')
       await page.getByRole('button', { name: 'Show all manuscripts' }).click()
-      assert.equal(await page.locator('.research-publication').count(), 2, 'empty-state reset should restore collection')
-      await page.locator('.research-publication').nth(1).click()
+      assert.equal(await page.locator('.research-publication').count(), manuscripts.length, 'empty-state reset should restore collection')
+      await page.locator('.research-publication[href*="low-temp-lyophilization-three-theses"]').click()
       await page.locator('.research-body #title h1').waitFor({ timeout: 25000 })
       assert.match(new URL(page.url()).pathname, /low-temp-lyophilization-three-theses/)
       await page.goBack({ waitUntil: 'domcontentloaded' })
       await page.locator('.research-library').waitFor()
-      assert.equal(await page.locator('.research-publication').count(), 2, 'browser back should restore index')
+      assert.equal(await page.locator('.research-publication').count(), manuscripts.length, 'browser back should restore index')
       assert.deepEqual(errors, [], 'browser exceptions: ' + errors.join('; '))
       if ((width === 375 || width === 1440) && theme === 'dark') {
         await page.screenshot({ path: 'artifacts/research-library/dark-' + width + '.png', fullPage: false })

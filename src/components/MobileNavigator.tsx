@@ -1,5 +1,5 @@
 import { Suspense, lazy, useState, useRef, type PointerEvent } from 'react'
-import { ArrowRight, Bookmark, BookOpen, Check, ChevronRight, FileText, FlaskConical, FolderOpen, Microscope, PenLine, Search, Settings2, SlidersHorizontal, Sun, Moon, X } from 'lucide-react'
+import { Quote, ArrowRight, Bookmark, BookOpen, Check, ChevronRight, FileText, FlaskConical, FolderOpen, Microscope, PenLine, Search, Settings2, SlidersHorizontal, Sun, Moon, X } from 'lucide-react'
 import { entries, topics, topicCount, type Entry, type Topic } from '../data'
 import { dateLabel } from '../lib/utils'
 import { cue } from '../haptics'
@@ -23,13 +23,14 @@ interface Props {
   onSaved: () => void
   onSearch: () => void
   onResearch: () => void
+  onQuotes: () => void
   onOpen: (entry: Entry) => void
   onSettings: () => void
   theme: 'light' | 'dark'
   onToggleTheme: () => void
   onClose: () => void
 }
-export function MobileNavigator({ active, saved, onFilter, onSaved, onSearch, onResearch, onOpen, onSettings, theme, onToggleTheme, onClose }: Props) {
+export function MobileNavigator({ active, saved, onFilter, onSaved, onSearch, onResearch, onQuotes, onOpen, onSettings, theme, onToggleTheme, onClose }: Props) {
   const [page, setPage] = useState<Page>('topics')
   const pointer = useRef<number | null>(null)
   const change = (next: Page) => { if (page !== next) cue('selection'); setPage(next) }
@@ -60,6 +61,7 @@ export function MobileNavigator({ active, saved, onFilter, onSaved, onSearch, on
         <div className="browse-featured-links">
           <button onClick={() => choose('All')} className={cn(active === 'All' && 'selected')}><span className="browse-feature-icon"><BookOpen size={17}/></span><span><strong>All writing</strong><small>Complete archive</small></span><span className="browse-numeric">{entries.length.toString().padStart(2, '0')}</span><ChevronRight size={15}/></button>
           <button onClick={() => { onResearch(); onClose() }}><span className="browse-feature-icon"><Microscope size={17}/></span><span><strong>Research manuscripts</strong><small>Formal papers and technical methods</small></span><ChevronRight size={15}/></button>
+          <button onClick={() => { onQuotes(); onClose() }}><span className="browse-feature-icon"><Quote size={17}/></span><span><strong>Quotes</strong><small>Original words and curated quotations</small></span><ChevronRight size={15}/></button>
           <button onClick={() => { onSaved(); onClose() }}><span className="browse-feature-icon"><Bookmark size={17}/></span><span><strong>Saved entries</strong><small>Stored on this device</small></span><span className="browse-numeric">{saved.toString().padStart(2, '0')}</span><ChevronRight size={15}/></button>
         </div>
         <div className="browse-section-label"><span>Subjects</span><span>5 collections</span></div>

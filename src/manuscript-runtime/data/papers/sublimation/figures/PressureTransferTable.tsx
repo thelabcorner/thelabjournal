@@ -1,6 +1,6 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
+import { ManuscriptLabel } from '../../../../components/typography/ManuscriptLabel';
 import { cn } from '../../../../utils/cn';
-import { ResearchSlider } from '../../../../components/controls/ResearchSlider';
 import { InlineMath } from '../ScientificMath';
 import { sublimationPressure, FtoK } from '../../../../utils/iapws-sublimation';
 import {
@@ -51,11 +51,11 @@ type Row = {
   note: string;
 };
 
-export function PressureTransferTable() {
-  // State
-  const [tempF, setTempF] = useState(20);
-  const [fH2O, setFH2O] = useState(0.5);
-  const [eta, setEta] = useState(1.0);
+export function PressureTransferTable({
+  tempF, fH2O, eta,
+}: {
+  tempF: number; fH2O: number; eta: number;
+}) {
 
   const pSub = useMemo(() => getPsubMTorr(tempF), [tempF]);
 
@@ -136,77 +136,49 @@ export function PressureTransferTable() {
       <div className="bg-[var(--figure-bg)] border border-[var(--border)] rounded-lg overflow-hidden">
         <div className="px-4 py-2.5 border-b border-[var(--border)]">
           <p className="text-xs font-medium text-[var(--text-secondary)]">
-            <span className="font-mono text-[var(--accent)] mr-2">Table 1</span>
-            Saturating-Family Pressure / Series-Resistance Table
+            <ManuscriptLabel className="mr-2">Table 1</ManuscriptLabel>
+             Companion values for the model panels above
           </p>
           <p className="text-xs text-[var(--text-muted)] mt-1">
 At <InlineMath math="T_{\mathrm{product}}" /> = {tempF.toFixed(1)}°F
              ({tempC.toFixed(1)}°C), <InlineMath math="P_{\mathrm{sub}}" /> = {pSub.toFixed(0)} mTorr,
              <InlineMath math="f_{\mathrm{H_2O}}" /> = {(fH2O * 100).toFixed(0)}%, and
-             {' '}<InlineMath math="\eta" /> = {eta.toFixed(2)}. The gas-conduction percentage represents
-             saturation toward the fixed plateau. The driving force is
-             {' '}<InlineMath math="P_{\mathrm{sub}}-p_{\mathrm{H_2O}}" />, and the series-model score is
-             normalized to 50 mTorr. The coefficients remain fixed as composition changes;
-             <InlineMath math="K_f" /> is omitted.
+              {' '}<InlineMath math="\eta" /> = {eta.toFixed(2)}. The gas-conduction percentage measures
+              the assumed approach to its plateau. The table lists the
+              positive part of the vapor-transfer potential
+              {' '}<InlineMath math="P_{\mathrm{sub}}-p_{\mathrm{H_2O}}" />;
+              the companion curve above retains the signed difference.
+              The relative series score uses 50 mTorr as baseline, the
+              transfer coefficients remain fixed, and
+              {' '}<InlineMath math="K_f" /> is omitted.
           </p>
 
-          {/* Control sliders */}
-          <div className="no-print mt-3 space-y-2 bg-[var(--bg-surface)] rounded p-2">
-            <ResearchSlider
-              label="Product Temperature"
-              value={tempF}
-              min={-10}
-              max={37}
-              step={0.5}
-              unit="°F"
-              onChange={setTempF}
-              formatValue={(v) => `${v.toFixed(1)}°F`}
-            />
-            <ResearchSlider
-              label="H₂O Mole Fraction (Driving Force)"
-              value={fH2O}
-              min={0.1}
-              max={0.8}
-              step={0.05}
-              onChange={setFH2O}
-              formatValue={(v) => `${(v * 100).toFixed(0)}%`}
-            />
-            <ResearchSlider
-              label="Series-Resistance Ratio η"
-              value={eta}
-              min={0}
-              max={10}
-              step={0.25}
-              onChange={setEta}
-              formatValue={(v) => v.toFixed(2)}
-            />
-          </div>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-sm border-collapse">
             <thead>
               <tr className="bg-[var(--bg-surface)]">
-                <th className="px-3 py-2 text-left text-xs font-semibold text-[var(--text-secondary)] uppercase">
+                <th className="px-3 py-2 text-left text-xs font-semibold text-[var(--text-secondary)]">
                   P_total (mTorr)
                 </th>
-                <th className="px-3 py-2 text-right text-xs font-semibold text-[var(--text-secondary)] uppercase">
+                <th className="px-3 py-2 text-right text-xs font-semibold text-[var(--text-secondary)]">
                   K_sat (W/m²K)
                 </th>
-                <th className="px-3 py-2 text-right text-xs font-semibold text-[var(--text-secondary)] uppercase">
+                <th className="px-3 py-2 text-right text-xs font-semibold text-[var(--text-secondary)]">
                   Kg plateau %
                 </th>
-                <th className="px-3 py-2 text-right text-xs font-semibold text-[var(--text-secondary)] uppercase">
+                <th className="px-3 py-2 text-right text-xs font-semibold text-[var(--text-secondary)]">
                   p_H₂O (mTorr)
                 </th>
-                <th className="px-3 py-2 text-right text-xs font-semibold text-[var(--text-secondary)] uppercase">
-                  Driving Force (mTorr)
+                <th className="px-3 py-2 text-right text-xs font-semibold text-[var(--text-secondary)]">
+                   Positive vapor potential (mTorr)
                 </th>
-                <th className="px-3 py-2 text-right text-xs font-semibold text-[var(--accent)] uppercase">
+                <th className="px-3 py-2 text-right text-xs font-semibold text-[var(--accent)]">
                   J_series (relative)
                 </th>
-                <th className="px-3 py-2 text-left text-xs font-semibold text-[var(--text-secondary)] uppercase">
-                  Regime / Interpretation
+                <th className="px-3 py-2 text-left text-xs font-semibold text-[var(--text-secondary)]">
+                  Regime / interpretation
                 </th>
               </tr>
             </thead>
@@ -220,20 +192,20 @@ At <InlineMath math="T_{\mathrm{product}}" /> = {tempF.toFixed(1)}°F
                     idx === rows.nearestPStarIdx && 'bg-[var(--success)]/5'
                   )}
                 >
-                  <td className="px-3 py-2 font-mono tabular-nums text-[var(--text)] font-medium">{row.pressure}</td>
-                  <td className="px-3 py-2 text-right font-mono tabular-nums text-[var(--text-secondary)]">
+                  <td data-label="Pressure (mTorr)" className="px-3 py-2 font-mono tabular-nums text-[var(--text)] font-medium">{row.pressure}</td>
+                  <td data-label="Heat transfer K (W/m²K)" className="px-3 py-2 text-right font-mono tabular-nums text-[var(--text-secondary)]">
                     {row.kSat.toFixed(1)}
                   </td>
-                  <td className="px-3 py-2 text-right font-mono tabular-nums text-[var(--text-secondary)]">
+                  <td data-label="Gas plateau (%)" className="px-3 py-2 text-right font-mono tabular-nums text-[var(--text-secondary)]">
                     {row.kgPercent.toFixed(0)}%
                   </td>
-                  <td className="px-3 py-2 text-right font-mono tabular-nums text-[var(--text-secondary)]">
+                  <td data-label="H₂O partial (mTorr)" className="px-3 py-2 text-right font-mono tabular-nums text-[var(--text-secondary)]">
                     {row.pH2O.toFixed(0)}
                   </td>
-                  <td className="px-3 py-2 text-right font-mono tabular-nums text-[var(--text-secondary)]">
+                  <td data-label="Positive vapor potential" className="px-3 py-2 text-right font-mono tabular-nums text-[var(--text-secondary)]">
                     {row.drivingForce.toFixed(0)}
                   </td>
-                  <td
+                  <td data-label="Series score / 50 mTorr"
                     className={cn(
                       'px-3 py-2 text-right font-mono tabular-nums font-semibold',
                       row.relativeSeries === '1.00x' ? 'text-[var(--text-muted)]' : 'text-[var(--accent)]'
@@ -241,7 +213,7 @@ At <InlineMath math="T_{\mathrm{product}}" /> = {tempF.toFixed(1)}°F
                   >
                     {row.relativeSeries}
                   </td>
-                  <td className="px-3 py-2 text-xs text-[var(--text)]">{row.note}</td>
+                  <td data-label="Model interpretation" className="px-3 py-2 text-xs text-[var(--text)]">{row.note}</td>
                 </tr>
               ))}
             </tbody>

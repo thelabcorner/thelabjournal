@@ -1,0 +1,230 @@
+/*
+ * thelabjournal / scientific equation reader
+ * One readable mathematical viewport, one overflow affordance. No stacked
+ * native scrollbars, decorative gradients, or image-based rendering.
+ */
+.research-body .math-block {
+  min-width: 0;
+  max-width: 100%;
+}
+.research-body .math-block__shell {
+  min-width: 0;
+  max-width: 100%;
+  padding: 0;
+  overflow: hidden;
+}
+.research-body .math-block__content {
+  min-width: 0;
+  max-width: 100%;
+}
+.research-body .math-block__formula,
+.research-body .math-block--python-enabled .math-block__formula {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  padding: 15px 16px 13px;
+  overflow: visible;
+}
+.research-body .math-block__reading-surface {
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+}
+.research-body .math-block__viewport {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.research-body .math-block__viewport::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+.research-body .math-block__viewport:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: -1px;
+  border-radius: 2px;
+}
+/* KaTeX's display must never create a second scroll container. */
+.research-body .math-block .math-block__viewport .math-block__typeset {
+  width: max-content;
+  min-width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+.research-body .math-block .math-block__viewport .katex-display-wrap > .katex-display {
+  display: block;
+  width: 100%;
+  min-width: max-content;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+}
+.research-body .math-block .math-block__viewport .katex-display > .katex {
+  font-size: calc(1.15em * var(--equation-scale,1));
+  white-space: nowrap;
+}
+.research-body .math-block__number {
+  display: block;
+  flex: none;
+  justify-self: end;
+  align-self: center;
+  min-width: 28px;
+  font-family: Inter,system-ui,sans-serif;
+  font-size: 10.5px;
+  line-height: 1.45;
+  font-weight: 450;
+  text-align: right;
+  color: var(--text-muted);
+  white-space: nowrap;
+  user-select: none;
+}
+.research-body .math-block__overflow-hint {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  margin: 9px 0 0;
+  color: var(--text-muted);
+  font: 450 10px/1.3 Inter,system-ui,sans-serif;
+}
+.research-body .math-block__overflow-copy { flex: none; }
+.research-body .math-block__overflow-track {
+  position: relative;
+  display: block;
+  flex: 1;
+  height: 2px;
+  background: var(--border);
+  overflow: hidden;
+}
+.research-body .math-block__overflow-thumb {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: block;
+  min-width: 12%;
+  height: 2px;
+  background: var(--text-muted);
+}
+.research-body .math-block__expand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-width: 0;
+  min-height: 22px;
+  padding: 2px 4px;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 0;
+  border-radius: 3px;
+  font: 500 10px/1.3 Inter,system-ui,sans-serif;
+  cursor: pointer;
+}
+.research-body .math-block__expand:hover {
+  color: var(--foreground);
+  background: var(--secondary);
+}
+.research-body .math-block__expand:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+.math-equation-dialog {
+  box-sizing: border-box;
+  width: min(1000px,94vw);
+  max-width: 94vw;
+  max-height: min(80vh,700px);
+  margin: auto;
+  padding: 0;
+  overflow: hidden;
+  color: var(--foreground);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 22px 80px rgb(0 0 0 / 0.22);
+}
+.math-equation-dialog::backdrop { background: rgb(0 0 0 / 0.55); }
+.math-equation-dialog__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+  font: 550 11px/1.5 Inter,system-ui,sans-serif;
+}
+.math-equation-dialog__head button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  color: var(--text-secondary);
+  border: 0;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.math-equation-dialog__head button:hover { background: var(--secondary); color: var(--foreground); }
+.math-equation-dialog__head button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.math-equation-dialog__reading {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+  padding: 24px 25px 30px;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--text-muted) transparent;
+}
+.math-equation-dialog__reading .katex-display-wrap {
+  display: block;
+  min-width: max-content;
+  width: 100%;
+  max-width: none;
+  text-align: center;
+}
+.math-equation-dialog__reading .katex-display {
+  margin: 0;
+  overflow: visible;
+  min-width: max-content;
+}
+.math-equation-dialog__reading .katex {
+  color: var(--foreground);
+  font-size: 1.16em;
+}
+@media (max-width: 600px) {
+  .research-body .math-block__formula,
+  .research-body .math-block--python-enabled .math-block__formula {
+    grid-template-columns: minmax(0,1fr);
+    gap: 5px;
+    padding: 14px 12px 12px;
+  }
+  .research-body .math-block__number { min-width: 0; font-size: 10px; }
+  .research-body .math-block__overflow-hint { margin-top: 8px; }
+  .math-equation-dialog__reading { padding: 22px 12px 28px; }
+}
+@media print {
+  .research-body .math-block__overflow-hint,
+  .math-equation-dialog { display: none !important; }
+  .research-body .math-block__viewport { overflow: visible !important; }
+  .research-body .math-block__formula { display: flex !important; }
+  .research-body .math-block .math-block__viewport .math-block__typeset { width: max-content; min-width: 0; }
+  .research-body .math-block .math-block__viewport .katex-display > .katex {
+    font-size: .88em !important;
+  }
+}

@@ -65,6 +65,8 @@ export interface PaperEntry {
   wordCount: number;
   /** Set to true once paper content is populated and ready to read */
   available: boolean;
+  /** Listing is independent of Scholar indexing: internal/editorial drafts can be browsable without being presented as indexed preprints. */
+  indexable?: boolean;
   /** Short tagline (≤ 120 chars) shown on the library card */
   tagline: string;
 }

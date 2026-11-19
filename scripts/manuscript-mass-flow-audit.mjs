@@ -35,6 +35,11 @@ for(const m of subsections){
   assert.equal(found?.[1],m[2]+'.'+m[3],'navigation numbering mismatch '+m[1]);
 }
 assert(body.indexOf('<Chapter id="volume"')>body.indexOf('<Chapter id="automation"'));
+assert(!body.includes('n="3.6"'), 'Enzymatic section must not interrupt mathematical derivation');
+assert(body.indexOf('id="model-enzymatic" n="8.4"')>body.indexOf('<Chapter id="limitations"'), 'Enzyme examples belong within the discussion');
+assert(nav.includes("label:'8.4 Enzymatic Systems'"));
+assert(body.includes('gravimetric bioreactor'));
+
 assert(body.indexOf('id="volume-collection"')<body.indexOf('id="volume-pulses"'));
 assert(body.includes('vacuum improves gas attribution rather than the pressure sensor'));
 assert(body.includes('An initial vacuum is particularly useful for vent accounting.'));
@@ -71,7 +76,7 @@ try{
             thermal:!!document.querySelector('.research-variable-badge[aria-label="T_0"] sub'),
             formula:!!document.querySelector('.research-chemical-formula[aria-label="CO2"] sub'),
             katexStyled:pMath.length>0&&parseFloat(getComputedStyle(pMath[0]).borderTopWidth)>=1,
-            abstract:document.querySelector('#abstract .research-abstract-card')?.textContent
+            abstract:document.querySelector('#abstract')?.textContent
           };
         });
         assert.deepEqual(state.chapterIds.filter(id=>chapters.includes(id)),chapters);
@@ -82,7 +87,7 @@ try{
         assert(state.sub&&state.thermal&&state.formula&&state.katexStyled);
         assert(state.rect.left>=-1&&state.rect.right<=width+1);
         assert(state.scrollWidth<=width+1,'horizontal page overflow');
-        assert.match(state.abstract,/formal publication of Decarboxulator/);
+        assert.match(state.abstract,/presents a gravimetric method for estimating progress/);
         assert.deepEqual(failures,[]);
         if(width===390||width===1440){
           await page.locator('.research-mass-pipeline').screenshot({path:'artifacts/manuscript-mass-flow/mass-'+width+'-'+theme+'.png'});

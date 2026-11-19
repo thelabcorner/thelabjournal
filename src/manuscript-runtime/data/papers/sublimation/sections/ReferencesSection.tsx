@@ -1,12 +1,10 @@
+import { ChapterLabel } from '../../../../components/sections/ChapterLabel';
 import { sublimationReferences } from '../references';
 
 export function ReferencesSection() {
   return (
     <section id="references" aria-labelledby="references-heading" className="prose-heading mb-10">
-      <div className="research-chapter-label mb-4">
-        <span className="research-heading-number">Ref</span>
-        <h2 id="references-heading" className="text-base font-semibold text-[var(--text)] tracking-tight">References</h2>
-      </div>
+      <ChapterLabel number="Ref" id="references-heading" title="References" />
 
       <div className="research-section-content">
         <div className="space-y-3" role="group" aria-label="Bibliography">

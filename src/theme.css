@@ -80,8 +80,7 @@
 :root[data-theme="dark"] .prefs-switch span::after { background: oklch(.95 0 0); }
 :root[data-theme="dark"] .prefs-foot button { background: var(--foreground); color: var(--background); }
 :root[data-theme="dark"] .browse-shortcuts > button,
-:root[data-theme="dark"] .inline-search,
-:root[data-theme="dark"] .sort-wrap { color: var(--foreground); }
+:root[data-theme="dark"] .inline-search { color: var(--foreground); }
 .prefs-theme { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; }
 .prefs-theme button { min-width:0; }
 .prefs-theme button > svg:first-child { width: 17px; height: 17px; color: var(--muted-foreground); }

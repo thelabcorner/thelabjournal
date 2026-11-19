@@ -44,7 +44,27 @@
   letter-spacing: -.01em;
   color: var(--foreground);
 }
-.research-body .research-chapter-label { padding-top: 16px; border-top: 1px solid var(--border); }
+/* Chapter heading number and title share a baseline. A zero-width gutter column
+ * keeps the title on the prose grid while allowing the number to live outside
+ * it. Unlike absolute top offsets, this survives different chapter padding,
+ * font metrics, wrapped headings, and print styles.
+ * Subsection labels retain their independent, already-aligned layout. */
+.research-body .research-chapter-label {
+  display: grid;
+  grid-template-columns: 0 minmax(0, 1fr);
+  align-items: baseline;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.research-body .research-chapter-label > .research-heading-number {
+  position: static;
+  align-self: baseline;
+  justify-self: end;
+  width: 30px;
+  margin: 0 10px 0 0;
+  text-align: right;
+}
+.research-body .research-chapter-label > h2 { min-width: 0; }
 .research-body .research-section-label { margin-top: 23px; margin-bottom: 12px; }
 .research-body .research-section-content {padding-inline-start: 0;}
 .research-body .prose-heading > :where(.space-y-4, .research-section-content),
@@ -66,13 +86,10 @@
 }
 .research-body #title p {line-height:1.55;}
 .research-body #title .font-mono {font-family: inherit;}
-.research-body #title .tracking-widest {letter-spacing: normal;}
-.research-body #title .uppercase {text-transform:none;}
 .research-body #abstract {margin-bottom: 32px;}
 .research-body #abstract > .bg-\[var\(--sidenote-bg\)\] {background:var(--card);}
 .research-body .math-block {margin-block:20px;}
 .research-body .math-block .katex-display-wrap {max-width:100%;min-width:0;}
-.research-body .math-block .katex-display-wrap > .katex-display {overflow-x:auto; overflow-y:hidden; overscroll-behavior-x:contain;}
 
 /* The journal contents system is the shared control grammar. Manuscripts
  * add collapsible scientific hierarchy rather than an enormous parallel list.
@@ -154,7 +171,17 @@
   .site-header .header-inner .header-end {margin-left:auto;}
   .research-reader-top {margin: -3px 0 12px;padding-bottom:8px;}
   .research-reader-short-title {max-width:32vw;}
-  .research-body .research-chapter-label {padding-top:14px;}
+  .research-body .research-chapter-label {
+    display:block;
+    padding-top:14px;
+  }
+  .research-body .research-chapter-label > .research-heading-number {
+    display:block;
+    justify-self:start;
+    width:auto;
+    margin:0 0 5px;
+    text-align:left;
+  }
   .research-body .research-chapter-label h2 {font-size:18px;}
   .research-body .research-heading-number {
     position:static;display:block;width:auto;text-align:left;
@@ -202,6 +229,12 @@
 @media print {
   .research-mobile-contents {display:none!important;}
   .research-body .research-heading-number {position:static;display:inline;margin-right:9px;}
+  /* Paper headings are inline number/title pairs; avoid a zero-width gutter
+     when the full manuscript is placed onto a paginated sheet. */
+  .research-body .research-chapter-label {display:flex;align-items:baseline;}
+  .research-body .research-chapter-label > .research-heading-number {
+    display:inline;width:auto;margin:0 9px 0 0;text-align:left;
+  }
   .research-body .research-chapter-label,
   .research-body .research-section-label {break-after:avoid;}
 }
@@ -226,10 +259,10 @@
 .research-publication-line > span + span {
   padding-left:10px;border-left:1px solid var(--border);
 }
-.research-keywords {margin-top:19px;border-top:1px solid var(--border);}
+.research-keywords {margin-top:17px;border:0;}
 .research-keywords summary {
   display:flex;align-items:center;gap:9px;cursor:pointer;
-  padding:11px 0;color:var(--foreground);font-size:11.5px;font-weight:550;
+  padding:0 0 9px;color:var(--foreground);font-size:11.5px;font-weight:580;
   list-style:none;
 }
 .research-keywords summary::-webkit-details-marker {display:none;}
@@ -239,13 +272,17 @@
   color:var(--muted-foreground);transition:transform .13s ease;
 }
 .research-keywords[open] summary::after {transform:rotate(180deg);}
-.research-keyword-list {display:flex;gap:6px;flex-wrap:wrap;padding:1px 0 12px;}
+.research-keyword-list {display:flex;gap:6px;flex-wrap:wrap;padding:0;}
 .research-keyword-list > span {
-  padding:3px 7px;border-radius:5px;background:var(--inset);
+  padding:3px 8px;border:1px solid var(--border);border-radius:5px;background:var(--inset);
   color:var(--muted-foreground);font-size:10.5px;line-height:1.4;
 }
 @media (min-width:768px) and (max-width:1023px) {
   .research-body .research-heading-number {left:-26px;width:20px;}
+  .research-body .research-chapter-label > .research-heading-number {
+    width:20px;
+    margin-right:6px;
+  }
 }
 @media(prefers-reduced-motion:reduce) {
   .research-keywords summary::after {transition:none;}

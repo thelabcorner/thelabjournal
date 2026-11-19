@@ -1,8 +1,4 @@
-import { gravimetricDecarboxylationEntry } from './manuscript-runtime/data/papers/gravimetric-decarboxylation/entry'
-import { sublimationEntry } from './manuscript-runtime/data/papers/sublimation/entry'
-import { gravimetricDecarboxylationNavSections } from './manuscript-runtime/data/papers/gravimetric-decarboxylation/nav'
-import { sublimationNavSections } from './manuscript-runtime/data/papers/sublimation/nav'
-import type { PaperEntry, NavSection } from './manuscript-runtime/types/thesis'
+import { PAPER_DEFINITIONS } from './manuscript-runtime/data/papers'
 
 export interface Manuscript {
   id: string
@@ -20,23 +16,9 @@ export interface Manuscript {
   source: string
 }
 
-type Source = { entry: PaperEntry; nav: NavSection[]; source: string }
-const definitions: Source[] = [
-  {
-    entry: gravimetricDecarboxylationEntry,
-    nav: gravimetricDecarboxylationNavSections,
-    source: 'thesis-website/src/data/papers/gravimetric-decarboxylation/entry.ts',
-  },
-  {
-    entry: sublimationEntry,
-    nav: sublimationNavSections,
-    source: 'thesis-website/src/data/papers/sublimation/entry.ts',
-  },
-]
-
-/** Derive index/search metadata from the SAME source modules used by the
- * scientific document body. No separately maintained abstract or title copies. */
-export const manuscripts: Manuscript[] = definitions.map(({ entry, nav, source }) => ({
+/** Derive scholarly browse/search metadata from the same canonical registry
+ * used by the reader and indexing pipeline. Editorial journals stay separate. */
+export const manuscripts: Manuscript[] = PAPER_DEFINITIONS.filter(({ entry }) => entry.available).map(({ entry, navSections }) => ({
   id: entry.id,
   title: entry.metadata.title,
   subtitle: entry.metadata.subtitle ?? '',
@@ -49,8 +31,8 @@ export const manuscripts: Manuscript[] = definitions.map(({ entry, nav, source }
   readTime: entry.readTime,
   wordCount: entry.wordCount,
   keywords: entry.metadata.keywords,
-  contents: nav.map(section => section.label),
-  source,
+  contents: navSections.map(section => section.label),
+  source: 'src/manuscript-runtime/data/papers/index.ts',
 }))
 
 const byId = new Map(manuscripts.map(paper => [paper.id, paper]))

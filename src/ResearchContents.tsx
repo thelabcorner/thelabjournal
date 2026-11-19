@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState, type KeyboardEve
 import { createPortal } from 'react-dom'
 import { ArrowUp, Check, ChevronDown, ListTree, Search, X } from 'lucide-react'
 import { ScrollView } from './components/ScrollView'
+import { hasSavedReadingPosition, pushReadingAnchor } from './lib/readingPosition'
 import type { NavSection } from './manuscript-runtime/types/thesis'
 
 type OutlineItem = { id: string; label: string; parentId: string; level: number }
@@ -32,6 +33,11 @@ export function useResearchOutline(sections: readonly NavSection[], paperId: str
     if (!paperId || !items.length) return
     let stopped = false
     let initialHashApplied = false
+    // A copied deep link must survive lazy figure layout and font reflow.
+    // Reposition for a short initial window, stopping immediately on user input.
+    let hashSettleUntil = 0
+    let hashCancelled = false
+    const cancelHashSettling = () => { hashCancelled = true }
     const headerOffset = () => {
       const value = getComputedStyle(document.documentElement).getPropertyValue('--header-height')
       return (parseFloat(value) || 48) +
@@ -61,12 +67,11 @@ export function useResearchOutline(sections: readonly NavSection[], paperId: str
     const followHash = () => {
       let hash = ''
       try { hash = decodeURIComponent(window.location.hash.slice(1)) } catch { return }
-      if (!items.some(item => item.id === hash)) return
       const target = document.getElementById(hash)
-      if (!target) return
+      if (!target || !document.querySelector('.research-body')?.contains(target)) return
       const y = target.getBoundingClientRect().top + window.scrollY - headerOffset()
       window.scrollTo({ top: Math.max(0, y), behavior: 'instant' })
-      setActiveId(hash)
+      if (items.some(item => item.id === hash)) setActiveId(hash)
     }
     const recalculate = () => {
       if (stopped) return
@@ -78,7 +83,15 @@ export function useResearchOutline(sections: readonly NavSection[], paperId: str
       positions.current = anchors.sort((a, b) => a.y - b.y)
       if (!initialHashApplied && positions.current.length === items.length) {
         initialHashApplied = true
-        if (window.location.hash) followHash()
+        if (window.location.hash && !hasSavedReadingPosition()) {
+          hashSettleUntil = performance.now() + 2500
+          followHash()
+        }
+      } else if (hashSettleUntil && !hashCancelled &&
+          performance.now() < hashSettleUntil && !hasSavedReadingPosition()) {
+        // ResizeObserver already tracks body reflow. No extra polling, observers
+        // or per-heading effects are required for late charts and figures.
+        followHash()
       }
       schedule()
     }
@@ -92,11 +105,21 @@ export function useResearchOutline(sections: readonly NavSection[], paperId: str
       if (positions.current.length === items.length) mutations.disconnect()
     })
     if (article) mutations.observe(article, { childList: true, subtree: true })
-    const onHashChange = () => { followHash(); recalculate() }
+    const settleExplicitHash = () => {
+      if (hasSavedReadingPosition()) return
+      hashCancelled = false
+      hashSettleUntil = performance.now() + 2500
+      followHash()
+    }
+    const onHashChange = () => { settleExplicitHash(); recalculate() }
+    const onHistoryChange = () => { settleExplicitHash(); recalculate() }
     window.addEventListener('scroll', schedule, { passive: true })
+    for (const type of ['wheel','touchstart','pointerdown','keydown'] as const) {
+      window.addEventListener(type, cancelHashSettling, { passive: true })
+    }
     window.addEventListener('resize', recalculate, { passive: true })
     window.addEventListener('hashchange', onHashChange)
-    window.addEventListener('popstate', onHashChange)
+    window.addEventListener('popstate', onHistoryChange)
     const startFrame = requestAnimationFrame(recalculate)
     void document.fonts?.ready.then(recalculate)
     return () => {
@@ -104,9 +127,12 @@ export function useResearchOutline(sections: readonly NavSection[], paperId: str
       cancelAnimationFrame(startFrame); cancel()
       resize.disconnect(); mutations.disconnect()
       window.removeEventListener('scroll', schedule)
+      for (const type of ['wheel','touchstart','pointerdown','keydown'] as const) {
+        window.removeEventListener(type, cancelHashSettling)
+      }
       window.removeEventListener('resize', recalculate)
       window.removeEventListener('hashchange', onHashChange)
-      window.removeEventListener('popstate', onHashChange)
+      window.removeEventListener('popstate', onHistoryChange)
     }
   }, [items, paperId])
 
@@ -119,7 +145,7 @@ export function useResearchOutline(sections: readonly NavSection[], paperId: str
       (document.querySelector<HTMLElement>('.research-reader-chrome')?.offsetHeight ?? 44) + 10
     const y = target.getBoundingClientRect().top + window.scrollY - offset
     if (window.location.hash !== '#' + id)
-      window.history.pushState(window.history.state, '', '#' + id)
+      pushReadingAnchor('#' + id)
     setActiveId(id)
     window.scrollTo({
       top: Math.max(0, y),

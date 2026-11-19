@@ -1,0 +1,322 @@
+{
+  "status": "PASSED",
+  "test_types": [
+    "saved-gamma-reference regression",
+    "fresh live COSMO 41-point root closure (independent verification after 28-round live root solving)",
+    "462-point grid coverage",
+    "correct pure-liquid type-0 gamma endpoint",
+    "activity monotonicity / local stability proxy",
+    "binary Gibbs-Duhem numerical diagnostic",
+    "42 thermal scenario rows and 41 resolved roots",
+    "mass fraction from mole fraction",
+    "no melt overrun report"
+  ],
+  "fresh_eos_root_checks": 41,
+  "max_abs_ln_activity_closure": 7.182935338190255e-07,
+  "mean_abs_ln_activity_closure": 1.224363066910758e-07,
+  "gibbs_duhem": {
+    "n": 392,
+    "max_abs": 0.0025878216547460253,
+    "median_abs": 6.494915070208874e-05,
+    "diagnostic_not_pass_fail": true
+  },
+  "ln_activity_nonmonotonic_brackets": 0,
+  "25C_patent_conditional_x": 0.11069479664707402,
+  "sha256": {
+    "campaign_script": "a2b34173c150d816ccff212e3de307fed6af6dad506d43df5f58876b0f1d4dab",
+    "gamma_grid": "68dfdd0cc6ce1a91c4153301a24ebdcbbb2d18a75bb63385ca5bec2428b17a53",
+    "scenario_results": "4331b9c6bb5695b6c1c292b51e30f2957b81f6c12a64f42bfe152a1b1844173a",
+    "original_legacy_model": "c8438da256966e710afa9ba41eaf88c6d906f9e0bf2c957f83338471c7cbef2f",
+    "original_legacy_report": "a3371e94da812dfda794e0f27f3604a1c2b60602ccbbe1cc80162b40caa4998e"
+  },
+  "root_check_results": [
+    {
+      "scenario": "patent_146C_16p3kJ_cp0",
+      "temperature_C": 15.0,
+      "x": 0.07619785515580113,
+      "direct_COSMO_ln_gamma": 0.44806280986558894,
+      "ln_activity_residual": -3.197817566302774e-09
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cp0",
+      "temperature_C": 25.0,
+      "x": 0.11069479664707402,
+      "direct_COSMO_ln_gamma": 0.3028109089393557,
+      "ln_activity_residual": -1.5681491549734972e-07
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cp0",
+      "temperature_C": 35.0,
+      "x": 0.15245629553994056,
+      "direct_COSMO_ln_gamma": 0.19609154260321404,
+      "ln_activity_residual": 2.728956529640669e-07
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cp0",
+      "temperature_C": 45.0,
+      "x": 0.2007792916777143,
+      "direct_COSMO_ln_gamma": 0.12073045365116586,
+      "ln_activity_residual": 1.3832874179442456e-08
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cp0",
+      "temperature_C": 55.0,
+      "x": 0.25498563774165417,
+      "direct_COSMO_ln_gamma": 0.06950921161556468,
+      "ln_activity_residual": -1.5185235358039506e-07
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cp0",
+      "temperature_C": 65.0,
+      "x": 0.3145886403227084,
+      "direct_COSMO_ln_gamma": 0.03612436332670557,
+      "ln_activity_residual": 7.661852508000777e-08
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cp0",
+      "temperature_C": 75.0,
+      "x": 0.3793205436227568,
+      "direct_COSMO_ln_gamma": 0.015532863540118513,
+      "ln_activity_residual": -3.8469227803261674e-13
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpPlus50",
+      "temperature_C": 15.0,
+      "x": 0.15092416981875242,
+      "direct_COSMO_ln_gamma": 0.24496632524585385,
+      "ln_activity_residual": 5.457694385313516e-08
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpPlus50",
+      "temperature_C": 25.0,
+      "x": 0.1873725037815241,
+      "direct_COSMO_ln_gamma": 0.1686005541426855,
+      "ln_activity_residual": 2.397583218627375e-07
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpPlus50",
+      "temperature_C": 35.0,
+      "x": 0.22747199538274981,
+      "direct_COSMO_ln_gamma": 0.11209041575509722,
+      "ln_activity_residual": 3.523446008291131e-07
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpPlus50",
+      "temperature_C": 45.0,
+      "x": 0.2712368686011088,
+      "direct_COSMO_ln_gamma": 0.07103932282252583,
+      "ln_activity_residual": -9.529674849240166e-08
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpPlus50",
+      "temperature_C": 55.0,
+      "x": 0.3187862177136533,
+      "direct_COSMO_ln_gamma": 0.04196395850021181,
+      "ln_activity_residual": -2.741431734953892e-07
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpPlus50",
+      "temperature_C": 65.0,
+      "x": 0.3703483042477004,
+      "direct_COSMO_ln_gamma": 0.022080239977144873,
+      "ln_activity_residual": -1.1004633659883467e-07
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpPlus50",
+      "temperature_C": 75.0,
+      "x": 0.4262408031531677,
+      "direct_COSMO_ln_gamma": 0.009197601444191253,
+      "ln_activity_residual": -9.850142379530524e-08
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpMinus50",
+      "temperature_C": 15.0,
+      "x": 0.038948977477519735,
+      "direct_COSMO_ln_gamma": 0.6387959418906553,
+      "ln_activity_residual": 7.997731366060634e-10
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpMinus50",
+      "temperature_C": 25.0,
+      "x": 0.06484485618450848,
+      "direct_COSMO_ln_gamma": 0.4454792508756287,
+      "ln_activity_residual": -1.2047341790832888e-08
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpMinus50",
+      "temperature_C": 35.0,
+      "x": 0.1008323554492054,
+      "direct_COSMO_ln_gamma": 0.2933618208294026,
+      "ln_activity_residual": -1.6754929710316446e-07
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpMinus50",
+      "temperature_C": 45.0,
+      "x": 0.14701534463471821,
+      "direct_COSMO_ln_gamma": 0.18130445512946758,
+      "ln_activity_residual": -5.359970933760394e-08
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpMinus50",
+      "temperature_C": 55.0,
+      "x": 0.20254069079044473,
+      "direct_COSMO_ln_gamma": 0.10400718898878764,
+      "ln_activity_residual": -2.2453161974134161e-07
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpMinus50",
+      "temperature_C": 65.0,
+      "x": 0.2662170369121519,
+      "direct_COSMO_ln_gamma": 0.053944156698804216,
+      "ln_activity_residual": 4.1744385725905886e-13
+    },
+    {
+      "scenario": "patent_146C_16p3kJ_cpMinus50",
+      "temperature_C": 75.0,
+      "x": 0.3369638004266664,
+      "direct_COSMO_ln_gamma": 0.023651221106641862,
+      "ln_activity_residual": -6.472344393770868e-08
+    },
+    {
+      "scenario": "hypothetical_100C_16p3kJ",
+      "temperature_C": 15.0,
+      "x": 0.1723273578393504,
+      "direct_COSMO_ln_gamma": 0.2085785622951418,
+      "ln_activity_residual": -9.064467176855828e-09
+    },
+    {
+      "scenario": "hypothetical_100C_16p3kJ",
+      "temperature_C": 25.0,
+      "x": 0.23726785242103565,
+      "direct_COSMO_ln_gamma": 0.11697654148912813,
+      "ln_activity_residual": -3.1582436665900104e-08
+    },
+    {
+      "scenario": "hypothetical_100C_16p3kJ",
+      "temperature_C": 35.0,
+      "x": 0.3108199957036606,
+      "direct_COSMO_ln_gamma": 0.06033354211118132,
+      "ln_activity_residual": -9.803609701819482e-08
+    },
+    {
+      "scenario": "hypothetical_100C_16p3kJ",
+      "temperature_C": 45.0,
+      "x": 0.39238606601846177,
+      "direct_COSMO_ln_gamma": 0.02726862083662865,
+      "ln_activity_residual": -2.0971649450363117e-07
+    },
+    {
+      "scenario": "hypothetical_100C_16p3kJ",
+      "temperature_C": 55.0,
+      "x": 0.48189957101822745,
+      "direct_COSMO_ln_gamma": 0.009559395762837833,
+      "ln_activity_residual": 1.9000769035937282e-07
+    },
+    {
+      "scenario": "hypothetical_100C_16p3kJ",
+      "temperature_C": 65.0,
+      "x": 0.5797130389106994,
+      "direct_COSMO_ln_gamma": 0.0014353464119170115,
+      "ln_activity_residual": 4.390396191045198e-08
+    },
+    {
+      "scenario": "hypothetical_100C_16p3kJ",
+      "temperature_C": 75.0,
+      "x": 0.6865080364776945,
+      "direct_COSMO_ln_gamma": -0.0011250636950508996,
+      "ln_activity_residual": 4.043407408893529e-08
+    },
+    {
+      "scenario": "historical_70C_16p3kJ",
+      "temperature_C": 15.0,
+      "x": 0.3114425722367116,
+      "direct_COSMO_ln_gamma": 0.07607073197896598,
+      "ln_activity_residual": -1.8838603721427205e-07
+    },
+    {
+      "scenario": "historical_70C_16p3kJ",
+      "temperature_C": 25.0,
+      "x": 0.4086706394321352,
+      "direct_COSMO_ln_gamma": 0.032567928190650304,
+      "ln_activity_residual": -1.7802289964397033e-07
+    },
+    {
+      "scenario": "historical_70C_16p3kJ",
+      "temperature_C": 35.0,
+      "x": 0.5169384334431956,
+      "direct_COSMO_ln_gamma": 0.010934693179944326,
+      "ln_activity_residual": -5.167172447695378e-07
+    },
+    {
+      "scenario": "historical_70C_16p3kJ",
+      "temperature_C": 45.0,
+      "x": 0.6370560819800668,
+      "direct_COSMO_ln_gamma": 0.0019687843870056926,
+      "ln_activity_residual": 2.863869918989792e-08
+    },
+    {
+      "scenario": "historical_70C_16p3kJ",
+      "temperature_C": 55.0,
+      "x": 0.770444102817371,
+      "direct_COSMO_ln_gamma": -0.0003600477336185683,
+      "ln_activity_residual": 7.182935338190255e-07
+    },
+    {
+      "scenario": "historical_70C_16p3kJ",
+      "temperature_C": 65.0,
+      "x": 0.9191228508387517,
+      "direct_COSMO_ln_gamma": -0.0001399075516131358,
+      "ln_activity_residual": -3.8675197946980155e-08
+    },
+    {
+      "scenario": "hypothetical_146C_30kJ",
+      "temperature_C": 15.0,
+      "x": 0.0078481187883886,
+      "direct_COSMO_ln_gamma": 0.9339369706673075,
+      "ln_activity_residual": 6.248335182590381e-13
+    },
+    {
+      "scenario": "hypothetical_146C_30kJ",
+      "temperature_C": 25.0,
+      "x": 0.0144175849242405,
+      "direct_COSMO_ln_gamma": 0.7457470189578794,
+      "ln_activity_residual": -3.0459072597466275e-08
+    },
+    {
+      "scenario": "hypothetical_146C_30kJ",
+      "temperature_C": 35.0,
+      "x": 0.025276788691847636,
+      "direct_COSMO_ln_gamma": 0.5770355432130214,
+      "ln_activity_residual": 1.0151879337172431e-12
+    },
+    {
+      "scenario": "hypothetical_146C_30kJ",
+      "temperature_C": 45.0,
+      "x": 0.04241902445380665,
+      "direct_COSMO_ln_gamma": 0.4273633924620879,
+      "ln_activity_residual": 8.150524699601647e-09
+    },
+    {
+      "scenario": "hypothetical_146C_30kJ",
+      "temperature_C": 55.0,
+      "x": 0.0681929284804567,
+      "direct_COSMO_ln_gamma": 0.2982266694526815,
+      "ln_activity_residual": 4.330614356007345e-08
+    },
+    {
+      "scenario": "hypothetical_146C_30kJ",
+      "temperature_C": 65.0,
+      "x": 0.1049581794313471,
+      "direct_COSMO_ln_gamma": 0.1921716704934795,
+      "ln_activity_residual": 4.718966239991573e-08
+    },
+    {
+      "scenario": "hypothetical_146C_30kJ",
+      "temperature_C": 75.0,
+      "x": 0.15464325902034287,
+      "direct_COSMO_ln_gamma": 0.11109931931385336,
+      "ln_activity_residual": 1.761710217706991e-07
+    }
+  ],
+  "important": "Numerical closure/consistency only; NOT experimental validation of melting point, polymorph or equilibrium solubility"
+}

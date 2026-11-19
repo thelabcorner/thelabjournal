@@ -1,9 +1,10 @@
 import type { Entry } from '../data'
 import type { Manuscript } from '../research'
+import { authorName, isOwnQuote, quoteTitle, type Quote, type QuoteCollection } from '../quotes/data'
 
-export type SpotlightKind = 'writing' | 'manuscripts' | 'navigate'
+export type SpotlightKind = 'writing' | 'manuscripts' | 'quotes' | 'navigate'
 export type SpotlightScope = 'all' | SpotlightKind
-export type SpotlightAction = 'journal' | 'research' | 'saved' | 'engineering'
+export type SpotlightAction = 'journal' | 'research' | 'quotes' | 'saved' | 'engineering'
 
 export type SpotlightRecord = {
   id: string
@@ -18,6 +19,8 @@ export type SpotlightRecord = {
   body: string
   entry?: Entry
   manuscript?: Manuscript
+  quote?: Quote
+  collection?: QuoteCollection
   action?: SpotlightAction
 }
 export type SpotlightHit = { record: SpotlightRecord; score: number; excerpt: string; matchedIn: string }
@@ -33,11 +36,12 @@ export const normalizeSpotlight = (value: string) => value.normalize('NFKD')
 const actions: ReadonlyArray<Pick<SpotlightRecord, 'id' | 'title' | 'summary' | 'action' | 'keywords'>> = [
   { id: 'action:journal', title: 'All writing', summary: 'Browse the complete journal archive', action: 'journal', keywords: ['journal', 'browse', 'essays', 'all'] },
   { id: 'action:research', title: 'Research library', summary: 'Manuscripts, abstracts and publication metadata', action: 'research', keywords: ['papers', 'research', 'thesis', 'manuscripts'] },
+  { id: 'action:quotes', title: 'Quotes', summary: 'Original and collected quotations and curated collections', action: 'quotes', keywords: ['quotes', 'quotations', 'collections', 'curation'] },
   { id: 'action:saved', title: 'Saved entries', summary: 'Return to writing bookmarked on this device', action: 'saved', keywords: ['bookmarks', 'favorites', 'saved'] },
   { id: 'action:engineering', title: 'Engineering notes', summary: 'Explore systems, algorithms and technical work', action: 'engineering', keywords: ['engineering', 'software', 'systems', 'notes'] },
 ]
 
-export function buildSpotlightIndex(writing: readonly Entry[], papers: readonly Manuscript[]): SpotlightRecord[] {
+export function buildSpotlightIndex(writing: readonly Entry[], papers: readonly Manuscript[], quotes: readonly Quote[] = [], collections: readonly QuoteCollection[] = []): SpotlightRecord[] {
   return [
     ...writing.map(entry => ({
       id: 'entry:' + entry.slug, kind: 'writing' as const,
@@ -55,6 +59,21 @@ export function buildSpotlightIndex(writing: readonly Entry[], papers: readonly 
       title: manuscript.title, summary: manuscript.subtitle, eyebrow: manuscript.field + ' / ' + manuscript.status,
       reference: manuscript.version, date: manuscript.revisedAt, keywords: manuscript.keywords,
       sections: manuscript.contents, body: manuscript.abstract, manuscript,
+    })),
+    ...quotes.map(quote => ({
+      id: 'quote:' + quote.id, kind: 'quotes' as const,
+      title: quoteTitle(quote), summary: authorName(quote.authorId),
+      eyebrow: isOwnQuote(quote) ? 'Original quotation' : 'Collected quotation',
+      reference: quote.id, date: quote.addedAt, keywords: quote.themes,
+      sections: quote.source?.title ? [quote.source.title] : [],
+      body: [quote.text, quote.source?.locator ?? '', authorName(quote.authorId)].join(' '),
+      quote,
+    })),
+    ...collections.map(collection => ({
+      id: 'collection:' + collection.id, kind: 'quotes' as const,
+      title: collection.title, summary: collection.description ?? '',
+      eyebrow: 'Quote collection', reference: collection.id,
+      date: '', keywords: ['collection'], sections: [], body: collection.description ?? '', collection,
     })),
     ...actions.map(action => ({
       ...action, kind: 'navigate' as const, eyebrow: 'Navigation',
@@ -116,7 +135,8 @@ function excerptFor(record: SpotlightRecord, tokens: readonly string[]): { excer
   if (heading) return { excerpt: heading, matchedIn: 'Section' }
   const keyword = record.keywords.find(value => tokens.some(token => normalizeSpotlight(value).includes(token)))
   if (keyword) return { excerpt: record.summary, matchedIn: 'Keyword: ' + keyword }
-  const paragraphs = record.entry
+  const paragraphs = record.quote ? [record.quote.text] :
+    record.collection ? [record.collection.description ?? ''] : record.entry
     ? [...(record.entry.intro ?? []), ...record.entry.sections.flatMap(section => section.paragraphs)]
     : record.manuscript ? [record.manuscript.abstract] : []
   const paragraph = paragraphs.find(value => tokens.some(token => normalizeSpotlight(value).includes(token)))
@@ -175,7 +195,7 @@ export function spotlightSuggestions(index: readonly SpotlightRecord[], recent: 
     results.push({ record, score: 0, excerpt: record.summary, matchedIn: '' })
   }
   for (const id of recent.slice(0, 4)) append(byID.get(id))
-  for (const id of ['action:journal', 'action:research', 'action:saved', 'action:engineering',
+  for (const id of ['action:journal', 'action:research', 'action:quotes', 'action:saved', 'action:engineering',
     'entry:learning-in-reverse', 'entry:nacre-vectorization', 'manuscript:gravimetric-decarboxylation-co2-progress',
     'manuscript:low-temp-lyophilization-three-theses']) append(byID.get(id))
   return results

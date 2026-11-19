@@ -3,6 +3,7 @@ import { useEffect, useRef, useMemo, useState, useId, lazy, Suspense } from 'rea
 const PierrePythonBlock = lazy(() => import('./PierrePythonBlock'));
 import { Code2, Sigma, Copy, Check } from 'lucide-react';
 import katex from 'katex';
+import { MathViewport } from './MathViewport';
 import 'katex/dist/katex.min.css';
 
 // ---------------------------------------------------------------------------
@@ -95,7 +96,7 @@ export function MathBlock({ math, label, caption, className = '', python }: Math
       data-equation-view={showPython && python ? 'python' : 'math'}
       aria-label={caption ?? `Equation ${label ?? ''}: ${math}`}
     >
-      <div className={`math-block__shell bg-[var(--figure-bg)] border border-[var(--border)] rounded-md relative ${python ? '' : 'px-5 py-4 overflow-x-auto'}`}>
+      <div className={`math-block__shell bg-[var(--figure-bg)] border border-[var(--border)] rounded-md relative`}>
         {python && (
           <div className="math-block__toolbar">
             <span className="math-block__eyebrow">{label ? `Equation ${label}` : 'Calculation'}</span>
@@ -113,16 +114,10 @@ export function MathBlock({ math, label, caption, className = '', python }: Math
           </div>
         )}
         <div id={contentId} className="math-block__content">
-          <div className="math-block__formula flex items-center justify-between gap-6">
-            <div
-              className="flex-1 flex justify-center katex-display-wrap"
-              dangerouslySetInnerHTML={{ __html: html }}
-            />
+          <div className="math-block__formula">
+            <MathViewport html={html} label={label} />
             {label && (
-              <span
-                className="shrink-0 text-xs font-mono text-[var(--text-muted)] self-center select-none"
-                aria-label={`Equation number ${label}`}
-              >
+              <span className="math-block__number" aria-label={`Equation number ${label}`}>
                 {label}
               </span>
             )}

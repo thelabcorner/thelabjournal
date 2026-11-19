@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { ScientificFigureCaption } from '../../../components/typography/ScientificFigureCaption';
 
 type Configuration = 'external' | 'cup';
 
@@ -105,10 +106,10 @@ function Scheme({ number, title, description, configuration, children }: {
 export function ReactorFigure() {
   return (
     <figure className="research-scientific-figure research-reactor-figure my-5 rounded-lg border border-[var(--border)] bg-[var(--figure-bg)] p-3 sm:p-4">
-      <figcaption className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
-        <span className="text-xs font-semibold text-[var(--text)]">Figure 2. One reactor, two heater load paths</span>
-        <span className="text-[11px] text-[var(--text-muted)]">Conceptual sections · not to scale</span>
-      </figcaption>
+      <ScientificFigureCaption
+        title="Figure 2. One reactor, two heater load paths"
+        detail="Conceptual sections · not to scale"
+      />
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <Scheme
           number="A"

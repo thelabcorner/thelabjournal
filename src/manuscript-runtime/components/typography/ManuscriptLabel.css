@@ -1,0 +1,12 @@
+/* Shared scientific-reader metadata: same sans, sentence case, zero tracking
+   as the journal's NCM / New York dense section-label typography. */
+.research-body .manuscript-label {
+  color: var(--muted-foreground);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 550;
+  line-height: 1.45;
+  letter-spacing: 0;
+  text-transform: none;
+  font-variant-numeric: tabular-nums;
+}

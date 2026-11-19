@@ -1,4 +1,6 @@
 import type React from 'react';
+import { ManuscriptLabel } from '../typography/ManuscriptLabel';
+import { HeadingTextWithPermalink } from '../typography/HeadingPermalink';
 import type { ThesisMetadata } from '../../types/thesis';
 
 interface TitlePageProps {
@@ -32,9 +34,10 @@ export function TitlePage({ metadata }: TitlePageProps) {
       {/* Title */}
       <h1
         id="title-heading"
-        className="text-2xl font-semibold tracking-tight text-[var(--text)] leading-snug mb-3"
+        aria-label={metadata.title}
+        className="research-anchor-heading text-2xl font-semibold tracking-tight text-[var(--text)] leading-snug mb-3"
       >
-        {metadata.title}
+        <HeadingTextWithPermalink title={metadata.title} fallbackId="title" />
       </h1>
 
       {/* Subtitle */}
@@ -94,9 +97,9 @@ export function TitlePage({ metadata }: TitlePageProps) {
         <MetaItem label="Version" value={<span className="font-mono text-xs text-[var(--text-secondary)]">{metadata.version}</span>} />
       </div>
 
-      {/* Scientific indexing terms remain accessible without making the title page a badge wall. */}
-      <details className="research-keywords">
-        <summary>Keywords <span>{metadata.keywords.length} indexed terms</span></summary>
+      {/* The title metadata owns the only keyword list; open and badged by default. */}
+      <details className="research-keywords" open>
+        <summary>Keywords <span>{metadata.keywords.length}</span></summary>
         <div className="research-keyword-list">
           {metadata.keywords.map(kw => <span key={kw}>{kw}</span>)}
         </div>
@@ -108,7 +111,7 @@ export function TitlePage({ metadata }: TitlePageProps) {
 function MetaItem({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div className="flex items-center gap-1.5">
-      <span className="text-xs text-[var(--text-muted)] uppercase tracking-widest">{label}</span>
+      <ManuscriptLabel>{label}</ManuscriptLabel>
       <span className="text-xs text-[var(--text-secondary)]">
         {typeof value === 'string' ? value : value}
       </span>

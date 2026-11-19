@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type MouseEvent, type ReactNode } from 'react'
-import { Microscope, ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, BookOpen, Bookmark, Check, ChevronDown, ChevronRight, Clock3, FileText, Filter, LayoutGrid, List as ListIcon, ListTree, Menu, Printer, Search, Settings2, Share2, Sun, Moon, X } from 'lucide-react'
+import { Quote as QuoteIcon, Microscope, ArrowLeft, ArrowRight, ArrowUp, ArrowUpRight, BookOpen, Bookmark, Check, ChevronRight, Clock3, FileText, LayoutGrid, List as ListIcon, ListTree, Menu, Search, Settings2, Share2, Sun, Moon, X } from 'lucide-react'
 import { entries, topics, topicCount, type Entry, type Topic } from './data'
 import { JournalFigure, hasJournalDetailFigure } from './components/JournalFigure'
 import { OXPArchitectureFigures } from './components/OXPArchitectureFigures'
@@ -13,29 +13,29 @@ import { AuthorAvatar } from './components/AuthorAvatar'
 import { ARCHIVE_VIRTUAL_THRESHOLD } from './components/virtualizationPolicy'
 import { loadPrefs, prefsStorage, type ArchiveLayout } from './components/journalPrefs'
 import { PWAUpdateNotice, useJournalPWA } from './components/JournalPWA'
+import { DeferredRouteBoundary } from './components/DeferredRouteBoundary'
+import { JournalLoadingState } from './components/JournalLoadingState'
+import { ArchiveSortSelect } from './components/ArchiveSortSelect'
 import { cue, cueDelayed, setHapticsEnabled } from './haptics'
 import { applyTheme, effectiveTheme } from './theme'
 import { cn, dateLabel } from './lib/utils'
 import { scrollToArticleSection } from './lib/articleNavigation'
+import { hasSavedReadingPosition, pushReadingAnchor, pushReadingRoute, replaceReadingRoute } from './lib/readingPosition'
 import { relatedEntriesFor } from './lib/relatedEntries'
 import { compareArchiveEntries, type ArchiveSort } from './lib/archiveSort'
 import { manuscripts, manuscriptPath, manuscriptFromPath, type Manuscript } from './research'
-import './research.css'
-import './research-reading.css'
+import { collectionById, collectionPath, quoteById, quotePath, quoteRouteFromPath, quotesPath, type Quote, type QuoteCollection, type QuoteRoute } from './quotes/data'
 import './manuscript-visual.css'
-import './gravimetric-manuscript-presentation.css'
-import './research-library.css'
-import { ResearchLibrary } from './ResearchLibrary'
-import { ResearchManuscriptBody, manuscriptNavigation } from './ResearchManuscriptBody'
-import { ResearchContents, ResearchMobileContents, useResearchOutline } from './ResearchContents'
 import { JournalSectionPicker } from './JournalSectionPicker'
 
 const JournalMarkdown = lazy(() => import('./components/JournalMarkdown').then(m => ({ default: m.JournalMarkdown })))
 const MobileNavigator = lazy(() => import('./components/MobileNavigator').then(m => ({ default: m.MobileNavigator })))
+const QuotesPage = lazy(() => import('./quotes/QuotesPage').then(m => ({ default: m.QuotesPage })))
+const ResearchPage = lazy(() => import('./ResearchPage'))
+const SpotlightSearch = lazy(() => import('./components/SpotlightSearch').then(m => ({ default: m.SpotlightSearch })))
 const loadWindowedArchive = () => import('./components/WindowedArchive')
 const WindowedArchive = lazy(() => loadWindowedArchive().then(m => ({ default: m.WindowedArchive })))
 import { JournalPreferences } from './components/JournalPreferences'
-import { SpotlightSearch } from './components/SpotlightSearch'
 import type { SpotlightAction } from './lib/spotlightIndex'
 type Filter = Topic | 'All'
 type Sort = ArchiveSort
@@ -57,82 +57,45 @@ const getInitialSlug = () => {
   return new URLSearchParams(window.location.search).get('post')
 }
 const findEntry = (slug: string | null) => entries.find((entry) => entry.slug === slug) || null
+// A stale installed shell may not yet know a newly published article. Keep
+// its requested URL visible instead of silently rendering the journal landing.
+const unavailableRoute = () => {
+  const relative = window.location.pathname.startsWith(journalBase)
+    ? window.location.pathname.slice(journalBase.length) : ''
+  if (/^posts\/[a-z0-9-]+\/?$/.test(relative)) return 'article' as const
+  if (/^research\/[a-z0-9-]+\/?$/.test(relative)) return 'manuscript' as const
+  if (new URLSearchParams(window.location.search).has('post')) return 'article' as const
+  return null
+}
+function PendingReader({ kind, updating, onHome }: { kind: 'article' | 'manuscript', updating: boolean, onHome: () => void }) {
+  const [retrying, setRetrying] = useState(false)
+  const retry = async () => {
+    setRetrying(true)
+    try {
+      if ('serviceWorker' in navigator) {
+        const registration = await navigator.serviceWorker.getRegistration(journalBase)
+        await registration?.update()
+      }
+    } catch { /* A normal navigation also retries the uncached route. */ }
+    window.location.reload()
+  }
+  return <main id="main" className="pwa-route-pending">
+    <span className="pwa-route-pending-mark" aria-hidden="true"><i/><i/><i/><i/></span>
+    <p className="section-label">The Lab Journal</p>
+    <h1>{updating ? `Preparing your ${kind}` : `This ${kind} is not available yet`}</h1>
+    <p>{updating
+      ? 'A newer journal version is being installed. Your original link is preserved and will reopen when it is ready.'
+      : 'This version of the journal does not contain the requested entry. Reload to check the latest release; your original link will be preserved.'}</p>
+    <div className="pwa-route-pending-actions">
+      <button type="button" onClick={() => void retry()} disabled={retrying}>{retrying ? 'Checking…' : 'Reload entry'}</button>
+      <button type="button" onClick={onHome}>Browse journal</button>
+    </div>
+  </main>
+}
 // App navigation and scroll restoration are jumps, not animated journeys.
 const jumpScroll = (top: number) => window.scrollTo({ top, behavior: 'instant' })
 
-function ResearchPage({ paper, onOpen, isDark, isSaved, onToggleSaved, copied, onShare }: {
-  paper: Manuscript | null
-  onOpen: (paper: Manuscript | null) => void
-  isDark: boolean
-  isSaved: boolean
-  onToggleSaved: (id: string) => void
-  copied: boolean
-  onShare: () => void
-}) {
-  const sections = paper ? manuscriptNavigation[paper.id] ?? [] : []
-  const outline = useResearchOutline(sections, paper?.id)
-  const progressRef = useRef<HTMLDivElement>(null)
-  useEffect(() => {
-    if (!paper) return
-    const documentBody = document.querySelector<HTMLElement>('.research-body')
-    if (!documentBody) return
-    let start = 0, end = 1, frame = 0
-    const paint = () => {
-      frame = 0
-      const ratio = Math.max(0, Math.min(1, (window.scrollY - start) / Math.max(1, end - start)))
-      if (progressRef.current) progressRef.current.style.transform = 'scaleX(' + ratio + ')'
-    }
-    const schedule = () => { if (!frame) frame = requestAnimationFrame(paint) }
-    const measure = () => {
-      const bounds = documentBody.getBoundingClientRect()
-      start = window.scrollY + bounds.top
-      end = Math.max(start + 1, start + bounds.height - window.innerHeight)
-      schedule()
-    }
-    const resize = new ResizeObserver(measure)
-    resize.observe(documentBody)
-    window.addEventListener('scroll', schedule, { passive: true })
-    window.addEventListener('resize', measure, { passive: true })
-    const initial = requestAnimationFrame(measure)
-    void document.fonts?.ready.then(measure)
-    return () => {
-      resize.disconnect(); cancelAnimationFrame(initial); cancelAnimationFrame(frame)
-      window.removeEventListener('scroll', schedule); window.removeEventListener('resize', measure)
-    }
-  }, [paper?.id])
-  return <main className="content-main research-page" id="main">{paper ? <>
-    <div className="research-reader-chrome">
-      <div className="research-reader-top">
-        <button type="button" className="research-back" onClick={() => onOpen(null)}><ArrowLeft size={14}/> Research</button>
-        <span className="research-reader-separator" aria-hidden="true">/</span>
-        <span className="research-reader-short-title">{paper.title}</span>
-        <span className="research-reader-version">{paper.version}</span>
-        <ResearchMobileContents outline={outline}/>
-        <div className="research-reader-actions" role="group" aria-label="Manuscript actions">
-          <button type="button" className={cn('research-reader-action', 'research-reader-save', isSaved && 'is-saved')}
-            aria-label={isSaved ? 'Remove manuscript from saved' : 'Save manuscript'} title={isSaved ? 'Remove from saved' : 'Save manuscript'}
-            aria-pressed={isSaved} onClick={() => { cue(isSaved ? 'light' : 'success'); onToggleSaved(paper.id) }}>
-            <Bookmark fill={isSaved ? 'currentColor' : 'none'} aria-hidden="true"/>
-          </button>
-          <button type="button" className="research-reader-action research-reader-share"
-            aria-label={copied ? 'Link copied' : typeof navigator.share === 'function' ? 'Share manuscript' : 'Copy manuscript link'}
-            title={copied ? 'Link copied' : typeof navigator.share === 'function' ? 'Share manuscript' : 'Copy manuscript link'}
-            onClick={onShare}>{copied ? <Check aria-hidden="true"/> : <Share2 aria-hidden="true"/>}</button>
-          <button type="button" className="research-reader-action research-print"
-            onClick={() => window.print()} aria-label="Print manuscript" title="Print manuscript"><Printer aria-hidden="true"/></button>
-        </div>
-      </div>
-      <div ref={progressRef} className="research-reading-progress" aria-hidden="true"/>
-    </div>
-    <div className="research-document-layout">
-      <article className={paper.id === "gravimetric-decarboxylation-co2-progress" ? "research-body research-body--gravimetric" : "research-body"} aria-label={paper.title}>
-        <ResearchManuscriptBody paperId={paper.id} isDark={isDark}/>
-        <footer className="research-integrity-note">Manuscript status: {paper.status}. This label describes the author's revision workflow; it does not establish external peer review. Scientific claims, equations and figures retain their source context.</footer>
-      </article>
-      <ResearchContents key={paper.id} sections={sections} outline={outline} version={paper.version}/>
-    </div>
-  </> : <ResearchLibrary onOpen={onOpen}/>}</main>
-}
+
 
 function Badge({ children, kind = 'neutral' }: { children: ReactNode, kind?: 'neutral' | 'success' | 'warning' }) {
   return <span className={cn('badge', 'badge--' + kind)}>{children}</span>
@@ -228,10 +191,17 @@ function JournalIndex({ active, view, sort, setSort, query, setQuery, onOpen, sa
     <section className="index-section" aria-labelledby="index-heading">
       <div className="index-heading-row">
         <div><span className="section-label">{view === 'saved' ? 'Reading list' : 'Archive'}</span><h2 id="index-heading">{view === 'saved' ? 'Bookmarked' : 'All writing'} <span className="count-inline">{results.length.toString().padStart(2, '0')}</span></h2></div>
-         <div className="index-actions"><div className="layout-choice" role="group" aria-label="Archive display"><button className={layout === "list" ? "is-selected" : ""} aria-pressed={layout === "list"} aria-label="List view" title="List view" onClick={() => { cue("selection"); setLayout("list") }}><ListIcon/></button><button className={layout === "cards" ? "is-selected" : ""} aria-pressed={layout === "cards"} aria-label="Card view" title="Card view" onClick={() => { cue("selection"); setLayout("cards") }}><LayoutGrid/></button></div><div className="inline-search"><Search aria-hidden="true"/><input type="search" aria-label="Filter journal entries" placeholder="Filter entries..." value={query} onChange={(event) => setQuery(event.target.value)}/>{query && <button title="Clear query" aria-label="Clear query" onClick={() => setQuery('')}><X/></button>}</div><div className="sort-wrap"><label htmlFor="journal-sort"><Filter aria-hidden="true"/></label><select id="journal-sort" aria-label="Sort journal entries" value={sort} onChange={(event) => setSort(event.target.value as Sort)}><option value="recent">Newest</option><option value="subject">Subject</option><option value="short">Shortest</option><option value="long">Longest</option></select><ChevronDown aria-hidden="true"/></div></div>
+         <div className="index-actions">
+           <div className="layout-choice" role="group" aria-label="Archive display">
+             <button className={layout === 'list' ? 'is-selected' : ''} aria-pressed={layout === 'list'} aria-label="List view" title="List view" onClick={() => { cue('selection'); setLayout('list') }}><ListIcon/></button>
+             <button className={layout === 'cards' ? 'is-selected' : ''} aria-pressed={layout === 'cards'} aria-label="Card view" title="Card view" onClick={() => { cue('selection'); setLayout('cards') }}><LayoutGrid/></button>
+           </div>
+           <div className="inline-search"><Search aria-hidden="true"/><input type="search" aria-label="Filter journal entries" placeholder="Filter entries..." value={query} onChange={(event) => setQuery(event.target.value)}/>{query && <button title="Clear query" aria-label="Clear query" onClick={() => setQuery('')}><X/></button>}</div>
+           <ArchiveSortSelect value={sort} onChange={next => { cue('selection'); setSort(next) }}/>
+         </div>
       </div>
       <div className="index-list-header"><span>Ref</span><span>Title / abstract</span><span>Field</span><span>Date</span><span>Actions</span></div>
-      {visibleResults.length >= ARCHIVE_VIRTUAL_THRESHOLD ? <Suspense fallback={<div className="journal-list journal-list--pending" role="status">Preparing archive…</div>}><WindowedArchive entries={visibleResults} layout={layout} renderEntry={renderEntry}/></Suspense> : <div className={cn("journal-list", layout === "cards" && "journal-list--cards")} role="list" aria-label="Journal articles">{results.length ? visibleResults.map((entry, index) => <ListRow key={entry.slug} entry={entry} onOpen={onOpen} isSaved={saved.includes(entry.slug)} toggle={toggle} position={index + 1} setSize={visibleResults.length}/>) : <div className="empty-state">{view === 'saved' && !query ? <Bookmark/> : <Search/>}<strong>{view === 'saved' && !query ? 'Nothing saved yet' : 'No matching entries'}</strong><p>{view === 'saved' && !query ? 'Use the bookmark icon on an entry to keep it here.' : 'Try a different keyword or subject.'}</p><button className="button button--outline" onClick={() => { setQuery(''); if (view === 'saved') onShowAll(); else onFilter('All') }}>{view === 'saved' ? 'Browse the journal' : 'Clear filters'} <ArrowRight/></button></div>}</div>}
+       {visibleResults.length >= ARCHIVE_VIRTUAL_THRESHOLD ? <Suspense fallback={<JournalLoadingState label="Preparing archive…" variant="inline" />}><WindowedArchive entries={visibleResults} layout={layout} renderEntry={renderEntry}/></Suspense> : <div className={cn("journal-list", layout === "cards" && "journal-list--cards")} role="list" aria-label="Journal articles">{results.length ? visibleResults.map((entry, index) => <ListRow key={entry.slug} entry={entry} onOpen={onOpen} isSaved={saved.includes(entry.slug)} toggle={toggle} position={index + 1} setSize={visibleResults.length}/>) : <div className="empty-state">{view === 'saved' && !query ? <Bookmark/> : <Search/>}<strong>{view === 'saved' && !query ? 'Nothing saved yet' : 'No matching entries'}</strong><p>{view === 'saved' && !query ? 'Use the bookmark icon on an entry to keep it here.' : 'Try a different keyword or subject.'}</p><button className="button button--outline" onClick={() => { setQuery(''); if (view === 'saved') onShowAll(); else onFilter('All') }}>{view === 'saved' ? 'Browse the journal' : 'Clear filters'} <ArrowRight/></button></div>}</div>}
       {results.length > 10 && <button className="show-more" onPointerEnter={() => { void loadWindowedArchive() }} onFocus={() => { void loadWindowedArchive() }} onClick={() => setExpanded((value) => !value)}>{expanded ? 'Show fewer entries' : 'Show all ' + results.length + ' entries'} <ArrowRight/></button>}
     </section>
     <div className="archive-disclaimer"><span className="small-dot"/><span>Drafts and working notes are labeled. A convincing prototype is not the same as a verified result.</span></div>
@@ -297,11 +267,12 @@ function Article({ entry, onBack, onOpen, copied, onShare, isSaved, toggle }: {
     }
     const resize = new ResizeObserver(measure)
     resize.observe(article)
-    const initial = requestAnimationFrame(() => { measure(); followHash() })
+    const followHistoryHash = () => { if (!hasSavedReadingPosition()) followHash() }
+    const initial = requestAnimationFrame(() => { measure(); followHistoryHash() })
     void document.fonts?.ready.then(measure)
     window.addEventListener('scroll', schedule, { passive: true })
     window.addEventListener('resize', measure)
-    window.addEventListener('popstate', followHash)
+    window.addEventListener('popstate', followHistoryHash)
     window.addEventListener('hashchange', followHash)
     return () => {
       disposed = true
@@ -310,15 +281,17 @@ function Article({ entry, onBack, onOpen, copied, onShare, isSaved, toggle }: {
       cancelAnimationFrame(frame)
       window.removeEventListener('scroll', schedule)
       window.removeEventListener('resize', measure)
-      window.removeEventListener('popstate', followHash)
+      window.removeEventListener('popstate', followHistoryHash)
       window.removeEventListener('hashchange', followHash)
     }
   }, [entry])
   const jumpTo = (index: number) => {
-    if (!scrollToArticleSection(sectionId(index), window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth')) return
+    if (!document.getElementById(sectionId(index))) return
     const hash = '#' + sectionId(index)
-    // pushState does not trigger the browser's second, independent anchor scroll.
-    if (window.location.hash !== hash) window.history.pushState(window.history.state, '', hash)
+    // Save the *pre-jump* position before creating a new history entry.
+    // Pushing after scroll would make Back return to the destination instead.
+    if (window.location.hash !== hash) pushReadingAnchor(hash)
+    scrollToArticleSection(sectionId(index), window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth')
     setActiveSection(index)
   }
   return <main className="content-main article-main" id="main">
@@ -408,15 +381,18 @@ function useSavedManuscripts() {
 
 export default function App() {
   const pwa = useJournalPWA()
+  // Tagged quote route avoids competing view-mode booleans.
+  const [quoteRoute, setQuoteRoute] = useState<QuoteRoute | null>(() => quoteRouteFromPath(window.location.pathname))
   const [researchPaper, setResearchPaper] = useState<Manuscript | null>(() => manuscriptFromPath(window.location.pathname))
   const [researchMode, setResearchMode] = useState(() => /\/research\/?$/.test(window.location.pathname) || Boolean(manuscriptFromPath(window.location.pathname)))
   const [selected, setSelected] = useState<Entry | null>(() => findEntry(getInitialSlug()))
+  const missingRoute = !selected && !researchMode && !quoteRoute ? unavailableRoute() : null
   useEffect(() => {
     // Upgrade existing bookmark links without breaking them.
     const legacy = new URLSearchParams(window.location.search).get('post')
     if (legacy) {
       const entry = findEntry(legacy)
-      if (entry) window.history.replaceState(window.history.state, '', paperHref(entry))
+       if (entry) replaceReadingRoute(paperHref(entry))
     }
   }, [])
   useEffect(() => {
@@ -468,23 +444,23 @@ export default function App() {
   const openArticle = (entry: Entry) => {
     cueDelayed('light', 75)
     trackSpotlightRecent('entry:' + entry.slug)
-    setResearchMode(false); setResearchPaper(null)
-    if (!selected) archiveScroll.current = window.scrollY
-    window.history.pushState({}, '', paperHref(entry))
+    setQuoteRoute(null); setResearchMode(false); setResearchPaper(null)
+    if (!selected && !quoteRoute && !researchMode) archiveScroll.current = window.scrollY
+    pushReadingRoute(paperHref(entry))
     setSelected(entry); setCopied(false); setNavOpen(false); setDialogOpen(false); jumpScroll(0)
   }
   const goHome = () => {
     cue('selection')
-    window.history.pushState({}, '', journalBase)
-    setResearchMode(false); setResearchPaper(null)
+    pushReadingRoute(journalBase)
+    setQuoteRoute(null); setResearchMode(false); setResearchPaper(null)
     setSelected(null); setNavOpen(false); setDialogOpen(false)
     requestAnimationFrame(() => jumpScroll(archiveScroll.current))
   }
   const changeFilter = (topic: Filter, delayed = false) => {
     if (delayed) cueDelayed('selection', 60); else cue('selection')
-    setResearchMode(false); setResearchPaper(null)
+    setQuoteRoute(null); setResearchMode(false); setResearchPaper(null)
     setFilter(topic); setView('all'); setQuery('')
-    if (selected || researchMode || window.location.pathname !== journalBase) { window.history.pushState({}, '', journalBase); setSelected(null) }
+    if (selected || researchMode || window.location.pathname !== journalBase) { pushReadingRoute(journalBase); setSelected(null) }
     jumpScroll(0)
   }
   const openResearch = (paper: Manuscript | null) => {
@@ -492,20 +468,37 @@ export default function App() {
     setCopied(false)
     if (paper) trackSpotlightRecent('manuscript:' + paper.id)
     const target = paper ? manuscriptPath(paper.id) : journalBase + 'research/'
-    if (window.location.pathname !== target) window.history.pushState({}, '', target)
-    setSelected(null); setResearchMode(true); setResearchPaper(paper); setNavOpen(false); setDialogOpen(false); jumpScroll(0)
+    if (window.location.pathname !== target) pushReadingRoute(target)
+    setQuoteRoute(null); setSelected(null); setResearchMode(true); setResearchPaper(paper); setNavOpen(false); setDialogOpen(false); jumpScroll(0)
+  }
+  const openQuotes = (target: QuoteRoute = { kind: 'index' }) => {
+    cue('selection')
+    const href = target.kind === 'quote' ? quotePath(target.id) :
+      target.kind === 'collection' ? collectionPath(target.id) : quotesPath()
+    if (window.location.pathname !== href) pushReadingRoute(href)
+    setQuoteRoute(target); setSelected(null); setResearchMode(false); setResearchPaper(null)
+    setNavOpen(false); setDialogOpen(false); setCopied(false); jumpScroll(0)
+  }
+  const openQuote = (quote: Quote) => {
+    trackSpotlightRecent('quote:' + quote.id)
+    openQuotes({ kind: 'quote', id: quote.id })
+  }
+  const openQuoteCollection = (collection: QuoteCollection) => {
+    trackSpotlightRecent('collection:' + collection.id)
+    openQuotes({ kind: 'collection', id: collection.id })
   }
   const showSaved = (delayed = false) => {
     if (delayed) cueDelayed('selection', 60); else cue('selection')
-    setResearchMode(false); setResearchPaper(null)
+    setQuoteRoute(null); setResearchMode(false); setResearchPaper(null)
     setView('saved'); setQuery('')
-    if (selected || researchMode || window.location.pathname !== journalBase) { window.history.pushState({}, '', journalBase); setSelected(null) }
+    if (selected || researchMode || window.location.pathname !== journalBase) { pushReadingRoute(journalBase); setSelected(null) }
     jumpScroll(0)
   }
   const openSearch = (delayed = false) => { if (delayed) cueDelayed('light', 60); else cue('light'); setNavOpen(false); setDialogOpen(true) }
   const spotlightAction = (action: SpotlightAction) => {
     if (action === 'journal') changeFilter('All')
     else if (action === 'research') openResearch(null)
+    else if (action === 'quotes') openQuotes()
     else if (action === 'saved') showSaved()
     else changeFilter('Engineering')
   }
@@ -517,13 +510,15 @@ export default function App() {
       const next = findEntry(getInitialSlug())
       const nextPaper = manuscriptFromPath(window.location.pathname)
       const nextMode = window.location.pathname === journalBase + 'research/' || Boolean(nextPaper)
+      const nextQuote = quoteRouteFromPath(window.location.pathname)
+      setQuoteRoute(nextQuote)
       setResearchPaper(nextPaper); setResearchMode(nextMode)
       // A TOC hash is history within this article, not a new article route.
       // Do not clobber the browser's current scroll position on Back/Forward.
-      if (previous && next && previous.slug === next.slug && !nextMode) return
-      setSelected(next); setNavOpen(false); setDialogOpen(false)
-      if (!next && previous) requestAnimationFrame(() => jumpScroll(archiveScroll.current))
-      else jumpScroll(0)
+      if (previous && next && previous.slug === next.slug && !nextMode && !nextQuote) return
+       setSelected(next); setNavOpen(false); setDialogOpen(false)
+       // Per-history-entry restoration runs after the destination mounts;
+       // do not overwrite it while React swaps route trees.
     }
     const media = window.matchMedia('(max-width: 1023px)')
     const phoneMedia = window.matchMedia('(max-width: 767px)')
@@ -544,6 +539,14 @@ export default function App() {
   }, [])
   useEffect(() => { document.title = selected ? selected.title + ' · thelabjournal™' : researchPaper ? researchPaper.title + ' · Research · thelabjournal™' : researchMode ? 'Research · thelabjournal™' : (view === 'saved' ? 'Saved · ' : '') + 'thelabjournal™' }, [selected, view, researchMode, researchPaper])
   useEffect(() => {
+    const label = quoteRoute?.kind === 'quote' ? quoteById.get(quoteRoute.id)?.text.slice(0, 75) :
+      quoteRoute?.kind === 'collection' ? collectionById.get(quoteRoute.id)?.title :
+      quoteRoute ? 'Quotes' : selected ? selected.title :
+      researchPaper ? researchPaper.title + ' | Research' :
+      researchMode ? 'Research' : view === 'saved' ? 'Saved' : ''
+    document.title = (label ? label + ' | ' : '') + 'thelabjournal™'
+  }, [quoteRoute, selected, researchPaper, researchMode, view])
+  useEffect(() => {
     if (!dialogOpen && !prefsOpen && !(compact && navOpen)) return
     returnFocus.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
     const previous = document.body.style.overflow
@@ -559,7 +562,7 @@ export default function App() {
     // its share sheet. A canceled sheet is not a request to copy.
     if (typeof navigator.share === 'function') {
       try {
-        await navigator.share({ title: researchPaper?.title ?? selected?.title ?? document.title, url: value })
+        await navigator.share({ title: quoteRoute ? document.title : researchPaper?.title ?? selected?.title ?? document.title, url: value })
         return
       } catch (error) {
         if (error && typeof error === 'object' && 'name' in error && error.name === 'AbortError') return
@@ -595,31 +598,35 @@ export default function App() {
     <header className="site-header"><span className="header-dither-field" aria-hidden="true"><DitherScene variant="nav" className="header-dither-canvas" fps={14} intensity={0.95}/></span><div className="header-inner">
       <IconControl className="mobile-nav-toggle" onClick={openNavigation} label="Open journal navigation"><Menu/></IconControl>
       <button onClick={goHome} className="brand" aria-label="thelabjournal™ home"><BrandMark/><span className="brand-text">thelabjournal™</span></button>
-      <nav className="header-links" aria-label="Primary navigation"><button className={!researchMode && !selected && view === 'all' && filter === 'All' ? 'current' : ''} onClick={() => changeFilter('All')}>Journal</button><button className={researchMode ? 'current' : ''} onClick={() => openResearch(null)}>Research</button><button className={!researchMode && !selected && view === 'all' && filter === 'Engineering' ? 'current' : ''} onClick={() => changeFilter('Engineering')}>Engineering</button></nav>
+      <nav className="header-links" aria-label="Primary navigation"><button className={!quoteRoute && !researchMode && !selected && view === 'all' && filter === 'All' ? 'current' : ''} onClick={() => changeFilter('All')}>Journal</button><button className={researchMode ? 'current' : ''} onClick={() => openResearch(null)}>Manuscripts</button><button className={quoteRoute ? 'current' : ''} onClick={() => openQuotes()}>Quotes</button></nav>
        <div className="header-end"><button className="header-search" onClick={() => openSearch()} aria-label="Search journal"><Search/><span>Search entries</span><kbd>{/Macintosh|Mac OS X|iPad|iPhone/i.test(navigator.userAgent) ? '⌘ K' : 'Ctrl K'}</kbd></button><IconControl className="mobile-search" label="Search journal" onClick={() => openSearch()}><Search/></IconControl><div className="header-tools"><IconControl className="header-preferences" label="Journal preferences" onClick={openSettings}><Settings2/></IconControl><IconControl className="header-theme" label={resolvedTheme === "dark" ? "Switch to light theme" : "Switch to dark theme"} onClick={toggleTheme}>{resolvedTheme === "dark" ? <Sun/> : <Moon/>}</IconControl></div></div>
     </div></header>
-    <div className={cn("frame", railCollapsed && "rail-collapsed", !researchMode && !selected && view === 'all' && filter === 'All' && "frame--journal-dither")}>
-      {!researchMode && !selected && view === 'all' && filter === 'All' && <div className="journal-landing-dither-field" aria-hidden="true"><div className="journal-landing-dither-viewport"><DitherScene variant="nav" className="journal-landing-dither-canvas" fps={14}/></div></div>}
+    <div data-reading-route={quoteRoute
+      ? quoteRoute.kind === 'quote' ? quotePath(quoteRoute.id) : quoteRoute.kind === 'collection' ? collectionPath(quoteRoute.id) : quotesPath()
+      : researchMode ? researchPaper ? manuscriptPath(researchPaper.id) : journalBase + 'research/'
+      : selected ? paperHref(selected) : journalBase}
+      className={cn("frame", railCollapsed && "rail-collapsed", !quoteRoute && !researchMode && !selected && view === 'all' && filter === 'All' && "frame--journal-dither")}>
+      {!quoteRoute && !researchMode && !selected && view === 'all' && filter === 'All' && <div className="journal-landing-dither-field" aria-hidden="true"><div className="journal-landing-dither-viewport"><DitherScene variant="nav" className="journal-landing-dither-canvas" fps={14}/></div></div>}
       <div className="workspace-edge" aria-hidden="true"><div className="workspace-edge-viewport"><span className="workspace-edge-dots"/></div></div>
       {compact && navOpen && <div className="mobile-drawer-backdrop is-open" onClick={() => setNavOpen(false)} aria-hidden="true"/>}
       <div ref={drawerRef} className={cn('sidebar-wrap', navOpen && 'is-open')} inert={compact && !navOpen} role={compact && navOpen ? 'dialog' : undefined} aria-modal={compact && navOpen ? 'true' : undefined} aria-label={compact && navOpen ? 'Journal navigation' : undefined} onKeyDown={trapTab}>
-        <DesktopRail collapsed={railCollapsed} active={filter} view={view} selected={Boolean(selected)} saved={saved.length} researchMode={researchMode} onResearch={() => openResearch(null)} onCollapse={toggleRail} onFilter={changeFilter} onSaved={showSaved} onSettings={openSettings}/>
-        {phone ? <Suspense fallback={null}><MobileNavigator active={filter} saved={saved.length} onFilter={changeFilter} onSaved={showSaved} onSearch={openSearch} onOpen={openArticle} onSettings={openSettings} onResearch={() => openResearch(null)} theme={resolvedTheme} onToggleTheme={toggleTheme} onClose={() => setNavOpen(false)}/></Suspense> : <><div className="mobile-drawer-head"><span className="drawer-handle" aria-hidden="true"/><span>Browse journal</span><IconControl className="drawer-close" label="Close navigation" onClick={() => setNavOpen(false)}><X/></IconControl></div><div className="side-panel"><ExpandedSidebar active={filter} view={view} researchMode={researchMode} activePaperId={researchPaper?.id ?? null} onResearch={() => openResearch(null)} openManuscript={openResearch} onFilter={changeFilter} showSaved={showSaved} openArticle={openArticle} selected={selected} savedCount={saved.length} close={() => setNavOpen(false)}/></div></>}
+        <DesktopRail collapsed={railCollapsed} active={filter} view={view} selected={Boolean(selected) || Boolean(quoteRoute)} saved={saved.length} researchMode={researchMode} quotesActive={Boolean(quoteRoute)} onQuotes={() => openQuotes()} onResearch={() => openResearch(null)} onCollapse={toggleRail} onFilter={changeFilter} onSaved={showSaved} onSettings={openSettings}/>
+        {phone ? <Suspense fallback={null}><MobileNavigator active={filter} saved={saved.length} onFilter={changeFilter} onSaved={showSaved} onSearch={openSearch} onOpen={openArticle} onSettings={openSettings} onResearch={() => openResearch(null)} onQuotes={() => openQuotes()} theme={resolvedTheme} onToggleTheme={toggleTheme} onClose={() => setNavOpen(false)}/></Suspense> : <><div className="mobile-drawer-head"><span className="drawer-handle" aria-hidden="true"/><span>Browse journal</span><IconControl className="drawer-close" label="Close navigation" onClick={() => setNavOpen(false)}><X/></IconControl></div><div className="side-panel"><ExpandedSidebar active={filter} view={view} researchMode={researchMode} quotesActive={Boolean(quoteRoute)} activePaperId={researchPaper?.id ?? null} onQuotes={() => openQuotes()} openQuote={openQuote} openQuoteCollection={openQuoteCollection} onResearch={() => openResearch(null)} openManuscript={openResearch} onFilter={changeFilter} showSaved={showSaved} openArticle={openArticle} selected={selected} savedCount={saved.length} close={() => setNavOpen(false)}/></div></>}
       </div>
-      {researchMode ? <ResearchPage paper={researchPaper} onOpen={openResearch} isDark={resolvedTheme === "dark"}
-        isSaved={Boolean(researchPaper && savedManuscripts.includes(researchPaper.id))}
-        onToggleSaved={toggleManuscript} copied={copied} onShare={shareLink}/> : selected ? <Article entry={selected} onBack={goHome} onOpen={openArticle} copied={copied} onShare={shareLink} isSaved={saved.includes(selected.slug)} toggle={toggle}/> : <JournalIndex active={filter} view={view} sort={sort} setSort={setSort} query={query} setQuery={setQuery} onOpen={openArticle} saved={saved} toggle={toggle} onFilter={changeFilter} onShowAll={() => changeFilter('All')} onResearch={() => openResearch(null)} layout={prefs.layout} setLayout={layout => changePrefs({...prefs,layout})}/>}
+       {quoteRoute ? <DeferredRouteBoundary section="quotes"><Suspense fallback={<JournalLoadingState label="Opening quotes…" />}><QuotesPage route={quoteRoute} onIndex={() => openQuotes()} onQuote={openQuote} onCollection={openQuoteCollection} onShare={shareLink} copied={copied}/></Suspense></DeferredRouteBoundary> : researchMode ? <DeferredRouteBoundary section="research"><Suspense fallback={<JournalLoadingState label="Preparing research…" />}><ResearchPage paper={researchPaper} onOpen={openResearch} isDark={resolvedTheme === "dark"}
+         isSaved={Boolean(researchPaper && savedManuscripts.includes(researchPaper.id))}
+          onToggleSaved={toggleManuscript} copied={copied} onShare={shareLink}/></Suspense></DeferredRouteBoundary> : selected ? <Suspense fallback={<JournalLoadingState label="Opening writing…" />}><Article entry={selected} onBack={goHome} onOpen={openArticle} copied={copied} onShare={shareLink} isSaved={saved.includes(selected.slug)} toggle={toggle}/></Suspense> : missingRoute ? <PendingReader kind={missingRoute} updating={pwa.updatePhase !== 'idle'} onHome={goHome}/> : <JournalIndex active={filter} view={view} sort={sort} setSort={setSort} query={query} setQuery={setQuery} onOpen={openArticle} saved={saved} toggle={toggle} onFilter={changeFilter} onShowAll={() => changeFilter('All')} onResearch={() => openResearch(null)} layout={prefs.layout} setLayout={layout => changePrefs({...prefs,layout})}/>}
     </div>
-    <footer className="site-footer"><div className="footer-inner"><span>© {new Date().getFullYear()} thelabjournal™</span><span>Research · Engineering · Essays</span><button onClick={() => window.scrollTo({ top:0, behavior:'smooth' })}>Back to top ↑</button></div></footer>
+    <footer className="site-footer"><div className="footer-inner"><span>© {new Date().getFullYear()} thelabjournal™</span><span>Research · Engineering · Quotes · Essays</span><button onClick={() => window.scrollTo({ top:0, behavior:'smooth' })}>Back to top ↑</button></div></footer>
     <nav className="mobile-tabbar" aria-label="Mobile primary navigation">
       <span className="tabbar-dither-field" aria-hidden="true"><DitherScene variant="nav" className="tabbar-dither-canvas" fps={14} intensity={0.98}/></span>
-      <button aria-current={!selected && view === 'all' && filter === 'All' ? 'page' : undefined} onClick={() => { changeFilter('All', true); window.scrollTo(0,0) }}><BookOpen/><span>Journal</span></button>
-      <button aria-expanded={navOpen} onClick={() => openNavigation(true)}><Menu/><span>Browse</span></button>
-      <button aria-current={!selected && view === 'saved' ? 'page' : undefined} onClick={() => { showSaved(true); window.scrollTo(0,0) }}><Bookmark/><span>Saved</span>{saved.length > 0 && <i className="tab-count">{saved.length}</i>}</button>
+      <button aria-current={!quoteRoute && !researchMode && !selected && view === 'all' && filter === 'All' ? 'page' : undefined} onClick={() => { changeFilter('All', true); window.scrollTo(0,0) }}><BookOpen/><span>Journal</span></button>
+      <button aria-current={quoteRoute ? 'page' : undefined} onClick={() => openQuotes()}><QuoteIcon/><span>Quotes</span></button><button aria-expanded={navOpen} onClick={() => openNavigation(true)}><Menu/><span>Browse</span></button>
+      <button aria-current={!quoteRoute && !researchMode && !selected && view === 'saved' ? 'page' : undefined} onClick={() => { showSaved(true); window.scrollTo(0,0) }}><Bookmark/><span>Saved</span>{saved.length > 0 && <i className="tab-count">{saved.length}</i>}</button>
       <button onClick={() => openSearch(true)}><Search/><span>Search</span></button>
     </nav>
     {prefsOpen && <Suspense fallback={null}><JournalPreferences prefs={prefs} pwa={pwa} onChange={changePrefs} onClose={() => setPrefsOpen(false)}/></Suspense>}
     <PWAUpdateNotice pwa={pwa}/>
-    {dialogOpen && <SpotlightSearch recent={spotlightRecent} onClose={() => setDialogOpen(false)} onEntry={openArticle} onManuscript={paper => openResearch(paper)} onAction={spotlightAction}/>}
+    {dialogOpen && <DeferredRouteBoundary section="search"><Suspense fallback={<div role="status" className="spotlight-pending">Preparing search…</div>}><SpotlightSearch recent={spotlightRecent} onClose={() => setDialogOpen(false)} onEntry={openArticle} onManuscript={paper => openResearch(paper)} onQuote={openQuote} onCollection={openQuoteCollection} onAction={spotlightAction}/></Suspense></DeferredRouteBoundary>}
   </div>
 }

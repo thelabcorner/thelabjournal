@@ -1,0 +1,126 @@
+{
+  "objective": "neutral THCA-A crystal in neat limonene at 298.15 K",
+  "inputs": {
+    "crystal_energy_hartree_per_8_formula_unit_cell": -1652.279167794905,
+    "gas_confid1_energy_hartree": -206.45403272886975,
+    "formula_units_per_cif_cell": 8,
+    "temperature_K": 298.15,
+    "nist_conformers_used": 293,
+    "nist_conformational_enthalpy_kj_mol": 2.211197421471061,
+    "nist_gas_reference": "1 atm, ideal-gas RRHO",
+    "cosmo_reference_state_types": [
+      0,
+      3,
+      4
+    ],
+    "cosmo_descriptor_format": "ORCA_COSMO_TZVPD",
+    "cosmo_sw_SR_polarizabilities": 0,
+    "cosmo_sw_SR_atomicNumber": 1,
+    "cosmo_dGsolv_reference": "openCOSMO-RS 24a, gas 1 M -> liquid 1 M standard states",
+    "cosmo_dGsolv_source": "current openCOSMORS-cli recheck using the explicit no-polarizability input; dGsolv matches the saved CLI output",
+    "cosmo_dGsolv_kcal_mol": -19.234740634162,
+    "density_limonene_g_ml_assumed": 0.84,
+    "limonene_molarity_assumed_mol_L": 6.165861679169663
+  },
+  "scenarios": [
+    {
+      "scenario": "soft_external_modes",
+      "six_external_mode_frequency_cm-1": 20.0,
+      "crystal_external_vibrational_free_energy_kj_mol": -34.770094087891344,
+      "static_crystal_to_gas_energy_kj_mol": 212.30642189007,
+      "nist_gas_ensemble_correction_vs_conf1_at_1atm_kj_mol": 1104.7872228493557,
+      "subtracted_conf1_intramolecular_vibrational_free_energy_kj_mol": 1199.5347164800407,
+      "delta_G_crystal_to_gas_1atm_kj_mol": 152.3290223472762,
+      "gas_standard_state_1atm_to_1M_correction_kj_mol": 7.925870215947503,
+      "delta_G_gas_1M_to_limonene_solution_1M_kj_mol_COSMO_RS": -80.47815481333382,
+      "delta_G_crystal_to_solution_1M_kj_mol": 79.77673774988989,
+      "solubility": {
+        "ln_molarity_mol_L": -32.1815734590146,
+        "molarity_mol_L": 1.0561369273212187e-14,
+        "mole_fraction": 1.7128780732937937e-15,
+        "wt_percent": 4.507079425013671e-13,
+        "mg_per_mL_assuming_neat_solvent_density": 3.785946717011483e-12
+      },
+      "COSMO_AAD_only_sensitivity": {
+        "lower": {
+          "ln_molarity_mol_L": -32.941086422537815,
+          "molarity_mol_L": 4.941603987740958e-15,
+          "mole_fraction": 8.014458067451204e-16,
+          "wt_percent": 2.1088365612027173e-13,
+          "mg_per_mL_assuming_neat_solvent_density": 1.7714227114102827e-12
+        },
+        "upper": {
+          "ln_molarity_mol_L": -31.422060495491394,
+          "molarity_mol_L": 2.257212864524604e-14,
+          "mole_fraction": 3.660823064114807e-15,
+          "wt_percent": 9.632688145256721e-13,
+          "mg_per_mL_assuming_neat_solvent_density": 8.091458042015645e-12
+        },
+        "interpretation": "0.45 kcal/mol dataset-AAD sensitivity only; not a confidence interval"
+      }
+    },
+    {
+      "scenario": "stiff_external_modes",
+      "six_external_mode_frequency_cm-1": 100.0,
+      "crystal_external_vibrational_free_energy_kj_mol": -10.69346099273999,
+      "static_crystal_to_gas_energy_kj_mol": 212.30642189007,
+      "nist_gas_ensemble_correction_vs_conf1_at_1atm_kj_mol": 1104.7872228493557,
+      "subtracted_conf1_intramolecular_vibrational_free_energy_kj_mol": 1199.5347164800407,
+      "delta_G_crystal_to_gas_1atm_kj_mol": 128.25238925212486,
+      "gas_standard_state_1atm_to_1M_correction_kj_mol": 7.925870215947503,
+      "delta_G_gas_1M_to_limonene_solution_1M_kj_mol_COSMO_RS": -80.47815481333382,
+      "delta_G_crystal_to_solution_1M_kj_mol": 55.70010465473854,
+      "solubility": {
+        "ln_molarity_mol_L": -22.469169085868565,
+        "molarity_mol_L": 1.7448731229013136e-10,
+        "mole_fraction": 2.8298933930786978e-11,
+        "wt_percent": 7.446270978185785e-09,
+        "mg_per_mL_assuming_neat_solvent_density": 6.254867621676059e-08
+      },
+      "COSMO_AAD_only_sensitivity": {
+        "lower": {
+          "ln_molarity_mol_L": -23.228682049391775,
+          "molarity_mol_L": 8.164161065839429e-11,
+          "mole_fraction": 1.3240908555105262e-11,
+          "wt_percent": 3.4840673978128265e-09,
+          "mg_per_mL_assuming_neat_solvent_density": 2.9266166141627742e-08
+        },
+        "upper": {
+          "ln_molarity_mol_L": -21.709656122345354,
+          "molarity_mol_L": 3.7292040057398633e-10,
+          "mole_fraction": 6.048147362943302e-11,
+          "wt_percent": 1.5914431366305117e-08,
+          "mg_per_mL_assuming_neat_solvent_density": 1.3368122347696296e-07
+        },
+        "interpretation": "0.45 kcal/mol dataset-AAD sensitivity only; not a confidence interval"
+      }
+    }
+  ],
+  "combined_sensitivity_envelope": {
+    "lower": {
+      "ln_molarity_mol_L": -32.941086422537815,
+      "molarity_mol_L": 4.941603987740958e-15,
+      "mole_fraction": 8.014458067451204e-16,
+      "wt_percent": 2.1088365612027173e-13,
+      "mg_per_mL_assuming_neat_solvent_density": 1.7714227114102827e-12
+    },
+    "upper": {
+      "ln_molarity_mol_L": -21.709656122345354,
+      "molarity_mol_L": 3.7292040057398633e-10,
+      "mole_fraction": 6.048147362943302e-11,
+      "wt_percent": 1.5914431366305117e-08,
+      "mg_per_mL_assuming_neat_solvent_density": 1.3368122347696296e-07
+    },
+    "interpretation": "20-100 cm-1 Einstein external-mode bracket plus/minus COSMO 24a dataset AAD; not a statistical interval and excludes major crystal-method systematics"
+  },
+  "limitations": [
+    "The originally named thca-cp2k-singlepoint job exited 137; a separate diagonalization crystal single-point completed. The solubility cycle uses the completed constrained-H geometry optimization instead.",
+    "CIF heavy-atom coordinates and cell are from the 120 K experimental structure; the cell and heavy atoms were fixed and only hydrogens relaxed at PBE-D3(BJ)/SZV-MOLOPT-SR-GTH.",
+    "The periodic SZV basis has no completed larger-basis convergence check and no BSSE correction; the DZVP periodic attempt was killed for resource use.",
+    "Crystal phonons are not computed. Six external modes are represented by 20 and 100 cm-1 Einstein scenarios; intramolecular crystal vibrations are assumed equal to gas conformer 1 and cancel.",
+    "The NIST RRHO ensemble covers 293 database conformers and reproduces the reported 2.2 kJ/mol conformational enthalpy, but low-frequency anharmonicity, conformer validation and solution conformer reweighting remain uncertain.",
+    "The supplied ORCA_COSMO_TZVPD descriptors predate the ORCA 6.0 descriptor workflow. Polarizability mode 7 is incompatible; results use the explicit no-polarizability compatibility path and the 24a parameter values, so the published 0.45 kcal/mol AAD is only a benchmark sensitivity, not target-specific uncertainty.",
+    "The deployed REST endpoint reproduces the mode-0 activity coefficients but does not accept dGsolv_* parameters; the type-4 dGsolv was rechecked with the container's CLI. A direct polarizability-mode-7 request closed the connection on these legacy descriptors.",
+    "The reported mass units assume a neat-limonene density of 0.84 g/mL and dilute-solution volume additivity."
+  ]
+}

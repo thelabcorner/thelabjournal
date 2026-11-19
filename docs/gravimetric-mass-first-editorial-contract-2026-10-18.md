@@ -60,3 +60,26 @@ Lower initial absolute air pressure reduces residual air and the air/CO₂ compo
 Run `bun run typecheck`, `bun scripts/manuscript-mass-flow-audit.mjs`, `bun scripts/manuscript-visual-audit.mjs`, and `bun scripts/manuscript-reader-ux-audit.mjs` against the local Vite server. The first three passed during this pass, including eight light/dark viewport pairs and sequential figure/citation checks. The full reader regression passed **18/18** scenarios across both manuscripts after explicitly scoping gravimetric-only inline mathematics styling. An earlier 320px overflow in the separate lyophilization manuscript was resolved without editing its scientific content.
 
 No claim of direct experimental verification, full screen-reader parity, printed PDF parity, or deployed production behavior is made here.
+
+
+## October 24, 2026 discussion: scope-preserving editorial instruction
+
+The manuscript remains a **practical methods paper**: one of the “papers I wish I had” when learning and doing this work. Its contribution is the accessible organization of existing chemistry, mathematical methods, measurement sequences, and implementable engineering ideas that developed alongside Decarboxulator. Its value is practical reproducibility and explanation, not a new reaction-mechanism discovery, doctoral thesis, or experimentally validated chemical assay.
+
+The complete supplied October 24 Zoom transcript has now been reviewed for manuscript-relevant remarks. Dr. Drew expressed enthusiasm for the practical project, noted the manuscript's length and its personal-project character, and was invited by the author to read it critically for errors. At approximately 4:35:49–4:36:43, when the author explicitly asked whether a detailed molecular reaction mechanism belonged in the paper, Drew distinguished chemistry and engineering lenses and answered, in general, **no**. At approximately 4:36:46, he reinforced that the author was not writing a PhD on THC. His comments do not constitute formal peer review or chemical-method validation.
+
+Editorial priorities informed by the discussion:
+- Explain the principal cannabinoid reaction, the meaning of gross-mass loss, its measurement boundary, the reference denominator, and what an estimated percentage represents before requiring the reader to work through formal derivations.
+- Keep a concrete manual workflow and worked numeric example central. Aliquot calibration and optional pressure-inventory methods are extensions, not prerequisites for basic tracking.
+- Distinguish established stoichiometry, historical/manual software capabilities, conceptual apparatus design, and proposed tests without demanding new experimentation for publication as a methods paper.
+- Preserve equations, calculation results, chapter IDs, figures, provenance and reference traces. Correct factual or mathematical errors when verified; do not extend into a comprehensive kinetics or analytical chemistry thesis to anticipate every possible expert question.
+- Maintain the actual author's scope and claim direction. No generic defensive additions, invented counterclaims, mass-spectrometric validation claims, or retroactive descriptions of experiments not performed.
+
+Transcript-specific scientific guardrails:
+- The roughly 4:13–4:49 exploration of THCA reaction mechanisms was exploratory and unresolved. Do not convert the improvised mechanism into an established figure or assert that heat alone reveals the microscopic pathway.
+- The conversation's 50% progress illustration is a useful reason to show a **mass-loss stopping threshold**, not grounds to equate progress with assayed THC concentration or to assume linear time remaining.
+- The CO2 released by decarboxylation is not itself the visible white smoke/aerosol, and claims about antioxidant benefit, dosing, or the comparative health of inhalation methods are not needed to explain this measurement.
+- The salicylic-acid case is a **conditional stoichiometric example**, not a demonstrated direct thermal reactor process. Cite chemistry that actually concerns the free acid, without importing its reaction mechanism into this practical paper.
+- The manuscript should answer how to take measurements, apply an explicit denominator, interpret the result, and reproduce the worked example. Optional future analytical verification can be described accurately without turning a practical methods manuscript into a chemical-kinetics dissertation.
+
+The October 24 follow-up adds a short reader pathway, repeatable-weighing details, a reverse target-mass example, careful time-to-target language, and more directly applicable support for the salicylic-acid illustration. The work remains a draft: no new experiments, deployment, or external peer-review outcome is implied.

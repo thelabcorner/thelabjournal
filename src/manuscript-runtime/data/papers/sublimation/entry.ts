@@ -4,18 +4,16 @@ export const sublimationEntry: PaperEntry = {
   id: 'low-temp-lyophilization-three-theses',
   field: 'Process Engineering',
   available: true,
-  tagline:
-    'Applied interpretation of pressure, sublimation, heater control, and vapor capture in consumer freeze drying.',
+  tagline: 'An applied scientific examination of assumptions about vacuum, heat delivery, pressure readings, and drying completion.',
   dateAdded: '2026-03-18',
-  lastModified: '2026-10-19',
-  readTime: 85,
-  wordCount: 22500,
+  lastModified: '2026-10-20',
+  readTime: 45,
+  wordCount: 8300,
   abstract:
-    'An applied-science interpretation of low-temperature primary drying that examines common misconceptions about low pressure, vapor-pressure driving potential, sublimative cooling, gauge readings, and internal cold-wall ice capture. Established thermodynamics and published experiments are used to explain practical limits of heater control and tray heat delivery. No new experimental data or universal pressure optimum is claimed.',
+    'Common operating assumptions in single-chamber freeze drying are examined against published transport experiments, thermodynamic relations, manufacturer documentation, and archived controller observations. Deep vacuum, pressure stability, and a regulated shelf temperature do not independently establish efficient sublimation or a completed batch. The proposed late-primary failure couples declining vapor replenishment, pump-down, gas-mediated heat transfer, and product resistance. The analysis distinguishes supported physics from unmeasured machine-specific effects.',
   metadata: {
-    title: 'Low-Temperature Lyophilization in Practice: Pressure, Heat Delivery, and Sublimation',
-    subtitle:
-      'An applied interpretation of common operating assumptions in single-chamber freeze drying',
+    title: 'Common Misconceptions in Single-Chamber Freeze Drying: An Applied Thermodynamic Analysis',
+    subtitle: 'Vacuum, vapor pressure, heat transfer, controller behavior, and primary-drying endpoints',
     authors: [
       {
         name: 'Jackson Cummings',
@@ -23,11 +21,15 @@ export const sublimationEntry: PaperEntry = {
         email: 'jackson@thedabcorner.site',
       },
     ],
-    researchArea: 'Applied thermodynamics and controls',
+    researchArea: 'Independent applied research in thermodynamics and process controls',
     year: '2026',
-    keywords: ['lyophilization', 'freeze drying', 'Smoluchowski model', 'pressure-primary control', 'gas-phase heat transfer', 'tray thermal resistance', 'contact resistance', 'aluminum tray', 'heat spreading', 'radiative gap heating', 'Harvest Right', 'Pikal framework', 'bang-bang control', 'thermocouple vacuum gauge'],
+    keywords: [
+      'single-chamber freeze drying', 'lyophilization', 'pressure-dependent heat transfer',
+      'water-vapor partial pressure', 'gas conduction', 'cold-wall deposition',
+      'sublimative cooling', 'heater control', 'drying endpoint', 'applied thermodynamics',
+    ],
     doi: undefined,
-    version: 'v1.2.0',
-    status: 'under-review',
+    version: 'v1.2.1',
+    status: 'draft',
   },
 };

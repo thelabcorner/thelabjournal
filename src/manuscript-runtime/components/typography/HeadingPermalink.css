@@ -1,0 +1,100 @@
+/* NCM manuscript anchor affordance: neutral, quiet, inline and layout-stable.
+ * The small inline box stays inside heading font metrics (including h3).
+ * An invisible pseudo-element expands its click target without changing text
+ * wrapping, the chapter gutter, or subsection-number baselines.
+ */
+.research-body .research-anchor-heading .research-heading-last-word {
+  white-space: nowrap;
+}
+.research-body .research-anchor-heading .research-heading-permalink {
+  position: relative;
+  display: inline-flex;
+  vertical-align: -.1em;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 1.05em;
+  height: 1.05em;
+  min-width: 0;
+  min-height: 0;
+  margin: 0 0 0 7px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  box-shadow: none;
+  color: var(--muted-foreground);
+  font: inherit;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 110ms ease, background-color 110ms ease;
+}
+.research-body .research-heading-permalink::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+}
+.research-body .research-heading-permalink > svg {
+  display: block;
+  width: 13px;
+  height: 13px;
+  max-width: 100%;
+  max-height: 100%;
+  stroke-width: 1.75;
+  pointer-events: none;
+}
+.research-body #title .research-heading-permalink > svg {
+  width: 15px;
+  height: 15px;
+}
+@media (hover: hover) {
+  .research-body .research-anchor-heading:hover .research-heading-permalink {
+    opacity: .75;
+    pointer-events: auto;
+  }
+}
+.research-body .research-anchor-heading:focus-within .research-heading-permalink,
+.research-body .research-heading-permalink:focus-visible,
+.research-body .research-heading-permalink[data-copy-state="copied"],
+.research-body .research-heading-permalink[data-copy-state="error"] {
+  opacity: 1;
+  pointer-events: auto;
+}
+.research-body .research-heading-permalink:hover {
+  color: var(--foreground);
+  background: var(--inset);
+}
+.research-body .research-heading-permalink:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+.research-body .research-heading-permalink[data-copy-state="copied"] {
+  color: var(--foreground);
+}
+.research-body .research-heading-permalink__status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+@media (hover: none) {
+  .research-body .research-anchor-heading .research-heading-permalink {
+    opacity: .65;
+    pointer-events: auto;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .research-body .research-heading-permalink { transition: none; }
+}
+@media print {
+  .research-body .research-heading-permalink { display: none !important; }
+}
+#pdf-publication .research-body .research-heading-permalink { display: none !important; }

@@ -1,26 +1,28 @@
 import { SubsectionLabel } from '../../../../components/sections/Abstract';
+import { ChapterLabel } from '../../../../components/sections/ChapterLabel';
 import { InlineCite } from '../../../../components/prose/InlineCite';
 import { MathBlock, InlineMath } from '../ScientificMath';
+import { GangulyExperimentalEvidenceFigure } from '../figures/GangulyExperimentalEvidenceFigure';
 
 export function LiteratureReviewSection() {
   return (
     <section id="literature" aria-labelledby="lit-heading" className="prose-heading mb-10">
-      <div className="research-chapter-label mb-4">
-        <span className="research-heading-number">2</span>
-        <h2 id="lit-heading" className="text-base font-semibold text-[var(--text)] tracking-tight">Physical evidence and its limits</h2>
-      </div>
+      <ChapterLabel number="2" id="lit-heading" title="Physical evidence and its limits" />
 
       <div className="space-y-4">
         <p className="text-sm text-[var(--text)] leading-relaxed">
-          Lower pressure may favor vapor escape while simultaneously weakening heat delivery through gas.
-          Published experiments establish the opposing mechanisms, but their magnitude depends on product
-          geometry and the thermal boundary. Vial measurements, bulk-tray studies, controller descriptions,
-          and gauge physics provide the evidence for interpreting a consumer dryer's readings.
-          None independently establishes the drying performance of this seven-shelf chamber.
-        </p>
+          Sublimation requires energy at the ice interface and a route for vapor to reach
+          the refrigerated collection surface. Chamber pressure affects each route differently.
+          Experiments with vials establish pressure-dependent gas conduction and the competing
+          resistance to vapor transport. Studies of bulk trays identify additional heat-transfer
+          losses at material interfaces. Equipment documents and vacuum-gauge measurements then
+          determine which parts of that physics can be recognized in an integrated cold-wall
+          chamber. The evidence is considered in that order, with its original geometry and
+          operating conditions retained.
+         </p>
 
         <div id="literature-pikal" className="prose-heading">
-          <SubsectionLabel number="2.1" title="Why lower pressure also reduces gas conduction" />
+          <SubsectionLabel number="2.1" title="Pressure-dependent molecular gas conduction" />
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
             Pikal, Roy & Shah (1984) established the fundamental three-component vial heat-transfer model from
@@ -54,11 +56,11 @@ export function LiteratureReviewSection() {
           </p>
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
-            Within the stated gas-gap model, gas conduction becomes smaller as chamber
-            pressure falls and approaches a finite plateau as pressure increases. This
-            refutes the idea that deeper vacuum always enhances heat delivery. It does
-            not mean higher pressure must improve drying, because greater water-vapor
-            backpressure can reduce the potential for sublimation.
+            The gas contribution declines with pressure in this model and approaches
+            a finite plateau at higher pressures. Sublimation responds to the accompanying
+            heat delivery as well as to the water-vapor pressure at the ice interface.
+            The model therefore provides the heat-transfer component of a pressure
+            comparison; the mass-transfer component must be evaluated alongside it.
           </p>
           <p className="text-sm text-[var(--text)] leading-relaxed">
             Pikal (1985) extended the framework to process design, emphasizing that pressure-dependent heat-transfer
@@ -68,7 +70,7 @@ export function LiteratureReviewSection() {
         </div>
 
         <div id="literature-nail" className="prose-heading">
-          <SubsectionLabel number="2.2" title="What higher-pressure drying experiments show" />
+          <SubsectionLabel number="2.2" title="Measured drying response to chamber pressure" />
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
             Nail (1980) conducted a direct chamber-pressure sweep experiment at constant shelf temperature, measuring
@@ -101,15 +103,17 @@ export function LiteratureReviewSection() {
           </div>
 
           <p className="text-sm text-[var(--text)] leading-relaxed">
-            This ~160% throughput gain at constant shelf temperature directly contradicts a simplistic "deeper vacuum
-            always accelerates drying" intuition and supports the pressure-dependent Kg mechanism. The effect was
-            interpreted as evidence that gas-phase conduction and convection are significant contributors to total heat
-            transfer and are strongly pressure-dependent in the 0.04–1.3 mm Hg range.
+            Across Nail's tested pressures, the higher-pressure condition yielded
+            approximately 2.6 times the drying rate at the same shelf temperature.
+            The measured throughput response is consistent with greater gas-mediated
+            heat delivery in that apparatus. Its magnitude belongs to the tested
+            formulation and geometry; the next question is how the relevant
+            heat-transfer gap and vapor route change in an open-tray chamber.
           </p>
         </div>
 
         <div id="literature-ganguly" className="prose-heading">
-          <SubsectionLabel number="2.3" title="Why experimental geometry matters" />
+          <SubsectionLabel number="2.3" title="Transfer geometry and the origin of spatial differences" />
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
             Ganguly, Nail & Alexeenko conducted experimental and computational studies of freeze-drying heat transfer,
@@ -140,14 +144,21 @@ export function LiteratureReviewSection() {
           </p>
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
-            A former table presented five heat-transfer percentage decompositions as directly
-            digitized laboratory data. Their point-by-point values could not be verified
-            from the primary publication and do not agree with the archived reconstruction.
-            They are omitted rather than treated as measurements. The illustrative heat-budget
-            chart in Section 4 is explicitly identified as a reconstruction.
+              The pie-chart percentages are each pathway's share of the total,
+              not the absolute heat flux supplied by that pathway. At fixed
+              surface temperatures and geometry, the radiative contribution is
+              independent of chamber pressure. Its declining percentage reflects
+              the growing denominator as gas-mediated heat transfer increases.
+              In the 2014 direct-contact pies, radiation falls from 69% at
+              10 mTorr to 45% at 100 mTorr, while gas conduction and the
+              flow-associated contribution rise from 13% to 44%. The accompanying
+              figure separates this normalization effect from the absolute
+              2010 heat-flux regressions, which report an approximately
+              2,666 W/m² radiative reference over the pressure comparison.
           </p>
-          <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
-            Two dissertation results are particularly relevant to an open-tray, multi-shelf consumer machine. First,
+           <GangulyExperimentalEvidenceFigure />
+           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
+             Two dissertation results are particularly relevant to an open-tray, multi-shelf consumer machine. First,
             Ganguly's open-ice top-heating experiment produced normalized three-hour mass-loss responses of approximately
             1.36, 1.17, 1.09, and 1.00 as the heated-surface separation increased through 45, 65, 85, and 105 mm. This is
             direct evidence that a hotter surface above exposed ice can materially change sublimation, although changing
@@ -161,41 +172,90 @@ export function LiteratureReviewSection() {
             pressure variation was about 8 mTorr at a 21 mm gap and about 4.2 mTorr at 26 mm, dropping below approximately
             1 mTorr at much larger separation. These data support a spatial pressure/conductance network for a seven-shelf
             stack and motivate measuring local geometry instead of assigning one chamber pressure to every sublimation
-            interface <InlineCite refs={['ganguly2014']} />.
-          </p>
+             interface <InlineCite refs={['ganguly2014']} />.
+           </p>
+           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
+             The dissertation's Figures 6.7–6.9 extend these transport balances
+             into calculated equipment limits and time-dependent sublimation
+             surfaces. Their calibration includes Baxter Medical Products
+             measurements on a 5% mannitol/5% sucrose formulation, 15 mL
+             per 30 mL vial, at a load of 112 vials. Sublimation was measured
+             by tunable diode laser absorption spectroscopy at 100 mTorr,
+             with the shelf ramped from −40 to −22 °C; product resistance
+             was estimated using 16 monitored vials. The displayed surfaces
+             are outputs of the coupled model, not an experimental grid.
+             The 150 L production calibration coefficients from a separate
+             dissertation case are not transferable to these curves
+             <InlineCite refs={['ganguly2014']} />.
+           </p>
 
 
         </div>
 
-        <div id="literature-patents" className="prose-heading">
-          <SubsectionLabel number="2.4" title="What heater-control evidence establishes" />
+         <div id="literature-patents" className="prose-heading">
+           <SubsectionLabel number="2.4" title="Integrated cold-wall equipment and control practices" />
 
-          <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
-            Harvest Right disclosed their freeze-drying method and control logic in two patents
-            <InlineCite refs={['hrpatent2016', 'hrpatent2022']} />. The patents describe a two-threshold pressure-cycling approach:
-          </p>
-
-          <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
-            Under the disclosed threshold scheme, the heater is enabled below <InlineMath math="P_1" /> and
-            disabled above <InlineMath math="P_2" />. Pressure cycling also informs the completion decision.
-            The patents describe time-dependent accommodations for small or low-moisture loads, where the
-            pressure signal may be weak enough to resemble a completed batch.
-          </p>
-
-          <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
-            Archived firmware interpretation suggests temperature regulation within a pressure-enabled
-            state <InlineCite refs={['cummings2024']} />, whereas Harvest Right patents explicitly describe
-            pressure-activated heater cycling <InlineCite refs={['hrpatent2016', 'hrpatent2022']} />.
-            These descriptions must not be collapsed into a definitive statement about all shipped
-            firmware. Heater-state logs, temperature error and native pressure readings from a known
-            firmware build are required to identify what limits useful heating in that unit.
-          </p>
-
-
-        </div>
+           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
+             Harvest Right's patent US 9,459,044 describes a cylindrical refrigerated chamber
+             with heated shelves, an external vacuum pump and pressure-activated heater cycling.
+             Water leaving the product is collected as ice on the inside wall of the same chamber
+             <InlineCite refs={['hrpatent2016', 'harvestRightHowWorks']} />. This physical
+             arrangement is relevant beyond that manufacturer's controller. Stay Fresh documents
+             internal wall-ice formation and continuous pump operation during primary drying,
+             with an algorithm that alternates pressure-regulated and temperature-regulated
+             intervals <InlineCite refs={['stayFreshManual']} />. Blue Alpine's technical
+             guidance likewise describes water-vapor capture on the chamber walls and its
+             sensitivity to accumulated frost <InlineCite refs={['blueAlpine2024support']} />.
+           </p>
+           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
+              This geometric distinction limits direct use of introductory
+              guidance. Biopharma Group's schematic depicts a separate condenser chamber,
+              whereas these designs collect frost on the wall of the product chamber
+              <InlineCite refs={['biopharma2019misconceptions']} />. Its cautions
+              about excessive vacuum and insufficient heat remain relevant,
+              but condenser-to-product pressure differences, flow conductance,
+              and available deposition area must be evaluated for the actual geometry.
+            </p>
+            <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
+              The shared cold-wall architecture provides common mass and energy
+              conservation boundaries. Heater logic, pump conductance, tray construction,
+              frost deposition and load capacity remain equipment-dependent.
+              The efficiency concern developed here concerns how those elements are
+              controlled as vapor production declines; quantifying its prevalence
+              across commercial dryers requires comparative throughput measurements.
+           </p>
+           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
+             Harvest Right's disclosed two-threshold scheme enables heating below
+             {' '}<InlineMath math="P_1" /> and interrupts heating above
+             {' '}<InlineMath math="P_2" />. Pressure response also enters its reported
+             completion logic <InlineCite refs={['hrpatent2016', 'hrpatent2022']} />.
+             Archived firmware interpretation suggests temperature regulation within a
+             pressure-enabled state <InlineCite refs={['cummings2024']} />. A patent,
+             an operating manual and a reverse-engineered firmware interpretation describe
+              different levels of evidence. Their provisions cannot be assigned to every
+              shipped controller revision. Static firmware analysis now supplies
+              a version-specific comparison. In Harvest Right v5.5.25 a
+              pressure-dependent three-level duty selection is evident in
+              the heater-control path; a temperature PID was not identified
+              there. In Blue Alpine v3.3.4 the recovered path combines
+              temperature PID and a two-threshold pressure gate. The
+              findings describe those binaries, not a common market-wide
+              control law <InlineCite refs={['firmwareAnalysis2026']} />.
+           </p>
+           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
+             Pharmaceutical process-design literature explicitly treats pressure and shelf
+             temperature as joint controls that balance sublimation driving potential,
+             gas-mediated heat transfer and product-temperature limits
+             <InlineCite refs={['tchessalov2023']} />. Consequently a higher gas-conduction
+             coefficient alone is not a standard for correct operation. The relevant comparison
+             is realized water-removal throughput under matched product and equipment limits.
+             Fixed or scheduled pressure thresholds cannot establish that throughput from
+             chamber pressure alone.
+           </p>
+         </div>
 
         <div id="literature-instrumentation" className="prose-heading">
-          <SubsectionLabel number="2.5" title="What a thermocouple gauge measures" />
+          <SubsectionLabel number="2.5" title="Composition-sensitive pressure indication" />
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
             The identified Agilent Type 531 tube is a thermocouple vacuum gauge, not a Pirani
@@ -215,6 +275,9 @@ export function LiteratureReviewSection() {
             influence the response. Although the same rarefied-gas physics contributes to
             product heat transfer, the instrument's response cannot be equated to a tray's
             gas-conduction coefficient or corrected using a universal conductivity ratio.
+             The gauge loses less heat as its gas environment becomes rarer, just as
+             a gas gap transfers less heat to a frozen product at lower pressure.
+             Surface conditions and geometry determine the magnitude in each case.
           </p>
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
             If heater switching uses the indicated gauge pressure
@@ -239,7 +302,7 @@ export function LiteratureReviewSection() {
         </div>
 
         <div id="literature-tray-material" className="prose-heading">
-          <SubsectionLabel number="2.6" title="Why tray contact changes heat delivery" />
+          <SubsectionLabel number="2.6" title="The tray and its thermal contacts" />
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
             Bulk freeze-drying introduces an additional thermal-resistance network between the temperature-controlled shelf
@@ -257,12 +320,13 @@ export function LiteratureReviewSection() {
           />
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
-            This is potentially a large hardware lever. Representative room-temperature conductivities place 300-series
-            stainless steel near 15–17 W/m·K, while common aluminum sheet alloys are typically on the order of 150–205
-            W/m·K. For equal thickness and area, replacing stainless with aluminum can therefore reduce the tray material&apos;s
-            own conduction resistance by roughly an order of magnitude. This does <strong>not</strong> imply an order-of-magnitude
-            reduction in drying time because shelf/tray contact resistance, tray/product contact, radiation, gas conduction,
-            and product-side mass-transfer resistance remain in series.
+            Representative room-temperature conductivities place 300-series
+            stainless steel near 15–17 W/m·K and common aluminum sheet
+            alloys near 150–205 W/m·K. For equal area and thickness, the
+            aluminum layer has roughly one-tenth the bulk thermal resistance.
+            Shelf/tray and tray/product contacts, radiation, gas conduction and
+            product-side vapor resistance determine how much that material
+            substitution changes the full drying process.
           </p>
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">

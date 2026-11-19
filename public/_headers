@@ -12,6 +12,12 @@
 /manifest.webmanifest
   Cache-Control: no-cache, must-revalidate
 
+# A stable content module URL prevents pure article revisions from
+# invalidating the application runtime's hashed JS. Revalidate it on
+# every uncontrolled visit; Workbox precaches each content revision.
+/journal-content.js
+  Cache-Control: no-cache, must-revalidate
+
 # Vite content-hashed assets are immutable across deployments.
 /assets/*
   Cache-Control: public, max-age=31536000, immutable

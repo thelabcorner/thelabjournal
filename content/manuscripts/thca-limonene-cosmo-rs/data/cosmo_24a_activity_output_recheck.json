@@ -1,0 +1,100 @@
+{
+  "model": "openCOSMO-RS 24a parameterization, mode 0, atomic-number segmentation on",
+  "reference_state_types": {
+    "pure_component": 0,
+    "COSMO_reference": 3
+  },
+  "concentrations": [
+    [
+      1e-06,
+      0.999999
+    ],
+    [
+      1e-06,
+      0.999999
+    ]
+  ],
+  "temperature_K": 298.15,
+  "request": {
+    "components": [
+      "THCa_c000.orcacosmo",
+      "Limonene_c000.orcacosmo"
+    ],
+    "concentrations": [
+      [
+        1e-06,
+        0.999999
+      ],
+      [
+        1e-06,
+        0.999999
+      ]
+    ],
+    "temperatures": [
+      298.15,
+      298.15
+    ],
+    "reference_state_types": [
+      0,
+      3
+    ],
+    "options": {
+      "sw_SR_polarizabilities": 0,
+      "sw_SR_atomicNumber": 1
+    },
+    "parameters": {
+      "Aeff": 5.925,
+      "alpha": 7281000.0,
+      "CHB": 43327000.0,
+      "CHBT": 1.5,
+      "SigmaHB": 0.00961,
+      "Rav": 0.5,
+      "RavCorr": 1,
+      "fCorr": 2.4,
+      "comb_SG_z_coord": 10.0,
+      "comb_SG_A_std": 41.624,
+      "comb_modSG_exp": 0.6666666666666666,
+      "comb_lambda0": 0.463,
+      "comb_lambda1": 0.42,
+      "comb_lambda2": 0.065,
+      "comb_SGG_lambda": 0.773,
+      "comb_SGG_beta": 0.778
+    }
+  },
+  "response": {
+    "components": [
+      "THCa_c000.orcacosmo",
+      "Limonene_c000.orcacosmo"
+    ],
+    "ln_gamma_x_SR_combinatorial": [
+      [
+        -0.1926967212747243,
+        -2.557464464346063e-13
+      ],
+      [
+        -0.1926967212747243,
+        -2.557464464346063e-13
+      ]
+    ],
+    "ln_gamma_x_SR_residual": [
+      [
+        1.1016727716375359,
+        1.2476650068649064e-06
+      ],
+      [
+        7.958346378514238,
+        2.4293452560355675
+      ]
+    ],
+    "ln_gamma_x_SR": [
+      [
+        0.9089760503628116,
+        1.24766475111846e-06
+      ],
+      [
+        7.765649657239514,
+        2.4293452560353117
+      ]
+    ]
+  }
+}

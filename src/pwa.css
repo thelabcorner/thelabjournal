@@ -43,23 +43,50 @@
   right: max(16px, env(safe-area-inset-right));
   bottom: max(17px, env(safe-area-inset-bottom));
   align-items: center;
-  justify-content: space-between;
-  gap: 14px;
+  gap: 11px;
   max-width: calc(100vw - 32px);
-  padding: 9px 10px 9px 12px;
+  padding: 11px 13px;
   background: var(--card);
   color: var(--foreground);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  box-shadow: 0 8px 32px oklch(0 0 0 / .13);
+  border-radius: 7px;
+  box-shadow: 0 8px 26px oklch(0 0 0 / .10);
   font-size: 12px;
+  opacity: 0;
+  animation: journal-update-appear .2s ease-out .35s both;
 }
-.pwa-update > span { display: flex; align-items: center; gap: 8px; min-width: 0; }
-.pwa-update > span svg { flex: 0 0 auto; width: 15px; height: 15px; color: var(--muted-foreground); }
-.pwa-update > div { flex: 0 0 auto; display: flex; align-items: center; gap: 4px; }
-.pwa-update button { border: 0; background: transparent; border-radius: 5px; min-height: 32px; padding: 0 9px; font-size: 11.5px; }
+.pwa-update-indicator { display: grid; flex: 0 0 auto; grid-template-columns: repeat(2, 4px); gap: 3px; padding: 3px; }
+.pwa-update-indicator i { width: 4px; height: 4px; background: var(--foreground); opacity: .24; animation: journal-update-dither 1.15s steps(2, end) infinite; }
+.pwa-update-indicator i:nth-child(2) { animation-delay: .18s; }
+.pwa-update-indicator i:nth-child(3) { animation-delay: .36s; }
+.pwa-update-indicator i:nth-child(4) { animation-delay: .54s; }
+.pwa-update-copy { display: flex; min-width: 0; flex-direction: column; gap: 2px; }
+.pwa-update-copy strong { font-size: 12px; line-height: 1.25; font-weight: 600; }
+.pwa-update-copy small { color: var(--muted-foreground); font-size: 11px; line-height: 1.4; font-weight: 450; }
+.pwa-update-actions { flex: 0 0 auto; display: flex; align-items: center; gap: 4px; margin-left: 8px; }
+.pwa-update button { border: 0; background: transparent; color: var(--foreground); border-radius: 5px; min-height: 32px; padding: 0 9px; font-size: 11.5px; cursor: pointer; }
 .pwa-update button:hover { background: var(--muted); }
 .pwa-update button:last-child { background: var(--primary); color: var(--primary-foreground); font-weight: 550; }
+@keyframes journal-update-appear { to { opacity: 1; } }
+@keyframes journal-update-dither { 0%, 100% { opacity: .24; } 50% { opacity: 1; } }
+.pwa-route-pending {
+  width: min(100%, 620px);
+  margin: clamp(56px, 11vh, 130px) auto;
+  padding: 0 24px 40px;
+  color: var(--foreground);
+}
+.pwa-route-pending-mark { display: grid; grid-template-columns: repeat(2, 5px); width: max-content; gap: 4px; margin-bottom: 25px; }
+.pwa-route-pending-mark i { width: 5px; height: 5px; background: var(--foreground); opacity: .24; animation: journal-update-dither 1.15s steps(2, end) infinite; }
+.pwa-route-pending-mark i:nth-child(2) { animation-delay: .18s; }
+.pwa-route-pending-mark i:nth-child(3) { animation-delay: .36s; }
+.pwa-route-pending-mark i:nth-child(4) { animation-delay: .54s; }
+.pwa-route-pending h1, .pwa-route-pending h2 { margin: 13px 0 12px; font-size: clamp(23px, 4vw, 30px); line-height: 1.18; font-weight: 600; letter-spacing: -.035em; }
+.pwa-route-pending > p:not(.section-label) { max-width: 55ch; margin: 0; color: var(--muted-foreground); font-size: 13px; line-height: 1.65; }
+.pwa-route-pending-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 25px; }
+.pwa-route-pending-actions button { min-height: 36px; padding: 0 13px; border: 1px solid var(--border); border-radius: 5px; color: var(--foreground); background: var(--card); font-size: 12px; font-weight: 550; cursor: pointer; }
+.pwa-route-pending-actions button:first-child { color: var(--primary-foreground); background: var(--primary); border-color: var(--primary); }
+.pwa-route-pending-actions button:disabled { opacity: .6; cursor: wait; }
+.pwa-route-pending-actions button:not(:disabled):hover { filter: brightness(.94); }
 @media (max-width: 767px) {
   .pwa-update {
     bottom: calc(72px + env(safe-area-inset-bottom));
@@ -87,6 +114,9 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .install-action, .pwa-update { transition: none; }
+  .pwa-update { animation: none; opacity: 1; }
+  .pwa-update-indicator i { animation: none; opacity: .65; }
+  .pwa-route-pending-mark i { animation: none; opacity: .65; }
 }
 
 /* A taller Preferences sheet must fit fully in short tablet and phone viewports.

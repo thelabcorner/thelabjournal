@@ -1,0 +1,73 @@
+/* NCM publication abstract: compact zinc surface, full rounded outline,
+   no accent rails, text-transform tricks or decorative heading rules. */
+.research-body .research-editorial-abstract {
+  min-width: 0;
+  margin: 0 0 26px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.research-body .research-editorial-abstract__surface {
+  min-width: 0;
+  padding: 15px 17px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius, 8px);
+  background: var(--card);
+}
+.research-body .research-editorial-abstract__heading {
+  margin: 0 0 9px;
+  padding: 0;
+}
+.research-body .research-editorial-abstract__heading h2 {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  font-size: 16.5px;
+  line-height: 1.35;
+  font-weight: 620;
+  letter-spacing: -.02em;
+  text-transform: none;
+  color: var(--foreground);
+}
+.research-body .research-editorial-abstract__body {
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: 0;
+  color: var(--prose-ink, var(--text));
+}
+.research-body .research-editorial-abstract__body > p {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  line-height: 1.7;
+  font-weight: 400;
+  color: inherit;
+  text-wrap: pretty;
+}
+.research-body .research-editorial-abstract__body > p + p {
+  margin-top: 12px;
+}
+.research-body .research-editorial-abstract > figure {
+  margin-top: 17px;
+}
+@media (max-width: 767px) {
+  .research-body .research-editorial-abstract { margin-bottom: 23px; }
+  .research-body .research-editorial-abstract__surface { padding: 13px 14px 14px; }
+  .research-body .research-editorial-abstract__heading { margin-bottom: 8px; }
+  .research-body .research-editorial-abstract__body > p { font-size: 13px; line-height: 1.68; }
+  .research-body .research-editorial-abstract__body > p + p { margin-top: 11px; }
+}
+@media print {
+  .research-body .research-editorial-abstract { break-inside: auto; }
+  .research-body .research-editorial-abstract__surface {
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    background: transparent;
+  }
+}

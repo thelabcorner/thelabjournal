@@ -1,8 +1,11 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
+// The scientific publication system uses the exact Inter sans-serif brand face.
+import './fonts.css'
 import App from './App'
 import './styles.css'
 import './app-shell.css'
+import './journal-loading.css'
 import './dither.css'
 import './chrome-v3.css'
 import './theme.css'

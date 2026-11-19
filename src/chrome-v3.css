@@ -99,7 +99,7 @@
 /* The margins reuse the nav's actual ordered-Bayer renderer, but their
    fades are computed on individual dot coverage/alpha in DitherScene.
    No CSS mask, vignette overlay, bright sweeping beam, or interactive rail. */
-.journal-gutter-fields { display: none; pointer-events: none; }
+.journal-gutter-fields { display: none; pointer-events: none; opacity: 0.3; }
 @media (min-width: 1680px) {
   .journal-gutter-fields {
     display: block;

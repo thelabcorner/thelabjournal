@@ -1,6 +1,6 @@
 # thelabjournal™
 
-A technical writing and research archive, implemented as a compact reading application rather than a sequence of marketing pages.
+A technical writing, research and curated-quotation archive, implemented as a compact reading application rather than a sequence of marketing pages.
 
 **Stack:** React 19 · TypeScript · Bun · Vite · Tailwind CSS v4 · Lucide · TanStack Virtual · Workbox PWA.
 **Visual source:** neighboring `webseal/STYLE_GUIDE.md`, with the archive density of `gallery/` and technical editorial conventions of `thesis-website/`.
@@ -28,6 +28,7 @@ bun run deploy:cloudflare
 
 ## Information architecture
 
+- **Three editorial domains:** Journal (notes/essays), Manuscripts (formal independent research), and Quotes (original statements, external quotations, and curated collections). Quotes use distinct source verification and the exact editorial label **Curation note**; see [docs/quotes-publication.md](docs/quotes-publication.md).
 - **Persistent application frame:** 48 px header, 252 px desktop navigation rail, compact archive workspace, subdued footer.
 - **Archive:** topic filters, category badges shared with the article reader, type/date metadata, keyword search, subject grouping (newest within each subject) by default, alternative chronological/reading-length sorts, item actions, selected entry, and saved view. No separate hero page for each topic.
 - **Journal landing background:** the existing ordered-dot WebSeal-style animation reused at exactly 2% opacity, with no paper ruling, margins, or artificial grain. The paint surface stays viewport-sized when scrolling, is excluded from printing, and exists only in Journal / All entries; other subjects, Saved, and article readers remain plain.
@@ -35,7 +36,7 @@ bun run deploy:cloudflare
 - **Brand assets:** the navbar's four-tile mark is shared with the generated SVG/ICO/PNG favicons, Apple touch icon and maskable PWA icon. Regenerate with `bun run generate:pwa-icons`; the reproducible format/geometry audit runs as `bun run audit:icons` and in release validation.
 - **Open Graph social artwork:** static 1200×630 Satori + Resvg rendering of the shared nav mark, Inter-only lettering, and a mathematically seeded stippled research globe. No image-generation service, remote images, gradient fills, serif or monospace typography. Regenerate with `bun run generate:og`, validate with `bun run audit:og`. The compact PNG is deployed, while the larger vector intermediate stays under ignored `artifacts/` to avoid unnecessary PWA precaching. Social tags reference the absolute Cloudflare custom-domain URL.
 - **Article reader:** back/actions bar, live reading-progress indicator, article contents rail at wide widths, and a native section picker at narrower widths. The first section appears **before** the supporting figure.
-- **Phone navigation:** persistent four-item bottom navigation (Journal, Browse, Saved, Search), safe-area-aware placement, and a bottom-sheet Browse menu. Breakpoint: below 768 px.
+- **Phone navigation:** persistent five-item bottom navigation (Journal, Quotes, Browse, Saved, Search), safe-area-aware placement, and a bottom-sheet Browse menu. Breakpoint: below 768 px.
 - **Tablet navigation:** top-bar Browse opens a left drawer between 768 and 1023 px.
 - **Saved entries:** functional browser-local bookmarks backed by `localStorage` when available, with in-memory fallback. There is no account or cross-device sync.
 - **Search:** Ctrl/⌘ K or / keyboard shortcut, filterable dialog, arrow navigation, Enter to open, Escape to dismiss.
@@ -62,6 +63,8 @@ Large archive lists, responsive card grids, saved/filtered views, full-search re
 
 ```sh
 bun run build
+bun run audit:quotes
+bun run audit:quotes:browser # needs production preview on localhost:11265
 bun run audit:archive
 bun run audit:landing-dither
 bun run smoke

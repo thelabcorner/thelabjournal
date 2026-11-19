@@ -1,4 +1,5 @@
 import { InlineMath } from '../../../components/prose/MathBlock';
+import { ScientificFigureCaption } from '../../../components/typography/ScientificFigureCaption';
 
 /** Selectable, semantic process diagram for the mass-led argument. */
 const stages = [
@@ -11,10 +12,10 @@ const stages = [
 
 export function MassPipelineFigure() {
   return <figure className="research-scientific-figure research-mass-pipeline">
-    <figcaption>
-      <span>Figure 1. Gravimetric measurement pathway</span>
-      <span>From the initial tare to a reference-relative progress estimate.</span>
-    </figcaption>
+    <ScientificFigureCaption
+      title="Figure 1. Gravimetric measurement pathway"
+      detail="From the initial tare to a reference-relative progress estimate."
+    />
     <ol className="research-mass-pipeline-steps">
       {stages.map(stage => <li key={stage.key} className={'research-mass-pipeline-stage research-mass-pipeline-stage--' + stage.tone}>
         <span className="research-mass-pipeline-index" aria-hidden="true">{stage.key}</span>

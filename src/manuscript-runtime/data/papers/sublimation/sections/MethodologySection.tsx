@@ -1,4 +1,5 @@
 import { SubsectionLabel } from '../../../../components/sections/Abstract';
+import { ChapterLabel } from '../../../../components/sections/ChapterLabel';
 import { Callout } from '../../../../components/prose/Callout';
 import { InlineCite } from '../../../../components/prose/InlineCite';
 import { InlineMath, MathBlock } from '../ScientificMath';
@@ -6,22 +7,22 @@ import { InlineMath, MathBlock } from '../ScientificMath';
 export function MethodologySection() {
   return (
     <section id="methodology" aria-labelledby="method-heading" className="prose-heading mb-10">
-      <div className="research-chapter-label mb-4">
-        <span className="research-heading-number">3</span>
-        <h2 id="method-heading" className="text-base font-semibold text-[var(--text)] tracking-tight">Physical relations for field interpretation</h2>
-      </div>
+      <ChapterLabel number="3" id="method-heading" title="Physical relations for field interpretation" />
 
       <div className="space-y-4">
         <p className="text-sm text-[var(--text)] leading-relaxed">
-          The pressure gauge does not directly measure water removal, and the shelf sensor does not
-          measure the temperature of every ice interface. Interpretation therefore begins with the
-          conservation of heat and water rather than a single displayed reading. The relations below
-          identify which physical quantities a measurement depends upon; their coefficients must be
-          established in the actual tray geometry before the model can predict a drying cycle.
+          The experimental results identify pressure-dependent heat transfer,
+          tray-contact resistance and composition-sensitive measurement. A
+          physical interpretation of the dryer now requires those effects to
+          share the same heat and gas inventories. The following equations
+          first connect the product's heat requirement to vapor generation,
+          then account for evacuation and deposition within the chamber.
+          Pressure optima and hardware changes are evaluated against
+          these balances rather than from one isolated coefficient.
         </p>
 
         <div id="methodology-coupled-model" className="prose-heading">
-          <SubsectionLabel number="3.1" title="How heat reaches the ice and water reaches the wall" />
+          <SubsectionLabel number="3.1" title="Coupled energy and species conservation" />
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
             Pikal's original vial model contains three additive heat-transfer pathways. Ganguly's measurements resolve a
@@ -37,7 +38,7 @@ export function MethodologySection() {
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
             where <InlineMath math="K_c" /> is solid/contact conduction, <InlineMath math="K_r" /> is radiation,
             <InlineMath math="K_g" /> is molecular gas-gap conduction, and <InlineMath math="K_f" /> is a separate
-            flow-coupled contribution. <InlineMath math="\mathcal G" /> denotes chamber geometry. In the target machine,
+            flow-coupled contribution. <InlineMath math="\mathcal G" /> denotes chamber geometry. For the worked rack geometry,
             <InlineMath math="K_f" /> must not be identified automatically with classical buoyant natural convection;
             pressure- and concentration-driven H₂O transport can also move energy. Here the fourth coefficient is an equivalent, geometry-dependent contribution under a specified temperature difference. Advected gas enthalpy is not automatically positive or independently additive to molecular conduction; separating it without double-counting requires measured flux and boundary temperatures. The molecular gas-conduction term follows the Smoluchowski relation in Eq. 2.2.
           </p>
@@ -68,18 +69,78 @@ export function MethodologySection() {
              water-vapor partial pressure whenever it exceeds ongoing vapor production, without removing
              water from the apparatus. Measured total pressure alone cannot separate the terms or supply
             the water mole fraction. Pressure, deposition, and sublimation therefore have to be
-            solved together when making equipment predictions.
-          </p>
+              solved together when making equipment predictions.
+           </p>
+           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
+             Wall-ice accumulation offers a convergent counterpart to the outward-spreading
+             intuition of the inverse-square law: the deposition front instead advances inward
+             through progressively smaller concentric cylindrical surfaces. For a uniform layer
+             of thickness <InlineMath math={String.raw`\delta`} /> and chamber inner radius
+             {' '}<InlineMath math="r_w" />, the exposed area decreases as
+             {' '}<InlineMath math={String.raw`A_{dep}=2\pi L(r_w-\delta)`} />, so inward
+             advance at a fixed total deposition rate scales as
+             {' '}<InlineMath math={String.raw`1/(r_w-\delta)`} />. The growing layer also adds
+             radial thermal resistance
+             {' '}<InlineMath math={String.raw`R_{ice}=\frac{\ln[r_w/(r_w-\delta)]}{2\pi k_{ice}L}`} />,
+             potentially warming the deposition surface and weakening vapor capture.
+             Significant buildup also reduces the free gas volume assumed constant above
+             <InlineCite refs={['ganguly2023equipment']} />.
+           </p>
+           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
+             The non-condensable inventory has its own balance,
+             {' '}<InlineMath math={String.raw`\frac{dn_{\mathrm{NCG}}}{dt}=\dot n_{\mathrm{in,NCG}}-\dot n_{\mathrm{pump,NCG}}`} />,
+             with{' '}<InlineMath math={String.raw`n_{\mathrm{NCG}}=p_{\mathrm{NCG}}V_g/(RT_g)`} /> under the same
+             uniform-gas approximation. The inlet term includes any deliberate gas admission and uncontrolled
+              leakage. Total pressure is the sum of water-vapor and non-condensable partial pressures. When the
+              wet-product source weakens but the pump continues operating, total pressure can decline even
+              when the nominal controller setpoint has not changed. The water balance alone cannot predict
+              that decline or the effect of adding a non-condensable gas inlet.
+            </p>
+            <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
+              Pumping progressively depletes noncondensable gas while sublimation
+              supplies water vapor. The refrigerated wall captures part of that vapor
+              as ice and the pump exhausts another part. The resulting change in
+              chamber composition is governed by the separate removal rates of the
+              two species. For fixed volume and approximately constant gas temperature,
+              adding the species balances gives
+              {' '}<InlineMath math={String.raw`\frac{dP_{\mathrm{total}}}{dt}=\frac{RT_g}{V_g}(\dot n_{\mathrm{sub}}+\dot n_{\mathrm{in,NCG}}-\dot n_{\mathrm{wall}}-\dot n_{\mathrm{pump,total}})`}/>.
+              The relative residence times of water vapor and non-condensables can therefore alter the
+              chamber's gas composition even while total pressure decreases. Dalton's law gives
+              {' '}<InlineMath math={String.raw`P_{\mathrm{total}}=p_{\mathrm{H_2O}}+p_{\mathrm{NCG}}`}/>.
+              In particular, the water-vapor fraction rises when
+              {' '}<InlineMath math={String.raw`\frac{d}{dt}\ln\!\left(p_{\mathrm{H_2O}}/p_{\mathrm{NCG}}\right)>0`}/>,
+              which is compatible with both component pressures falling if the non-condensable
+              partial pressure falls faster proportionally. A falling absolute pressure and
+              rising water-vapor fraction are thus physically compatible outcomes of the
+              repeated evacuation, sublimation and deposition process.
+            </p>
+            <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
+              As vapor generation falls, the imbalance between gas production and
+              removal changes chamber pressure. The resulting heat-transfer change
+              acts on vapor production in the next interval. Product temperature,
+              remaining ice, vapor composition and pump behavior therefore form
+              a coupled dynamic state
+              {' '}<InlineMath math={String.raw`\dot{\mathbf x}=\mathbf F(\mathbf x,\mathbf u)`}/>.
+              Depending on the relative strength of gas-mediated heating and
+              vapor backpressure, this feedback can accelerate or damp the decline
+              in sublimation. Whether its response is locally exponential depends
+              on the eigenvalues of the linearized dynamics. The proposed
+              late-primary operating condition is examined after the model
+              comparisons, where the evolving product resistance and
+              controller response can be included.
+            </p>
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
-            Multiplying a heat-transfer coefficient by a vapor-pressure potential produces a
-            useful comparison between assumed pressure conditions, but not a mass-removal rate.
+             Multiplying a heat-transfer coefficient by a vapor-pressure potential
+             produces a screening index, not a mass-removal rate. The product omits
+             the temperature difference supplying latent heat and the resistance
+             governing vapor escape. Its dimensions are not those of sublimation flux.
           </p>
 
           <MathBlock
             math="F_{screen}(P_{total}, f_{H_2O}, T) = K_{eff}(P_{total}, f_{H_2O}) \left[P_{sub}(T) - f_{H_2O} P_{total}\right]"
             label="(3.3)"
-            caption="Heat-transfer-weighted driving-force screening metric; not a physical mass-flux equation"
+            caption="Heat-transfer-weighted vapor-pressure-potential index; not a physical mass-flux equation"
           />
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
@@ -111,9 +172,12 @@ export function MethodologySection() {
           />
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
-            This expression explains why increasing pressure can help only while the associated increase in heat delivery
-            outweighs the loss in water-vapor driving force. It also makes the evolving dried layer a first-class state:
-            the pressure optimum can move as <InlineMath math="R_p" /> changes during primary drying.
+             Equation (3.5) separates vapor-pressure potential in the numerator
+             from heat- and mass-transfer resistance in the denominator. A
+             favorable pressure potential can coexist with negligible flux when
+             resistance is high or heat delivery is inadequate. The attainable
+             drying rate and pressure optimum can change as
+             {' '}<InlineMath math="R_p" /> increases during primary drying.
           </p>
 
           <MathBlock
@@ -138,7 +202,7 @@ export function MethodologySection() {
         </div>
 
         <div id="methodology-optimal-pressure" className="prose-heading">
-          <SubsectionLabel number="3.2" title="Why a calculated pressure optimum is conditional" />
+          <SubsectionLabel number="3.2" title="Pressure sensitivity under specified boundary conditions" />
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
              Under an explicitly fixed water-vapor fraction and fixed interfacial temperature,
@@ -156,7 +220,7 @@ export function MethodologySection() {
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
              This is an interior stationary point only when it lies inside the admissible pressure
-             interval and the driving force is positive. Otherwise the constrained maximum occurs at
+              interval and the vapor-pressure potential is positive. Otherwise the constrained maximum occurs at
              an interval boundary. Since changing pressure can change the vapor fraction and interface
              temperature, the result is a conditional sensitivity calculation rather than an
              operating setpoint.
@@ -198,7 +262,7 @@ export function MethodologySection() {
         </div>
 
         <div id="methodology-radiative-gap" className="prose-heading">
-          <SubsectionLabel number="3.3" title="What contact and radiative gaps change" />
+          <SubsectionLabel number="3.3" title="Solid contact, radiation and latent-heat buffering" />
 
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
             A deliberate heater-to-tray gap is treated as an alternative thermal boundary condition, not as a source of
@@ -232,7 +296,7 @@ export function MethodologySection() {
         </div>
 
         <div id="methodology-vapor-removal" className="prose-heading">
-          <SubsectionLabel number="3.4" title="What limits vapor capture in a shared chamber" />
+          <SubsectionLabel number="3.4" title="Finite deposition capacity in the shared chamber" />
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
             The product-side resistance in Equation (3.5) applies when chamber water-vapor pressure is known.
             Predicting that pressure requires a relation between vapor generation and cold-wall deposition. The
@@ -289,21 +353,26 @@ export function MethodologySection() {
             This result links tray conductivity and heater control to cold-wall deposition performance. Reducing
             thermal resistance cannot eliminate a large vapor-capture resistance. Neither the effective
             conductance nor the wall-ice temperature distribution has been measured for the target machine.
-            Wall frost growth, changing gas composition, local shelf gradients, and flow limitations can
-            invalidate the linear, well-mixed approximation. The accompanying numerical model uses it as
-            a conservation-checked baseline, not a predicted operating pressure
+             Wall frost growth, changing gas composition, local shelf gradients, pump-speed curves, and
+             flow limitations can invalidate the linear, well-mixed approximation. Deliberate gas admission
+             changes the non-condensable inventory and therefore requires a coupled transient pressure
+             model rather than a fixed water-vapor sink. The accompanying numerical model uses the
+             steady water balance as a conservation-checked baseline, not a predicted operating pressure
             <InlineCite refs={['pikal1984', 'pikal1985']} />.
           </p>
         </div>
 
         <div id="methodology-assumptions" className="prose-heading">
-          <SubsectionLabel number="3.5" title="What the simplified models cannot establish" />
+          <SubsectionLabel number="3.5" title="Model applicability and unmeasured coefficients" />
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
             Vial-calibrated transfer coefficients provide an experimental point of departure, not measured
-            properties of these trays. The Smoluchowski relation transfers as a physical model, while its
-            geometric coefficients must be identified for the shelf-to-product gaps in this machine.
-            Tray alloy, thickness, flatness, contact area, and surface finish also affect the actual
-            thermal path. Conductivity data alone therefore constrain only the material resistance.
+            properties of integrated cold-wall trays. The Smoluchowski relation transfers as a physical model, while its
+            geometric coefficients must be identified for the shelf-to-product gaps in the worked seven-shelf configuration.
+Tray alloy, thickness, flatness, contact area, and surface finish also affect the actual
+             thermal path. Conductivity data alone therefore constrain only the material resistance.
+             Single-chamber units from different manufacturers share source-and-sink conservation
+             but do not share measured gas conductance, frost capacity or heater-control laws.
+             A market-wide performance conclusion requires paired hardware and cycle measurements.
           </p>
           <p className="text-sm text-[var(--text)] leading-relaxed mb-3">
             The heat and mass balances assume a quasi-steady sublimation interface over the pressure-cycle

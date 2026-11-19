@@ -1,4 +1,4 @@
-import { BookOpen, Bookmark, FlaskConical, Microscope, PanelLeftClose, PanelLeftOpen, PenLine, Settings2 } from 'lucide-react'
+import { Quote, BookOpen, Bookmark, FlaskConical, Microscope, PanelLeftClose, PanelLeftOpen, PenLine, Settings2 } from 'lucide-react'
 import { cn } from '../lib/utils'
 import { AuthorAvatar } from './AuthorAvatar'
 import { cue } from '../haptics'
@@ -10,6 +10,8 @@ interface Props {
   view: 'all' | 'saved'
   selected: boolean
   researchMode: boolean
+  quotesActive: boolean
+  onQuotes: () => void
   onResearch: () => void
   saved: number
   onCollapse: () => void
@@ -17,7 +19,7 @@ interface Props {
   onSaved: () => void
   onSettings: () => void
 }
-export function DesktopRail({ collapsed, active, view, selected, researchMode, onResearch, saved, onCollapse, onFilter, onSaved, onSettings }: Props) {
+export function DesktopRail({ collapsed, active, view, selected, researchMode, quotesActive, onQuotes, onResearch, saved, onCollapse, onFilter, onSaved, onSettings }: Props) {
   const nav = [
     {label:'All writing', icon:BookOpen, topic:'All' as const},
     {label:'Essays', icon:PenLine, topic:'Essays' as const},
@@ -32,8 +34,9 @@ export function DesktopRail({ collapsed, active, view, selected, researchMode, o
     </div>
     <div className="rail-micro-divider"/>
     <nav className="rail-primary-nav" aria-label="Quick sections">
-      {nav.map(({label,icon:Icon,topic}) => <button key={topic} aria-label={label} title={label} aria-current={!selected && view==='all' && active===topic ? 'page' : undefined} className={cn(!selected && view==='all' && active===topic && 'active')} onClick={() => { cue('selection'); onFilter(topic) }}><Icon size={18}/></button>)}
+      {nav.map(({label,icon:Icon,topic}) => <button key={topic} aria-label={label} title={label} aria-current={!selected && !researchMode && !quotesActive && view==='all' && active===topic ? 'page' : undefined} className={cn(!selected && !researchMode && !quotesActive && view==='all' && active===topic && 'active')} onClick={() => { cue('selection'); onFilter(topic) }}><Icon size={18}/></button>)}
       <button aria-label="Research manuscripts" title="Research manuscripts" className={cn(researchMode && 'active')} aria-current={researchMode ? 'page' : undefined} onClick={() => { cue('selection'); onResearch() }}><Microscope size={18}/></button>
+      <button aria-label="Quotes" title="Quotes" className={cn(quotesActive && 'active')} aria-current={quotesActive ? 'page' : undefined} onClick={() => { cue('selection'); onQuotes() }}><Quote size={18}/></button>
       <div className="rail-micro-divider"/>
       <button aria-label="Saved entries" title="Saved entries" className={cn(!selected && view==='saved' && 'active')} aria-current={!selected && view==='saved' ? 'page' : undefined} onClick={() => { cue('selection'); onSaved() }}><Bookmark size={18}/>{saved>0 && <span className="rail-tiny-count">{saved}</span>}</button>
     </nav>

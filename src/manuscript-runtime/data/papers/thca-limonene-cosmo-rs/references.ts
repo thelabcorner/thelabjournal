@@ -1,0 +1,31 @@
+import type { ReferenceEntry } from '../../../types/thesis'
+
+/** Primary literature used by the active research edition. Calculated data have a separate provenance ledger. */
+export const thcaLimoneneReferences: ReferenceEntry[] = [
+  { id:'skell2021', authors:'Skell, J. M., Kahn, M., and Foxman, B. M.', year:'2021',
+    title:'Crystal structure of Δ9-tetrahydrocannabinolic acid A', venue:'Acta Crystallographica C 77, 84–89; doi:10.1107/S2053229621000280',
+    url:'https://doi.org/10.1107/S2053229621000280' },
+  { id:'patent2026', authors:'Yarger, J. L., Davidowski, S., and Seth, M.', year:'2026',
+    title:'Cannabinoid acids crystalline forms, methods of producing, and uses thereof',
+    venue:'US20260008762A1; patent XRD, DSC and TGA reports, not independently confirmed reversible fusion',
+    url:'https://patents.google.com/patent/US20260008762A1/en' },
+  { id:'muller2025', authors:'Müller, S., Nevolianis, T., Garcia-Ratés, M., Riplinger, C., Leonhard, K., and Smirnova, I.', year:'2025',
+    title:'OpenCOSMO-RS method and parameterization', venue:'Fluid Phase Equilibria 589, 114250; doi:10.1016/j.fluid.2024.114250',
+    url:'https://doi.org/10.1016/j.fluid.2024.114250' },
+  { id:'pulido2023', authors:'Pulido Bonilla et al.', year:'2023',
+    title:'Temperature-dependent experimental solubility of cannabidiol in hydrocarbon solvents',
+    venue:'Industrial & Engineering Chemistry Research; doi:10.1021/acs.iecr.3c01192',
+    url:'https://doi.org/10.1021/acs.iecr.3c01192' },
+  { id:'rapinel2017', authors:'Rapinel et al.', year:'2017',
+    title:'COSMO-RS screening and experimental extraction involving botanical compounds and n-butane',
+    venue:'LWT – Food Science and Technology; doi:10.1016/j.lwt.2016.10.003',
+    url:'https://doi.org/10.1016/j.lwt.2016.10.003' },
+  { id:'filer2021', authors:'Filer, C. N.', year:'2021',
+    title:'Letter to the Editor: On the Reluctant Decarboxylation of THCA-B',
+    venue:'Cannabis and Cannabinoid Research 6, 446–448; doi:10.1089/can.2021.0003',
+    url:'https://doi.org/10.1089/can.2021.0003' },
+  { id:'wang2016', authors:'Wang, M., Wang, Y.-H., Avula, B., et al.', year:'2016',
+    title:'Decarboxylation Study of Acidic Cannabinoids',
+    venue:'Cannabis and Cannabinoid Research 1, 262–271; doi:10.1089/can.2016.0020',
+    url:'https://doi.org/10.1089/can.2016.0020' },
+]

@@ -1,0 +1,69 @@
+/* Shared journal/essay/quote/manuscript loading state.
+   The visual center is deliberate, not a card, skeleton, or decorative overlay. */
+.journal-loading {
+  box-sizing: border-box;
+  min-width: 0;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 0;
+}
+.journal-loading--page {
+  min-height: max(330px, calc(100dvh - var(--header-height, 48px) - 128px));
+  padding-block: clamp(48px, 8dvh, 100px);
+}
+.journal-loading--section {
+  min-height: 230px;
+  padding: 36px 16px;
+}
+.journal-loading--inline {
+  min-height: 94px;
+  padding: 20px 12px;
+}
+.journal-loading__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 17px;
+  max-width: 100%;
+  text-align: center;
+  color: var(--muted-foreground);
+  font: 500 12px/1.55 Inter, system-ui, sans-serif;
+}
+.journal-loading__dither {
+  display: grid;
+  grid-template: repeat(4, 4px) / repeat(4, 4px);
+  gap: 3px;
+  flex: none;
+  color: var(--foreground);
+}
+.journal-loading__dot {
+  display: block;
+  width: 4px;
+  height: 4px;
+  background: currentColor;
+  opacity: .18;
+  animation: journal-loading-dither 1.68s ease-in-out infinite;
+}
+@keyframes journal-loading-dither {
+  0%, 100% { opacity: .16; }
+  38% { opacity: .78; }
+  67% { opacity: .28; }
+}
+.journal-loading__label {
+  max-width: 36ch;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 767px) {
+  .journal-loading--page {
+    min-height: max(300px, calc(100dvh - var(--header-height, 52px) - 150px));
+    padding-block: 48px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .journal-loading__dot { animation: none; opacity: .42; }
+}
+@media print {
+  .journal-loading { display: none; }
+}

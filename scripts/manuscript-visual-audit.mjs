@@ -38,7 +38,7 @@ try {
           localStorage.setItem('thelabcorner.journal.preferences.v2', JSON.stringify({ theme }))
         }, appearance)
         await page.goto(url, { waitUntil: 'domcontentloaded' })
-        await page.locator('.research-body #abstract .research-abstract-card').waitFor()
+        await page.locator('.research-body #abstract .research-editorial-abstract__body').waitFor()
         const measure = await page.evaluate(() => {
           const find = selector => document.querySelector(selector)
           const css = selector => getComputedStyle(find(selector))
@@ -46,8 +46,8 @@ try {
             const rect = find(selector).getBoundingClientRect()
             return { left: rect.left, right: rect.right, top: rect.top, width: rect.width }
           }
-          const abstract = find('#abstract .research-abstract-card')
-          const pad = css('#abstract .research-abstract-card')
+          const abstract = find('#abstract .research-editorial-abstract__body')
+          const pad = css('#abstract .research-editorial-abstract__body')
           const badge = css('#title .research-badge--research')
           const figure = css('.research-reactor-figure')
           const heater = find('.research-reactor-figure svg path[stroke="var(--research-thermal)"]')
@@ -59,8 +59,8 @@ try {
             scrollWidth: document.documentElement.scrollWidth,
             title: find('#title h1')?.textContent,
             abstractText: abstract.textContent,
-            abstract: bounds('#abstract .research-abstract-card'),
-            paragraph: bounds('#abstract .research-abstract-card p'),
+            abstract: bounds('#abstract .research-editorial-abstract__body'),
+            paragraph: bounds('#abstract .research-editorial-abstract__body p'),
             padLeft: parseFloat(pad.paddingLeft),
             padRight: parseFloat(pad.paddingRight),
             badgeBorder: parseFloat(badge.borderTopWidth),
@@ -75,11 +75,12 @@ try {
           }
         })
         assert.match(measure.title, /gravimetric|decarboxylation/i)
-        assert.match(measure.abstractText, /formal publication of Decarboxulator/)
+        assert.match(measure.abstractText, /documents practical decarboxylation tracking methods developed with Decarboxulator/)
         assert(measure.scrollWidth <= width + 1, 'document horizontal overflow')
         assert(measure.abstract.left >= -1 && measure.abstract.right <= width + 1, 'abstract escapes viewport')
-        assert(measure.padLeft >= 14 && measure.padRight >= 14, 'abstract text padding is too tight')
-        assert(measure.paragraph.left >= measure.abstract.left + 14, 'abstract text intersects card edge')
+        assert.equal(measure.padLeft, 0, 'editorial abstract must have no left inset')
+        assert.equal(measure.padRight, 0, 'editorial abstract must have no right inset')
+        assert(Math.abs(measure.paragraph.left - measure.abstract.left) < 1, 'abstract prose must align with reading column')
         assert(measure.badgeBorder >= 1, 'thesis-inspired badge lost its border')
         assert(measure.equations >= 100, 'scientific equations were lost')
         assert(measure.charts >= 3, 'scientific figures were lost')

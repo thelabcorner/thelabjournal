@@ -1,0 +1,42 @@
+/* Scientific figures belong to the manuscript's editorial typography.
+ * A heading and a supporting note must never share an anonymous inline linebox.
+ * Scoped to opt-in figure captions; equation captions and tables are untouched.
+ */
+.research-body .research-scientific-figure > figcaption.research-figure-caption {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  align-items: start;
+  gap: 4px;
+  min-width: 0;
+  margin: 0 0 12px;
+  padding: 0 0 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  line-height: normal;
+}
+.research-body .research-scientific-figure > .research-figure-caption .research-figure-caption__title {
+  display: block;
+  min-width: 0;
+  margin: 0;
+  color: var(--foreground);
+  font: 620 13px/1.45 var(--font-sans);
+  letter-spacing: -.012em;
+  text-transform: none;
+  overflow-wrap: break-word;
+}
+.research-body .research-scientific-figure > .research-figure-caption .research-figure-caption__detail {
+  display: block;
+  min-width: 0;
+  margin: 0;
+  color: var(--muted-foreground);
+  font: 400 11.5px/1.5 var(--font-sans);
+  letter-spacing: 0;
+  text-transform: none;
+  overflow-wrap: break-word;
+}
+@media print {
+  .research-body .research-scientific-figure > figcaption.research-figure-caption {
+    break-after: avoid;
+  }
+}

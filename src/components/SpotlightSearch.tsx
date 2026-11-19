@@ -1,18 +1,20 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from 'react'
-import { ArrowRight, ArrowUpRight, CornerDownLeft, FileText, FlaskConical, History, Search, X } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, CornerDownLeft, FileText, FlaskConical, History, Quote as QuoteIcon, Search, X } from 'lucide-react'
 import { entries, type Entry } from '../data'
 import { manuscripts, type Manuscript } from '../research'
+import { publishedCollections, publishedQuotes, type Quote, type QuoteCollection } from '../quotes/data'
 import { ScrollView } from './ScrollView'
 import {
   buildSpotlightIndex, normalizeSpotlight, searchSpotlight, spotlightSuggestions,
   type SpotlightAction, type SpotlightHit, type SpotlightKind, type SpotlightScope,
 } from '../lib/spotlightIndex'
 
-const index = buildSpotlightIndex(entries, manuscripts)
+const index = buildSpotlightIndex(entries, manuscripts, publishedQuotes, publishedCollections)
 const scopes: Array<{ id: SpotlightScope; name: string }> = [
   { id: 'all', name: 'All' },
   { id: 'writing', name: 'Writing' },
   { id: 'manuscripts', name: 'Manuscripts' },
+  { id: 'quotes', name: 'Quotes' },
   { id: 'navigate', name: 'Actions' },
 ]
 const maxRendered = 80
@@ -27,18 +29,22 @@ function Highlight({ value, query }: { value: string; query: string }) {
 }
 function KindIcon({ kind }: { kind: SpotlightKind }) {
   return kind === 'writing' ? <FileText aria-hidden="true"/> :
-    kind === 'manuscripts' ? <FlaskConical aria-hidden="true"/> : <ArrowRight aria-hidden="true"/>
+    kind === 'manuscripts' ? <FlaskConical aria-hidden="true"/> :
+    kind === 'quotes' ? <QuoteIcon aria-hidden="true"/> : <ArrowRight aria-hidden="true"/>
 }
 function groupLabel(kind: SpotlightKind, recent: boolean) {
   if (recent) return 'Recently opened'
-  return kind === 'writing' ? 'Writing' : kind === 'manuscripts' ? 'Research' : 'Quick access'
+  return kind === 'writing' ? 'Writing' : kind === 'manuscripts' ? 'Research' :
+    kind === 'quotes' ? 'Quotes' : 'Quick access'
 }
 function Shortcut({ children }: { children: ReactNode }) { return <kbd className="spotlight-key">{children}</kbd> }
 
-export function SpotlightSearch({ onClose, onEntry, onManuscript, onAction, recent }: {
+export function SpotlightSearch({ onClose, onEntry, onManuscript, onQuote, onCollection, onAction, recent }: {
   onClose: () => void
   onEntry: (entry: Entry) => void
   onManuscript: (manuscript: Manuscript) => void
+  onQuote: (quote: Quote) => void
+  onCollection: (collection: QuoteCollection) => void
   onAction: (action: SpotlightAction) => void
   recent: readonly string[]
 }) {
@@ -59,6 +65,7 @@ export function SpotlightSearch({ onClose, onEntry, onManuscript, onAction, rece
       all: records.length,
       writing: records.filter(hit => hit.record.kind === 'writing').length,
       manuscripts: records.filter(hit => hit.record.kind === 'manuscripts').length,
+      quotes: records.filter(hit => hit.record.kind === 'quotes').length,
       navigate: records.filter(hit => hit.record.kind === 'navigate').length,
     }
   }, [query, searched])
@@ -81,6 +88,8 @@ export function SpotlightSearch({ onClose, onEntry, onManuscript, onAction, rece
   const activate = (hit: SpotlightHit) => {
     if (hit.record.entry) onEntry(hit.record.entry)
     else if (hit.record.manuscript) onManuscript(hit.record.manuscript)
+    else if (hit.record.quote) onQuote(hit.record.quote)
+    else if (hit.record.collection) onCollection(hit.record.collection)
     else if (hit.record.action) onAction(hit.record.action)
     onClose()
   }
@@ -114,7 +123,7 @@ export function SpotlightSearch({ onClose, onEntry, onManuscript, onAction, rece
       <div className="spotlight-search-bar">
         <Search className="spotlight-magnifier" aria-hidden="true"/>
         <input ref={input} value={query} onChange={event => { setQuery(event.target.value); setActive(0) }}
-          role="combobox" aria-label="Search the journal and research" aria-expanded="true"
+          role="combobox" aria-label="Search journals, manuscripts and quotes" aria-expanded="true"
           aria-controls="spotlight-options" aria-autocomplete="list"
           aria-activedescendant={focused ? 'spotlight-option-' + focused.record.id : undefined}
           placeholder="Search writing, research and more..." autoComplete="off" spellCheck={false}/>

@@ -4,8 +4,17 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "bun scripts/sync-silica-post.mjs && vite --host 0.0.0.0",
-    "build": "bun scripts/sync-silica-post.mjs && bun run generate:og && tsc --noEmit && vite build && bun scripts/article-social.mjs pages && bun scripts/article-social.mjs audit",
+    "dev": "bun scripts/sync-silica-post.mjs && bun scripts/sync-thca-manuscript.mjs && vite --host 0.0.0.0",
+    "build": "bun scripts/sync-silica-post.mjs && bun scripts/thca-manuscript-source-audit.mjs && bun scripts/sync-thca-manuscript.mjs && bun run generate:og && bun scripts/quote-feature-audit.mjs && tsc --noEmit && vite build && bun scripts/article-social.mjs pages && bun scripts/scholar-pages.mjs generate && bun scripts/quote-pages.mjs generate && bun scripts/article-social.mjs audit && bun scripts/scholar-pages.mjs audit && bun scripts/quote-pages.mjs audit",
+    "audit:quotes": "bun scripts/quote-feature-audit.mjs && bun scripts/quote-pages.mjs audit",
+    "audit:quotes:browser": "bun scripts/quote-browser-audit.mjs",
+    "audit:scholar": "bun scripts/scholar-pages.mjs audit",
+    "audit:thca-manuscript": "node scripts/thca-manuscript-reader-audit.mjs",
+    "audit:thca-manuscript:source": "node scripts/thca-manuscript-source-audit.mjs",
+    "audit:scholar:http": "bun scripts/scholar-http-audit.mjs",
+    "audit:scholar:visual": "bun scripts/scholar-pdf-visual-audit.mjs",
+    "generate:scholar:pdf": "bun scripts/manuscript-pdf.mjs",
+    "publish:scholar": "bun run build && bun run generate:scholar:pdf && bun run build && bun run audit:scholar:http && bun run audit:scholar:visual",
     "deploy:cloudflare": "bun run build && wrangler deploy --config wrangler.jsonc",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview --host 0.0.0.0",
@@ -17,6 +26,7 @@
     "audit:spotlight": "bun scripts/spotlight-audit.ts",
     "audit:mobile-sections": "bun scripts/mobile-section-menu-audit.mjs",
     "audit:manuscript-progress": "bun scripts/manuscript-sticky-progress-audit.mjs",
+    "audit:manuscript-anchors": "node scripts/manuscript-anchor-links-audit.mjs",
     "audit:share": "bun scripts/native-share-audit.mjs",
     "audit:shell": "bun scripts/shell-alignment-audit.mjs",
     "audit:theme-haptics": "bun scripts/theme-haptics-audit.mjs",
@@ -26,7 +36,15 @@
     "audit:og": "bun scripts/og-audit.mjs && bun scripts/article-social.mjs audit && bun scripts/article-social.mjs audit-determinism",
     "audit:icons": "bun scripts/icon-audit.mjs",
     "audit:pwa": "bun scripts/pwa-audit.mjs",
+    "audit:pwa-cache": "bun scripts/pwa-cache-budget-audit.mjs",
     "audit:pwa-update": "bun scripts/pwa-update-audit.mjs",
+    "audit:reading": "bun scripts/scroll-restoration-audit.mjs",
+    "audit:reading-perf": "bun scripts/reading-performance-bench.mjs",
+    "audit:archive-sort": "bun scripts/archive-sort-popover-audit.mjs",
+    "audit:pwa-routes": "bun scripts/pwa-route-isolation-audit.mjs",
+    "audit:pwa-stability": "bun scripts/pwa-release-stability-audit.mjs",
+    "audit:pwa-editorial": "bun scripts/pwa-editorial-update-audit.mjs",
+    "audit:pwa-mirror": "bun scripts/pwa-mirror-audit.mjs",
     "audit:virtualization": "bun scripts/virtualization-audit.mjs && bun scripts/virtual-navigation-audit.mjs && bun scripts/virtual-pane-audit.mjs && bun scripts/virtual-resize-audit.mjs && bun scripts/navigation-virtual-regression.mjs",
     "audit:virtual-cold": "bun scripts/virtual-cold-load-audit.mjs",
     "bench:virtualization": "bun scripts/virtualization-bench.mjs",
@@ -40,6 +58,7 @@
   },
   "dependencies": {
     "@pierre/diffs": "1.5.2",
+    "@radix-ui/react-select": "2.4.1",
     "@tanstack/react-virtual": "^3.13.12",
     "@types/katex": "^0.16.8",
     "class-variance-authority": "^0.7.1",
@@ -54,7 +73,11 @@
     "rehype-katex": "^7.0.1",
     "remark-gfm": "^4.0.1",
     "remark-math": "^6.0.0",
-    "tailwind-merge": "^3.4.0"
+    "tailwind-merge": "^3.4.0",
+
+    "@zoomport/core": "file:vendor/zoomport/zoomport-core-0.1.0.tgz",
+    "@zoomport/dom": "file:vendor/zoomport/zoomport-dom-0.1.0.tgz",
+    "@zoomport/react": "file:vendor/zoomport/zoomport-react-0.1.0.tgz"
   },
   "devDependencies": {
     "@fontsource/inter": "^5.3.0",
@@ -63,6 +86,7 @@
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
+    "pdfjs-dist": "5.4.449",
     "playwright-core": "^1.64.0",
     "satori": "^0.47.1",
     "tailwindcss": "^4.1.17",
@@ -70,5 +94,9 @@
     "vite": "^7.2.4",
     "vite-plugin-pwa": "^2.0.0",
     "wrangler": "4.101.0"
+  },
+  "overrides": {
+    "@zoomport/core": "file:vendor/zoomport/zoomport-core-0.1.0.tgz",
+    "@zoomport/dom": "file:vendor/zoomport/zoomport-dom-0.1.0.tgz"
   }
 }

@@ -1,19 +1,30 @@
+import type { ReactNode } from 'react';
+import '../../../manuscript-editorial.css';
+import { HeadingTextWithPermalink } from '../typography/HeadingPermalink';
+
 interface AbstractProps {
-  content: string;
+  content?: string;
+  children?: ReactNode;
+  /** An accompanying scientific figure remains within the abstract section for PDF extraction. */
+  after?: ReactNode;
 }
 
-export function Abstract({ content }: AbstractProps) {
+/**
+ * Shared scholarly abstract. One open editorial surface, no card chrome,
+ * colored wash, inset box, or wrapped decorative edge.
+ */
+export function Abstract({ content, children, after }: AbstractProps) {
   return (
-    <section
-      id="abstract"
-      aria-labelledby="abstract-heading"
-      className="prose-heading mb-10"
-    >
-      <SectionLabel number="—" title="Abstract" id="abstract-heading" />
-
-      <div className="bg-[var(--sidenote-bg)] border border-[var(--border)] rounded-lg p-4 mt-4">
-        <p className="text-sm text-[var(--text)] leading-relaxed">{content}</p>
+    <section id="abstract" aria-labelledby="abstract-heading" className="prose-heading research-editorial-abstract">
+      <div className="research-editorial-abstract__surface">
+        <div className="research-editorial-abstract__heading">
+          <h2 id="abstract-heading" aria-label="Abstract" className="research-anchor-heading"><HeadingTextWithPermalink title="Abstract" fallbackId="abstract" /></h2>
+        </div>
+        <div className="research-editorial-abstract__body">
+          {content ? <p>{content}</p> : children}
+        </div>
       </div>
+      {after}
     </section>
   );
 }
@@ -36,9 +47,10 @@ export function SectionLabel({
       )}
       <h2
         id={id}
-        className={`text-base font-semibold text-[var(--text)] tracking-tight ${number === '—' ? '' : ''}`}
+        aria-label={title}
+        className="research-anchor-heading text-base font-semibold text-[var(--text)] tracking-tight"
       >
-        {title}
+        <HeadingTextWithPermalink title={title} fallbackId={id} />
       </h2>
     </div>
   );
@@ -60,9 +72,10 @@ export function SubsectionLabel({
       </span>
       <h3
         id={id}
-        className="text-sm font-semibold text-[var(--text-secondary)]"
+        aria-label={title}
+        className="research-anchor-heading text-sm font-semibold text-[var(--text-secondary)]"
       >
-        {title}
+        <HeadingTextWithPermalink title={title} fallbackId={id} />
       </h3>
     </div>
   );
