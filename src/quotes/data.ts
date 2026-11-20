@@ -60,6 +60,15 @@ export const quoteAuthors: QuoteAuthor[] = [
 // against its attributed author's original publication.
 export const quoteRegistry: Quote[] = [
   {
+    id: 'which-tree-makes-you-stop',
+    text: 'when you walk through the park, ya know there will be trees\n\nwe know what trees look like, (i hope) \nmight even have an idea of what represents an extremely beautiful tree\n\nbut you cannot predict which tree will make you stop walking',
+    authorId: OWN_AUTHOR_ID,
+    themes: ['Beauty', 'Discovery', 'Expectations'],
+    recordedAt: '2026-11-20',
+    addedAt: '2026-11-20',
+    status: 'published',
+  },
+  {
     id: 'castle-before-villagers',
     text: 'don’t build the castle before you have any villagers',
     authorId: OWN_AUTHOR_ID,
@@ -974,6 +983,7 @@ export const quoteCollectionRegistry: QuoteCollection[] = [
       'burning-blamed-for-ashes',
       'jack-stauber-pup-three-words',
       'jack-stauber-rain-awning',
+      'which-tree-makes-you-stop',
     ],
     status: 'published',
   },
